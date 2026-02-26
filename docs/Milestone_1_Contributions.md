@@ -1,4 +1,4 @@
-                       ## **Contributions – Milestone 1**
+                       **Contributions – Milestone 1**
 
 ## **Overview**
 
