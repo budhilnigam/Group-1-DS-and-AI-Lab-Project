@@ -1,4 +1,4 @@
-    ## **Contribution - Milestone_1**
+## **Contribution - Milestone_1**
 
 ## **Overview**
 
