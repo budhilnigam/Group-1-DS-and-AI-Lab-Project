@@ -1,9 +1,9 @@
 #          **RAG-Based LLM Code Review Agent**
 
-                                       Data Science and AI Lab Project
+Data Science and AI Lab Project
 
-                                  **Milestone1 Report**  
-                                          Group 1
+# **Milestone 1 Report**  
+Group 1
 
 | Name | Email |
 | :---- | :---- |
