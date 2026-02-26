@@ -1,0 +1,10 @@
+                       Contributions – Milestone 1
+
+| Name | Email | Contribution |
+| :---- | :---- | :---- |
+| Jeevika S | 21f3001259@ds.study.iitm.ac.in | Existing Solution, Research, Slides, Documentation |
+| Budhil Nigam | 23f1001585@ds.study.iitm.ac.in | Problem Statement, Research, Existing Solutions, Documentation, Slides |
+| Kannan S | 21f3000990@ds.study.iitm.ac.in | Research, Gap identification |
+| Omkar | 22f2001265@ds.study.iitm.ac.in  | Research, Existing Solution, Slides |
+| Karunesh | 221001606@ds.study.iitm.ac.in | Gap identification, Existing Solutions, Research, Slides |
+
