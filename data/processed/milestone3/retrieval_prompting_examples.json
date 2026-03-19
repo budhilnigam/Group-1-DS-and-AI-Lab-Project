@@ -1,0 +1,412 @@
+[
+  {
+    "pr_id": "PR_5775",
+    "repo": "pallets/flask",
+    "file_path": "tests/test_helpers.py",
+    "line_number": 238,
+    "gold_category": "unused_import",
+    "predicted_category_hint": "unused_import",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0425",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.7086
+      },
+      {
+        "chunk_id": "chunk_0460",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.673
+      },
+      {
+        "chunk_id": "chunk_0430",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.663
+      },
+      {
+        "chunk_id": "chunk_0961",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6595
+      },
+      {
+        "chunk_id": "chunk_0437",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6574
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_5775\n- file_path: tests/test_helpers.py\n- line_number: 238\n- predicted_category_hint: unused_import\n\nDiff chunk:\ntests/test_helpers.py\n\n\nclass TestStreaming:\n    def test_streaming_with_context(self, app, client):\n        @app.route(\"/\")\n        def index():\n    def test_stream_with_context_fails_with_async_route(self):\n        import gc\n\n        import pytest\n\n        import flask\n\n        app = flask.Flask(__name__)\n\n        @app.route(\"/stream\")\n        async def stream():\n            @flask.stream_with_context\n            def generate():\n                yield \"Hello \"\n                yield flask.request.args[\"name\"]\n                yield \"!\"\n                yield \"hello\"\n\n            return flask.Response(flask.stream_with_context(generate()))\n            return flask.Response(generate())\n\n        rv = client.get(\"/?name=World\")\n        assert rv.data == b\"Hello World!\"\n        with app.test_request_context(\"/stream\"):\n            with pytest.raises(\n                RuntimeError, match=\"Install Flask with the 'async' extra\"\n            ):\n                # This forces Flask to run the async view and raise the RuntimeError\n                app.ensure_sync(app.view_functions[\"stream\"])()\n\n        # Clean up coroutine warnings\n        gc.collect()\n\n    def test_streaming_with_context_as_decorator(self, app, client):\n        @app.route(\"/\")\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0425 | category=unused_import | source=review_comment | score=0.7086\nimport asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest(TransactionTestCase): available_apps = [\"async\"] async def test_nesting_error1(self): async def aget\n\n[2] chunk_id=chunk_0460 | category=unused_import | source=review_comment | score=0.6730\n`requests ` is used in web building and tests.\n\n[3] chunk_id=chunk_0430 | category=unused_import | source=review_comment | score=0.6630\nThis unguarded import causes an error running the test suite in an environment without `redis` installed. ERROR: cache.tests (unittest.loader._FailedTest.cache.tests) ---------------------------------------------------------------------- ImportError: Failed to import test module: cache.tests Traceba\n\n[4] chunk_id=chunk_0961 | category=documentation_formatting | source=review_comment | score=0.6595\nSee: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail for the decorator.\n\n[5] chunk_id=chunk_0437 | category=unused_import | source=review_comment | score=0.6574\nUnless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4992",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/config.py",
+    "line_number": 259,
+    "gold_category": "documentation_formatting",
+    "predicted_category_hint": "unused_import",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0454",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6454
+      },
+      {
+        "chunk_id": "chunk_0406",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6449
+      },
+      {
+        "chunk_id": "chunk_0607",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.644
+      },
+      {
+        "chunk_id": "chunk_0551",
+        "category": "unused_import",
+        "source_type": "project_guideline",
+        "score": 0.6438
+      },
+      {
+        "chunk_id": "chunk_0737",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6436
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4992\n- file_path: src/flask/config.py\n- line_number: 259\n- predicted_category_hint: unused_import\n\nDiff chunk:\nsrc/flask/config.py\n        :type load: ``Callable[[Reader], Mapping]`` where ``Reader``\n            implements a ``read`` method.\n        :param silent: Ignore the file if it doesn't exist.\n        :param text: Open the file in text or binary mode.\n        :return: ``True`` if the file was loaded successfully.\n\n        .. versionchanged:: 2.3\n            The ``text`` parameter was added.\n\n        .. versionadded:: 2.0\n        \"\"\"\n        filename = os.path.join(self.root_path, filename)\n\n        try:\n            with open(filename) as f:\n            with open(filename, \"r\" if text else \"rb\") as f:\n                obj = load(f)\n        except OSError as e:\n            if silent and e.errno in (errno.ENOENT, errno.EISDIR):\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0454 | category=unused_import | source=review_comment | score=0.6454\nHi Matthew, yes the `_read_method_doc` can be removed. Should I remove it in this PR?\n\n[2] chunk_id=chunk_0406 | category=unused_import | source=review_comment | score=0.6449\nI don't know. Using a normal import seems to work fine. I'll change it.\n\n[3] chunk_id=chunk_0607 | category=mutable_default | source=review_comment | score=0.6440\nCan you make `_validate_meta` handle `None` instead?\n\n[4] chunk_id=chunk_0551 | category=unused_import | source=project_guideline | score=0.6438\n# try/except try: import yaml except ImportError: yaml = None\n\n[5] chunk_id=chunk_0737 | category=mutable_default | source=augmented | score=0.6436\nDefault argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects.\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4682",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/globals.py",
+    "line_number": 73,
+    "gold_category": "naming_convention",
+    "predicted_category_hint": "unused_import",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0575",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.7029
+      },
+      {
+        "chunk_id": "chunk_0584",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6962
+      },
+      {
+        "chunk_id": "chunk_0600",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6938
+      },
+      {
+        "chunk_id": "chunk_0571",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6934
+      },
+      {
+        "chunk_id": "chunk_0564",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6926
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4682\n- file_path: src/flask/globals.py\n- line_number: 73\n- predicted_category_hint: unused_import\n\nDiff chunk:\nsrc/flask/globals.py\nimport typing as t\nfrom functools import partial\nfrom contextvars import ContextVar\n\nfrom werkzeug.local import LocalProxy\nfrom werkzeug.local import LocalStack\n\nif t.TYPE_CHECKING:  # pragma: no cover\n    from .app import Flask\n    from .ctx import _AppCtxGlobals\n    from .ctx import AppContext\n    from .ctx import RequestContext\n    from .sessions import SessionMixin\n    from .wrappers import Request\n\n_request_ctx_err_msg = \"\"\"\\\nWorking outside of request context.\n\nThis typically means that you attempted to use functionality that needed\nan active HTTP request.  Consult the documentation on testing for\ninformation about how to avoid this problem.\\\n\"\"\"\n_app_ctx_err_msg = \"\"\"\\\nclass _FakeStack:\n    def __init__(self, name: str, cv: ContextVar[t.Any]) -> None:\n        self.name = name\n        self.cv = cv\n\n    def _warn(self):\n        import warnings\n\n        warnings.warn(\n            f\"'_{self.name}_ctx_stack' is deprecated and will be\"\n            \" removed in Flask 2.3. Use 'g' to store data, or\"\n            f\" '{self.name}_ctx' to access the current context.\",\n            DeprecationWarning,\n            stacklevel=3,\n        )\n\n    def push(self, obj: t.Any) -> None:\n        self._warn()\n        self.cv.set(obj)\n\n    def pop(self) -> t.Any:\n        self._warn()\n        ctx = self.cv.get(None)\n        self.cv.set(None)\n        return ctx\n\n    @property\n    def top(self) -> t.Optional[t.Any]:\n        self._warn()\n        return self.cv.get(None)\n\n\n_no_app_msg = \"\"\"\\\nWorking outside of application context.\n\nThis typically means that you attempted to use functionality that needed\nto interface with the current application object in some way. To solve\nthis, set up an application context with app.app_context().  See the\ndocumentation for more information.\\\nthe current application. To solve this, set up an application context\nwith app.app_context(). See the documentation for more information.\\\n\"\"\"\n_cv_app: ContextVar[\"AppContext\"] = ContextVar(\"flask.app_ctx\")\n__app_ctx_stack = _FakeStack(\"app\", _cv_app)\napp_ctx: \"AppContext\" = LocalProxy(  # type: ignore[assignment]\n    _cv_app, unbound_message=_no_app_msg\n)\ncurrent_app: \"Flask\" = LocalProxy(  # type: ignore[assignment]\n    _cv_app, \"app\", unbound_message=_no_app_msg\n)\ng: \"_AppCtxGlobals\" = LocalProxy(  # type: ignore[assignment]\n    _cv_app, \"g\", unbound_message=_no_app_msg\n)\n\n_no_req_msg = \"\"\"\\\nWorking outside of request context.\n\ndef _lookup_req_object(name):\n    top = _request_ctx_stac\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0575 | category=unused_import | source=augmented | score=0.7029\nThe `from module import function` statement is not used in the code. Removing it will improve clarity.\n\n[2] chunk_id=chunk_0584 | category=unused_import | source=augmented | score=0.6962\nThis import statement isn't used anywhere in the module; consider removing it to keep the code clean.\n\n[3] chunk_id=chunk_0600 | category=unused_import | source=augmented | score=0.6938\nThe `functools` import appears unnecessary here; removing unused imports helps with maintainability.\n\n[4] chunk_id=chunk_0571 | category=unused_import | source=augmented | score=0.6934\nThis import appears to be leftover from a previous implementation. Please remove it if it’s no longer needed.\n\n[5] chunk_id=chunk_0564 | category=unused_import | source=augmented | score=0.6926\nIt looks like this import is not being used anywhere in the code. Consider removing it to keep the code clean and maintainable.\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4560",
+    "repo": "pallets/flask",
+    "file_path": "tests/test_user_error_handler.py",
+    "line_number": 17,
+    "gold_category": "unused_import",
+    "predicted_category_hint": "naming_convention",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0643",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.7162
+      },
+      {
+        "chunk_id": "chunk_0352",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6915
+      },
+      {
+        "chunk_id": "chunk_0961",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6767
+      },
+      {
+        "chunk_id": "chunk_0288",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6589
+      },
+      {
+        "chunk_id": "chunk_0407",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6501
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4560\n- file_path: tests/test_user_error_handler.py\n- line_number: 17\n- predicted_category_hint: naming_convention\n\nDiff chunk:\ntests/test_user_error_handler.py\n    class CustomException(Exception):\n        pass\n\n    class UnacceptableCustomException(BaseException):\n        pass\n\n    @app.errorhandler(CustomException)\n    def custom_exception_handler(e):\n        assert isinstance(e, CustomException)\n        return \"custom\"\n\n    with pytest.raises(\n        AssertionError, match=\"Custom exceptions must be subclasses of Exception.\"\n    ):\n        app.register_error_handler(UnacceptableCustomException, None)\n    with pytest.raises(TypeError) as exc_info:\n        app.register_error_handler(CustomException(), None)\n\n    assert \"CustomException() is an instance, not a class.\" in str(exc_info.value)\n\n    with pytest.raises(ValueError) as exc_info:\n        app.register_error_handler(list, None)\n\n    assert \"'list' is not a subclass of Exception.\" in str(exc_info.value)\n\n    @app.errorhandler(500)\n    def handle_500(e):\n        assert isinstance(e, InternalServerError)\n        original = getattr(e, \"original_exception\", None)\n\n        if original is not None:\n            return f\"wrapped {type(original).__name__}\"\n        if e.original_exception is not None:\n            return f\"wrapped {type(e.original_exception).__name__}\"\n\n        return \"direct\"\n\n    with pytest.raises(ValueError) as exc_info:\n        app.register_error_handler(999, None)\n\n    assert \"Use a subclass of HTTPException\" in str(exc_info.value)\n\n    @app.route(\"/custom\")\n    def custom_test():\n        raise CustomException()\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0643 | category=mutable_default | source=pep8 | score=0.7162\nover an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rather than the locations where the exceptions are raised. Aim to answer the question “What went wrong?\n\n[2] chunk_id=chunk_0352 | category=naming_convention | source=review_comment | score=0.6915\nMost of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from `ImproperlyConfigured`, there seems to be a mismatch here. * Should `TaskIntegrityError` derive fro\n\n[3] chunk_id=chunk_0961 | category=documentation_formatting | source=review_comment | score=0.6767\nSee: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail for the decorator.\n\n[4] chunk_id=chunk_0288 | category=naming_convention | source=review_comment | score=0.6589\nSorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_none_with_empty_strings_allowed`/`serializerTestNoneWithEmptyStringsAllowed` 😬? Unless I'm thinking \n\n[5] chunk_id=chunk_0407 | category=unused_import | source=review_comment | score=0.6501\nYou can remove the model: diff --git a/tests/queries/test_execute_sql.py b/tests/queries/test_execute_sql.py index 6e9e578093..213ac21f53 100644 --- a/tests/queries/test_execute_sql.py +++ b/tests/queries/test_execute_sql.py from unittest import mock -from django.db import DatabaseError, connection,\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4534",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/json/__init__.py",
+    "line_number": 171,
+    "gold_category": "documentation_formatting",
+    "predicted_category_hint": "mutable_default",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0589",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.7215
+      },
+      {
+        "chunk_id": "chunk_0616",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6863
+      },
+      {
+        "chunk_id": "chunk_0752",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6726
+      },
+      {
+        "chunk_id": "chunk_0702",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.672
+      },
+      {
+        "chunk_id": "chunk_0799",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6708
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4534\n- file_path: src/flask/json/__init__.py\n- line_number: 171\n- predicted_category_hint: mutable_default\n\nDiff chunk:\nsrc/flask/json/__init__.py\n    _json.dump(obj, fp, **kwargs)\n\n\ndef loads(s: str, app: t.Optional[\"Flask\"] = None, **kwargs: t.Any) -> t.Any:\ndef loads(\n    s: t.Union[str, bytes],\n    app: t.Optional[\"Flask\"] = None,\n    **kwargs: t.Any,\n) -> t.Any:\n    \"\"\"Deserialize an object from a string of JSON.\n\n    Takes the same arguments as the built-in :func:`json.loads`, with\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0589 | category=unused_import | source=augmented | score=0.7215\nThis module imports `json`, but I don't see it being used anywhere—please verify if it's necessary.\n\n[2] chunk_id=chunk_0616 | category=mutable_default | source=review_comment | score=0.6863\nto_pandas_kwargs = {} if to_pandas_kwargs is None else to_pandas_kwargs\n\n[3] chunk_id=chunk_0752 | category=mutable_default | source=augmented | score=0.6726\nThe default argument `my_dict={}` is mutable and can cause unintended side effects if modified. Replace it with `None` and initialize the dictionary within the function body.\n\n[4] chunk_id=chunk_0702 | category=mutable_default | source=augmented | score=0.6720\nMutable default arguments like 'options={}' can cause side effects; refactor to use None as default and create a new object inside the function.\n\n[5] chunk_id=chunk_0799 | category=mutable_default | source=augmented | score=0.6708\nMutable default arguments like lists or dictionaries can lead to shared state across function calls, which is often a source of bugs. Use `None` as the default and initialize the object inside the function.\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4479",
+    "repo": "pallets/flask",
+    "file_path": "tests/test_config.py",
+    "line_number": 59,
+    "gold_category": "naming_convention",
+    "predicted_category_hint": "mutable_default",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0748",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6815
+      },
+      {
+        "chunk_id": "chunk_0699",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6636
+      },
+      {
+        "chunk_id": "chunk_0755",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6605
+      },
+      {
+        "chunk_id": "chunk_0529",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6602
+      },
+      {
+        "chunk_id": "chunk_0737",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6583
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4479\n- file_path: tests/test_config.py\n- line_number: 59\n- predicted_category_hint: mutable_default\n\nDiff chunk:\ntests/test_config.py\n    common_object_test(app)\n\n\ndef test_from_prefixed_env(monkeypatch):\n    monkeypatch.setenv(\"FLASK_STRING\", \"value\")\n    monkeypatch.setenv(\"FLASK_BOOL\", \"true\")\n    monkeypatch.setenv(\"FLASK_INT\", \"1\")\n    monkeypatch.setenv(\"FLASK_FLOAT\", \"1.2\")\n    monkeypatch.setenv(\"FLASK_LIST\", \"[1, 2]\")\n    monkeypatch.setenv(\"FLASK_DICT\", '{\"k\": \"v\"}')\n    monkeypatch.setenv(\"NOT_FLASK_OTHER\", \"other\")\n\n    app = flask.Flask(__name__)\n    app.config.from_prefixed_env()\n\n    assert app.config[\"STRING\"] == \"value\"\n    assert app.config[\"BOOL\"] is True\n    assert app.config[\"INT\"] == 1\n    assert app.config[\"FLOAT\"] == 1.2\n    assert app.config[\"LIST\"] == [1, 2]\n    assert app.config[\"DICT\"] == {\"k\": \"v\"}\n    assert \"OTHER\" not in app.config\n\n\ndef test_from_prefixed_env_custom_prefix(monkeypatch):\n    monkeypatch.setenv(\"FLASK_A\", \"a\")\n    monkeypatch.setenv(\"NOT_FLASK_A\", \"b\")\n\n    app = flask.Flask(__name__)\n    app.config.from_prefixed_env(\"NOT_FLASK\")\n\n    assert app.config[\"A\"] == \"b\"\n\n\ndef test_from_prefixed_env_nested(monkeypatch):\n    monkeypatch.setenv(\"FLASK_EXIST__ok\", \"other\")\n    monkeypatch.setenv(\"FLASK_EXIST__inner__ik\", \"2\")\n    monkeypatch.setenv(\"FLASK_EXIST__new__more\", '{\"k\": false}')\n    monkeypatch.setenv(\"FLASK_NEW__K\", \"v\")\n\n    app = flask.Flask(__name__)\n    app.config[\"EXIST\"] = {\"ok\": \"value\", \"flag\": True, \"inner\": {\"ik\": 1}}\n    app.config.from_prefixed_env()\n\n    if os.name != \"nt\":\n        assert app.config[\"EXIST\"] == {\n            \"ok\": \"other\",\n            \"flag\": True,\n            \"inner\": {\"ik\": 2},\n            \"new\": {\"more\": {\"k\": False}},\n        }\n    else:\n        # Windows env var keys are always uppercase.\n        assert app.config[\"EXIST\"] == {\n            \"ok\": \"value\",\n            \"OK\": \"other\",\n            \"flag\": True,\n            \"inner\": {\"ik\": 1},\n            \"INNER\": {\"IK\": 2},\n            \"NEW\": {\"MORE\": {\"k\": False}},\n        }\n\n    assert app.config[\"NEW\"] == {\"K\": \"v\"}\n\n\ndef test_config_from_mapping():\n    app = flask.Flask(__name__)\n    app.config.from_mapping({\"SECRET_KEY\": \"config\", \"TEST_KEY\": \"foo\"})\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0748 | category=mutable_default | source=augmented | score=0.6815\nDefault argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects.\n\n[2] chunk_id=chunk_0699 | category=mutable_default | source=augmented | score=0.6636\nDefault argument for 'config' is a mutable dictionary; switch to None and initialize within the function to avoid shared state across calls.\n\n[3] chunk_id=chunk_0755 | category=mutable_default | source=augmented | score=0.6605\nThe use of a mutable default argument `config={}` is risky as it can be modified across calls. Consider using `None` and initializing the dictionary inside the function.\n\n[4] chunk_id=chunk_0529 | category=unused_import | source=review_comment | score=0.6602\nWould importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant.\n\n[5] chunk_id=chunk_0737 | category=mutable_default | source=augmented | score=0.6583\nDefault argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects.\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4268",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/scaffold.py",
+    "line_number": 595,
+    "gold_category": "documentation_formatting",
+    "predicted_category_hint": "mutable_default",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0643",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.7391
+      },
+      {
+        "chunk_id": "chunk_0961",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6622
+      },
+      {
+        "chunk_id": "chunk_0644",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.6579
+      },
+      {
+        "chunk_id": "chunk_0352",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6555
+      },
+      {
+        "chunk_id": "chunk_0604",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6531
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4268\n- file_path: src/flask/scaffold.py\n- line_number: 595\n- predicted_category_hint: mutable_default\n\nDiff chunk:\nsrc/flask/scaffold.py\n        stack of active contexts.  This becomes relevant if you are using\n        such constructs in tests.\n\n        Teardown functions must avoid raising exceptions, since they . If they\n        execute code that might fail they\n        will have to surround the execution of these code by try/except\n        statements and log occurring errors.\n        Teardown functions must avoid raising exceptions. If\n        they execute code that might fail they\n        will have to surround the execution of that code with try/except\n        statements and log any errors.\n\n        When a teardown function was called because of an exception it will\n        be passed an error object.\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0643 | category=mutable_default | source=pep8 | score=0.7391\nover an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rather than the locations where the exceptions are raised. Aim to answer the question “What went wrong?\n\n[2] chunk_id=chunk_0961 | category=documentation_formatting | source=review_comment | score=0.6622\nSee: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail for the decorator.\n\n[3] chunk_id=chunk_0644 | category=mutable_default | source=pep8 | score=0.6579\nin this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar(x): if x < 0: return return math.sqrt(x) startswith() and endswith() are cleaner and less error pron\n\n[4] chunk_id=chunk_0352 | category=naming_convention | source=review_comment | score=0.6555\nMost of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from `ImproperlyConfigured`, there seems to be a mismatch here. * Should `TaskIntegrityError` derive fro\n\n[5] chunk_id=chunk_0604 | category=mutable_default | source=review_comment | score=0.6531\nIt looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called on empty groups by SQLite so the `if self` guard can be dropped def finalize(self): return self[0] T\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4268",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/scaffold.py",
+    "line_number": 594,
+    "gold_category": "documentation_formatting",
+    "predicted_category_hint": "mutable_default",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0643",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.7391
+      },
+      {
+        "chunk_id": "chunk_0961",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6622
+      },
+      {
+        "chunk_id": "chunk_0644",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.6579
+      },
+      {
+        "chunk_id": "chunk_0352",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6555
+      },
+      {
+        "chunk_id": "chunk_0604",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6531
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4268\n- file_path: src/flask/scaffold.py\n- line_number: 594\n- predicted_category_hint: mutable_default\n\nDiff chunk:\nsrc/flask/scaffold.py\n        stack of active contexts.  This becomes relevant if you are using\n        such constructs in tests.\n\n        Teardown functions must avoid raising exceptions, since they . If they\n        execute code that might fail they\n        will have to surround the execution of these code by try/except\n        statements and log occurring errors.\n        Teardown functions must avoid raising exceptions. If\n        they execute code that might fail they\n        will have to surround the execution of that code with try/except\n        statements and log any errors.\n\n        When a teardown function was called because of an exception it will\n        be passed an error object.\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0643 | category=mutable_default | source=pep8 | score=0.7391\nover an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rather than the locations where the exceptions are raised. Aim to answer the question “What went wrong?\n\n[2] chunk_id=chunk_0961 | category=documentation_formatting | source=review_comment | score=0.6622\nSee: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail for the decorator.\n\n[3] chunk_id=chunk_0644 | category=mutable_default | source=pep8 | score=0.6579\nin this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar(x): if x < 0: return return math.sqrt(x) startswith() and endswith() are cleaner and less error pron\n\n[4] chunk_id=chunk_0352 | category=naming_convention | source=review_comment | score=0.6555\nMost of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from `ImproperlyConfigured`, there seems to be a mismatch here. * Should `TaskIntegrityError` derive fro\n\n[5] chunk_id=chunk_0604 | category=mutable_default | source=review_comment | score=0.6531\nIt looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called on empty groups by SQLite so the `if self` guard can be dropped def finalize(self): return self[0] T\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4268",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/scaffold.py",
+    "line_number": 592,
+    "gold_category": "documentation_formatting",
+    "predicted_category_hint": "mutable_default",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0643",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.7391
+      },
+      {
+        "chunk_id": "chunk_0961",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6622
+      },
+      {
+        "chunk_id": "chunk_0644",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.6579
+      },
+      {
+        "chunk_id": "chunk_0352",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6555
+      },
+      {
+        "chunk_id": "chunk_0604",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6531
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4268\n- file_path: src/flask/scaffold.py\n- line_number: 592\n- predicted_category_hint: mutable_default\n\nDiff chunk:\nsrc/flask/scaffold.py\n        stack of active contexts.  This becomes relevant if you are using\n        such constructs in tests.\n\n        Teardown functions must avoid raising exceptions, since they . If they\n        execute code that might fail they\n        will have to surround the execution of these code by try/except\n        statements and log occurring errors.\n        Teardown functions must avoid raising exceptions. If\n        they execute code that might fail they\n        will have to surround the execution of that code with try/except\n        statements and log any errors.\n\n        When a teardown function was called because of an exception it will\n        be passed an error object.\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0643 | category=mutable_default | source=pep8 | score=0.7391\nover an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rather than the locations where the exceptions are raised. Aim to answer the question “What went wrong?\n\n[2] chunk_id=chunk_0961 | category=documentation_formatting | source=review_comment | score=0.6622\nSee: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail for the decorator.\n\n[3] chunk_id=chunk_0644 | category=mutable_default | source=pep8 | score=0.6579\nin this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar(x): if x < 0: return return math.sqrt(x) startswith() and endswith() are cleaner and less error pron\n\n[4] chunk_id=chunk_0352 | category=naming_convention | source=review_comment | score=0.6555\nMost of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from `ImproperlyConfigured`, there seems to be a mismatch here. * Should `TaskIntegrityError` derive fro\n\n[5] chunk_id=chunk_0604 | category=mutable_default | source=review_comment | score=0.6531\nIt looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called on empty groups by SQLite so the `if self` guard can be dropped def finalize(self): return self[0] T\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  },
+  {
+    "pr_id": "PR_4131",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/config.py",
+    "line_number": 110,
+    "gold_category": "documentation_formatting",
+    "predicted_category_hint": "mutable_default",
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0603",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6445
+      },
+      {
+        "chunk_id": "chunk_0319",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6363
+      },
+      {
+        "chunk_id": "chunk_0607",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6246
+      },
+      {
+        "chunk_id": "chunk_0748",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6215
+      },
+      {
+        "chunk_id": "chunk_0551",
+        "category": "unused_import",
+        "source_type": "project_guideline",
+        "score": 0.6093
+      }
+    ],
+    "prompt": "You are a Python code-review assistant in a RAG system.\n\nTask:\n- Review ONLY the provided diff context and retrieved evidence.\n- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.\n- Do NOT comment on functionality correctness, security, architecture, or testing strategy.\n- If evidence is weak, say uncertainty explicitly.\n- Output exactly one concise review comment.\n\nContext:\n- repo: pallets/flask\n- pr_id: PR_4131\n- file_path: src/flask/config.py\n- line_number: 110\n- predicted_category_hint: mutable_default\n\nDiff chunk:\nsrc/flask/config.py\n                         root path.\n        :param silent: set to ``True`` if you want silent failure for missing\n                       files.\n        :return: ``True`` if the file was loaded successfully.\n\n        .. versionadded:: 0.7\n           `silent` parameter.\n\nRetrieved evidence (top-k):\n[1] chunk_id=chunk_0603 | category=mutable_default | source=review_comment | score=0.6445\n(General note for this and following comments: I haven't read every single comment from #18215, so apologies if I raise something that was already discussed and agreed. Feel free to redirect me to the relevant comment, ) From how these settings are used and checked, would it make more sense to use N\n\n[2] chunk_id=chunk_0319 | category=naming_convention | source=review_comment | score=0.6363\nfound_files[prefixed_path] = (storage, path) Should this by prefexed_path, it was in the original. I think it should be here too.\n\n[3] chunk_id=chunk_0607 | category=mutable_default | source=review_comment | score=0.6246\nCan you make `_validate_meta` handle `None` instead?\n\n[4] chunk_id=chunk_0748 | category=mutable_default | source=augmented | score=0.6215\nDefault argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects.\n\n[5] chunk_id=chunk_0551 | category=unused_import | source=project_guideline | score=0.6093\n# try/except try: import yaml except ImportError: yaml = None\n\nOutput format:\n- category: <one of allowed categories>\n- grounded_comment: <single actionable sentence with evidence grounding>\n- cited_chunk_ids: <comma-separated chunk ids used>\n"
+  }
+]
