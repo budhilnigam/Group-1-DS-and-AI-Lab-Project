@@ -1,0 +1,554 @@
+[
+  {
+    "pr_id": "PR_5168",
+    "repo": "fastapi/fastapi",
+    "file_path": "tests/test_stoplight_elements_docs.py",
+    "line_number": 15,
+    "gold_category": "naming_convention",
+    "predicted_category": "naming_convention",
+    "generated_comment": "Potential naming convention issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from =",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0806",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6857
+      },
+      {
+        "chunk_id": "chunk_0114",
+        "category": "indentation",
+        "source_type": "review_comment",
+        "score": 0.6815
+      },
+      {
+        "chunk_id": "chunk_0437",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6623
+      },
+      {
+        "chunk_id": "chunk_0288",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6618
+      },
+      {
+        "chunk_id": "chunk_0242",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6593
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_627",
+    "repo": "encode/httpx",
+    "file_path": "httpx/dispatch/connection_pool.py",
+    "line_number": 132,
+    "gold_category": "naming_convention",
+    "predicted_category": "naming_convention",
+    "generated_comment": "Potential naming convention issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0250",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6886
+      },
+      {
+        "chunk_id": "chunk_0425",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6852
+      },
+      {
+        "chunk_id": "chunk_0245",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6553
+      },
+      {
+        "chunk_id": "chunk_0403",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6377
+      },
+      {
+        "chunk_id": "chunk_0902",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.619
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_14258",
+    "repo": "fastapi/fastapi",
+    "file_path": "tests/test_router_circular_import.py",
+    "line_number": 12,
+    "gold_category": "unused_import",
+    "predicted_category": "unused_import",
+    "generated_comment": "Potential unused import issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): I tried that and faced a circular import error both while testing and running unit tests , please let me know if there is a way to avoid that when I move it to the top `\"ImportErro",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0448",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6894
+      },
+      {
+        "chunk_id": "chunk_0437",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.681
+      },
+      {
+        "chunk_id": "chunk_0529",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6807
+      },
+      {
+        "chunk_id": "chunk_0475",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6671
+      },
+      {
+        "chunk_id": "chunk_0409",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6655
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_4682",
+    "repo": "pallets/flask",
+    "file_path": "src/flask/globals.py",
+    "line_number": 73,
+    "gold_category": "naming_convention",
+    "predicted_category": "unused_import",
+    "generated_comment": "Potential unused import issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (augmented): The `from module import function` statement is not used in the code. Removing it will improve clarity.",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0575",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.7029
+      },
+      {
+        "chunk_id": "chunk_0584",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6962
+      },
+      {
+        "chunk_id": "chunk_0600",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6938
+      },
+      {
+        "chunk_id": "chunk_0571",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6934
+      },
+      {
+        "chunk_id": "chunk_0564",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6926
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_3208",
+    "repo": "pallets/flask",
+    "file_path": "flask/signals.py",
+    "line_number": 45,
+    "gold_category": "indentation",
+    "predicted_category": "naming_convention",
+    "generated_comment": "Potential naming convention issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): Naming things is hard - I'll avoid the problem entirely and merge `signals.py` and `signal_handlers.py`.",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0291",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.73
+      },
+      {
+        "chunk_id": "chunk_0405",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6947
+      },
+      {
+        "chunk_id": "chunk_0245",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6892
+      },
+      {
+        "chunk_id": "chunk_0629",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6861
+      },
+      {
+        "chunk_id": "chunk_0250",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6842
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_4766",
+    "repo": "psf/requests",
+    "file_path": "tests/test_requests.py",
+    "line_number": 883,
+    "gold_category": "indentation",
+    "predicted_category": "unused_import",
+    "generated_comment": "Potential unused import issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): `requests ` is used in web building and tests.",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0460",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.7043
+      },
+      {
+        "chunk_id": "chunk_0288",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.7036
+      },
+      {
+        "chunk_id": "chunk_0529",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6834
+      },
+      {
+        "chunk_id": "chunk_0332",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6767
+      },
+      {
+        "chunk_id": "chunk_0401",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6721
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_1579",
+    "repo": "encode/httpx",
+    "file_path": "httpx/_content.py",
+    "line_number": 16,
+    "gold_category": "unused_import",
+    "predicted_category": "unused_import",
+    "generated_comment": "Potential unused import issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (project_guideline): # Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0549",
+        "category": "unused_import",
+        "source_type": "project_guideline",
+        "score": 0.7641
+      },
+      {
+        "chunk_id": "chunk_0593",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.7348
+      },
+      {
+        "chunk_id": "chunk_0470",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6887
+      },
+      {
+        "chunk_id": "chunk_0460",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.68
+      },
+      {
+        "chunk_id": "chunk_0581",
+        "category": "unused_import",
+        "source_type": "augmented",
+        "score": 0.6782
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_1095",
+    "repo": "encode/httpx",
+    "file_path": "httpx/_exceptions.py",
+    "line_number": 203,
+    "gold_category": "documentation_formatting",
+    "predicted_category": "naming_convention",
+    "generated_comment": "Potential naming convention issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskB",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0352",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6977
+      },
+      {
+        "chunk_id": "chunk_0549",
+        "category": "unused_import",
+        "source_type": "project_guideline",
+        "score": 0.692
+      },
+      {
+        "chunk_id": "chunk_0643",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.688
+      },
+      {
+        "chunk_id": "chunk_0386",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6827
+      },
+      {
+        "chunk_id": "chunk_0708",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6688
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_628",
+    "repo": "encode/httpx",
+    "file_path": "httpx/dispatch/http2.py",
+    "line_number": 197,
+    "gold_category": "indentation",
+    "predicted_category": "unused_import",
+    "generated_comment": "Potential unused import issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (project_guideline): # Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0549",
+        "category": "unused_import",
+        "source_type": "project_guideline",
+        "score": 0.6611
+      },
+      {
+        "chunk_id": "chunk_0250",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6497
+      },
+      {
+        "chunk_id": "chunk_0245",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6373
+      },
+      {
+        "chunk_id": "chunk_0708",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6259
+      },
+      {
+        "chunk_id": "chunk_0425",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6241
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_4488",
+    "repo": "fastapi/fastapi",
+    "file_path": "fastapi/exceptions.py",
+    "line_number": 5,
+    "gold_category": "unused_import",
+    "predicted_category": "mutable_default",
+    "generated_comment": "Potential mutable default issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (augmented): The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects.",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0708",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.7044
+      },
+      {
+        "chunk_id": "chunk_0643",
+        "category": "mutable_default",
+        "source_type": "pep8",
+        "score": 0.6901
+      },
+      {
+        "chunk_id": "chunk_0737",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6734
+      },
+      {
+        "chunk_id": "chunk_0616",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.6721
+      },
+      {
+        "chunk_id": "chunk_0352",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6687
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_4381",
+    "repo": "fastapi/fastapi",
+    "file_path": "fastapi/routing.py",
+    "line_number": 339,
+    "gold_category": "mutable_default",
+    "predicted_category": "naming_convention",
+    "generated_comment": "Potential naming convention issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): `set_method_name` could be called `set_method_request` as a more intuitive variable name.",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0375",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6816
+      },
+      {
+        "chunk_id": "chunk_0126",
+        "category": "indentation",
+        "source_type": "review_comment",
+        "score": 0.6787
+      },
+      {
+        "chunk_id": "chunk_0245",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6744
+      },
+      {
+        "chunk_id": "chunk_0629",
+        "category": "mutable_default",
+        "source_type": "review_comment",
+        "score": 0.671
+      },
+      {
+        "chunk_id": "chunk_0268",
+        "category": "naming_convention",
+        "source_type": "review_comment",
+        "score": 0.6626
+      }
+    ]
+  },
+  {
+    "pr_id": "PR_1627",
+    "repo": "fastapi/fastapi",
+    "file_path": "fastapi/dependencies/utils.py",
+    "line_number": 791,
+    "gold_category": "indentation",
+    "predicted_category": "unused_import",
+    "generated_comment": "Potential unused import issue detected. Suggested review: align this change with project style guidance and update the code accordingly. Evidence source (review_comment): pa = import_optional_dependency(\"pyarrow\") Got it . Let's wrap this in `import_optional_dependency` just to future proof a little bit ( I think we validate the `adbc_driver_manager",
+    "retrieval_backend": "faiss",
+    "generation_backend": "template",
+    "llm_parse_valid": false,
+    "llm_parse_status": "not_applicable",
+    "cited_chunk_ids": [],
+    "retrieved_chunks": [
+      {
+        "chunk_id": "chunk_0479",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6876
+      },
+      {
+        "chunk_id": "chunk_0922",
+        "category": "documentation_formatting",
+        "source_type": "review_comment",
+        "score": 0.6651
+      },
+      {
+        "chunk_id": "chunk_0529",
+        "category": "unused_import",
+        "source_type": "review_comment",
+        "score": 0.6638
+      },
+      {
+        "chunk_id": "chunk_0021",
+        "category": "indentation",
+        "source_type": "review_comment",
+        "score": 0.6571
+      },
+      {
+        "chunk_id": "chunk_0737",
+        "category": "mutable_default",
+        "source_type": "augmented",
+        "score": 0.6556
+      }
+    ]
+  }
+]

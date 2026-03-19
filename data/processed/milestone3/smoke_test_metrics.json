@@ -1,0 +1,67 @@
+{
+  "split": {
+    "subset_size": 60,
+    "train_size": 36,
+    "val_size": 12,
+    "test_size": 12,
+    "seed": 42,
+    "top_k": 5,
+    "note": "Milestone 3 smoke test split used for end-to-end verification"
+  },
+  "metrics": {
+    "accuracy": 0.3333,
+    "macro_f1": 0.1889,
+    "num_samples": 12,
+    "per_class": {
+      "documentation_formatting": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "indentation": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 4
+      },
+      "mutable_default": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "naming_convention": {
+        "precision": 0.4,
+        "recall": 0.6667,
+        "f1": 0.5,
+        "support": 3
+      },
+      "unused_import": {
+        "precision": 0.3333,
+        "recall": 0.6667,
+        "f1": 0.4444,
+        "support": 3
+      }
+    }
+  },
+  "pipeline_capabilities": {
+    "implemented": {
+      "preprocessing": true,
+      "query_construction": true,
+      "retrieval": "faiss",
+      "category_prediction": true,
+      "comment_generation": "template_and_optional_llm"
+    },
+    "optional_in_this_run": {
+      "llm_provider": "not_enabled",
+      "llm_samples_requested": 0,
+      "groq_model": null,
+      "groq_rpm_limit": null
+    },
+    "planned_or_external": {
+      "static_analysis_baseline": "outside this smoke pipeline script"
+    }
+  },
+  "llm_parse_status_counts": {}
+}
