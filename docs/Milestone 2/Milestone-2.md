@@ -115,11 +115,13 @@ The project generates three primary datasets, each serving a specific purpose in
 | Retrieval Corpus | Knowledge base used by the RAG system |
 | Static Analysis Input | Used to run baseline linters |
 
-| Dataset | Entries | Organic | Synthetic |
-| :---- | :---- | :---- | :---- |
-| Evaluation Dataset | 158 | 128 | 30 |
-| Retrieval Corpus | 220 | 220 | 0 |
-| Static Analysis Input | 125 | 95 | 30 |
+| Dataset | Current dataset\_v1 size | Notes |
+| :---- | :---- | :---- |
+| Evaluation Dataset | 287 entries | PR-file level records with diff chunks and labeled review comments |
+| Retrieval Corpus | 1000 chunks | Balanced to 200 chunks per violation category |
+| Static Analysis Input | 287 files | Reconstructed file-level code snippets used for linter baselines |
+
+The updated counts above are taken directly from the current JSON artifacts in `data/raw/dataset_v1/`. The earlier draft used a smaller intermediate snapshot; the latest notebook-driven pipeline now produces a larger evaluation set and a much larger retrieval corpus. The current evaluation and static-analysis JSON files no longer preserve a separate organic-versus-synthetic flag per entry, so the report now describes the datasets using the fields that are actually present in `dataset_v1`.
 
 ## **2.1. Dataset Sources** {#2.1.-dataset-sources}
 
@@ -134,8 +136,10 @@ The repositories used in this study include:
 | scikit-learn/scikit-learn | Training |
 | pallets/flask | Evaluation |
 | fastapi/fastapi | Evaluation |
+| encode/httpx | Evaluation |
+| psf/requests | Evaluation |
 
-These repositories provide a diverse set of Python codebases across web development, machine learning, and data processing domains.
+These repositories provide a diverse set of Python codebases across web development, machine learning, HTTP tooling, and data processing domains. Compared with the earlier draft, the current notebook pipeline expands evaluation coverage from two repositories to four repositories, which improves repository diversity while preserving a repository-based train/evaluation split.
 
 ## 
 
@@ -147,53 +151,57 @@ Source: Public Python repositories on GitHub.
 
 Description:
 
-The evaluation dataset contains pull request diffs extracted from open-source repositories. These diffs represent real code changes submitted by developers during collaborative development.
+The evaluation dataset contains pull request diffs extracted from open-source repositories. In the current `dataset_v1` format, **one entry corresponds to one `(repository, pull request, file)` record**, not to a single violation instance. Each entry stores:
+
+* `pr_id`, `repo`, and `file_path`
+* `diff_chunks`, where each chunk includes `chunk_id`, `start_line`, `end_line`, and `diff_lines`
+* `ground_truth_reviews`, where each review includes `line_number`, `violation_category`, and `review_comment`
+
+This explicit definition addresses ambiguity in the earlier draft about whether an entry referred to a PR, diff chunk, file change, or single violation.
 
 | Metric | Value |
 | :---- | :---- |
-| Total entries | 158 |
-| Organic entries | 128 |
-| Synthetic entries | 30 |
-| Total violations | 268 |
+| Total entries | 287 |
+| Evaluation repositories | 4 |
+| Total labeled reviews | 366 |
+| Mean reviews per entry | 1.28 |
+| Median reviews per entry | 1 |
 
 **Violation distribution:**
 
 | Category | Count |
 | :---- | :---- |
-| indentation | 104 |
-| documentation\_formatting | 75 |
-| naming\_convention | 53 |
-| mutable\_default | 21 |
-| unused\_import | 15 |
+| documentation\_formatting | 170 |
+| naming\_convention | 77 |
+| indentation | 59 |
+| unused\_import | 45 |
+| mutable\_default | 15 |
 
-Each pull request diff is segmented into diff chunks, which are annotated with ground truth review comments describing coding violations.
+The current evaluation set is larger than the earlier draft, but it remains class-imbalanced: `documentation_formatting` dominates while `mutable_default` remains the smallest class. This is why later evaluation focuses on category-wise precision/recall and macro-F1 instead of relying only on aggregate accuracy.
 
 ## **2.3 Retrieval Corpus** {#2.3-retrieval-corpus}
 
-The retrieval corpus forms the knowledge base used by the RAG model. Each document is converted into knowledge chunks that contain rule explanations related to code quality.
-
-Sources include 220 knowledge chunks of:
-
-* Python coding guidelines  
-* project style guides  
-* linter rule explanations  
-* historical review comment
+The retrieval corpus forms the knowledge base used by the RAG model. In `dataset_v1`, the final corpus contains **1000 chunks** and is category-balanced, with 200 chunks for each of the five violation categories.
 
 | Source | Chunks |
 | :---- | :---- |
-| Review comments | 84 |
-| PEP-8 guidelines | 81 |
-| Linter rules | 36 |
-| PEP-257 documentation | 17 |
-| Project guidelines | 2 |
+| Review comments | 694 |
+| Augmented synthetic chunks | 246 |
+| Project guidelines | 32 |
+| PEP-8 guidelines | 18 |
+| Linter rules | 9 |
+| PEP-257 documentation | 1 |
 
-**Chunk size statistics:**
+**Text length statistics (characters):**
 
-* min: 9 words  
-* max: 421 words  
-* mean: 122 words
+* min: 15  
+* max: 2252  
+* mean: 182.27  
+* median: 126
 
-Chunks were split to remain within **400 tokens**, ensuring efficient retrieval.
+Although the final corpus is balanced by violation category, it is **not balanced by source type**. Most chunks come from historical review comments and augmented examples, while repository-specific guidelines and formal linter-rule chunks contribute comparatively few items. This uneven source mix is important because it limits how much repository-specific grounding the retriever can supply for every query.
+
+Chunks were split to remain within approximately **200-400 token windows** for guideline documents and focused review-comment snippets, preserving one primary rule or rationale per chunk.
 
 Example:
 
@@ -204,7 +212,7 @@ Example:
   "source\_type": "project\_guideline"  
 }
 
-These chunks are embedded and stored in a vector database for semantic retrieval.
+These chunks are prepared for embedding-based retrieval, but the embedding step and vector index are still deferred to the implementation phase described later in this report.
 
 ## **2.4 Static Analysis Input Dataset** {#2.4-static-analysis-input-dataset}
 
@@ -226,10 +234,13 @@ Statistics:
 
 | Metric | Value |
 | :---- | :---- |
-| Files | 125 |
-| Organic files | 95 |
-| Synthetic files | 30 |
-| Lines of code | 39,015 |
+| Files | 287 |
+| Reconstructed lines of code | 187,469 |
+| Mean lines per file | 653.2 |
+| Median lines per file | 367 |
+| Max lines per file | 4,647 |
+
+The static-analysis input is produced from the same PR/file selection as the evaluation dataset, but stored as reconstructed code snippets in `diff_code` so that Flake8 and Pylint can be run against file-level content. The current JSON does not store a repository field separately for this dataset.
 
 # **3\. Dataset Construction and Description** {#3.-dataset-construction-and-description}
 
@@ -237,7 +248,7 @@ The datasets used in this study are constructed through a **multi-stage data col
 
 ## **3.1 GitHub API Data Collection** {#3.1-github-api-data-collection}
 
-Data for the evaluation dataset was collected using the GitHub REST API (v3). The collection process systematically retrieved pull request review comments and file change diffs across selected repositories.
+Data for the evaluation dataset was collected using the GitHub REST API (v3) and orchestrated through the notebook pipeline in `notebooks/data_preparation_pipeline.ipynb`. The current pipeline retrieves pull request review comments and file change diffs across three training repositories and four evaluation repositories.
 
 The following endpoints were used during data collection:
 
@@ -252,15 +263,11 @@ This endpoint was used to extract unified diff patches representing code modific
 To ensure reliable and stable data collection, several strategies were implemented:
 
 * Pagination was used to retrieve large datasets across multiple API responses.  
-* A 1-second delay between API requests was introduced to respect GitHub rate limits.  
-* Automatic retries were implemented when HTTP 403 rate-limit responses were encountered.  
+* Per-repository collection caps were applied in the notebook (`5000` review comments for each training repository and `6000` for each evaluation repository) so that the raw crawl stayed tractable.  
+* Automatic retries and exponential backoff were implemented when HTTP `403` or `429` rate-limit responses were encountered.  
 * All API responses were cached locally in a cache/ directory to ensure experiment reproducibility.
 
-In total, the data collection process retrieved:
-
-* 25,000 pull request review comments  
-* 98 pull request file change sets  
-* Data spanning five large Python repositories
+The earlier draft reported fixed totals for raw comments and PR file sets, but the current notebook pipeline is better described by its repository caps and filtering stages than by a single stale count. In practice, only a small fraction of the raw comments survived the downstream filters because most GitHub review comments were unrelated to the five targeted violation categories.
 
 ## **3.2 Raw Data Sources** {#3.2-raw-data-sources}
 
@@ -288,14 +295,14 @@ Important features in the dataset include:
 | PR ID | Unique identifier assigned to each pull request in the dataset  |
 | Repository | Name of the GitHub repository from which the pull request was extracted |
 | File Path | The path of the modified file within the repository |
-| Diff Chunks | Segmented portions of the pull request diff representing code changes |
-| Line Numbers | Line numbers indicating the location of the modification in the file |
-| Violation Category | The category of coding issue detected (e.g., unused import, indentation error) |
-| Review Comment | Ground truth review comment describing the detected violation |
+| Diff Chunks | A list of chunk objects, each with `chunk_id`, `start_line`, `end_line`, and `diff_lines` |
+| Line Numbers | The line in the changed file referenced by a human review comment |
+| Violation Category | Stored in each review record as `violation_category` |
+| Review Comment | Stored in each review record as `review_comment` |
 
 ## **3.3 Synthetic Data Generation Strategy** {#3.3-synthetic-data-generation-strategy}
 
-During the data collection phase, pull request review comments were scraped from several open-source Python repositories using the GitHub API. In total, more than **25,000 review comments** were collected across the selected repositories. However, only a very small fraction of these comments corresponded to **actual coding guideline violations** relevant to the scope of this project.
+During the data collection phase, pull request review comments were scraped from several open-source Python repositories using the GitHub API, subject to the per-repository caps described earlier. However, only a very small fraction of the crawled comments corresponded to **actual coding guideline violations** relevant to the scope of this project.
 
 Most pull request comments typically relate to general development workflow or project coordination, such as suggestions about architecture, requests for additional tests, clarification questions, or general feedback (e.g., “Looks good”, “Please add tests”, “Can you rebase?”). These comments do not correspond to identifiable coding rule violations and therefore, cannot be used as labeled examples for a code review violation detection system.
 
@@ -309,7 +316,9 @@ After filtering and preprocessing, only a limited number of comments could be co
 
 Because of this imbalance, relying solely on the filtered GitHub data would result in **severe category imbalance**, where some violation types appear frequently while others appear only rarely. Such an imbalance negatively affects both retrieval quality and evaluation reliability.
 
-To address this limitation, **synthetic examples were generated selectively** to supplement the real dataset. Synthetic data was created only for categories that were significantly underrepresented in the collected GitHub review comments. The generation process produced realistic examples of:
+To address this limitation, **synthetic augmentation was generated selectively** for underrepresented categories. In the current `dataset_v1` artifacts, this augmentation is most explicit in the retrieval corpus, where chunks with `source_type = augmented` account for a large portion of the final balanced corpus.
+
+The generation process produced realistic examples of:
 
 * code diffs representing a specific violation pattern  
 * corresponding review comments describing the violation
@@ -325,21 +334,29 @@ To minimize bias introduced by artificial examples, the following constraints we
 3. **The evaluation dataset prioritizes real-world examples.**  
    Synthetic examples are included only in limited numbers to ensure category coverage.
 
-This strategy allows the dataset to maintain a realistic representation of GitHub code review behavior while ensuring that each violation category is sufficiently represented for meaningful experimentation. Future iterations of the dataset can progressively replace synthetic examples with additional real-world data as more labeled examples are collected.
+This strategy allows the dataset to maintain a realistic representation of GitHub code review behavior while ensuring that each violation category is sufficiently represented for meaningful experimentation. At the same time, synthetic augmentation can bias retrieval toward templated phrasing or overly clean examples, so results obtained with the current corpus should be interpreted as a mixture of real review language and synthetic balancing data rather than as a purely organic review distribution.
 
 ## **3.4 Dataset Statistics** {#3.4-dataset-statistics}
 
-The raw dataset collected during the pipeline consists of:
+The final structured datasets generated by the current pipeline are summarized below.
 
 | Dataset Component | Count |
 | :---: | :---: |
-| Review Comments | 25000 |
-| Pull Request File Changes | 98 |
-| Repositories | 5 |
-| Linter Rule Explanations | 36 |
-| PEP Guideline Sections | Multiple |
+| Evaluation entries | 287 |
+| Labeled reviews | 366 |
+| Retrieval chunks | 1000 |
+| Static-analysis files | 287 |
+| Evaluation repositories | 4 |
 
-These datasets are then transformed into the structured evaluation dataset and retrieval corpus used by the RAG system.
+**Diff complexity statistics for the evaluation dataset**
+
+| Metric | Value |
+| :--- | :--- |
+| Diff chunks per entry | min 1, median 2, mean 3.26, max 53 |
+| Diff lines per chunk | min 1, median 11, mean 22.19, max 200 |
+| Diff line percentiles | p25 8, p50 11, p75 20, p90 44, p95 86, p99 200 |
+
+These statistics were added because the earlier draft reported dataset sizes but not the complexity of the diffs being evaluated. The long-tail up to 200 lines per chunk shows that the evaluation set still contains a mix of simple and relatively complex review contexts.
 
 # **4\. Dataset Quality Assessment** {#4.-dataset-quality-assessment}
 
@@ -364,7 +381,11 @@ To minimize API cost and token usage:
 
 3. Cross Validation
 
-* A second model independently re-classified evaluation comments. Disagreements were handled conservatively to ensure label reliability.
+* A second model independently re-classified candidate evaluation comments. The current notebook pipeline keeps only comments that remain plausible after this second pass, while malformed responses fall back to keyword-based labeling.
+
+This two-pass setup is stronger than the earlier one-line description, and the current project also includes a **manual validation pass** over `dataset_v1` labels. The team split the non-synthetic portion of the dataset across all group members and manually checked whether each retained review comment was mapped to the correct violation category. This audit found that approximately **42% of the reviewed non-synthetic labels were inefficient or wrongly mapped** to the intended violation category, which confirms that raw LLM-based labeling alone was not reliable enough for final reporting.
+
+The manual audit therefore serves as an important quality-control.
 
 **Missing Values**
 
@@ -390,14 +411,29 @@ Noise may arise from:
 
 Preprocessing steps normalize indentation and remove irrelevant lines.
 
+**Data Leakage Risks**
+
+The current split is repository-based: training repositories contribute retrieval knowledge and evaluation repositories contribute the held-out PR examples. In addition, the notebook performs a lightweight leakage check to ensure that evaluation repository names are not explicitly present in retrieval-corpus text. However, this check is still limited. It does not guarantee removal of semantically near-duplicate review comments, duplicated diff patterns, or leakage introduced through synthetic examples that paraphrase evaluation-style comments. This limitation should be kept in mind when interpreting downstream performance.
+
+**Observed PR Collection Issues**
+
+During collection, several practical issues affected data quality and coverage:
+
+* GitHub API rate limiting required retries and exponential backoff.  
+* Many review comments were filtered out because they were non-actionable discussion comments rather than coding-guideline violations.  
+* Some PR file patches were missing from the API response, so the pipeline fell back to the inline `diff_hunk` stored with the comment when available.  
+* LLM outputs occasionally returned malformed JSON or ambiguous labels, which triggered regex fallback classification.  
+* The final datasets still lack a full schema-level validation pass after generation.
+
 # **5\. Dataset Splitting Strategy** {#5.-dataset-splitting-strategy}
 
 Although the project does not train model weights directly, dataset splitting is necessary to avoid data leakage in the retrieval system.
 
 The split strategy is repository-based.  
-Training repositories are used to construct the retrieval corpus.  
-Evaluation repositories are used exclusively for building the evaluation dataset.  
-This separation ensures that the system cannot retrieve ground truth answers during evaluation.
+Training repositories (`django/django`, `pandas-dev/pandas`, and `scikit-learn/scikit-learn`) are used to construct the retrieval corpus.  
+Evaluation repositories (`pallets/flask`, `fastapi/fastapi`, `encode/httpx`, and `psf/requests`) are used exclusively for building the evaluation dataset.  
+
+This separation substantially reduces direct leakage, because evaluation diffs are not drawn from the same repositories that seed the retrieval corpus. However, as noted above, the current leakage checks are still conservative rather than exhaustive.
 
 # **6\. Retrieval Corpus Preparation** {#6.-retrieval-corpus-preparation}
 
@@ -449,13 +485,15 @@ Official Python Enhancement Proposals (PEPs) provide the primary reference for P
 * Pylint rule descriptions  
 * Flake8 rule explanations  
     
-  A total of **36 rule explanations** covering the five targeted violation categories were included in the corpus.
+  A total of **36 raw rule explanations** were collected during preprocessing, but only a smaller number of linter-rule chunks appear in the final balanced corpus.
+
+In the current `dataset_v1` retrieval corpus, the final source distribution is heavily skewed toward `review_comment` and `augmented` chunks, with much smaller contributions from `project_guideline`, `pep8`, `linter_rule`, and `pep257`. This means the retriever has broad coverage of review-comment language, but limited repository-specific context in some categories.
 
 ## **6.2 Chunking Strategy** {#6.2-chunking-strategy}
 
 To improve retrieval efficiency, documents are divided into smaller segments before embedding.
 
-Each document is split into 200–400 token chunks. Smaller chunks allow the embedding model to capture specific coding rules and concepts more precisely, improving semantic retrieval performance.
+Guideline documents are split into roughly 200-400 token windows, while review-comment examples are kept as short focused snippets. Smaller chunks allow the embedding model to capture specific coding rules and concepts more precisely, improving semantic retrieval performance.
 
 Example chunk:
 
@@ -466,60 +504,56 @@ This chunking strategy ensures that each vector represents a focused coding guid
 
 ## **6.3 Embedding Generation** {#6.3-embedding-generation}
 
-In future versions of the system, textual guideline chunks may be converted into vector embeddings using models such as **bge-large-en-v1.5.**  
-Embeddings represent the semantic meaning of coding rules and allow similarity comparison between code diffs and guideline documents.  
-This enables the system to identify relevant coding standards that relate to a specific code change.
+Embedding generation is **not yet implemented in Milestone 2**. The current report proposes `bge-large-en-v1.5` as the target embedding model for the next stage because it is a strong general-purpose retrieval encoder for English technical text. The actual embedding run and vector-index construction are deferred to Milestone 3.
 
 ## **6.4 Vector Database** {#6.4-vector-database}
 
-The generated embeddings can be stored in a **FAISS** **vector database** to enable efficient semantic search.  
-During inference, code diffs could be embedded and used to retrieve the most relevant guideline chunks from the index.  
-These retrieved documents would then be provided as context to the RAG model for generating grounded review comments.
+The generated embeddings are planned to be stored in a **FAISS** vector database, but this is still a proposed retrieval infrastructure rather than an implemented Milestone 2 artifact. FAISS configuration, indexing parameters, and retrieval-effectiveness measurements therefore remain future work for Milestone 3, once the embedding step is available.
 
 # **Visualisations** {#visualisations}
 
-![][image1]  
-**Fig 1: Organic vs Synthetic Data distribution in Evaluation, Retrieval and Static Analysis datasets**
+The figures below are regenerated from the current `data/raw/dataset_v1` artifacts and replace the earlier draft visualizations that were based on a smaller intermediate dataset.
 
-![][image2]  
-**Fig 2: Violation Categories distribution**
+![](assets/milestone2_fig1_dataset_sizes.png)  
+**Fig 1: dataset\_v1 size comparison across evaluation, retrieval, and static-analysis datasets**
 
-![][image3]  
-**Fig 3: Code Repository wise entries distribution**
+![](assets/milestone2_fig2_eval_categories.png)  
+**Fig 2: evaluation review labels by violation category**
 
-![][image4]  
-**Fig 4: Retrieval Corpus Dataset (Source Type) distribution**
+![](assets/milestone2_fig3_repo_category_heatmap.png)  
+**Fig 3: evaluation repository versus violation-category heatmap**
+
+![](assets/milestone2_fig4_retrieval_sources.png)  
+**Fig 4: retrieval corpus source mix by category**
 
 # 
 
 # **7\. Data Preprocessing Pipeline** {#7.-data-preprocessing-pipeline}
 
-The retrieval corpus is designed to provide contextual knowledge for the Retrieval-Augmented Generation **(RAG)** model. This corpus contains coding guidelines, rule explanations, and documentation that help the model understand coding standards when generating review comments.
-
-Documents are processed through several stages including collection, chunking, embedding generation, and indexing.
+The current preprocessing pipeline is implemented in `notebooks/data_preparation_pipeline.ipynb`. Compared with the earlier Milestone 2 draft, the latest pipeline adds broader evaluation-repository coverage, disk caching, retry logic, stronger review-comment filtering, and a more explicit two-pass labeling workflow.
 
 1. **Fetch**  
      
-   Retrieve raw pull request review comments and file diffs using the GitHub API.  
+  Retrieve raw pull request review comments and PR file diffs using the GitHub API, with pagination, caching, and retry/backoff logic.  
      
 2. **Extract**  
      
-   Parse JSON responses and extract structured fields including:  
+  Parse JSON responses and extract structured fields including:  
      
 * file path  
 * line number  
-* diff hunk  
+* diff hunk or fallback `diff_hunk` text  
 * review comment body  
     
     
 3. **Classify**  
      
-   Each review comment is automatically classified into one of the five violation categories using multiple large language models:  
+  Clean each review comment, remove obvious non-actionable discussion comments, and classify the remainder into one of the five violation categories using multiple large language models:  
      
 * GPT-4.1  
 * GPT-4o  
 * GPT-4.1-mini  
-  In cases where API limits are reached, a fallback pattern-matching classifier is applied.  
+  The current notebook performs a second-pass validation step and falls back to a regex classifier if model responses are unavailable or malformed.  
     
 4. **Filter**
 
@@ -529,9 +563,9 @@ Documents are processed through several stages including collection, chunking, e
 
 5. **Construct**  
      
-   Violations are grouped by:  
+  Violations are grouped by:  
    *(repository, pull request, file)*  
-   and converted into structured evaluation dataset entries with associated diff chunks.  
+  and converted into structured evaluation dataset entries with associated diff chunks. In parallel, the pipeline builds the retrieval corpus from review comments, PEP documents, linter-rule descriptions, repository contribution guides, and targeted augmentation for underrepresented categories.  
      
 6. **Validate**
 
@@ -539,7 +573,26 @@ Documents are processed through several stages including collection, chunking, e
 
 * duplicate removal  
 * consistency checks  
+* lightweight leakage checks  
 * annotation validation
+
+7. **Assemble linter baseline inputs**
+
+  Reconstruct file-level `diff_code` snippets for the static-analysis baseline so that Flake8 and Pylint can be run on the same PR/file selection used by the evaluation set.
+
+**Notebook rerun steps**
+
+To recreate the current `dataset_v1` artifacts from the notebook, the intended rerun procedure is:
+
+1. Activate the project Python environment and install the notebook dependencies used for data collection and plotting.
+2. Open `notebooks/data_preparation_pipeline.ipynb` and configure the required GitHub/API credentials expected by the collection cells.
+3. Clear or reuse the local `cache/` directory depending on whether a fresh crawl or a reproducible cached rerun is desired.
+4. Run the notebook sequentially from top to bottom so that the fetch, extraction, classification, filtering, validation, retrieval-corpus assembly, and static-baseline assembly steps execute in order.
+5. Verify that the generated outputs are written back under `data/raw/dataset_v1/`, including `evaluation_dataset.json`, `retrieval_corpus.json`, and `static_analysis_input.json`.
+6. Re-run the visualization cells to refresh the dataset figures after any dataset regeneration.
+7. If label-quality validation is being repeated, divide the non-synthetic `dataset_v1` entries across all team members and manually review whether each retained label matches the target violation category before treating the dataset as final.
+
+The main changes from the older draft are therefore: expanded evaluation repositories, stronger label filtering and validation, explicit augmented retrieval chunks for balancing, and regenerated visualizations based on the current JSON outputs.
 
 # **8\. Proposed Methodology Overview** {#8.-proposed-methodology-overview}
 
