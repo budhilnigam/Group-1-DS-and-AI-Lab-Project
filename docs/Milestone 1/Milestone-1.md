@@ -212,6 +212,8 @@ The objectives of this project are:
 * Inconsistent adherence to repository guidelines  
 * Sensitive to prompt design  
 * Lack of explicit grounding mechanisms
+  
+  Prior research provides useful benchmarks for LLM-based code tasks. The CodeReviewer model by Zhen Li et al. (2022) reports BLEU-4 scores of 0.36–0.41 for code review comment generation. In general code-related tasks, models evaluated in Evaluating Large Language Models Trained on Code achieve accuracy between 70% and 85%. Additionally, Retrieval-Augmented Generation (RAG) introduced by Patrick Lewis et al. (2020) shows performance improvements of 5–20% in accuracy and relevance, with 8–15% gains in grounding and precision in software engineering tasks.
 
   6. ## How the Proposed Approach Differs {#how-the-proposed-approach-differs}
 
