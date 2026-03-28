@@ -2,29 +2,29 @@
 
 repo: django/django
 
-repo\_name: Django
+repo_name: Django
 
-storage\_type: raw\_guidelines
+storage_type: raw_guidelines
 
-collected\_on: 2026-03-21
+collected_on: 2026-03-21
 
-collector: team\_member\_name
+collector: team_member_name
 
 \---
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_001
+source_id: django_001
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-source\_title: Python Coding Style
+source_title: Python Coding Style
 
-section\_hint: Python style
+section_hint: Python style
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 * All files should be formatted using the [black](https://pypi.org/project/black/) auto-formatter. This will be run by **pre-commit** if that is configured.  
 * The project repository includes an **.editorconfig** file. We recommend using a text editor with [EditorConfig](https://editorconfig.org/) support to avoid indentation and whitespace issues. The Python files use 4 spaces for indentation and the HTML files use 2 spaces.  
@@ -39,48 +39,48 @@ BEGIN\_TEXT
   f"hello **{**self**.**user**.**name**}**"  
      
   *\# Disallowed*  
-  f"hello **{**get\_user()**}**"  
+  f"hello **{**get_user()**}**"  
   f"you are **{**user**.**age **\*** 365.25**}** days old"  
      
   *\# Allowed with local variable assignment*  
-  user **\=** get\_user()  
+  user **\=** get_user()  
   f"hello **{**user**}**"  
-  user\_days\_old **\=** user**.**age **\*** 365.25  
-  f"you are **{**user\_days\_old**}** days old"  
+  user_days_old **\=** user**.**age **\*** 365.25  
+  f"you are **{**user_days_old**}** days old"  
   f-strings should not be used for any string that may require translation, including error and logging messages. In general **format()** is more verbose, so the other formatting methods are preferred.  
   Don’t waste time doing unrelated refactoring of existing code to adjust the formatting method.  
 * Avoid use of “we” in comments, e.g. “Loop over” rather than “We loop over”.  
-* Use underscores, not camelCase, for variable, function and method names (i.e. **poll.get\_unique\_voters()**, not **poll.getUniqueVoters()**).  
+* Use underscores, not camelCase, for variable, function and method names (i.e. **poll.get_unique_voters()**, not **poll.getUniqueVoters()**).  
 * Use **InitialCaps** for class names (or for factory functions that return classes).  
 * In docstrings, follow the style of existing docstrings and [**PEP 257**](https://peps.python.org/pep-0257/).  
 * In tests, use [**assertRaisesMessage()**](https://docs.djangoproject.com/en/dev/topics/testing/tools/#django.test.SimpleTestCase.assertRaisesMessage) and [**assertWarnsMessage()**](https://docs.djangoproject.com/en/dev/topics/testing/tools/#django.test.SimpleTestCase.assertWarnsMessage) instead of [**assertRaises()**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertRaises) and [**assertWarns()**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertWarns) so you can check the exception or warning message. Use [**assertRaisesRegex()**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertRaisesRegex) and [**assertWarnsRegex()**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertWarnsRegex) only if you need regular expression matching.  
   Use [**assertIs(…, True/False)**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertIs) for testing boolean values, rather than [**assertTrue()**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertTrue) and [**assertFalse()**](https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertFalse), so you can check the actual boolean value, not the truthiness of the expression.  
 * In test docstrings, state the expected behavior that each test demonstrates. Don’t include preambles such as “Tests that” or “Ensures that”.  
   Reserve ticket references for obscure issues where the ticket has additional details that can’t be easily described in docstrings or comments. Include the ticket number at the end of a sentence like this:  
-  **def** **test\_foo**():  
+  **def** **test_foo**():  
   	*"""*  
   	*A test docstring looks like this (\#123456).*  
   	*"""*  
   	**...**  
 * Where applicable, use unpacking generalizations compliant with [**PEP 448**](https://peps.python.org/pep-0448/), such as merging mappings (**{x, y}**) or sequences (**[a, b]**). This improves performance, readability, and maintainability while reducing errors.
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_002
+source_id: django_002
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-source\_title: Python Coding Style
+source_title: Python Coding Style
 
-section\_hint: Imports
+section_hint: Imports
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 * Use [isort](https://pypi.org/project/isort/) to automate import sorting using the guidelines below.  
   Quick start:  
@@ -95,7 +95,7 @@ BEGIN\_TEXT
   For example (comments are for explanatory purposes only):  
   django/contrib/admin/example.py[**¶**](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/#id1)  
   *\# future*  
-  **from** **\_\_future\_\_** **import** unicode\_literals  
+  **from** **__future__** **import** unicode_literals  
      
   *\# standard library*  
   **import** **json**  
@@ -132,23 +132,23 @@ BEGIN\_TEXT
   instead of:  
   **from** **django.views.generic.base** **import** View
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_003
+source_id: django_003
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-source\_title: Python Coding Style
+source_title: Python Coding Style
 
-source\_hint: Template style
+source_hint: Template style
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 Follow the below rules in Django template code.
 
@@ -225,87 +225,87 @@ Follow the below rules in Django template code.
     ***{%*** **block** content ***%}***  
     ...
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_004
+source_id: django_004
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-source\_title: Python Coding Style
+source_title: Python Coding Style
 
-source\_hint: View style
+source_hint: View style
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 * In Django views, the first parameter in a view function should be called **request**.  
   Do this:  
-  **def** **my\_view**(request, foo): **...**  
+  **def** **my_view**(request, foo): **...**  
   Don’t do this:  
-  **def** **my\_view**(req, foo): **...**
+  **def** **my_view**(req, foo): **...**
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_005
+source_id: django_005
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-source\_title: Python Coding Style
+source_title: Python Coding Style
 
-source\_hint: Model style
+source_hint: Model style
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 * Field names should be all lowercase, using underscores instead of camelCase.  
   Do this:  
   **class** **Person**(models**.**Model):  
-  	first\_name **\=** models**.**CharField(max\_length**\=**20)  
-  	last\_name **\=** models**.**CharField(max\_length**\=**40)  
+  	first_name **\=** models**.**CharField(max_length**\=**20)  
+  	last_name **\=** models**.**CharField(max_length**\=**40)  
   Don’t do this:  
   **class** **Person**(models**.**Model):  
-      FirstName **\=** models**.**CharField(max\_length**\=**20)  
-  	Last\_Name **\=** models**.**CharField(max\_length**\=**40)  
+      FirstName **\=** models**.**CharField(max_length**\=**20)  
+  	Last_Name **\=** models**.**CharField(max_length**\=**40)  
 * The **class Meta** should appear *after* the fields are defined, with a single blank line separating the fields and the class definition.  
   Do this:  
   **class** **Person**(models**.**Model):  
-  	first\_name **\=** models**.**CharField(max\_length**\=**20)  
-  	last\_name **\=** models**.**CharField(max\_length**\=**40)  
+  	first_name **\=** models**.**CharField(max_length**\=**20)  
+  	last_name **\=** models**.**CharField(max_length**\=**40)  
      
   	**class** **Meta**:  
-     	 verbose\_name\_plural **\=** "people"  
+     	 verbose_name_plural **\=** "people"  
   Don’t do this:  
   **class** **Person**(models**.**Model):  
   	**class** **Meta**:  
-      	verbose\_name\_plural **\=** "people"  
+      	verbose_name_plural **\=** "people"  
      
-  	first\_name **\=** models**.**CharField(max\_length**\=**20)  
-  	last\_name **\=** models**.**CharField(max\_length**\=**40)  
+  	first_name **\=** models**.**CharField(max_length**\=**20)  
+  	last_name **\=** models**.**CharField(max_length**\=**40)  
 * The order of model inner classes and standard methods should be as follows (noting that these are not all required):  
   * All database fields  
   * Custom manager attributes  
   * **class Meta**  
-  * **def \_\_str\_\_()** and other Python magic methods  
+  * **def __str__()** and other Python magic methods  
   * **def save()**  
-  * **def get\_absolute\_url()**  
+  * **def get_absolute_url()**  
   * Any custom methods  
 * If **choices** is defined for a given model field, define each choice as a mapping, with an all-uppercase name as a class attribute on the model. Example:  
   · 	**class** **MyModel**(models**.**Model):  
-  · 	    DIRECTION\_UP **\=** "U"  
-  · 	    DIRECTION\_DOWN **\=** "D"  
-  · 	    DIRECTION\_CHOICES **\=** {  
-  · 	        DIRECTION\_UP: "Up",  
-  · 	        DIRECTION\_DOWN: "Down",  
+  · 	    DIRECTION_UP **\=** "U"  
+  · 	    DIRECTION_DOWN **\=** "D"  
+  · 	    DIRECTION_CHOICES **\=** {  
+  · 	        DIRECTION_UP: "Up",  
+  · 	        DIRECTION_DOWN: "Down",  
   · 	    }  
   Alternatively, consider using [Enumeration types](https://docs.djangoproject.com/en/dev/ref/models/fields/#field-choices-enum-types):  
   **class** **MyModel**(models**.**Model):  
@@ -313,33 +313,33 @@ BEGIN\_TEXT
       	UP **\=** "U", "Up"  
       	DOWN **\=** "D", "Down"
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_006
+source_id: django_006
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 
-source\_title: Python Coding Style
+source_title: Python Coding Style
 
-source\_hint: Use of **django.conf.settings**
+source_hint: Use of **django.conf.settings**
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 Modules should not in general use settings stored in **django.conf.settings** at the top level (i.e. evaluated when the module is imported). The explanation for this is as follows:
 
-Manual configuration of settings (i.e. not relying on the [**DJANGO\_SETTINGS\_MODULE**](https://docs.djangoproject.com/en/dev/topics/settings/#envvar-DJANGO_SETTINGS_MODULE) environment variable) is allowed and possible as follows:
+Manual configuration of settings (i.e. not relying on the [**DJANGO_SETTINGS_MODULE**](https://docs.djangoproject.com/en/dev/topics/settings/#envvar-DJANGO_SETTINGS_MODULE) environment variable) is allowed and possible as follows:
 
 **from** **django.conf** **import** settings
 
  
 
-settings**.**configure({}, SOME\_SETTING**\=**"foo")
+settings**.**configure({}, SOME_SETTING**\=**"foo")
 
 However, if any setting is accessed before the **settings.configure** line, this will not work. (Internally, **settings** is a **LazyObject** which configures itself automatically when the settings are accessed if it has not already been configured).
 
@@ -347,78 +347,78 @@ So, if there is a module containing some code as follows:
 
 **from** **django.conf** **import** settings
 
-**from** **django.urls** **import** get\_callable
+**from** **django.urls** **import** get_callable
 
  
 
-default\_foo\_view **\=** get\_callable(settings**.**FOO\_VIEW)
+default_foo_view **\=** get_callable(settings**.**FOO_VIEW)
 
 …then importing this module will cause the settings object to be configured. That means that the ability for third parties to import the module at the top level is incompatible with the ability to configure the settings object manually, or makes it very difficult in some circumstances.
 
 Instead of the above code, a level of laziness or indirection must be used, such as **django.utils.functional.LazyObject**, **django.utils.functional.lazy()** or **lambda**.
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_007
+source_id: django_007
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/
 
-source\_title: Javascript Coding Style
+source_title: Javascript Coding Style
 
-source\_hint: Code style
+source_hint: Code style
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 * Please conform to the indentation style dictated in the **.editorconfig** file. We recommend using a text editor with [EditorConfig](https://editorconfig.org/) support to avoid indentation and whitespace issues. Most of the JavaScript files use 4 spaces for indentation, but there are some exceptions.  
-* When naming variables, use **camelCase** instead of **underscore\_case**. Different JavaScript files sometimes use a different code style. Please try to conform to the code style of each file.  
+* When naming variables, use **camelCase** instead of **underscore_case**. Different JavaScript files sometimes use a different code style. Please try to conform to the code style of each file.  
 * Use the [ESLint](https://eslint.org/) code linter to check your code for bugs and style errors. ESLint will be run when you run the JavaScript tests. We also recommended installing a ESLint plugin in your text editor.  
 * Where possible, write code that will work even if the page structure is later changed with JavaScript. For instance, when binding a click handler, use **$('body').on('click', selector, func)** instead of **$(selector).click(func)**. This makes it easier for projects to extend Django’s default behavior with JavaScript.
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_008
+source_id: django_008
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/
 
-source\_title: Javascript Coding Style
+source_title: Javascript Coding Style
 
-source\_hint: Javascript patches
+source_hint: Javascript patches
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
 Django’s admin system leverages the jQuery framework to increase the capabilities of the admin interface. In conjunction, there is an emphasis on admin JavaScript performance and minimizing overall admin media file size.
 
-END\_TEXT
+END_TEXT
 
-END\_GUIDELINE\_BLOCK
+END_GUIDELINE_BLOCK
 
  
 
-BEGIN\_GUIDELINE\_BLOCK
+BEGIN_GUIDELINE_BLOCK
 
-source\_id: django\_009
+source_id: django_009
 
-source\_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/
+source_url: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/
 
-source\_title: Javascript Coding Style
+source_title: Javascript Coding Style
 
-source\_hint: Javascript Tests
+source_hint: Javascript Tests
 
-BEGIN\_TEXT
+BEGIN_TEXT
 
-Django’s JavaScript tests can be run in a browser or from the command line. The tests are located in a top level [js\_tests](https://github.com/django/django/blob/main/js_tests) directory.
+Django’s JavaScript tests can be run in a browser or from the command line. The tests are located in a top level [js_tests](https://github.com/django/django/blob/main/js_tests) directory.
 
 **Writing tests**
 
@@ -474,13 +474,13 @@ The JavaScript tests may be run from a web browser or from the command line.
 
 #### Testing from a web browser
 
-To run the tests from a web browser, open up [js\_tests/tests.html](https://github.com/django/django/blob/main/js_tests/tests.html) in your browser.
+To run the tests from a web browser, open up [js_tests/tests.html](https://github.com/django/django/blob/main/js_tests/tests.html) in your browser.
 
 To measure code coverage when running the tests, you need to view that file over HTTP. To view code coverage:
 
-* Execute **python \-m http.server** from the root directory (not from inside **js\_tests**).
+* Execute **python \-m http.server** from the root directory (not from inside **js_tests**).
 
-* Open [http://localhost:8000/js\_tests/tests.html](http://localhost:8000/js_tests/tests.html) in your web browser.
+* Open [http://localhost:8000/js_tests/tests.html](http://localhost:8000/js_tests/tests.html) in your web browser.
 
 #### Testing from the command line
 

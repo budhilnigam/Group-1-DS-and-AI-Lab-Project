@@ -1,0 +1,162 @@
+[
+  {
+    "chunk_id": "django_001__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_001",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": "Python style",
+    "word_count": 174
+  },
+  {
+    "chunk_id": "django_001__2",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_001",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": "Python style",
+    "word_count": 155
+  },
+  {
+    "chunk_id": "django_001__3",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_001",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": "Python style",
+    "word_count": 175
+  },
+  {
+    "chunk_id": "django_001__4",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_001",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": "Python style",
+    "word_count": 114
+  },
+  {
+    "chunk_id": "django_002__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_002",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": "Imports",
+    "word_count": 178
+  },
+  {
+    "chunk_id": "django_002__2",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_002",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": "Imports",
+    "word_count": 153
+  },
+  {
+    "chunk_id": "django_003__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_003",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": null,
+    "word_count": 162
+  },
+  {
+    "chunk_id": "django_003__2",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_003",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": null,
+    "word_count": 174
+  },
+  {
+    "chunk_id": "django_004__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_004",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": null,
+    "word_count": 28
+  },
+  {
+    "chunk_id": "django_005__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_005",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": null,
+    "word_count": 165
+  },
+  {
+    "chunk_id": "django_005__2",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_005",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": null,
+    "word_count": 80
+  },
+  {
+    "chunk_id": "django_006__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_006",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "source_title": "Python Coding Style",
+    "section_hint": null,
+    "word_count": 176
+  },
+  {
+    "chunk_id": "django_007__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_007",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/",
+    "source_title": "Javascript Coding Style",
+    "section_hint": null,
+    "word_count": 152
+  },
+  {
+    "chunk_id": "django_008__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_008",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/",
+    "source_title": "Javascript Coding Style",
+    "section_hint": null,
+    "word_count": 32
+  },
+  {
+    "chunk_id": "django_009__1",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_009",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/",
+    "source_title": "Javascript Coding Style",
+    "section_hint": null,
+    "word_count": 169
+  },
+  {
+    "chunk_id": "django_009__2",
+    "repo": "django",
+    "source_file": "data\\raw\\guidelines_raw\\django_guidelines_raw.md",
+    "source_id": "django_009",
+    "source_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/javascript/",
+    "source_title": "Javascript Coding Style",
+    "section_hint": null,
+    "word_count": 84
+  }
+]

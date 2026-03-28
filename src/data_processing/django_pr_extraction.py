@@ -18,41 +18,37 @@ MAX_SAMPLES = 50
 PER_PAGE = 30
 SLEEP_TIME = 0.5
 
-OUTPUT_FILE = "django_evaluation_dataset.json"
+OUTPUT_FILE = "django_evaluation_dataset.jsonl"
+CHECKPOINT_FILE = "django_checkpoint.json"
 
 HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}",
     "Accept": "application/vnd.github+json"
 }
 
-MAX_ADDED_LINES = 200
-CONTEXT_RADIUS = 3
+# =========================
+# CHECKPOINT HANDLING
+# =========================
 
-def filter_diff_lines(parsed):
-    added_indices = [i for i, x in enumerate(parsed) if x["type"] == "add"]
+def load_checkpoint():
+    if os.path.exists(CHECKPOINT_FILE):
+        with open(CHECKPOINT_FILE, "r") as f:
+            return json.load(f)
+    return {"page": 1, "pr_index": 0, "collected": 0}
 
-    if not added_indices:
-        return []
 
-    selected_indices = set()
+def save_checkpoint(state):
+    with open(CHECKPOINT_FILE, "w") as f:
+        json.dump(state, f)
 
-    for idx in added_indices[:MAX_ADDED_LINES]:
-        for i in range(idx - CONTEXT_RADIUS, idx + CONTEXT_RADIUS + 1):
-            if 0 <= i < len(parsed):
-                selected_indices.add(i)
-
-    selected_indices = sorted(selected_indices)
-
-    return [parsed[i]["content"] for i in selected_indices]
 
 # =========================
-# FILTERING HEURISTICS
+# FILTERING
 # =========================
 
 USELESS_PATTERNS = [
     r"\blgtm\b", r"\blooks good\b", r"\bnice work\b",
-    r"\bgood job\b", r"\bthanks\b", r"\bapproved\b",
-    r"\bready to merge\b"
+    r"\bgood job\b", r"\bthanks\b", r"\bapproved\b"
 ]
 
 def is_useful_comment(text):
@@ -65,29 +61,27 @@ def is_useful_comment(text):
         if re.search(p, text):
             return False
 
-    # Must contain signal words
-    signal_keywords = ["should", "must", "avoid", "fix", "incorrect", "error", "issue"]
-    if not any(k in text for k in signal_keywords):
-        return False
-
-    return True
+    keywords = ["should", "must", "fix", "error", "issue", "incorrect"]
+    return any(k in text for k in keywords)
 
 
 # =========================
-# API UTILITIES
+# API
 # =========================
 
-def github_get(url, params=None, retries=3):
-    for _ in range(retries):
+def github_get(url, params=None):
+    while True:
         res = requests.get(url, headers=HEADERS, params=params)
+
         if res.status_code == 200:
             return res.json()
-        elif res.status_code == 403:
-            print("Rate limit hit, sleeping...")
+
+        if res.status_code == 403:
+            print("Rate limit hit. Sleeping 60s...")
             time.sleep(60)
         else:
+            print(f"Retrying... ({res.status_code})")
             time.sleep(2)
-    return None
 
 
 def get_prs(page):
@@ -111,9 +105,6 @@ def get_review_comments(pr_number):
 # =========================
 
 def parse_diff_hunk(diff_hunk):
-    """
-    Parses diff hunk into structured lines with mapping
-    """
     lines = diff_hunk.split("\n")
 
     parsed = []
@@ -128,27 +119,20 @@ def parse_diff_hunk(diff_hunk):
         new_line = int(match.group(2))
 
     for line in lines[1:]:
-        entry = {
-            "content": line,
-            "type": None,
-            "old_line": None,
-            "new_line": None
-        }
+        entry = {"content": line, "type": None, "old": None, "new": None}
 
         if line.startswith("+"):
             entry["type"] = "add"
-            entry["new_line"] = new_line
+            entry["new"] = new_line
             new_line += 1
-
         elif line.startswith("-"):
             entry["type"] = "del"
-            entry["old_line"] = old_line
+            entry["old"] = old_line
             old_line += 1
-
         else:
             entry["type"] = "context"
-            entry["old_line"] = old_line
-            entry["new_line"] = new_line
+            entry["old"] = old_line
+            entry["new"] = new_line
             old_line += 1
             new_line += 1
 
@@ -157,60 +141,78 @@ def parse_diff_hunk(diff_hunk):
     return parsed
 
 
-def find_diff_index(parsed_lines, target_line):
-    """
-    Maps GitHub 'line' to diff index accurately
-    """
-    for idx, entry in enumerate(parsed_lines):
-        if entry["new_line"] == target_line:
-            return idx
+def find_diff_index(parsed, target_line):
+    for i, p in enumerate(parsed):
+        if p["new"] == target_line:
+            return i
     return None
 
 
 # =========================
-# CHUNK MERGING
+# DIFF FILTERING (200 ADDED LINES RULE)
 # =========================
 
-def merge_chunks(existing_chunks, new_chunk_lines):
-    """
-    Merge overlapping diff chunks to avoid duplication
-    """
-    new_set = set(new_chunk_lines)
+MAX_ADDED_LINES = 200
+CONTEXT_RADIUS = 3
 
-    for chunk in existing_chunks:
-        if len(new_set.intersection(set(chunk["diff_lines"]))) > 3:
-            # merge
-            merged = list(set(chunk["diff_lines"] + new_chunk_lines))
-            chunk["diff_lines"] = merged
-            return chunk["chunk_id"]
+def filter_diff(parsed):
+    added_indices = [i for i, x in enumerate(parsed) if x["type"] == "add"]
 
-    chunk_id = f"c{len(existing_chunks) + 1}"
-    existing_chunks.append({
-        "chunk_id": chunk_id,
-        "diff_lines": new_chunk_lines
-    })
-    return chunk_id
+    if not added_indices:
+        return [], {}
+
+    selected = set()
+
+    for idx in added_indices[:MAX_ADDED_LINES]:
+        for i in range(idx - CONTEXT_RADIUS, idx + CONTEXT_RADIUS + 1):
+            if 0 <= i < len(parsed):
+                selected.add(i)
+
+    selected = sorted(selected)
+
+    index_map = {}
+    filtered_lines = []
+
+    for new_idx, old_idx in enumerate(selected):
+        index_map[old_idx] = new_idx
+        filtered_lines.append(parsed[old_idx]["content"])
+
+    return filtered_lines, index_map
 
 
 # =========================
-# MAIN PIPELINE
+# STREAM WRITE
 # =========================
 
-def build_dataset():
-    dataset = []
-    collected = 0
-    page = 1
+def append_to_file(entry):
+    with open(OUTPUT_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
+# =========================
+# MAIN
+# =========================
+
+def run():
+    state = load_checkpoint()
+
+    page = state["page"]
+    pr_index = state["pr_index"]
+    collected = state["collected"]
+
+    print("Resuming from:", state)
 
     while collected < MAX_SAMPLES:
         prs = get_prs(page)
+
         if not prs:
             break
 
-        print(f"\nProcessing PR page {page}")
-
-        for pr in prs:
+        for i in range(pr_index, len(prs)):
+            pr = prs[i]
             pr_number = pr["number"]
-            print(f"PR #{pr_number}")
+
+            print(f"Processing PR #{pr_number}")
 
             comments = get_review_comments(pr_number)
             if not comments:
@@ -220,8 +222,6 @@ def build_dataset():
                 "diff_chunks": [],
                 "ground_truth_reviews": []
             })
-
-            seen_comments = set()
 
             for c in comments:
                 body = c.get("body", "")
@@ -235,27 +235,30 @@ def build_dataset():
                 if not is_useful_comment(body):
                     continue
 
-                if body in seen_comments:
-                    continue
-                seen_comments.add(body)
-
                 parsed = parse_diff_hunk(diff_hunk)
                 diff_index = find_diff_index(parsed, line)
 
                 if diff_index is None:
                     continue
 
-                diff_lines = filter_diff_lines(parsed)
+                diff_lines, index_map = filter_diff(parsed)
 
-                chunk_id = merge_chunks(
-                    file_data[path]["diff_chunks"],
-                    diff_lines
-                )
+                if diff_index not in index_map:
+                    continue
+
+                new_index = index_map[diff_index]
+
+                chunk_id = f"c{len(file_data[path]['diff_chunks'])+1}"
+
+                file_data[path]["diff_chunks"].append({
+                    "chunk_id": chunk_id,
+                    "diff_lines": diff_lines
+                })
 
                 file_data[path]["ground_truth_reviews"].append({
                     "review_id": f"r{c['id']}",
                     "chunk_id": chunk_id,
-                    "diff_line_index": diff_index,
+                    "diff_line_index": new_index,
                     "file_line_number": line,
                     "violation_category": "",
                     "review_comment": body.strip()
@@ -265,13 +268,15 @@ def build_dataset():
                 if not data["ground_truth_reviews"]:
                     continue
 
-                dataset.append({
+                entry = {
                     "pr_id": f"PR_{pr_number}",
                     "repo": f"{REPO_OWNER}/{REPO_NAME}",
                     "file_path": file_path,
                     "diff_chunks": data["diff_chunks"],
                     "ground_truth_reviews": data["ground_truth_reviews"]
-                })
+                }
+
+                append_to_file(entry)
 
                 collected += 1
                 print(f"Collected: {collected}")
@@ -279,24 +284,22 @@ def build_dataset():
                 if collected >= MAX_SAMPLES:
                     break
 
-            if collected >= MAX_SAMPLES:
-                break
+            # ✅ SAVE CHECKPOINT AFTER EACH PR
+            state = {
+                "page": page,
+                "pr_index": i + 1,
+                "collected": collected
+            }
+            save_checkpoint(state)
 
             time.sleep(SLEEP_TIME)
 
+            if collected >= MAX_SAMPLES:
+                break
+
         page += 1
+        pr_index = 0
 
-    return dataset
-
-
-# =========================
-# RUN
-# =========================
 
 if __name__ == "__main__":
-    data = build_dataset()
-
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
-
-    print(f"\nSaved dataset to {OUTPUT_FILE}")
+    run()

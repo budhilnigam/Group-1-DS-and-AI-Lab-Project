@@ -1,0 +1,18 @@
+{
+  "django": {
+    "chunks": 16,
+    "out_path": "data/processed/guideline_chunks\\django_chunks.json"
+  },
+  "fastapi": {
+    "chunks": 18,
+    "out_path": "data/processed/guideline_chunks\\fastapi_chunks.json"
+  },
+  "pandas": {
+    "chunks": 31,
+    "out_path": "data/processed/guideline_chunks\\pandas_chunks.json"
+  },
+  "scikit-learn": {
+    "chunks": 10,
+    "out_path": "data/processed/guideline_chunks\\scikit-learn_chunks.json"
+  }
+}

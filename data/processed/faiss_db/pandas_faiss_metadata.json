@@ -1,0 +1,312 @@
+[
+  {
+    "chunk_id": "pandas_001__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_001",
+    "source_url": "doc/source/development/contributing.rst",
+    "source_title": "Contributing to pandas",
+    "section_hint": "Pull request title conventions",
+    "word_count": 117
+  },
+  {
+    "chunk_id": "pandas_002__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_002",
+    "source_url": "doc/source/development/contributing.rst",
+    "source_title": "Contributing to pandas",
+    "section_hint": "Code standards",
+    "word_count": 82
+  },
+  {
+    "chunk_id": "pandas_003__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_003",
+    "source_url": "doc/source/development/contributing.rst",
+    "source_title": "Contributing to pandas",
+    "section_hint": "Pre-commit",
+    "word_count": 97
+  },
+  {
+    "chunk_id": "pandas_004__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_004",
+    "source_url": "doc/source/development/contributing.rst",
+    "source_title": "Contributing to pandas",
+    "section_hint": "Optional dependencies",
+    "word_count": 40
+  },
+  {
+    "chunk_id": "pandas_005__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_005",
+    "source_url": "doc/source/development/contributing.rst",
+    "source_title": "Contributing to pandas",
+    "section_hint": "Backwards compatibility",
+    "word_count": 83
+  },
+  {
+    "chunk_id": "pandas_006__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_006",
+    "source_url": "doc/source/development/contributing.rst",
+    "source_title": "Contributing to pandas",
+    "section_hint": "Type hints",
+    "word_count": 23
+  },
+  {
+    "chunk_id": "pandas_007__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_007",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Style guidelines - imports",
+    "word_count": 163
+  },
+  {
+    "chunk_id": "pandas_007__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_007",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Style guidelines - imports",
+    "word_count": 65
+  },
+  {
+    "chunk_id": "pandas_008__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_008",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Documenting - release notes and references",
+    "word_count": 171
+  },
+  {
+    "chunk_id": "pandas_009__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_009",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Docstrings overview and standards",
+    "word_count": 85
+  },
+  {
+    "chunk_id": "pandas_010__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_010",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Writing docstrings - general rules",
+    "word_count": 154
+  },
+  {
+    "chunk_id": "pandas_011__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_011",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Docstring sections",
+    "word_count": 143
+  },
+  {
+    "chunk_id": "pandas_011__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_011",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Docstring sections",
+    "word_count": 179
+  },
+  {
+    "chunk_id": "pandas_011__3",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_011",
+    "source_url": "doc/source/development/contributing_codebase.rst",
+    "source_title": "Contributing to the Codebase",
+    "section_hint": "Docstring sections",
+    "word_count": 129
+  },
+  {
+    "chunk_id": "pandas_012__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_012",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Parameter types",
+    "word_count": 176
+  },
+  {
+    "chunk_id": "pandas_012__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_012",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Parameter types",
+    "word_count": 61
+  },
+  {
+    "chunk_id": "pandas_013__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_013",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Returns or Yields",
+    "word_count": 174
+  },
+  {
+    "chunk_id": "pandas_013__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_013",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Returns or Yields",
+    "word_count": 51
+  },
+  {
+    "chunk_id": "pandas_014__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_014",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Section 5: see also",
+    "word_count": 171
+  },
+  {
+    "chunk_id": "pandas_014__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_014",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Section 5: see also",
+    "word_count": 161
+  },
+  {
+    "chunk_id": "pandas_014__3",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_014",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "Section 5: see also",
+    "word_count": 79
+  },
+  {
+    "chunk_id": "pandas_015__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_015",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "docstring examples",
+    "word_count": 180
+  },
+  {
+    "chunk_id": "pandas_015__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_015",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "docstring examples",
+    "word_count": 174
+  },
+  {
+    "chunk_id": "pandas_015__3",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_015",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "docstring examples",
+    "word_count": 175
+  },
+  {
+    "chunk_id": "pandas_015__4",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_015",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "docstring examples",
+    "word_count": 167
+  },
+  {
+    "chunk_id": "pandas_015__5",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_015",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "docstring examples",
+    "word_count": 168
+  },
+  {
+    "chunk_id": "pandas_016__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_016",
+    "source_url": "doc/source/development/contributing_docstring.rst",
+    "source_title": "pandas docstring guide",
+    "section_hint": "doctest_tips",
+    "word_count": 156
+  },
+  {
+    "chunk_id": "pandas_017__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_017",
+    "source_url": "doc/source/development/contributing_documentation.rst",
+    "source_title": "Contributing to the documentation",
+    "section_hint": "About the pandas documentation",
+    "word_count": 180
+  },
+  {
+    "chunk_id": "pandas_017__2",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_017",
+    "source_url": "doc/source/development/contributing_documentation.rst",
+    "source_title": "Contributing to the documentation",
+    "section_hint": "About the pandas documentation",
+    "word_count": 57
+  },
+  {
+    "chunk_id": "pandas_018__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_018",
+    "source_url": "doc/source/development/contributing_documentation.rst",
+    "source_title": "Contributing to the documentation",
+    "section_hint": "Docstring validation and updates",
+    "word_count": 101
+  },
+  {
+    "chunk_id": "pandas_019__1",
+    "repo": "pandas",
+    "source_file": "data\\raw\\guidelines_raw\\pandas_guidelines_raw.md",
+    "source_id": "pandas_019",
+    "source_url": "doc/source/development/contributing_documentation.rst",
+    "source_title": "Contributing to the documentation",
+    "section_hint": "Building documentation",
+    "word_count": 167
+  }
+]

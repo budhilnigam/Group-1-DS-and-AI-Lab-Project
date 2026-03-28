@@ -1,0 +1,182 @@
+[
+  {
+    "chunk_id": "fastapi_001__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_001",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/body/",
+    "source_title": "Request Body",
+    "section_hint": "Data Validation",
+    "word_count": 67
+  },
+  {
+    "chunk_id": "fastapi_002__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_002",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "source_title": "Path Parameters",
+    "section_hint": "API Design",
+    "word_count": 52
+  },
+  {
+    "chunk_id": "fastapi_003__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_003",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "source_title": "Query Parameters",
+    "section_hint": "API Design",
+    "word_count": 63
+  },
+  {
+    "chunk_id": "fastapi_004__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_004",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "source_title": "Dependencies",
+    "section_hint": "API Design",
+    "word_count": 69
+  },
+  {
+    "chunk_id": "fastapi_005__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_005",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "source_title": "Response Model",
+    "section_hint": "Data Validation",
+    "word_count": 66
+  },
+  {
+    "chunk_id": "fastapi_006__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_006",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "source_title": "Handling Errors",
+    "section_hint": "Error Handling",
+    "word_count": 57
+  },
+  {
+    "chunk_id": "fastapi_007__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_007",
+    "source_url": "https://fastapi.tiangolo.com/async/",
+    "source_title": "Async and Await",
+    "section_hint": "Python Style",
+    "word_count": 50
+  },
+  {
+    "chunk_id": "fastapi_008__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_008",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "source_title": "Nested Models",
+    "section_hint": "Data Validation",
+    "word_count": 50
+  },
+  {
+    "chunk_id": "fastapi_009__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_009",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "source_title": "Body Fields",
+    "section_hint": "Data Validation",
+    "word_count": 50
+  },
+  {
+    "chunk_id": "fastapi_010__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_010",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "source_title": "Background Tasks",
+    "section_hint": "API Design",
+    "word_count": 69
+  },
+  {
+    "chunk_id": "fastapi_011__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_011",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "source_title": "Path Operation Configuration",
+    "section_hint": "API Design",
+    "word_count": 39
+  },
+  {
+    "chunk_id": "fastapi_012__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_012",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "source_title": "Tags",
+    "section_hint": "API Design",
+    "word_count": 40
+  },
+  {
+    "chunk_id": "fastapi_013__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_013",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/status-codes/",
+    "source_title": "Status Codes",
+    "section_hint": "API Design",
+    "word_count": 44
+  },
+  {
+    "chunk_id": "fastapi_014__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_014",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "source_title": "Response Status Code",
+    "section_hint": "API Design",
+    "word_count": 34
+  },
+  {
+    "chunk_id": "fastapi_015__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_015",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "source_title": "Form Data",
+    "section_hint": "Data Validation",
+    "word_count": 47
+  },
+  {
+    "chunk_id": "fastapi_016__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_016",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "source_title": "File Uploads",
+    "section_hint": "API Design",
+    "word_count": 35
+  },
+  {
+    "chunk_id": "fastapi_017__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_017",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "source_title": "Multiple File Uploads",
+    "section_hint": "API Design",
+    "word_count": 35
+  },
+  {
+    "chunk_id": "fastapi_018__1",
+    "repo": "fastapi",
+    "source_file": "data\\raw\\guidelines_raw\\fastapi_guidelines_raw.md",
+    "source_id": "fastapi_018",
+    "source_url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "source_title": "Automatic Docs",
+    "section_hint": "API Design",
+    "word_count": 32
+  }
+]

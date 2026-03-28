@@ -1,0 +1,102 @@
+[
+  {
+    "chunk_id": "sklearn_001__1",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_001",
+    "source_url": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "source_title": "Coding guidelines",
+    "section_hint": "Coding guidelines",
+    "word_count": 107
+  },
+  {
+    "chunk_id": "sklearn_001__2",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_001",
+    "source_url": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "source_title": "Coding guidelines",
+    "section_hint": "Coding guidelines",
+    "word_count": 168
+  },
+  {
+    "chunk_id": "sklearn_002__1",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_002",
+    "source_url": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "source_title": "Instantiation",
+    "section_hint": "Instantiation",
+    "word_count": 157
+  },
+  {
+    "chunk_id": "sklearn_002__2",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_002",
+    "source_url": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "source_title": "Instantiation",
+    "section_hint": "Instantiation",
+    "word_count": 131
+  },
+  {
+    "chunk_id": "sklearn_003__1",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_003",
+    "source_url": "https://scikit-learn.org/stable/developers/develop.html#estimated-attributes",
+    "source_title": "Estimated Attributes",
+    "section_hint": "Estimated Attributes",
+    "word_count": 120
+  },
+  {
+    "chunk_id": "sklearn_004__1",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_004",
+    "source_url": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "source_title": "Contribute Documentation",
+    "section_hint": "Guidelines for writing docstrings",
+    "word_count": 176
+  },
+  {
+    "chunk_id": "sklearn_004__2",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_004",
+    "source_url": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "source_title": "Contribute Documentation",
+    "section_hint": "Guidelines for writing docstrings",
+    "word_count": 47
+  },
+  {
+    "chunk_id": "sklearn_004__3",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_004",
+    "source_url": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "source_title": "Contribute Documentation",
+    "section_hint": "Guidelines for writing docstrings",
+    "word_count": 171
+  },
+  {
+    "chunk_id": "sklearn_004__4",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_004",
+    "source_url": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "source_title": "Contribute Documentation",
+    "section_hint": "Guidelines for writing docstrings",
+    "word_count": 171
+  },
+  {
+    "chunk_id": "sklearn_004__5",
+    "repo": "scikit-learn",
+    "source_file": "data\\raw\\guidelines_raw\\sklearn_guidelines_raw.md",
+    "source_id": "sklearn_004",
+    "source_url": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "source_title": "Contribute Documentation",
+    "section_hint": "Guidelines for writing docstrings",
+    "word_count": 142
+  }
+]

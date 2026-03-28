@@ -1,0 +1,187 @@
+{
+  "repo": "scikit-learn/scikit-learn",
+  "repo_name": "scikit-learn",
+  "storage_type": "chunked_guidelines",
+  "collected_on": "2026-03-26",
+  "source_urls": [
+    "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "https://scikit-learn.org/stable/developers/contributing.html#code-review-guidelines"
+  ],
+  "violation_types": [
+    "indentation",
+    "naming_convention",
+    "unused_import",
+    "mutable_default",
+    "documentation_formatting"
+  ],
+  "chunks": [
+    {
+      "chunk_id": "sklearn_001",
+      "repo_name": "scikit-learn",
+      "violation_type": "indentation",
+      "rule": "Follow PEP 8 indentation rules strictly. Use 4 spaces per indentation level for all Python code. Never mix tabs and spaces. Consistent indentation is enforced via flake8 and pre-commit hooks across the entire codebase."
+    },
+    {
+      "chunk_id": "sklearn_002",
+      "repo_name": "scikit-learn",
+      "violation_type": "indentation",
+      "rule": "Avoid multiple statements on one line. Prefer a line return after a control flow statement such as if or for. Each statement should occupy its own line to improve readability and debuggability."
+    },
+    {
+      "chunk_id": "sklearn_003",
+      "repo_name": "scikit-learn",
+      "violation_type": "indentation",
+      "rule": "Continuation lines should be aligned with the opening delimiter or use a hanging indent of 4 spaces. For function arguments that span multiple lines, align wrapped elements either vertically or with a consistent hanging indent."
+    },
+    {
+      "chunk_id": "sklearn_004",
+      "repo_name": "scikit-learn",
+      "violation_type": "indentation",
+      "rule": "Do not add PEP 8 indentation violations in your pull request. On a Unix-like system, run 'make flake8-diff' to check. Avoid reformatting parts of the file that your pull request does not change, as it distracts from code review."
+    },
+    {
+      "chunk_id": "sklearn_005",
+      "repo_name": "scikit-learn",
+      "violation_type": "indentation",
+      "rule": "Use pre-commit hooks for automatic indentation and formatting corrections. When pre-commit reformats your code on commit, run git add followed by git commit again. In rare cases, you may need to fix indentation manually."
+    },
+    {
+      "chunk_id": "sklearn_006",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "Use underscores to separate words in non-class names, e.g. n_samples rather than nsamples. This applies to variables, functions, method names, and module-level constants throughout the codebase."
+    },
+    {
+      "chunk_id": "sklearn_007",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "Attributes estimated from data must always have a name ending with a trailing underscore, e.g. coef_ for regression coefficients after fit is called. This convention distinguishes fitted attributes from constructor parameters."
+    },
+    {
+      "chunk_id": "sklearn_008",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "Every keyword argument accepted by __init__ should correspond to an attribute on the instance with the same name. Store parameters unmodified as attributes, e.g. self.n_clusters = n_clusters. scikit-learn relies on this for model selection."
+    },
+    {
+      "chunk_id": "sklearn_009",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "Parameters should conventionally start with an alphabetic character and end with an alphanumeric character. Follow consistent naming conventions for constructor parameters across all estimator implementations."
+    },
+    {
+      "chunk_id": "sklearn_010",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "Use CamelCase for class names, e.g. RandomForestClassifier. Use lowercase_with_underscores for function and method names, e.g. fit_transform. Use UPPER_CASE for module-level constants, e.g. DEFAULT_N_JOBS."
+    },
+    {
+      "chunk_id": "sklearn_011",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "If randomness is needed after fit, store the RNG in an attribute named random_state_ with a trailing underscore. This follows the convention that post-fit state attributes end with an underscore to signal they were computed during fitting."
+    },
+    {
+      "chunk_id": "sklearn_012",
+      "repo_name": "scikit-learn",
+      "violation_type": "naming_convention",
+      "rule": "Estimators should set n_features_in_ at fit time to indicate the expected number of features. The trailing underscore signals this is a fitted attribute, not a user-provided parameter. This enables input shape validation."
+    },
+    {
+      "chunk_id": "sklearn_013",
+      "repo_name": "scikit-learn",
+      "violation_type": "unused_import",
+      "rule": "Never use 'import *' in any module. It is considered harmful by official Python recommendations. It makes the code harder to read as the origin of symbols is no longer explicitly referenced, and it prevents static analysis tools like pyflakes from finding bugs."
+    },
+    {
+      "chunk_id": "sklearn_014",
+      "repo_name": "scikit-learn",
+      "violation_type": "unused_import",
+      "rule": "Remove all unused imports before submitting a pull request. Unused imports clutter the namespace and may mask real import errors. Run flake8 to automatically detect unused import statements flagged under the F401 error code."
+    },
+    {
+      "chunk_id": "sklearn_015",
+      "repo_name": "scikit-learn",
+      "violation_type": "unused_import",
+      "rule": "Import only the specific names you need from a module, e.g. 'from sklearn.utils import check_array' rather than 'import sklearn.utils'. This makes dependencies explicit and helps tools identify unused imports accurately."
+    },
+    {
+      "chunk_id": "sklearn_016",
+      "repo_name": "scikit-learn",
+      "violation_type": "unused_import",
+      "rule": "Organize imports into three groups separated by a blank line: standard library imports first, then third-party imports, then local scikit-learn imports. Within each group, sort alphabetically. Remove any imports that are no longer referenced in the code."
+    },
+    {
+      "chunk_id": "sklearn_017",
+      "repo_name": "scikit-learn",
+      "violation_type": "unused_import",
+      "rule": "Type checking must not produce new errors in your pull request. Ensure that type imports used only for annotations are placed inside an 'if TYPE_CHECKING:' block so they do not become runtime unused imports."
+    },
+    {
+      "chunk_id": "sklearn_018",
+      "repo_name": "scikit-learn",
+      "violation_type": "mutable_default",
+      "rule": "Never use mutable objects like lists, dicts, or sets as default argument values in function or method signatures. Use None as the default and create the mutable object inside the function body, e.g. 'if param is None: param = []'."
+    },
+    {
+      "chunk_id": "sklearn_019",
+      "repo_name": "scikit-learn",
+      "violation_type": "mutable_default",
+      "rule": "There should be no logic, not even input validation, in the __init__ method. Store parameters unmodified as attributes. This prevents accidental mutation of mutable defaults and ensures set_params works correctly for GridSearchCV."
+    },
+    {
+      "chunk_id": "sklearn_020",
+      "repo_name": "scikit-learn",
+      "violation_type": "mutable_default",
+      "rule": "The estimator __init__ should take a random_state argument with a default of None, not a mutable random generator. Store the value unmodified and call check_random_state in fit to create the actual RNG from the immutable default."
+    },
+    {
+      "chunk_id": "sklearn_021",
+      "repo_name": "scikit-learn",
+      "violation_type": "mutable_default",
+      "rule": "When an estimator accepts a list or dict parameter, default it to None in __init__ and document the actual default behavior in the docstring, e.g. 'weights : list or None, default=None. If None, all weights are equal.'"
+    },
+    {
+      "chunk_id": "sklearn_022",
+      "repo_name": "scikit-learn",
+      "violation_type": "mutable_default",
+      "rule": "Attributes with trailing underscores (fitted attributes) should not be set inside __init__. Setting mutable fitted state like lists or arrays in __init__ would cause shared state bugs across instances and violate the estimator API contract."
+    },
+    {
+      "chunk_id": "sklearn_023",
+      "repo_name": "scikit-learn",
+      "violation_type": "documentation_formatting",
+      "rule": "All public methods should have informative docstrings with sample usage presented as doctests when appropriate. Follow the numpydoc format for docstring sections in this order: Parameters, Returns, See Also, Notes, Examples."
+    },
+    {
+      "chunk_id": "sklearn_024",
+      "repo_name": "scikit-learn",
+      "violation_type": "documentation_formatting",
+      "rule": "Document parameters with their type and default value using the format 'n_clusters : int, default=3'. For parameters accepting multiple types, use '{\"hello\", \"goodbye\"}, bool or int, default=True'. Always include the default value."
+    },
+    {
+      "chunk_id": "sklearn_025",
+      "repo_name": "scikit-learn",
+      "violation_type": "documentation_formatting",
+      "rule": "The See Also docstring section should have one line per reference with a colon and explanation, e.g. 'SelectKBest : Select features based on the k highest scores'. Keep cross-references concise and relevant to the current method or class."
+    },
+    {
+      "chunk_id": "sklearn_026",
+      "repo_name": "scikit-learn",
+      "violation_type": "documentation_formatting",
+      "rule": "The Examples section in docstrings should include one or two code snippets showing usage with all required imports included. Test docstring examples using pytest with the --doctest-modules flag on the relevant module file."
+    },
+    {
+      "chunk_id": "sklearn_027",
+      "repo_name": "scikit-learn",
+      "violation_type": "documentation_formatting",
+      "rule": "Docstrings must pass numpydoc validation. Run validation checks to ensure sections are properly formatted, parameter types are documented, return values are described, and no required sections are missing from public API docstrings."
+    },
+    {
+      "chunk_id": "sklearn_028",
+      "repo_name": "scikit-learn",
+      "violation_type": "documentation_formatting",
+      "rule": "The Notes section is optional and should provide information on specific behavior of the function or class. Use it for mathematical formulas, algorithm details, or implementation notes. Do not duplicate what is already stated in the Parameters section."
+    }
+  ]
+}
