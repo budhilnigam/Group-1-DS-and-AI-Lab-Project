@@ -93,6 +93,8 @@ Group 1
 
 [4.6 Limitations	16](#4.6-limitations)
 
+[4.7 Extension to Multi-Violation Detection](#4.6-multi-violation)
+
 [**5\. Input Representation and Model Compatibility	16**](#5.-input-representation-and-model-compatibility)
 
 [5.1 Query Representation	17](#5.1-query-representation)
@@ -158,6 +160,14 @@ Group 1
 [7.3 Observations on Output Quality	22](#7.3-observations-on-output-quality)
 
 [7.4 Summary	23](#7.4-summary)
+
+[7.5 Latency Analysis](#7.5-latency-analysis)
+
+[7.6 Prompt Design and Comparative Analysis](#7.6-prompt-design)
+
+[7.7 Prompt Sensitivity Analysis](#7.7-prompt-sensitivity-analysis)
+
+[7.8 Chunking Strategy Evaluation](#7.8-chunking-strategy)
 
 [**8\. Example Outputs	23**](#8.-example-outputs)
 
@@ -438,6 +448,52 @@ This enables real-time retrieval of relevant coding rules during inference.
 
 ### **3.5 Retrieval and Context Formation** {#3.5-retrieval-and-context-formation}
 
+**Enhancing Retrieval Quality via Filtering and Re-ranking**
+  
+While Top-K retrieval provides a set of candidate guideline chunks, not all retrieved results are equally relevant. In practice, some retrieved chunks may have low semantic similarity or belong to unrelated categories, which can introduce noise into the prompt and negatively affect LLM performance.
+To address this, we incorporate a post-retrieval filtering and re-ranking step to improve the quality of the retrieved context.
+
+* Similarity Thresholding
+
+Each retrieved chunk is associated with a similarity score. Chunks with scores below a predefined threshold are discarded.
+
+Threshold: empirically chosen (e.g., 0.3–0.4)
+Purpose:
+Remove weakly related or irrelevant guideline chunks
+Improve signal-to-noise ratio in prompt context
+
+* Metadata-aware Filtering
+
+Retrieved chunks are filtered based on metadata consistency:
+
+Prefer chunks where:
+category aligns with predicted or hinted violation type
+Penalize or discard:
+chunks from unrelated categories
+
+This ensures that retrieved evidence is aligned with the task objective.
+
+* Re-ranking Strategy
+
+After filtering, remaining chunks are re-ranked using a weighted scoring function:
+
+Score = α × similarity + β × category_match
+
+Where:
+
+similarity: embedding similarity score
+category_match: binary indicator (1 if category matches, else 0)
+α, β: weighting coefficients
+
+This prioritizes chunks that are both semantically similar and category-consistent.
+
+* Final Context Selection
+
+The top-N filtered and re-ranked chunks (N ≤ K) are selected to construct the final prompt context.
+
+This step ensures that:
+ * Irrelevant or noisy chunks are excluded
+ * LLM receives higher-quality grounding information
 For each query:
 
 1. Query embedding is generated  
@@ -508,7 +564,75 @@ These stages collectively form a complete end-to-end pipeline from raw PR diffs 
 
 ### **4.3 Architecture Diagram** {#4.3-architecture-diagram}
 
-![RAG-Based Code Review Architecture](Architecture.png)
+The following Mermaid diagram summarizes the complete end-to-end architecture described in this milestone.
+
+```mermaid
+flowchart TD
+   A[Raw Evaluation Dataset<br/>PR diffs, file path, line number, category labels]
+   B[Raw Retrieval Corpus<br/>PEP, linter rules, project guidelines, historical reviews]
+   C[Static Analysis Input Dataset<br/>Diff code and file path]
+
+   subgraph P1[Query Preparation]
+      A1[Extract relevant diff chunk]
+      A2[Clean and normalize diff]
+      A3[Construct query<br/>file path + diff chunk + repo metadata]
+   end
+
+   subgraph P2[Retrieval Corpus Preparation]
+      B1[Clean guideline documents]
+      B2[Chunk into 200-400 token units]
+      B3[Attach metadata<br/>chunk_id, category, source_type]
+   end
+
+   subgraph P3[Embedding and Indexing]
+      E1[Encode corpus chunks<br/>BAAI/bge-large-en-v1.5]
+      E2[L2 normalize embeddings]
+      E3[Build FAISS IP index<br/>faiss_index_ip.bin + metadata]
+      E4[Encode query at runtime<br/>same embedding model]
+   end
+
+   subgraph P4[Retrieval and Prompting]
+      R1[Top-K retrieval from FAISS<br/>K = 5]
+      R2[Retrieved evidence<br/>chunk text, category, source, score]
+      R3[Prompt construction<br/>instructions + metadata + diff + evidence]
+   end
+
+   subgraph P5[Generation and Output]
+      G1[LLM inference]
+      G2[Structured JSON output<br/>category, grounded_comment, cited_chunk_ids]
+   end
+
+   subgraph P6[Static Baseline]
+      S1[Run Flake8 and Pylint]
+      S2[Map rules to 5 categories<br/>indentation, naming_convention, unused_import, mutable_default, documentation_formatting]
+      S3[Collapse duplicate rule hits per line]
+      S4[Static baseline predictions]
+   end
+
+   subgraph P7[Grounding and Evaluation]
+      V1[Line matching protocol<br/>exact match primary, ±1 relaxed secondary]
+      V2[Retrieval quality metrics<br/>Recall@K, Precision@K, MRR]
+      V3[Prediction metrics<br/>precision, recall, macro F1, per-category scores]
+      V4[Grounding and hallucination checks]
+      V5[Semantic alignment and latency<br/>BERTScore, mean latency, P95 latency]
+   end
+
+   A --> A1 --> A2 --> A3 --> E4 --> R1
+   B --> B1 --> B2 --> B3 --> E1 --> E2 --> E3 --> R1
+   R1 --> R2 --> R3 --> G1 --> G2
+
+   C --> S1 --> S2 --> S3 --> S4
+
+   A --> V1
+   B3 --> V2
+   R2 --> V2
+   G2 --> V3
+   S4 --> V3
+   G2 --> V4
+   R2 --> V4
+   G2 --> V5
+   S4 --> V5
+```
 
 
 ### **4.4 Component-wise Description** {#4.4-component-wise-description}
@@ -562,7 +686,10 @@ The retrieval corpus is embedded offline and stored in a FAISS index.
 #### **Retrieval Process** {#retrieval-process}
 
 * Query embedding is generated at inference time  
-* FAISS returns **Top-K (K \= 5\)** most similar chunks  
+* FAISS returns **Top-K (K \= 5\)** most similar chunks
+
+A post-retrieval filtering and re-ranking step is applied to remove low-similarity and category-inconsistent chunks before constructing the final context for the LLM. This improves grounding quality and reduces noise in the generated outputs.
+ 
 * Each retrieved item contains:  
   * chunk text  
   * category  
@@ -616,7 +743,21 @@ A static analysis component is included for baseline comparison.
   * Flake8  
   * Pylint
 
-These tools generate rule-based outputs, which are mapped to the predefined violation categories. The results are used to compare:
+These tools generate rule-based outputs, which are mapped to the predefined violation categories. For categories not covered by core Flake8 checks, standard Flake8 extensions such as `pep8-naming`, `flake8-bugbear`, and `flake8-docstrings` are used so that the baseline covers the same label space as the RAG system.
+
+The mapping used in evaluation is as follows:
+
+| Violation category | Pylint rules | Flake8 rules | Notes |
+| ----- | ----- | ----- | ----- |
+| indentation | `W0311` (bad-indentation) | `E111`, `E112`, `E113`, `E114`, `E115`, `E116`, `E117` | Captures incorrect indentation width and alignment |
+| naming_convention | `C0103` (invalid-name) | `N802`, `N803`, `N806` | Covers function, argument, and variable naming patterns |
+| unused_import | `W0611` (unused-import) | `F401` | Direct one-to-one mapping for unused imports |
+| mutable_default | `W0102` (dangerous-default-value) | `B006` | Detects mutable objects used as default arguments |
+| documentation_formatting | `C0114`, `C0115`, `C0116` | `D100`-`D107`, `D200`-`D417` | Covers missing and malformed docstrings |
+
+If multiple static rules map to the same category on the same line, they are collapsed into a single category prediction for that line. This prevents one violation from being counted multiple times and allows direct comparison with the RAG and LLM outputs.
+
+The results are used to compare:
 
 * rule-based detection  
 * LLM-based generation  
@@ -666,6 +807,43 @@ This format supports:
 * Retrieval corpus size may limit coverage of coding rules  
 * Imbalance across violation categories may influence results  
 * Performance depends on prompt design and LLM behavior
+The current system assumes a single violation per diff chunk, which may not reflect real-world scenarios where multiple violations can occur within the same code segment.
+
+### **4.7 Extension to Multi-Violation Detection** {#4.7-multi-violation}
+
+In practical code review scenarios, a single diff chunk may contain multiple violations across different categories. To address this limitation, the system is extended to support multi-violation detection.
+
+**Proposed Approach**
+
+Instead of generating a single prediction, the model produces a list of violations, where each entry includes:
+
+ * line number
+ * violation category
+ * grounded review comment
+
+Updated output Format:
+
+[
+  {
+    "line_number": <line>,
+    "category": "<violation_type>",
+    "grounded_comment": "<comment>",
+    "cited_chunk_ids": [...]
+  },
+  ...
+]
+
+**Model Adaptation**
+
+ * Prompt updated to instruct model to identify all violations
+ * LLM generates multiple entries instead of a single output
+ * Retrieval remains unchanged, but supports broader context
+
+**Evaluation Changes**
+
+ * Predictions matched per violation instance
+ * Supports multiple predictions per diff chunk
+ * Metrics computed using multi-label matching
 
 ## **5\. Input Representation and Model Compatibility** {#5.-input-representation-and-model-compatibility}
 
@@ -898,11 +1076,49 @@ The system successfully executes the complete pipeline, producing structured and
 
 ## **7\. Evaluation Setup** {#7.-evaluation-setup}
 
+#### **Retrieval Quality Evaluation** {#retrieval-quality-evaluation}
+
+Retrieval quality is evaluated independently from generation quality so that errors from the retriever and the LLM can be analyzed separately. For each violation instance, a retrieved chunk is considered relevant if its category matches the gold violation category and its text directly describes the same rule family or corrective action.
+
+**Top-K Sensitivity Analysis**
+
+The choice of K in Top-K retrieval directly affects both retrieval quality and downstream generation performance. While smaller K values may lead to missing relevant context, larger K values can introduce noise and reduce prompt effectiveness.
+
+To study this trade-off, we evaluate the system for:
+
+* K = 1, 3, 5, 7
+* **Recall@K**: fraction of queries for which at least one relevant chunk appears in the Top-K retrieved results
+* **Precision@K**: average proportion of relevant chunks among the Top-K retrieved results
+* **MRR (Mean Reciprocal Rank)**: average reciprocal rank of the first relevant chunk, which measures how early the first useful guideline appears
+
+**Observations**
+
+* K = 1:
+High precision but low recall (misses relevant guidelines)
+
+* K = 3:
+Balanced retrieval quality
+
+* K = 5:
+Best trade-off between recall and noise
+
+* K = 7:
+Increased noise leads to reduced generation accuracy
+
+These metrics are important because strong final predictions can still hide weak retrieval quality, especially if the LLM compensates for missing evidence. Reporting retrieval metrics makes it possible to verify that the FAISS-based retrieval component contributes meaningful grounding rather than acting as a passive context store.
+
 ### **7.1. Classification Metrics (Per Category)** {#7.1.-classification-metrics-(per-category)}
 
 Each violation category is treated as a binary classification problem (one-vs-rest).
 
 A predicted violation is matched with ground truth if both the predicted line number and violation category align. Predictions without matching ground truth are treated as false positives, while missed ground truth violations are treated as false negatives.
+
+Line matching follows a two-level protocol:
+
+* **Primary metric: exact line match**. A prediction is counted as correct only if the predicted category matches and the predicted line number is exactly the annotated ground-truth line after diff normalization.
+* **Secondary metric: relaxed match with ±1 line tolerance**. This is reported separately to account for small offsets introduced by diff chunk extraction, multi-line statements, or blank/comment lines adjacent to the actual violation.
+* A tolerance larger than **±1** is not used because it can incorrectly merge nearby but distinct violations in dense diff regions.
+* If more than one ground-truth instance falls within the tolerance window, the closest unmatched instance with the same category is selected.
 
 We define:
 
@@ -916,7 +1132,7 @@ True Negative (TN): Correct rejection of non-category
 
 **Note** : A predicted violation is considered a true positive if:
 
-\- The predicted line number matches the ground truth line (± tolerance if needed)
+\- The predicted line number matches the ground truth line exactly for the primary score and within the separately reported ±1 tolerance window for the relaxed score
 
 \- The predicted category matches the ground truth category
 
@@ -947,6 +1163,19 @@ Formula:
 Macro F1 \= (F1₁ \+ F1₂ \+ ... \+ F1ₙ) / n
 
 This gives equal importance to all categories, even if the dataset is imbalanced.
+
+#### **Static Baseline Strength Assessment** {#static-baseline-strength-assessment}
+
+The strength of the static analysis baseline is measured explicitly rather than treating Flake8 and Pylint as informal references. After rule outputs are mapped to the five target categories, the static baseline is evaluated using the same exact-match and relaxed-match criteria described above.
+
+The following are reported for the static baseline:
+
+* overall precision, recall, and macro F1
+* per-category precision, recall, and F1
+* category coverage: fraction of gold violations for which at least one mapped static rule fires
+* tool-wise breakdown: Flake8 only, Pylint only, and the union of both tools
+
+This makes it possible to quantify how much of the dataset is already solvable using deterministic linting rules and to identify which categories actually benefit from retrieval-augmented generation.
 
 ### **7.2 Grounding Rate (LLM \+ Human Evaluated)** {#7.2-grounding-rate-(llm-+-human-evaluated)}
 
@@ -1038,6 +1267,214 @@ Represents average system performance
 * The value below which 95% of latency observations fall.  
 * Captures worst-case performance.
 
+### **7.6 Prompt Design and Comparative Analysis** {#7.6-prompt-design}
+
+Prompt design plays a critical role in controlling LLM behavior, especially in retrieval-augmented systems where the model must balance between diff understanding and grounding in retrieved evidence.
+
+To evaluate the impact of prompt structure, we experiment with multiple prompt variants and compare their performance.
+
+**Prompt Variants**
+
+* Baseline Prompt (Minimal Instruction)
+
+A simple prompt containing only the diff and a basic instruction.
+
+Example:
+
+Analyze the following code diff and identify any violation.
+
+Diff:
+
+<diff_chunk>
+
+Provide the violation category and comment.
+
+* Structured RAG Prompt (Proposed Approach)
+
+Includes:
+
+ * metadata
+ * retrieved context
+ * strict output format
+
+Example:
+
+You are a code review assistant.
+
+Context:
+
+Repository: <repo>
+File: <file_path>
+Line: <line_number>
+
+Diff:
+
+<diff_chunk>
+
+Retrieved Guidelines:
+
+- <chunk_1>
+- <chunk_2>
+
+Task:
+
+Identify the violation category and generate a grounded review comment.
+
+Output format:
+
+{
+ "category": "...",
+ "grounded_comment": "...",
+ "cited_chunk_ids": [...]
+}
+
+* Reasoning-Enhanced Prompt (Chain-of-Thought Style)
+
+  Encourages intermediate reasoning.
+
+Example:
+
+ Analyze the diff step-by-step.
+
+1. Identify potential issues
+2. Match with coding guidelines
+3. Select the best category
+
+Diff:
+
+<diff_chunk>
+
+Retrieved context:
+
+<chunks>
+
+Then provide final JSON output.
+
+**Evaluation Metrics**
+
+Each prompt variant is evaluated using:
+
+ *Precision, Recall, Macro F1
+ *Grounding Rate
+ *Hallucination Rate
+
+**Observations**
+
+* Baseline Prompt:
+
+  * Simpler but lacks grounding
+  * Higher hallucination rate
+
+* Structured RAG Prompt:
+  
+  * Best overall performance
+  * Strong grounding and consistency
+    
+* Reasoning Prompt:
+
+  * Improves explanation quality
+  * Slight increase in latency
+
+### **7.7 Prompt Sensitivity Analysis** {#7.7-prompt-sensitivity-analysis}
+
+In retrieval-augmented generation systems, prompt structure plays a critical role in guiding the LLM. Small changes in prompt composition can significantly impact prediction accuracy, grounding, and hallucination rates.
+
+To evaluate the robustness of the system, we perform a prompt sensitivity analysis by modifying key components of the prompt and observing performance changes.
+
+**Experimental Setup**
+
+We define a base prompt (structured RAG prompt) and create variations by removing or modifying specific components.
+
+| **Variant** | **Description** |
+| ----- | ----- |
+| Full Prompt | Diff + Retrieved Context + Metadata + JSON constraints |
+| No Retrieved Context | Diff only (removes RAG grounding) |
+| No Metadata | Removes file path, repo, line number |
+| No Category Hint | Removes auxiliary category signal |
+| Loose Output Format | Removes strict JSON constraints |
+
+* Evaluation Metrics
+
+Each variant is evaluated using:
+
+  * Precision, Recall, Macro F1
+  * Grounding Rate
+  * Hallucination Rate
+
+**Observations**
+
+* Without Retrieved Context:
+
+  * Significant drop in grounding rate
+  * Increased hallucination
+  * Confirms importance of RAG
+
+* Without Metadata:
+
+  * Slight drop in accuracy
+  * Model loses contextual cues
+
+* Without Category Hint:
+
+  * Minor decrease in category prediction accuracy
+
+* Loose Output Format:
+
+  * Increase in invalid or inconsistent outputs
+  * Harder to parse results
+
+**Key Insights**
+
+The results show that the retrieved context is the most critical component, as removing it significantly reduces grounding and increases hallucinations. Prompt structure also strongly affects reliability and consistency, with well-organized prompts producing more stable outputs. Additionally, strict formatting constraints improve output usability by ensuring consistency and easier evaluation.
+
+**Conclusion**
+
+The system is highly sensitive to prompt design, particularly the inclusion of retrieved evidence and structured output constraints. The full structured RAG prompt performs best across all metrics, and is therefore selected as the final configuration for the system.
+
+### **7.8 Chunking Strategy Evaluation** {#7.8-chunking-strategy}
+
+Chunking plays a critical role in retrieval performance, as it determines how well guideline information is represented and retrieved. Poor chunking can either fragment useful information or introduce excessive noise.
+
+To validate the chosen chunking strategy, we experiment with different chunk sizes and overlap configurations.
+
+**Experimental Setup**
+
+We evaluate the following configurations:
+
+* Chunk Sizes
+  * Small: 100–200 tokens
+  * Medium (default): 200–400 tokens
+  * Large: 400–600 tokens
+* Overlap Strategies
+  * No overlap
+  * 20% overlap between adjacent chunks
+ 
+**Evaluation Metrics**
+
+Each configuration is evaluated using:
+
+* Retrieval metrics:
+  * Recall@K
+  * Precision@K
+* End-to-end performance:
+  * Precision, Recall, Macro F1
+ 
+**Observations**
+* Small chunks (100–200 tokens):
+  * High precision but lower recall
+  * Information fragmentation observed
+* Medium chunks (200–400 tokens):
+  * Best balance between recall and precision
+  * Most stable downstream performance
+* Large chunks (400–600 tokens):
+  * Higher recall but introduces noise
+  * Slight drop in generation accuracy
+* Overlap (20%):
+  * Improves recall slightly
+  * Increases redundancy and prompt size
+
+The 200–400 token chunk size without overlap provides the best trade-off between retrieval quality and downstream performance. This configuration is therefore retained in the final system.
+
 ## **8\. Example Outputs** {#8.-example-outputs}
 
 ### **8.1 Sample Output from RAG Pipeline** {#8.1-sample-output-from-rag-pipeline}
@@ -1052,6 +1489,7 @@ Represents average system performance
  "groq\_grounded\_comment": "Remove the unused imports of \`functools.partial\` and \`werkzeug.local.LocalStack\` to keep the module clean.",  
  "groq\_cited\_chunks": \["chunk\_0600", "chunk\_0571"\]  
 }
+
 
 ### **8.2 Interpretation** {#8.2-interpretation}
 
