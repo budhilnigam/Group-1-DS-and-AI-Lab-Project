@@ -508,7 +508,75 @@ These stages collectively form a complete end-to-end pipeline from raw PR diffs 
 
 ### **4.3 Architecture Diagram** {#4.3-architecture-diagram}
 
-![RAG-Based Code Review Architecture](Architecture.png)
+The following Mermaid diagram summarizes the complete end-to-end architecture described in this milestone.
+
+```mermaid
+flowchart TD
+   A[Raw Evaluation Dataset<br/>PR diffs, file path, line number, category labels]
+   B[Raw Retrieval Corpus<br/>PEP, linter rules, project guidelines, historical reviews]
+   C[Static Analysis Input Dataset<br/>Diff code and file path]
+
+   subgraph P1[Query Preparation]
+      A1[Extract relevant diff chunk]
+      A2[Clean and normalize diff]
+      A3[Construct query<br/>file path + diff chunk + repo metadata]
+   end
+
+   subgraph P2[Retrieval Corpus Preparation]
+      B1[Clean guideline documents]
+      B2[Chunk into 200-400 token units]
+      B3[Attach metadata<br/>chunk_id, category, source_type]
+   end
+
+   subgraph P3[Embedding and Indexing]
+      E1[Encode corpus chunks<br/>BAAI/bge-large-en-v1.5]
+      E2[L2 normalize embeddings]
+      E3[Build FAISS IP index<br/>faiss_index_ip.bin + metadata]
+      E4[Encode query at runtime<br/>same embedding model]
+   end
+
+   subgraph P4[Retrieval and Prompting]
+      R1[Top-K retrieval from FAISS<br/>K = 5]
+      R2[Retrieved evidence<br/>chunk text, category, source, score]
+      R3[Prompt construction<br/>instructions + metadata + diff + evidence]
+   end
+
+   subgraph P5[Generation and Output]
+      G1[LLM inference]
+      G2[Structured JSON output<br/>category, grounded_comment, cited_chunk_ids]
+   end
+
+   subgraph P6[Static Baseline]
+      S1[Run Flake8 and Pylint]
+      S2[Map rules to 5 categories<br/>indentation, naming_convention, unused_import, mutable_default, documentation_formatting]
+      S3[Collapse duplicate rule hits per line]
+      S4[Static baseline predictions]
+   end
+
+   subgraph P7[Grounding and Evaluation]
+      V1[Line matching protocol<br/>exact match primary, ±1 relaxed secondary]
+      V2[Retrieval quality metrics<br/>Recall@K, Precision@K, MRR]
+      V3[Prediction metrics<br/>precision, recall, macro F1, per-category scores]
+      V4[Grounding and hallucination checks]
+      V5[Semantic alignment and latency<br/>BERTScore, mean latency, P95 latency]
+   end
+
+   A --> A1 --> A2 --> A3 --> E4 --> R1
+   B --> B1 --> B2 --> B3 --> E1 --> E2 --> E3 --> R1
+   R1 --> R2 --> R3 --> G1 --> G2
+
+   C --> S1 --> S2 --> S3 --> S4
+
+   A --> V1
+   B3 --> V2
+   R2 --> V2
+   G2 --> V3
+   S4 --> V3
+   G2 --> V4
+   R2 --> V4
+   G2 --> V5
+   S4 --> V5
+```
 
 
 ### **4.4 Component-wise Description** {#4.4-component-wise-description}
@@ -616,7 +684,21 @@ A static analysis component is included for baseline comparison.
   * Flake8  
   * Pylint
 
-These tools generate rule-based outputs, which are mapped to the predefined violation categories. The results are used to compare:
+These tools generate rule-based outputs, which are mapped to the predefined violation categories. For categories not covered by core Flake8 checks, standard Flake8 extensions such as `pep8-naming`, `flake8-bugbear`, and `flake8-docstrings` are used so that the baseline covers the same label space as the RAG system.
+
+The mapping used in evaluation is as follows:
+
+| Violation category | Pylint rules | Flake8 rules | Notes |
+| ----- | ----- | ----- | ----- |
+| indentation | `W0311` (bad-indentation) | `E111`, `E112`, `E113`, `E114`, `E115`, `E116`, `E117` | Captures incorrect indentation width and alignment |
+| naming_convention | `C0103` (invalid-name) | `N802`, `N803`, `N806` | Covers function, argument, and variable naming patterns |
+| unused_import | `W0611` (unused-import) | `F401` | Direct one-to-one mapping for unused imports |
+| mutable_default | `W0102` (dangerous-default-value) | `B006` | Detects mutable objects used as default arguments |
+| documentation_formatting | `C0114`, `C0115`, `C0116` | `D100`-`D107`, `D200`-`D417` | Covers missing and malformed docstrings |
+
+If multiple static rules map to the same category on the same line, they are collapsed into a single category prediction for that line. This prevents one violation from being counted multiple times and allows direct comparison with the RAG and LLM outputs.
+
+The results are used to compare:
 
 * rule-based detection  
 * LLM-based generation  
@@ -898,11 +980,30 @@ The system successfully executes the complete pipeline, producing structured and
 
 ## **7\. Evaluation Setup** {#7.-evaluation-setup}
 
+#### **Retrieval Quality Evaluation** {#retrieval-quality-evaluation}
+
+Retrieval quality is evaluated independently from generation quality so that errors from the retriever and the LLM can be analyzed separately. For each violation instance, a retrieved chunk is considered relevant if its category matches the gold violation category and its text directly describes the same rule family or corrective action.
+
+The retriever is evaluated at **K = 1, 3, 5** using the following metrics:
+
+* **Recall@K**: fraction of queries for which at least one relevant chunk appears in the Top-K retrieved results
+* **Precision@K**: average proportion of relevant chunks among the Top-K retrieved results
+* **MRR (Mean Reciprocal Rank)**: average reciprocal rank of the first relevant chunk, which measures how early the first useful guideline appears
+
+These metrics are important because strong final predictions can still hide weak retrieval quality, especially if the LLM compensates for missing evidence. Reporting retrieval metrics makes it possible to verify that the FAISS-based retrieval component contributes meaningful grounding rather than acting as a passive context store.
+
 ### **7.1. Classification Metrics (Per Category)** {#7.1.-classification-metrics-(per-category)}
 
 Each violation category is treated as a binary classification problem (one-vs-rest).
 
 A predicted violation is matched with ground truth if both the predicted line number and violation category align. Predictions without matching ground truth are treated as false positives, while missed ground truth violations are treated as false negatives.
+
+Line matching follows a two-level protocol:
+
+* **Primary metric: exact line match**. A prediction is counted as correct only if the predicted category matches and the predicted line number is exactly the annotated ground-truth line after diff normalization.
+* **Secondary metric: relaxed match with ±1 line tolerance**. This is reported separately to account for small offsets introduced by diff chunk extraction, multi-line statements, or blank/comment lines adjacent to the actual violation.
+* A tolerance larger than **±1** is not used because it can incorrectly merge nearby but distinct violations in dense diff regions.
+* If more than one ground-truth instance falls within the tolerance window, the closest unmatched instance with the same category is selected.
 
 We define:
 
@@ -916,7 +1017,7 @@ True Negative (TN): Correct rejection of non-category
 
 **Note** : A predicted violation is considered a true positive if:
 
-\- The predicted line number matches the ground truth line (± tolerance if needed)
+\- The predicted line number matches the ground truth line exactly for the primary score and within the separately reported ±1 tolerance window for the relaxed score
 
 \- The predicted category matches the ground truth category
 
@@ -947,6 +1048,19 @@ Formula:
 Macro F1 \= (F1₁ \+ F1₂ \+ ... \+ F1ₙ) / n
 
 This gives equal importance to all categories, even if the dataset is imbalanced.
+
+#### **Static Baseline Strength Assessment** {#static-baseline-strength-assessment}
+
+The strength of the static analysis baseline is measured explicitly rather than treating Flake8 and Pylint as informal references. After rule outputs are mapped to the five target categories, the static baseline is evaluated using the same exact-match and relaxed-match criteria described above.
+
+The following are reported for the static baseline:
+
+* overall precision, recall, and macro F1
+* per-category precision, recall, and F1
+* category coverage: fraction of gold violations for which at least one mapped static rule fires
+* tool-wise breakdown: Flake8 only, Pylint only, and the union of both tools
+
+This makes it possible to quantify how much of the dataset is already solvable using deterministic linting rules and to identify which categories actually benefit from retrieval-augmented generation.
 
 ### **7.2 Grounding Rate (LLM \+ Human Evaluated)** {#7.2-grounding-rate-(llm-+-human-evaluated)}
 
