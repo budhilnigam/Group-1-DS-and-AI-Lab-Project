@@ -1,0 +1,1346 @@
+[
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17667_1438869197",
+    "diff": "@@ -248,6 +248,11 @@ def __init__(\n                 else:\n                     self.attach(*attachment)\n         self.extra_headers = headers or {}\n+        self.headers_with_one_occurrence = {\n+            \"To\": self.to,\n+            \"Reply-To\": self.reply_to,\n+            \"Cc\": self.cc,\n+        }",
+    "violations": [
+      {
+        "type": "",
+        "line": 255,
+        "review_comment": "The PR contains the changes you made in https://github.com/django/django/pull/17642.\r\nPlease remove them."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "get_connection",
+      "start_line": 253,
+      "end_line": 258,
+      "code": "    def get_connection(self, fail_silently=False):\n        from django.core.mail import get_connection\n\n        if not self.connection:\n            self.connection = get_connection(fail_silently=fail_silently)\n        return self.connection",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/models/base.py",
+    "chunk_id": "PR17667_1438894237",
+    "diff": "@@ -775,6 +784,20 @@ def save(\n         that the \"save\" must be an SQL insert or update (or equivalent for\n         non-SQL backends), respectively. Normally, they should not be set.\n         \"\"\"\n+\n+        # RemovedInDjango60Warning\n+        if args:\n+            warnings.warn(\n+                \"Passing positional arguments to save is deprecated\",\n+                RemovedInDjango60Warning,\n+                stacklevel=2,\n+            )\n+            for arg, attr in zip(\n+                args, [\"force_insert\", \"force_update\", \"using\", \"update_fields\"]\n+            ):\n+                if arg:\n+                    setattr(self, attr, arg)",
+    "violations": [
+      {
+        "type": "",
+        "line": 799,
+        "review_comment": "Setting attributes on `self` isn't what you want. Notice this test fails:\r\n\r\n```py\r\n    @ignore_warnings(category=RemovedInDjango60Warning)\r\n    def test_save_positional_arguments(self):\r\n        a = Article.objects.create(headline=\"original\", pub_date=datetime(2014, 5, 16))\r\n        a.headline = \"changed\"\r\n        a.save(False, False, None, [\"pub_date\"])\r\n        a.refresh_from_db()\r\n        self.assertEqual(a.headline, \"original\")\r\n```\r\n```\r\n======================================================================\r\nFAIL: test_save_positional_arguments (basic.tests.ModelInstanceCreationTests.test_save_positional_arguments)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"/Users/jwalls/django/django/test/utils.py\", line 446, in inner\r\n    return func(*args, **kwargs)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"/Users/jwalls/django/tests/basic/tests.py\", line 205, in test_save_positional_arguments\r\n    self.assertEqual(a.headline, \"original\")\r\nAssertionError: 'changed' != 'original'\r\n- changed\r\n+ original\r\n\r\n\r\n----------------------------------------------------------------------\r\nRan 1 test in 0.007s\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "save",
+      "start_line": 772,
+      "end_line": 857,
+      "code": "    def save(\n        self,\n        *args,\n        force_insert=False,\n        force_update=False,\n        using=None,\n        update_fields=None,\n    ):\n        \"\"\"\n        Save the current instance. Override this in a subclass if you want to\n        control the saving process.\n\n        The 'force_insert' and 'force_update' parameters can be used to insist\n        that the \"save\" must be an SQL insert or update (or equivalent for\n        non-SQL backends), respectively. Normally, they should not be set.\n        \"\"\"\n        # RemovedInDjango60Warning.\n        if args:\n            warnings.warn(\n                \"Passing positional arguments to save() is deprecated\",\n                RemovedInDjango60Warning,\n                stacklevel=2,\n            )\n            for arg, attr in zip(\n                args, [\"force_insert\", \"force_update\", \"using\", \"update_fields\"]\n            ):\n                if arg:\n                    if attr == \"force_insert\":\n                        force_insert = arg\n                    elif attr == \"force_update\":\n                        force_update = arg\n                    elif attr == \"using\":\n                        using = arg\n                    else:\n                        update_fields = arg\n\n        self._prepare_related_fields_for_save(operation_name=\"save\")\n\n        using = using or router.db_for_write(self.__class__, instance=self)\n        if force_insert and (force_update or update_fields):\n            raise ValueError(\"Cannot force both insert and updating in model saving.\")\n\n        deferred_non_generated_fields = {\n            f.attname\n            for f in self._meta.concrete_fields\n            if f.attname not in self.__dict__ and f.generated is False\n        }\n        if update_fields is not None:\n            # If update_fields is empty, skip the save. We do also check for\n            # no-op saves later on for inheritance cases. This bailout is\n            # still needed for skipping signal sending.\n            if not update_fields:\n                return\n\n            update_fields = frozenset(update_fields)\n            field_names = self._meta._non_pk_concrete_field_names\n            non_model_fields = update_fields.difference(field_names)\n\n            if non_model_fields:\n                raise ValueError(\n                    \"The following fields do not exist in this model, are m2m \"\n                    \"fields, or are non-concrete fields: %s\"\n                    % \", \".join(non_model_fields)\n                )\n\n        # If saving to the same database, and this model is deferred, then\n        # automatically do an \"update_fields\" save on the loaded fields.\n        elif (\n            not force_insert\n            and deferred_non_generated_fields\n            and using == self._state.db\n        ):\n            field_names = set()\n            for field in self._meta.concrete_fields:\n                if not field.primary_key and not hasattr(field, \"through\"):\n                    field_names.add(field.attname)\n            loaded_fields = field_names.difference(deferred_non_generated_fields)\n            if loaded_fields:\n                update_fields = frozenset(loaded_fields)\n\n        self.save_base(\n            using=using,\n            force_insert=force_insert,\n            force_update=force_update,\n            update_fields=update_fields,\n        )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/basic/tests.py",
+    "chunk_id": "PR17667_1438894585",
+    "diff": "@@ -187,6 +189,19 @@ def test_save_parent_primary_with_default(self):\n         with self.assertNumQueries(2):\n             ChildPrimaryKeyWithDefault().save()\n \n+    def test_save_deprecation(self):\n+        a = Article(headline=\"original\", pub_date=datetime(2014, 5, 16))\n+        msg = \"Passing positional arguments to save is deprecated\"\n+        with self.assertRaisesMessage(RemovedInDjango60Warning, msg):\n+            a.save(False, False, None, None)\n+            self.assertEqual(Article.objects.count(), 1)\n+\n+    @ignore_warnings(category=RemovedInDjango60Warning)\n+    def test_save_positional_arguments(self):\n+        a = Article(headline=\"original\", pub_date=datetime(2014, 5, 16))\n+        a.save(False, False, None, None)\n+        self.assertEqual(Article.objects.count(), 1)",
+    "violations": [
+      {
+        "type": "",
+        "line": 203,
+        "review_comment": "Make sure the test you add fails without your changes."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_asave_deprecation",
+      "start_line": 199,
+      "end_line": 204,
+      "code": "    async def test_asave_deprecation(self):\n        a = Article(headline=\"original\", pub_date=datetime(2014, 5, 16))\n        msg = \"Passing positional arguments to asave() is deprecated\"\n        with self.assertWarnsMessage(RemovedInDjango60Warning, msg):\n            await a.asave(False, False, None, None)\n            self.assertEqual(await Article.objects.acount(), 1)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/basic/tests.py",
+    "chunk_id": "PR17667_1438904776",
+    "diff": "@@ -187,6 +189,19 @@ def test_save_parent_primary_with_default(self):\n         with self.assertNumQueries(2):\n             ChildPrimaryKeyWithDefault().save()\n \n+    def test_save_deprecation(self):\n+        a = Article(headline=\"original\", pub_date=datetime(2014, 5, 16))\n+        msg = \"Passing positional arguments to save is deprecated\"\n+        with self.assertRaisesMessage(RemovedInDjango60Warning, msg):\n+            a.save(False, False, None, None)\n+            self.assertEqual(Article.objects.count(), 1)\n+\n+    @ignore_warnings(category=RemovedInDjango60Warning)\n+    def test_save_positional_arguments(self):\n+        a = Article(headline=\"original\", pub_date=datetime(2014, 5, 16))\n+        a.save(False, False, None, None)\n+        self.assertEqual(Article.objects.count(), 1)",
+    "violations": [
+      {
+        "type": "",
+        "line": 203,
+        "review_comment": "Sorry, I should have clarified that in the event your test case also passes on main (because we're not intending to change any substantive behavior here), then a test that increases coverage should be segregated into a separate commit."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_asave_deprecation",
+      "start_line": 199,
+      "end_line": 204,
+      "code": "    async def test_asave_deprecation(self):\n        a = Article(headline=\"original\", pub_date=datetime(2014, 5, 16))\n        msg = \"Passing positional arguments to asave() is deprecated\"\n        with self.assertWarnsMessage(RemovedInDjango60Warning, msg):\n            await a.asave(False, False, None, None)\n            self.assertEqual(await Article.objects.acount(), 1)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/models/base.py",
+    "chunk_id": "PR17667_1439155940",
+    "diff": "@@ -764,8 +765,16 @@ def serializable_value(self, field_name):\n             return getattr(self, field_name)\n         return getattr(self, field.attname)\n \n+    # RemovedInDjango60Warning: When the deprecation ends, replace with:\n+    # def save(self, *,\n+    #          force_insert=False, force_update=False, using=None, update_fields=None):\n     def save(\n-        self, force_insert=False, force_update=False, using=None, update_fields=None\n+        self,\n+        *args,\n+        force_insert=False,\n+        force_update=False,\n+        using=None,\n+        update_fields=None,",
+    "violations": [
+      {
+        "type": "",
+        "line": 778,
+        "review_comment": "`asave()` should also be changed."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "save",
+      "start_line": 772,
+      "end_line": 857,
+      "code": "    def save(\n        self,\n        *args,\n        force_insert=False,\n        force_update=False,\n        using=None,\n        update_fields=None,\n    ):\n        \"\"\"\n        Save the current instance. Override this in a subclass if you want to\n        control the saving process.\n\n        The 'force_insert' and 'force_update' parameters can be used to insist\n        that the \"save\" must be an SQL insert or update (or equivalent for\n        non-SQL backends), respectively. Normally, they should not be set.\n        \"\"\"\n        # RemovedInDjango60Warning.\n        if args:\n            warnings.warn(\n                \"Passing positional arguments to save() is deprecated\",\n                RemovedInDjango60Warning,\n                stacklevel=2,\n            )\n            for arg, attr in zip(\n                args, [\"force_insert\", \"force_update\", \"using\", \"update_fields\"]\n            ):\n                if arg:\n                    if attr == \"force_insert\":\n                        force_insert = arg\n                    elif attr == \"force_update\":\n                        force_update = arg\n                    elif attr == \"using\":\n                        using = arg\n                    else:\n                        update_fields = arg\n\n        self._prepare_related_fields_for_save(operation_name=\"save\")\n\n        using = using or router.db_for_write(self.__class__, instance=self)\n        if force_insert and (force_update or update_fields):\n            raise ValueError(\"Cannot force both insert and updating in model saving.\")\n\n        deferred_non_generated_fields = {\n            f.attname\n            for f in self._meta.concrete_fields\n            if f.attname not in self.__dict__ and f.generated is False\n        }\n        if update_fields is not None:\n            # If update_fields is empty, skip the save. We do also check for\n            # no-op saves later on for inheritance cases. This bailout is\n            # still needed for skipping signal sending.\n            if not update_fields:\n                return\n\n            update_fields = frozenset(update_fields)\n            field_names = self._meta._non_pk_concrete_field_names\n            non_model_fields = update_fields.difference(field_names)\n\n            if non_model_fields:\n                raise ValueError(\n                    \"The following fields do not exist in this model, are m2m \"\n                    \"fields, or are non-concrete fields: %s\"\n                    % \", \".join(non_model_fields)\n                )\n\n        # If saving to the same database, and this model is deferred, then\n        # automatically do an \"update_fields\" save on the loaded fields.\n        elif (\n            not force_insert\n            and deferred_non_generated_fields\n            and using == self._state.db\n        ):\n            field_names = set()\n            for field in self._meta.concrete_fields:\n                if not field.primary_key and not hasattr(field, \"through\"):\n                    field_names.add(field.attname)\n            loaded_fields = field_names.difference(deferred_non_generated_fields)\n            if loaded_fields:\n                update_fields = frozenset(loaded_fields)\n\n        self.save_base(\n            using=using,\n            force_insert=force_insert,\n            force_update=force_update,\n            update_fields=update_fields,\n        )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/postgres/indexes.py",
+    "chunk_id": "PR17666_1438840971",
+    "diff": "@@ -117,20 +117,27 @@ def get_with_params(self):\n class BTreeIndex(PostgresIndex):\n     suffix = \"btree\"\n \n-    def __init__(self, *expressions, fillfactor=None, **kwargs):\n+    def __init__(self, *expressions, fillfactor=None, deduplicate_items=None, **kwargs):\n         self.fillfactor = fillfactor\n+        self.deduplicate_items = deduplicate_items\n         super().__init__(*expressions, **kwargs)\n \n     def deconstruct(self):\n         path, args, kwargs = super().deconstruct()\n         if self.fillfactor is not None:\n             kwargs[\"fillfactor\"] = self.fillfactor\n+        if self.deduplicate_items is not None:\n+            kwargs[\"deduplicate_items\"] = self.deduplicate_items\n         return path, args, kwargs\n \n     def get_with_params(self):\n         with_params = []\n         if self.fillfactor is not None:\n             with_params.append(\"fillfactor = %d\" % self.fillfactor)\n+        if self.deduplicate_items is not None:\n+            with_params.append(\n+                \"deduplicate_items = %s\" % (\"on\" if self.deduplicate_items else \"off\")\n+            )",
+    "violations": [
+      {
+        "type": "",
+        "line": 140,
+        "review_comment": "`deduplicate_items` cannot be used with `include`. Do you think we should raise a `ValueError` in this case?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "get_with_params",
+      "start_line": 133,
+      "end_line": 141,
+      "code": "    def get_with_params(self):\n        with_params = []\n        if self.fillfactor is not None:\n            with_params.append(\"fillfactor = %d\" % self.fillfactor)\n        if self.deduplicate_items is not None:\n            with_params.append(\n                \"deduplicate_items = %s\" % (\"on\" if self.deduplicate_items else \"off\")\n            )\n        return with_params",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/postgres/indexes.py",
+    "chunk_id": "PR17666_1439371495",
+    "diff": "@@ -117,20 +117,27 @@ def get_with_params(self):\n class BTreeIndex(PostgresIndex):\n     suffix = \"btree\"\n \n-    def __init__(self, *expressions, fillfactor=None, **kwargs):\n+    def __init__(self, *expressions, fillfactor=None, deduplicate_items=None, **kwargs):\n         self.fillfactor = fillfactor\n+        self.deduplicate_items = deduplicate_items\n         super().__init__(*expressions, **kwargs)\n \n     def deconstruct(self):\n         path, args, kwargs = super().deconstruct()\n         if self.fillfactor is not None:\n             kwargs[\"fillfactor\"] = self.fillfactor\n+        if self.deduplicate_items is not None:\n+            kwargs[\"deduplicate_items\"] = self.deduplicate_items\n         return path, args, kwargs\n \n     def get_with_params(self):\n         with_params = []\n         if self.fillfactor is not None:\n             with_params.append(\"fillfactor = %d\" % self.fillfactor)\n+        if self.deduplicate_items is not None:\n+            with_params.append(\n+                \"deduplicate_items = %s\" % (\"on\" if self.deduplicate_items else \"off\")\n+            )",
+    "violations": [
+      {
+        "type": "",
+        "line": 140,
+        "review_comment": "`deduplicate_items` has more limitations, let's leave that to the users. "
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "get_with_params",
+      "start_line": 133,
+      "end_line": 141,
+      "code": "    def get_with_params(self):\n        with_params = []\n        if self.fillfactor is not None:\n            with_params.append(\"fillfactor = %d\" % self.fillfactor)\n        if self.deduplicate_items is not None:\n            with_params.append(\n                \"deduplicate_items = %s\" % (\"on\" if self.deduplicate_items else \"off\")\n            )\n        return with_params",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/models/functions/comparison.py",
+    "chunk_id": "PR17664_1439803578",
+    "diff": "@@ -159,35 +159,40 @@ def as_sql(self, compiler, connection, **extra_context):\n             )\n         return super().as_sql(compiler, connection, **extra_context)\n \n-    def as_postgresql(self, compiler, connection, **extra_context):\n-        copy = self.copy()\n-        copy.set_source_expressions(\n-            [\n-                Cast(expression, TextField()) if index % 2 == 0 else expression\n-                for index, expression in enumerate(copy.get_source_expressions())\n-            ]\n-        )\n-        return super(JSONObject, copy).as_sql(\n-            compiler,\n-            connection,\n-            function=\"JSONB_BUILD_OBJECT\",\n-            **extra_context,\n-        )\n-\n-    def as_oracle(self, compiler, connection, **extra_context):\n+    def as_native(self, compiler, connection, *, returning, **extra_context):\n         class ArgJoiner:\n             def join(self, args):\n-                args = [\" VALUE \".join(arg) for arg in zip(args[::2], args[1::2])]\n-                return \", \".join(args)\n+                pairs = zip(args[::2], args[1::2], strict=True)\n+                return \", \".join([\" VALUE \".join(pair) for pair in pairs])",
+    "violations": [
+      {
+        "type": "",
+        "line": 166,
+        "review_comment": "I'm late to the party, but something that I usually recommend is to avoid creating a whole list in memory before calling `join`, since it handles generators very nicely and it uses less memory:\r\n```suggestion\r\n                return \", \".join(\" VALUE \".join(pair) for pair in pairs)\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "join",
+      "start_line": 164,
+      "end_line": 166,
+      "code": "            def join(self, args):\n                pairs = zip(args[::2], args[1::2], strict=True)\n                return \", \".join([\" VALUE \".join(pair) for pair in pairs])",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/models/functions/comparison.py",
+    "chunk_id": "PR17664_1439806511",
+    "diff": "@@ -159,35 +159,40 @@ def as_sql(self, compiler, connection, **extra_context):\n             )\n         return super().as_sql(compiler, connection, **extra_context)\n \n-    def as_postgresql(self, compiler, connection, **extra_context):\n-        copy = self.copy()\n-        copy.set_source_expressions(\n-            [\n-                Cast(expression, TextField()) if index % 2 == 0 else expression\n-                for index, expression in enumerate(copy.get_source_expressions())\n-            ]\n-        )\n-        return super(JSONObject, copy).as_sql(\n-            compiler,\n-            connection,\n-            function=\"JSONB_BUILD_OBJECT\",\n-            **extra_context,\n-        )\n-\n-    def as_oracle(self, compiler, connection, **extra_context):\n+    def as_native(self, compiler, connection, *, returning, **extra_context):\n         class ArgJoiner:\n             def join(self, args):\n-                args = [\" VALUE \".join(arg) for arg in zip(args[::2], args[1::2])]\n-                return \", \".join(args)\n+                pairs = zip(args[::2], args[1::2], strict=True)\n+                return \", \".join([\" VALUE \".join(pair) for pair in pairs])",
+    "violations": [
+      {
+        "type": "",
+        "line": 166,
+        "review_comment": "A list comprehension is preferable here as `str.join()` converts to list internally anyway. It is better performance to provide a list up front.\r\n - https://stackoverflow.com/questions/9060653/list-comprehension-without-in-python/9061024#9061024\r\n - https://github.com/adamchainz/flake8-comprehensions/issues/156\r\n"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "join",
+      "start_line": 164,
+      "end_line": 166,
+      "code": "            def join(self, args):\n                pairs = zip(args[::2], args[1::2], strict=True)\n                return \", \".join([\" VALUE \".join(pair) for pair in pairs])",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/models/functions/comparison.py",
+    "chunk_id": "PR17664_1439928736",
+    "diff": "@@ -159,35 +159,40 @@ def as_sql(self, compiler, connection, **extra_context):\n             )\n         return super().as_sql(compiler, connection, **extra_context)\n \n-    def as_postgresql(self, compiler, connection, **extra_context):\n-        copy = self.copy()\n-        copy.set_source_expressions(\n-            [\n-                Cast(expression, TextField()) if index % 2 == 0 else expression\n-                for index, expression in enumerate(copy.get_source_expressions())\n-            ]\n-        )\n-        return super(JSONObject, copy).as_sql(\n-            compiler,\n-            connection,\n-            function=\"JSONB_BUILD_OBJECT\",\n-            **extra_context,\n-        )\n-\n-    def as_oracle(self, compiler, connection, **extra_context):\n+    def as_native(self, compiler, connection, *, returning, **extra_context):\n         class ArgJoiner:\n             def join(self, args):\n-                args = [\" VALUE \".join(arg) for arg in zip(args[::2], args[1::2])]\n-                return \", \".join(args)\n+                pairs = zip(args[::2], args[1::2], strict=True)\n+                return \", \".join([\" VALUE \".join(pair) for pair in pairs])",
+    "violations": [
+      {
+        "type": "",
+        "line": 166,
+        "review_comment": "Thank you! Now that you mention it, I recall this was already discussed in another Django PR. I need to re-learn this! :books: "
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "join",
+      "start_line": 164,
+      "end_line": 166,
+      "code": "            def join(self, args):\n                pairs = zip(args[::2], args[1::2], strict=True)\n                return \", \".join([\" VALUE \".join(pair) for pair in pairs])",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/gis/db/backends/oracle/schema.py",
+    "chunk_id": "PR17662_1442629471",
+    "diff": "@@ -119,3 +140,23 @@ def _create_spatial_index_name(self, model, field):\n         return truncate_name(\n             \"%s_%s_id\" % (strip_quotes(model._meta.db_table), field.column), 30\n         )\n+\n+    def _queue_create_spatial_index(self, model, field):\n+        \"\"\"Queues SQL to drop a field's index for execution by run_geometry_sql().\"\"\"\n+        self.geometry_sql.append(\n+            self.sql_add_spatial_index\n+            % {\n+                \"index\": self.quote_name(self._create_spatial_index_name(model, field)),\n+                \"table\": self.quote_name(model._meta.db_table),\n+                \"column\": self.quote_name(field.column),\n+            }\n+        )\n+\n+    def _drop_spatial_index(self, model, field):\n+        \"\"\"Executes SQL to drop the spatial index on the given field.\"\"\"\n+        self.execute(\n+            self.sql_drop_spatial_index\n+            % {\n+                \"index\": self.quote_name(self._create_spatial_index_name(model, field)),\n+            }\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 162,
+        "review_comment": "There is nothing special in dropping spatial indexes on MySQL or Oracle, so I proposed to reuse existing hooks, #17697.\r\n"
+      }
+    ],
+    "ast_context": {
+      "type": "sliding_window",
+      "name": "",
+      "start_line": 152,
+      "end_line": 158,
+      "code": "        )\n\n    def _drop_spatial_index(self, model, field):\n        \"\"\"Executes SQL to drop the spatial index on the given field.\"\"\"\n        index_name = self._create_spatial_index_name(model, field)\n        self.execute(self._delete_index_sql(model, index_name))\n",
+      "fallback": true
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/gis_tests/gis_migrations/test_operations.py",
+    "chunk_id": "PR17662_1444293272",
+    "diff": "@@ -214,6 +228,98 @@ def test_create_model_spatial_index(self):\n         if connection.features.supports_raster:\n             self.assertSpatialIndexExists(\"gis_neighborhood\", \"rast\", raster=True)\n \n+    @skipUnlessDBFeature(\"can_alter_geometry_field\")\n+    def test_alter_field_remove_spatial_index(self):\n+        \"\"\"\n+        Test that indexes are removed when `spatial_index` is changed to False\n+        \"\"\"\n+        if not self.has_spatial_indexes:\n+            self.skipTest(\"No support for Spatial indexes\")\n+\n+        self.alter_gis_model(\n+            migrations.AlterField,\n+            \"Neighborhood\",\n+            \"geom\",\n+            False,\n+            fields.MultiPolygonField,\n+            field_class_kwargs={\"srid\": 4326, \"spatial_index\": False},\n+        )\n+        self.assertSpatialIndexNotExists(\"gis_neighborhood\", \"geom\")\n+\n+    @skipUnlessDBFeature(\"can_alter_geometry_field\")\n+    def test_alter_field_add_spatial_index(self):\n+        \"\"\"\n+        Test that indexes are added when `spatial_index` is changed to True\n+        \"\"\"\n+        if not self.has_spatial_indexes:\n+            self.skipTest(\"No support for Spatial indexes\")\n+\n+        self.alter_gis_model(\n+            migrations.AddField,\n+            \"Neighborhood\",\n+            \"point\",\n+            False,\n+            fields.PointField,\n+            field_class_kwargs={\"srid\": 4326, \"spatial_index\": False},\n+        )\n+        self.assertSpatialIndexNotExists(\"gis_neighborhood\", \"point\")\n+\n+        self.alter_gis_model(\n+            migrations.AlterField,\n+            \"Neighborhood\",\n+            \"point\",\n+            False,\n+            fields.PointField,\n+            field_class_kwargs={\"srid\": 4326, \"spatial_index\": True},\n+        )\n+        self.assertSpatialIndexExists(\"gis_neighborhood\", \"point\")\n+\n+    @skipUnlessDBFeature(\"supports_raster\", \"can_alter_geometry_field\")\n+    def test_alter_raster_field_remove_spatial_index(self):\n+        \"\"\"\n+        Test that raster indexes are removed when `spatial_index` is changed to False\n+        \"\"\"\n+        if not self.has_spatial_indexes:\n+            self.skipTest(\"No support for Spatial indexes\")\n+\n+        self.alter_gis_model(\n+            migrations.AlterField,\n+            \"Neighborhood\",\n+            \"rast\",\n+            False,\n+            fields.RasterField,\n+            field_class_kwargs={\"srid\": 4326, \"null\": True, \"spatial_index\": False},\n+        )\n+        self.assertSpatialIndexNotExists(\"gis_neighborhood\", \"rast\", raster=True)\n+\n+    @skipUnlessDBFeature(\"supports_raster\", \"can_alter_geometry_field\")\n+    def test_alter_raster_field_add_spatial_index(self):",
+    "violations": [
+      {
+        "type": "",
+        "line": 296,
+        "review_comment": "Is there any specific here for `RasterField`? If not, I'd remove `test_alter_raster_field_remove_spatial_index` and `test_alter_raster_field_add_spatial_index` as they are redundant."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_alter_raster_field_add_spatial_index",
+      "start_line": 296,
+      "end_line": 321,
+      "code": "    def test_alter_raster_field_add_spatial_index(self):\n        \"\"\"\n        Test that raster indexes are added when `spatial_index` is changed to True\n        \"\"\"\n        if not self.has_spatial_indexes:\n            self.skipTest(\"No support for Spatial indexes\")\n\n        self.alter_gis_model(\n            migrations.AddField,\n            \"Neighborhood\",\n            \"heatmap\",\n            False,\n            fields.RasterField,\n            field_class_kwargs={\"srid\": 4326, \"null\": True, \"spatial_index\": False},\n        )\n        self.assertSpatialIndexNotExists(\"gis_neighborhood\", \"heatmap\", raster=True)\n\n        self.alter_gis_model(\n            migrations.AlterField,\n            \"Neighborhood\",\n            \"heatmap\",\n            False,\n            fields.RasterField,\n            field_class_kwargs={\"srid\": 4326, \"null\": True, \"spatial_index\": True},\n        )\n        self.assertSpatialIndexExists(\"gis_neighborhood\", \"heatmap\", raster=True)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/gis_tests/gis_migrations/test_operations.py",
+    "chunk_id": "PR17662_1444293783",
+    "diff": "@@ -214,6 +228,98 @@ def test_create_model_spatial_index(self):\n         if connection.features.supports_raster:\n             self.assertSpatialIndexExists(\"gis_neighborhood\", \"rast\", raster=True)\n \n+    @skipUnlessDBFeature(\"can_alter_geometry_field\")\n+    def test_alter_field_remove_spatial_index(self):\n+        \"\"\"\n+        Test that indexes are removed when `spatial_index` is changed to False\n+        \"\"\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 235,
+        "review_comment": "To add more explanation, docstrings should state the expected behavior and omit prefixes like \"Test that\" since all tests test things. This guideline is from [Python coding style](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/#python-style).\r\n"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_alter_field_remove_spatial_index",
+      "start_line": 232,
+      "end_line": 247,
+      "code": "    def test_alter_field_remove_spatial_index(self):\n        \"\"\"\n        Test that indexes are removed when `spatial_index` is changed to False\n        \"\"\"\n        if not self.has_spatial_indexes:\n            self.skipTest(\"No support for Spatial indexes\")\n\n        self.alter_gis_model(\n            migrations.AlterField,\n            \"Neighborhood\",\n            \"geom\",\n            False,\n            fields.MultiPolygonField,\n            field_class_kwargs={\"srid\": 4326, \"spatial_index\": False},\n        )\n        self.assertSpatialIndexNotExists(\"gis_neighborhood\", \"geom\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/gis/db/backends/postgis/schema.py",
+    "chunk_id": "PR17662_1444294895",
+    "diff": "@@ -50,6 +82,9 @@ def _create_index_sql(self, model, *, fields=None, **kwargs):\n             expressions=expressions,\n         )\n \n+    def _create_spatial_index_name(self, model, field):\n+        return self._create_index_name(model._meta.db_table, [field.column], \"_id\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 86,
+        "review_comment": "This hook is unnecessary as it's a single method call."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "_create_spatial_index_name",
+      "start_line": 85,
+      "end_line": 86,
+      "code": "    def _create_spatial_index_name(self, model, field):\n        return self._create_index_name(model._meta.db_table, [field.column], \"_id\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/gis/db/backends/mysql/schema.py",
+    "chunk_id": "PR17662_1444301855",
+    "diff": "@@ -81,3 +95,36 @@ def create_spatial_indexes(self):\n                     f\"support them.\",\n                 )\n         self.geometry_sql = []\n+\n+    def _should_have_spatial_index(self, field):\n+        # MySQL doesn't support spatial indexes on NULL columns\n+        return (\n+            isinstance(field, GeometryField) and field.spatial_index and not field.null\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 103,
+        "review_comment": "It's quite confusing that we have here three different approaches:\r\n- `_should_have_spatial_index()` hook on MySQL,\r\n- `isinstance(old_field, GeometryField) and old_field.spatial_index` check on Oracle, and\r\n- `getattr(old_field, \"spatial_index\", False)` on PostgreSQL.\r\n\r\nCan we add `_field_should_be_spatial_indexed(model, field)` hook on all backend? That would be a similar approach to the `BaseDatabaseSchemaEditor._field_should_be_indexed()`.\r\n\r\nDo we need `isinstance(field, GeometryField)` check on MySQL and Oracle? Is it not enough to use `getattr(old_field, \"spatial_index\", False)` like on PostgreSQL?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "_should_have_spatial_index",
+      "start_line": 99,
+      "end_line": 103,
+      "code": "    def _should_have_spatial_index(self, field):\n        # MySQL doesn't support spatial indexes on NULL columns\n        return (\n            isinstance(field, GeometryField) and field.spatial_index and not field.null\n        )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/gis/db/backends/mysql/schema.py",
+    "chunk_id": "PR17662_1444306019",
+    "diff": "@@ -81,3 +95,36 @@ def create_spatial_indexes(self):\n                     f\"support them.\",\n                 )\n         self.geometry_sql = []\n+\n+    def _should_have_spatial_index(self, field):\n+        # MySQL doesn't support spatial indexes on NULL columns\n+        return (\n+            isinstance(field, GeometryField) and field.spatial_index and not field.null\n+        )\n+\n+    def _queue_create_spatial_index(self, model, field):\n+        \"\"\"Queues SQL to drop a field's index for create_spatial_indexes().\"\"\"\n+        qn = self.connection.ops.quote_name\n+        db_table = model._meta.db_table\n+        self.geometry_sql.append(\n+            self.sql_add_spatial_index\n+            % {\n+                \"index\": qn(self._create_spatial_index_name(model, field)),\n+                \"table\": qn(db_table),\n+                \"column\": qn(field.column),\n+            }\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 116,
+        "review_comment": "I'd rename it to the `_spatial_index_sql()` and add a result to the deferred SQL directly in the `_alter_field()` and `column_sql()`."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "_queue_create_spatial_index",
+      "start_line": 105,
+      "end_line": 116,
+      "code": "    def _queue_create_spatial_index(self, model, field):\n        \"\"\"Queues SQL to drop a field's index for create_spatial_indexes().\"\"\"\n        qn = self.connection.ops.quote_name\n        db_table = model._meta.db_table\n        self.geometry_sql.append(\n            self.sql_add_spatial_index\n            % {\n                \"index\": qn(self._create_spatial_index_name(model, field)),\n                \"table\": qn(db_table),\n                \"column\": qn(field.column),\n            }\n        )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/gis/db/backends/postgis/schema.py",
+    "chunk_id": "PR17662_1444609032",
+    "diff": "@@ -50,6 +82,9 @@ def _create_index_sql(self, model, *, fields=None, **kwargs):\n             expressions=expressions,\n         )\n \n+    def _create_spatial_index_name(self, model, field):\n+        return self._create_index_name(model._meta.db_table, [field.column], \"_id\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 86,
+        "review_comment": "We cannot mix unnecessary refactoring with a bugfix as this will make it more difficult to fix any potential regression introduced by this code."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "_create_spatial_index_name",
+      "start_line": 85,
+      "end_line": 86,
+      "code": "    def _create_spatial_index_name(self, model, field):\n        return self._create_index_name(model._meta.db_table, [field.column], \"_id\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/gis/db/backends/mysql/schema.py",
+    "chunk_id": "PR17662_1444617530",
+    "diff": "@@ -81,3 +95,36 @@ def create_spatial_indexes(self):\n                     f\"support them.\",\n                 )\n         self.geometry_sql = []\n+\n+    def _should_have_spatial_index(self, field):\n+        # MySQL doesn't support spatial indexes on NULL columns\n+        return (\n+            isinstance(field, GeometryField) and field.spatial_index and not field.null\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 103,
+        "review_comment": "We should split it into multiple cleanups before fixing ticket-35074.\r\n\r\nFor example, lack of `not field.null` in the `remove_field()` on Oracle seems to be a good candidate as a separate bugfix. Next, I'd introduce `_field_should_be_spatial_indexed()` and `_spatial_index_sql()` on Oracle, MySQL, and PostgreSQL without changing the current behavior. Finally, we can fix ticket-35074."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "_should_have_spatial_index",
+      "start_line": 99,
+      "end_line": 103,
+      "code": "    def _should_have_spatial_index(self, field):\n        # MySQL doesn't support spatial indexes on NULL columns\n        return (\n            isinstance(field, GeometryField) and field.spatial_index and not field.null\n        )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/file_storage/tests.py",
+    "chunk_id": "PR17659_1438375025",
+    "diff": "@@ -71,16 +71,14 @@ class FileStorageTests(SimpleTestCase):\n \n     def setUp(self):\n         self.temp_dir = tempfile.mkdtemp()\n+        self.addCleanup(shutil.rmtree, self.temp_dir)\n         self.storage = self.storage_class(\n             location=self.temp_dir, base_url=\"/test_media_url/\"\n         )\n         # Set up a second temporary directory which is ensured to have a mixed\n         # case name.\n         self.temp_dir2 = tempfile.mkdtemp(suffix=\"aBc\")\n-\n-    def tearDown(self):\n-        shutil.rmtree(self.temp_dir)\n-        shutil.rmtree(self.temp_dir2)\n+        self.addCleanup(shutil.rmtree, self.temp_dir2)",
+    "violations": [
+      {
+        "type": "",
+        "line": 81,
+        "review_comment": "Not directly related to this patch, but `self.temp_dir2` is only used in one test, so it could be created directly in that test instead of being created/deleted for each test of the class."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_empty_location",
+      "start_line": 79,
+      "end_line": 85,
+      "code": "    def test_empty_location(self):\n        \"\"\"\n        Makes sure an exception is raised if the location is empty\n        \"\"\"\n        storage = self.storage_class(location=\"\")\n        self.assertEqual(storage.base_location, \"\")\n        self.assertEqual(storage.location, os.getcwd())",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/file_storage/tests.py",
+    "chunk_id": "PR17659_1438375852",
+    "diff": "@@ -1018,11 +1012,9 @@ class FileStoragePermissions(unittest.TestCase):\n     def setUp(self):\n         self.umask = 0o027\n         self.old_umask = os.umask(self.umask)\n+        self.addCleanup(os.umask, self.old_umask)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1015,
+        "review_comment": "Nit-pick: old_umask doesn't need to be defined on self. There are some other occurrences in this file where the defined variable is not used later in tests, so does not need to be on self. Maybe you prefer consistency and always define the variable on self?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "setUp",
+      "start_line": 1010,
+      "end_line": 1015,
+      "code": "    def setUp(self):\n        self.umask = 0o027\n        old_umask = os.umask(self.umask)\n        self.addCleanup(os.umask, old_umask)\n        self.storage_dir = tempfile.mkdtemp()\n        self.addCleanup(shutil.rmtree, self.storage_dir)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/transactions/tests.py",
+    "chunk_id": "PR17659_1438378592",
+    "diff": "@@ -249,22 +249,18 @@ class AtomicInsideTransactionTests(AtomicTests):\n     def setUp(self):\n         self.atomic = transaction.atomic()\n         self.atomic.__enter__()\n-\n-    def tearDown(self):\n-        self.atomic.__exit__(*sys.exc_info())\n+        self.addCleanup(self.atomic.__exit__, *sys.exc_info())",
+    "violations": [
+      {
+        "type": "naming_convention",
+        "line": 252,
+        "review_comment": "I suspect `sys.exc_info()` is not necessarily identical in `setUp` and in `tearDown`. Don't know if this matters or not."
+      }
+    ],
+    "ast_context": {
+      "type": "class_definition",
+      "name": "AtomicInsideTransactionTests",
+      "start_line": 246,
+      "end_line": 254,
+      "code": "class AtomicInsideTransactionTests(AtomicTests):\n    \"\"\"All basic tests for atomic should also pass within an existing transaction.\"\"\"\n\n    def setUp(self):\n        self.atomic = transaction.atomic()\n        self.atomic.__enter__()\n\n    def tearDown(self):\n        self.atomic.__exit__(*sys.exc_info())",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/contrib/postgres/aggregates/mixins.py",
+    "chunk_id": "PR17658_1438076262",
+    "diff": "@@ -3,18 +3,22 @@\n \n class OrderableAggMixin:\n     def __init__(self, *expressions, ordering=(), **extra):\n-        if isinstance(ordering, (list, tuple)):\n-            self.order_by = OrderByList(*ordering)\n+        if ordering:",
+    "violations": [
+      {
+        "type": "",
+        "line": 6,
+        "review_comment": "Nit: Could reduce some indentation here by making the first branch `if not ordering:` \ud83e\udd14 "
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "__init__",
+      "start_line": 5,
+      "end_line": 12,
+      "code": "    def __init__(self, *expressions, ordering=(), **extra):\n        if not ordering:\n            self.order_by = None\n        elif isinstance(ordering, (list, tuple)):\n            self.order_by = OrderByList(*ordering)\n        else:\n            self.order_by = OrderByList(ordering)\n        super().__init__(*expressions, **extra)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1437402265",
+    "diff": "@@ -274,6 +274,12 @@ def __call__(self, result=None):\n         \"\"\"\n         self._setup_and_call(result)\n \n+    def __getstate__(self):\n+        \"\"\"\n+        Make SimpleTestCase pickable for parallel tests using subtests.\n+        \"\"\"\n+        return {k: v for k, v in self.__dict__.items() if k.startswith(\"_\")}",
+    "violations": [
+      {
+        "type": "",
+        "line": 281,
+        "review_comment": "Does it affect attributes without the leading underscore? e.g. `failureException`, `longMessage`, or `maxDiff`."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "_remove_databases_failures",
+      "start_line": 278,
+      "end_line": 285,
+      "code": "    def _remove_databases_failures(cls):\n        for alias in connections:\n            if alias in cls.databases:\n                continue\n            connection = connections[alias]\n            for name, _ in cls._disallowed_connection_methods:\n                method = getattr(connection, name)\n                setattr(connection, name, method.wrapped)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1438105096",
+    "diff": "@@ -90,6 +91,15 @@ def to_list(value):\n     return value\n \n \n+def is_pickable(obj):\n+    \"\"\"Returns true if the object can be dumped and loaded through the pickle module.\"\"\"\n+    try:\n+        pickle.loads(pickle.dumps(obj))\n+    except (AttributeError, TypeError):\n+        return False\n+    return True",
+    "violations": [
+      {
+        "type": "",
+        "line": 105,
+        "review_comment": "I'm not sure if it's an acceptable solution. I can imagine that `dumps`/`loads` round-trip for every attribute in every test will cause a big performance regression."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "is_pickable",
+      "start_line": 96,
+      "end_line": 105,
+      "code": "def is_pickable(obj):\n    \"\"\"\n    Returns true if the object can be dumped and loaded through the pickle\n    module.\n    \"\"\"\n    try:\n        pickle.loads(pickle.dumps(obj))\n    except (AttributeError, TypeError):\n        return False\n    return True",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1438110016",
+    "diff": "@@ -90,6 +91,15 @@ def to_list(value):\n     return value\n \n \n+def is_pickable(obj):\n+    \"\"\"Returns true if the object can be dumped and loaded through the pickle module.\"\"\"\n+    try:\n+        pickle.loads(pickle.dumps(obj))\n+    except (AttributeError, TypeError):\n+        return False\n+    return True",
+    "violations": [
+      {
+        "type": "",
+        "line": 105,
+        "review_comment": "Let's ask Adam for opinion (\\cc @adamchainz)."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "is_pickable",
+      "start_line": 96,
+      "end_line": 105,
+      "code": "def is_pickable(obj):\n    \"\"\"\n    Returns true if the object can be dumped and loaded through the pickle\n    module.\n    \"\"\"\n    try:\n        pickle.loads(pickle.dumps(obj))\n    except (AttributeError, TypeError):\n        return False\n    return True",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1475782520",
+    "diff": "@@ -90,6 +91,15 @@ def to_list(value):\n     return value\n \n \n+def is_pickable(obj):\n+    \"\"\"Returns true if the object can be dumped and loaded through the pickle module.\"\"\"\n+    try:\n+        pickle.loads(pickle.dumps(obj))\n+    except (AttributeError, TypeError):\n+        return False\n+    return True",
+    "violations": [
+      {
+        "type": "",
+        "line": 105,
+        "review_comment": "@David-Wobrock Unfortunately, it's called many times when run in parallel. For example:\r\n```\r\npython -m cProfile ./runtests.py queries\r\n...\r\n     2778    0.003    0.000    0.019    0.000 testcases.py:96(is_pickable)\r\n```\r\nNo parallel, no `is_pickable()` calls:\r\n```\r\npython -m cProfile ./runtests.py queries --parallel=1\r\n```\r\n\r\nMaybe this is something we could avoid :thinking: "
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "is_pickable",
+      "start_line": 96,
+      "end_line": 105,
+      "code": "def is_pickable(obj):\n    \"\"\"\n    Returns true if the object can be dumped and loaded through the pickle\n    module.\n    \"\"\"\n    try:\n        pickle.loads(pickle.dumps(obj))\n    except (AttributeError, TypeError):\n        return False\n    return True",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1475815097",
+    "diff": "@@ -274,6 +284,17 @@ def __call__(self, result=None):\n         \"\"\"\n         self._setup_and_call(result)\n \n+    def __getstate__(self):\n+        \"\"\"\n+        Make SimpleTestCase pickable for parallel tests using subtests.\n+        \"\"\"\n+        attributes = self.__dict__.copy()\n+        # _outcome and _subtest cannot be tested on picklebility, since they contain\n+        # the TestCase, and therefore itself, leading to an infinite recursion.\n+        attributes[\"_outcome\"] = None\n+        attributes[\"_subtest\"] = None\n+        return {k: v for k, v in attributes.items() if is_pickable(v)}",
+    "violations": [
+      {
+        "type": "",
+        "line": 296,
+        "review_comment": "Maybe we should do this only when `_outcome` is set, to [inject directly into gathering test results](https://github.com/python/cpython/blob/1aec0644447e69e981d582449849761b23702ec8/Lib/unittest/case.py#L628-L659) :thinking: \r\ndraft:\r\n```diff\r\ndiff --git a/django/test/testcases.py b/django/test/testcases.py\r\nindex c7ecf166b5..4b29ff909c 100644\r\n--- a/django/test/testcases.py\r\n+++ b/django/test/testcases.py\r\n@@ -318,9 +318,13 @@ class SimpleTestCase(unittest.TestCase):\r\n         attributes = self.__dict__.copy()\r\n         # _outcome and _subtest cannot be tested on picklebility, since they contain\r\n         # the TestCase, and therefore itself, leading to an infinite recursion.\r\n-        attributes[\"_outcome\"] = None\r\n-        attributes[\"_subtest\"] = None\r\n-        return {k: v for k, v in attributes.items() if is_pickable(v)}\r\n+        outcome = attributes[\"_outcome\"] is not None\r\n+        if outcome:\r\n+            attributes[\"_outcome\"] = None\r\n+            attributes[\"_subtest\"] = None\r\n+            return {k: v for k, v in attributes.items() if is_pickable(v)}\r\n+        else:\r\n+            return attributes\r\n \r\n     def debug(self):\r\n         \"\"\"Perform the same as __call__(), without catching the exception.\"\"\"\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "patched_ensure_connection",
+      "start_line": 291,
+      "end_line": 307,
+      "code": "        def patched_ensure_connection(self, *args, **kwargs):\n            if (\n                self.connection is None\n                and self.alias not in cls.databases\n                and self.alias != NO_DB_ALIAS\n                # Dynamically created connections are always allowed.\n                and self.alias in connections\n            ):\n                # Connection has not yet been established, but the alias is not allowed.\n                message = cls._disallowed_database_msg % {\n                    \"test\": f\"{cls.__module__}.{cls.__qualname__}\",\n                    \"alias\": self.alias,\n                    \"operation\": \"threaded connections\",\n                }\n                return _DatabaseFailure(self.ensure_connection, message)()\n\n            real_ensure_connection(self, *args, **kwargs)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1477420838",
+    "diff": "@@ -301,6 +311,19 @@ def __call__(self, result=None):\n         \"\"\"\n         self._setup_and_call(result)\n \n+    def __getstate__(self):\n+        \"\"\"\n+        Make SimpleTestCase pickable for parallel tests using subtests.\n+        \"\"\"\n+        attributes = self.__dict__.copy()\n+        # _outcome and _subtest cannot be tested on picklebility, since they contain\n+        # the TestCase itself, leading to an infinite recursion.\n+        if attributes[\"_outcome\"]:\n+            attributes[\"_outcome\"] = None\n+            attributes[\"_subtest\"] = None\n+            return {k: v for k, v in attributes.items() if is_pickable(v)}\n+        return attributes",
+    "violations": [
+      {
+        "type": "",
+        "line": 325,
+        "review_comment": "Can we also avoid the `__dict__` copy when there is no outcome?\r\n\r\n```suggestion\r\n        state = super().__getstate__()\r\n        # _outcome and _subtest cannot be tested on picklebility, since they contain\r\n        # the TestCase itself, leading to an infinite recursion.\r\n        if state[\"_outcome\"]:\r\n            pickable_state = {\"_outcome\": None, \"_subTest\": None}\r\n            for key, value in state.items():\r\n                if key in pickable_state or not is_pickable(value):\r\n                    continue\r\n                pickable_state[key] = value\r\n            return pickable\r\n        return state\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "__getstate__",
+      "start_line": 319,
+      "end_line": 334,
+      "code": "    def __getstate__(self):\n        \"\"\"\n        Make SimpleTestCase picklable for parallel tests using subtests.\n        \"\"\"\n        state = super().__dict__\n        # _outcome and _subtest cannot be tested on picklability, since they\n        # contain the TestCase itself, leading to an infinite recursion.\n        if state[\"_outcome\"]:\n            pickable_state = {\"_outcome\": None, \"_subtest\": None}\n            for key, value in state.items():\n                if key in pickable_state or not is_pickable(value):\n                    continue\n                pickable_state[key] = value\n            return pickable_state\n\n        return state",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1477423083",
+    "diff": "@@ -90,6 +91,15 @@ def to_list(value):\n     return value\n \n \n+def is_pickable(obj):\n+    \"\"\"Returns true if the object can be dumped and loaded through the pickle module.\"\"\"\n+    try:\n+        pickle.loads(pickle.dumps(obj))\n+    except (AttributeError, TypeError):\n+        return False\n+    return True",
+    "violations": [
+      {
+        "type": "",
+        "line": 105,
+        "review_comment": "FWIW there must be a way to create an `pickle.Unpickler` instance so it drops the keys in a `dict` that cannot be unpickled to avoid multiple `loads` roundtrips. Given we already venture in peeking at internals for `unittest` I figured it was at least worth mentioning."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "is_pickable",
+      "start_line": 96,
+      "end_line": 105,
+      "code": "def is_pickable(obj):\n    \"\"\"\n    Returns true if the object can be dumped and loaded through the pickle\n    module.\n    \"\"\"\n    try:\n        pickle.loads(pickle.dumps(obj))\n    except (AttributeError, TypeError):\n        return False\n    return True",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/test/testcases.py",
+    "chunk_id": "PR17650_1496892365",
+    "diff": "@@ -303,6 +313,23 @@ def __call__(self, result=None):\n         \"\"\"\n         self._setup_and_call(result)\n \n+    def __getstate__(self):\n+        \"\"\"\n+        Make SimpleTestCase pickable for parallel tests using subtests.\n+        \"\"\"\n+        state = super().__dict__",
+    "violations": [
+      {
+        "type": "",
+        "line": 323,
+        "review_comment": "```suggestion\r\n        state = super().__getstate__()\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "__getstate__",
+      "start_line": 319,
+      "end_line": 334,
+      "code": "    def __getstate__(self):\n        \"\"\"\n        Make SimpleTestCase picklable for parallel tests using subtests.\n        \"\"\"\n        state = super().__dict__\n        # _outcome and _subtest cannot be tested on picklability, since they\n        # contain the TestCase itself, leading to an infinite recursion.\n        if state[\"_outcome\"]:\n            pickable_state = {\"_outcome\": None, \"_subtest\": None}\n            for key, value in state.items():\n                if key in pickable_state or not is_pickable(value):\n                    continue\n                pickable_state[key] = value\n            return pickable_state\n\n        return state",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/migrations/autodetector.py",
+    "chunk_id": "PR17644_1435872080",
+    "diff": "@@ -1447,6 +1447,32 @@ def generate_renamed_indexes(self):\n                     ),\n                 )\n \n+    def compare_altered_constraints(self, constraints_to_add, constraints_compared):\n+        constraints = []\n+        for c in constraints_to_add:\n+            # check if there is any constraint compared equals\n+            equals = False\n+            for o in constraints_compared:\n+                if (\n+                    isinstance(c, models.CheckConstraint)\n+                    and isinstance(o, models.CheckConstraint)\n+                    and c.check == o.check\n+                ):\n+                    equals = True\n+                    break\n+                if (\n+                    isinstance(c, models.UniqueConstraint)\n+                    and isinstance(o, models.UniqueConstraint)\n+                    and c.fields == o.fields\n+                ):\n+                    equals = True\n+                    break\n+            # if all constraints compared are different",
+    "violations": [
+      {
+        "type": "",
+        "line": 1470,
+        "review_comment": "Avoid comments explaining what the code does.\r\n"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "compare_altered_constraints",
+      "start_line": 1450,
+      "end_line": 1474,
+      "code": "    def compare_altered_constraints(self, constraints_to_add, constraints_compared):\n        constraints = []\n        for c in constraints_to_add:\n            # check if there is any constraint compared equals\n            equals = False\n            for o in constraints_compared:\n                if (\n                    isinstance(c, models.CheckConstraint)\n                    and isinstance(o, models.CheckConstraint)\n                    and c.check == o.check\n                ):\n                    equals = True\n                    break\n                if (\n                    isinstance(c, models.UniqueConstraint)\n                    and isinstance(o, models.UniqueConstraint)\n                    and c.fields == o.fields\n                ):\n                    equals = True\n                    break\n            # if all constraints compared are different\n            # it add the new constraint to list\n            if not equals:\n                constraints.append(c)\n        return constraints",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/migrations/autodetector.py",
+    "chunk_id": "PR17644_1435872296",
+    "diff": "@@ -1458,8 +1484,13 @@ def create_altered_constraints(self):\n \n             old_constraints = old_model_state.options[option_name]\n             new_constraints = new_model_state.options[option_name]\n-            add_constraints = [c for c in new_constraints if c not in old_constraints]\n-            rem_constraints = [c for c in old_constraints if c not in new_constraints]\n+",
+    "violations": [
+      {
+        "type": "",
+        "line": 1487,
+        "review_comment": "delete all empty lines"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "create_altered_constraints",
+      "start_line": 1476,
+      "end_line": 1502,
+      "code": "    def create_altered_constraints(self):\n        option_name = operations.AddConstraint.option_name\n        for app_label, model_name in sorted(self.kept_model_keys):\n            old_model_name = self.renamed_models.get(\n                (app_label, model_name), model_name\n            )\n            old_model_state = self.from_state.models[app_label, old_model_name]\n            new_model_state = self.to_state.models[app_label, model_name]\n\n            old_constraints = old_model_state.options[option_name]\n            new_constraints = new_model_state.options[option_name]\n\n            add_constraints = self.compare_altered_constraints(\n                new_constraints, old_constraints\n            )\n            rem_constraints = self.compare_altered_constraints(\n                old_constraints, new_constraints\n            )\n\n            self.altered_constraints.update(\n                {\n                    (app_label, model_name): {\n                        \"added_constraints\": add_constraints,\n                        \"removed_constraints\": rem_constraints,\n                    }\n                }\n            )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/migrations/autodetector.py",
+    "chunk_id": "PR17644_1436755051",
+    "diff": "@@ -1458,8 +1484,13 @@ def create_altered_constraints(self):\n \n             old_constraints = old_model_state.options[option_name]\n             new_constraints = new_model_state.options[option_name]\n-            add_constraints = [c for c in new_constraints if c not in old_constraints]\n-            rem_constraints = [c for c in old_constraints if c not in new_constraints]\n+\n+            add_constraints = self.compare_altered_constraints(\n+                new_constraints, old_constraints\n+            )\n+            rem_constraints = self.compare_altered_constraints(\n+                old_constraints, new_constraints\n+            )",
+    "violations": [
+      {
+        "type": "",
+        "line": 1493,
+        "review_comment": "> Can I ask you how do I check if an attribute doesn't impact DDL definitions without using `__eq__` operator? @felixxm\r\n\r\nWe could add an internal hook for this, something similar to the `_field_should_be_altered()`."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "create_altered_constraints",
+      "start_line": 1476,
+      "end_line": 1502,
+      "code": "    def create_altered_constraints(self):\n        option_name = operations.AddConstraint.option_name\n        for app_label, model_name in sorted(self.kept_model_keys):\n            old_model_name = self.renamed_models.get(\n                (app_label, model_name), model_name\n            )\n            old_model_state = self.from_state.models[app_label, old_model_name]\n            new_model_state = self.to_state.models[app_label, model_name]\n\n            old_constraints = old_model_state.options[option_name]\n            new_constraints = new_model_state.options[option_name]\n\n            add_constraints = self.compare_altered_constraints(\n                new_constraints, old_constraints\n            )\n            rem_constraints = self.compare_altered_constraints(\n                old_constraints, new_constraints\n            )\n\n            self.altered_constraints.update(\n                {\n                    (app_label, model_name): {\n                        \"added_constraints\": add_constraints,\n                        \"removed_constraints\": rem_constraints,\n                    }\n                }\n            )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/db/migrations/autodetector.py",
+    "chunk_id": "PR17644_1436832017",
+    "diff": "@@ -1458,8 +1484,13 @@ def create_altered_constraints(self):\n \n             old_constraints = old_model_state.options[option_name]\n             new_constraints = new_model_state.options[option_name]\n-            add_constraints = [c for c in new_constraints if c not in old_constraints]\n-            rem_constraints = [c for c in old_constraints if c not in new_constraints]\n+\n+            add_constraints = self.compare_altered_constraints(\n+                new_constraints, old_constraints\n+            )\n+            rem_constraints = self.compare_altered_constraints(\n+                old_constraints, new_constraints\n+            )",
+    "violations": [
+      {
+        "type": "",
+        "line": 1493,
+        "review_comment": "> Do I have to assign the ticket to myself?\r\n\r\nYes, you should assign to yourself the tickets you're working on."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "create_altered_constraints",
+      "start_line": 1476,
+      "end_line": 1502,
+      "code": "    def create_altered_constraints(self):\n        option_name = operations.AddConstraint.option_name\n        for app_label, model_name in sorted(self.kept_model_keys):\n            old_model_name = self.renamed_models.get(\n                (app_label, model_name), model_name\n            )\n            old_model_state = self.from_state.models[app_label, old_model_name]\n            new_model_state = self.to_state.models[app_label, model_name]\n\n            old_constraints = old_model_state.options[option_name]\n            new_constraints = new_model_state.options[option_name]\n\n            add_constraints = self.compare_altered_constraints(\n                new_constraints, old_constraints\n            )\n            rem_constraints = self.compare_altered_constraints(\n                old_constraints, new_constraints\n            )\n\n            self.altered_constraints.update(\n                {\n                    (app_label, model_name): {\n                        \"added_constraints\": add_constraints,\n                        \"removed_constraints\": rem_constraints,\n                    }\n                }\n            )",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/servers/basehttp.py",
+    "chunk_id": "PR17643_1436864695",
+    "diff": "@@ -134,6 +134,7 @@ def cleanup_headers(self):\n         if (\n             self.environ[\"REQUEST_METHOD\"] == \"HEAD\"\n             and \"Content-Length\" in self.headers\n+            and str(self.headers[\"Content-Length\"]) == \"0\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 137,
+        "review_comment": "Wouldn't it be technically valid for a 200 response to return a `Content-Length` of `0`?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "cleanup_headers",
+      "start_line": 132,
+      "end_line": 154,
+      "code": "    def cleanup_headers(self):\n        super().cleanup_headers()\n        if (\n            self.environ[\"REQUEST_METHOD\"] == \"HEAD\"\n            and \"Content-Length\" in self.headers\n            and str(self.headers[\"Content-Length\"]) == \"0\"\n        ):\n            del self.headers[\"Content-Length\"]\n        # HTTP/1.1 requires support for persistent connections. Send 'close' if\n        # the content length is unknown to prevent clients from reusing the\n        # connection.\n        if (\n            self.environ[\"REQUEST_METHOD\"] != \"HEAD\"\n            and \"Content-Length\" not in self.headers\n        ):\n            self.headers[\"Connection\"] = \"close\"\n        # Persistent connections require threading server.\n        elif not isinstance(self.request_handler.server, socketserver.ThreadingMixIn):\n            self.headers[\"Connection\"] = \"close\"\n        # Mark the connection for closing if it's set as such above or if the\n        # application sent the header.\n        if self.headers.get(\"Connection\") == \"close\":\n            self.request_handler.close_connection = True",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/servers/basehttp.py",
+    "chunk_id": "PR17643_1437262519",
+    "diff": "@@ -134,6 +134,7 @@ def cleanup_headers(self):\n         if (\n             self.environ[\"REQUEST_METHOD\"] == \"HEAD\"\n             and \"Content-Length\" in self.headers\n+            and str(self.headers[\"Content-Length\"]) == \"0\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 137,
+        "review_comment": "Yeah, given that this is only for runserver,, I think it wouldn't be worth to add an extra mechanism for it."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "cleanup_headers",
+      "start_line": 132,
+      "end_line": 154,
+      "code": "    def cleanup_headers(self):\n        super().cleanup_headers()\n        if (\n            self.environ[\"REQUEST_METHOD\"] == \"HEAD\"\n            and \"Content-Length\" in self.headers\n            and str(self.headers[\"Content-Length\"]) == \"0\"\n        ):\n            del self.headers[\"Content-Length\"]\n        # HTTP/1.1 requires support for persistent connections. Send 'close' if\n        # the content length is unknown to prevent clients from reusing the\n        # connection.\n        if (\n            self.environ[\"REQUEST_METHOD\"] != \"HEAD\"\n            and \"Content-Length\" not in self.headers\n        ):\n            self.headers[\"Connection\"] = \"close\"\n        # Persistent connections require threading server.\n        elif not isinstance(self.request_handler.server, socketserver.ThreadingMixIn):\n            self.headers[\"Connection\"] = \"close\"\n        # Mark the connection for closing if it's set as such above or if the\n        # application sent the header.\n        if self.headers.get(\"Connection\") == \"close\":\n            self.request_handler.close_connection = True",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/servers/tests.py",
+    "chunk_id": "PR17643_1437409377",
+    "diff": "@@ -256,6 +256,25 @@ def test_keep_alive_on_connection_with_content_length(self):\n         finally:\n             conn.close()\n \n+    def test_head_content_length_removed(self):\n+        conn = HTTPConnection(\n+            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n+        )\n+\n+        conn.request(\"HEAD\", \"/head_view/?content-length=0\")\n+        response = conn.getresponse()\n+        self.assertIsNone(response.getheader(\"Content-Length\"))\n+        conn.close()\n+\n+    def test_head_content_length_set(self):\n+        conn = HTTPConnection(\n+            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n+        )\n+        conn.request(\"HEAD\", \"/head_view/?content-length=11151978\")\n+        response = conn.getresponse()\n+        self.assertEqual(response.getheader(\"Content-Length\"), \"11151978\")\n+        conn.close()",
+    "violations": [
+      {
+        "type": "",
+        "line": 276,
+        "review_comment": "Move tests to the `tests/servers/test_basehttp.py`."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_keep_alive_connection_clears_previous_request_data",
+      "start_line": 259,
+      "end_line": 280,
+      "code": "    def test_keep_alive_connection_clears_previous_request_data(self):\n        conn = HTTPConnection(\n            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n        )\n        try:\n            conn.request(\n                \"POST\", \"/method_view/\", b\"{}\", headers={\"Connection\": \"keep-alive\"}\n            )\n            response = conn.getresponse()\n            self.assertFalse(response.will_close)\n            self.assertEqual(response.status, 200)\n            self.assertEqual(response.read(), b\"POST\")\n\n            conn.request(\n                \"POST\", \"/method_view/\", b\"{}\", headers={\"Connection\": \"close\"}\n            )\n            response = conn.getresponse()\n            self.assertFalse(response.will_close)\n            self.assertEqual(response.status, 200)\n            self.assertEqual(response.read(), b\"POST\")\n        finally:\n            conn.close()",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/servers/test_basehttp.py",
+    "chunk_id": "PR17643_1437722058",
+    "diff": "@@ -189,3 +190,27 @@ def test_broken_pipe_errors(self):\n                         self.assertEqual(cm.records[0].getMessage(), msg)\n                 finally:\n                     server.server_close()\n+\n+\n+@override_settings(ROOT_URLCONF=\"servers.urls\")\n+class LiveServerViews(LiveServerTestCase):\n+    available_apps = []\n+\n+    def test_head_content_length_removed(self):\n+        conn = HTTPConnection(\n+            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 202,
+        "review_comment": "Do we need to use `LiveServer` in tests? :thinking: "
+      }
+    ],
+    "ast_context": {
+      "type": "sliding_window",
+      "name": "",
+      "start_line": 192,
+      "end_line": 212,
+      "code": "            WSGIRequestHandler(request, \"192.168.0.2\", server)\n\n        wfile.seek(0)\n        lines = list(wfile.readlines())\n        body = lines[-1]\n        # The body is not returned in a HEAD response.\n        self.assertEqual(body, b\"\\r\\n\")\n        # Non-zero Content-Length is not removed.\n        self.assertEqual(lines[-2], f\"Content-length: {content_length}\\r\\n\".encode())\n        self.assertNotIn(b\"Connection: close\\r\\n\", lines)\n\n\nclass WSGIServerTestCase(SimpleTestCase):\n    request_factory = RequestFactory()\n\n    def test_broken_pipe_errors(self):\n        \"\"\"WSGIServer handles broken pipe errors.\"\"\"\n        request = WSGIRequest(self.request_factory.get(\"/\").environ)\n        client_address = (\"192.168.2.0\", 8080)\n        msg = f\"- Broken pipe from {client_address}\"\n        tests = [",
+      "fallback": true
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/servers/test_basehttp.py",
+    "chunk_id": "PR17643_1437990453",
+    "diff": "@@ -189,3 +190,27 @@ def test_broken_pipe_errors(self):\n                         self.assertEqual(cm.records[0].getMessage(), msg)\n                 finally:\n                     server.server_close()\n+\n+\n+@override_settings(ROOT_URLCONF=\"servers.urls\")\n+class LiveServerViews(LiveServerTestCase):\n+    available_apps = []\n+\n+    def test_head_content_length_removed(self):",
+    "violations": [
+      {
+        "type": "",
+        "line": 199,
+        "review_comment": "This is already covered by `servers.test_basehttp.WSGIRequestHandlerTestCase.test_no_body_returned_for_head_requests`."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_non_zero_content_length_set_head_request",
+      "start_line": 164,
+      "end_line": 201,
+      "code": "    def test_non_zero_content_length_set_head_request(self):\n        hello_world_body = b\"<!DOCTYPE html><html><body>Hello World</body></html>\"\n        content_length = len(hello_world_body)\n\n        def test_app(environ, start_response):\n            \"\"\"\n            A WSGI app that returns a hello world with non-zero Content-Length.\n            \"\"\"\n            start_response(\"200 OK\", [(\"Content-length\", str(content_length))])\n            return [hello_world_body]\n\n        rfile = BytesIO(b\"HEAD / HTTP/1.0\\r\\n\")\n        rfile.seek(0)\n\n        wfile = UnclosableBytesIO()\n\n        def makefile(mode, *a, **kw):\n            if mode == \"rb\":\n                return rfile\n            elif mode == \"wb\":\n                return wfile\n\n        request = Stub(makefile=makefile)\n        server = Stub(base_environ={}, get_app=lambda: test_app)\n\n        # Prevent logging from appearing in test output.\n        with self.assertLogs(\"django.server\", \"INFO\"):\n            # Instantiating a handler runs the request as side effect.\n            WSGIRequestHandler(request, \"192.168.0.2\", server)\n\n        wfile.seek(0)\n        lines = list(wfile.readlines())\n        body = lines[-1]\n        # The body is not returned in a HEAD response.\n        self.assertEqual(body, b\"\\r\\n\")\n        # Non-zero Content-Length is not removed.\n        self.assertEqual(lines[-2], f\"Content-length: {content_length}\\r\\n\".encode())\n        self.assertNotIn(b\"Connection: close\\r\\n\", lines)",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/servers/test_basehttp.py",
+    "chunk_id": "PR17643_1437997140",
+    "diff": "@@ -189,3 +190,27 @@ def test_broken_pipe_errors(self):\n                         self.assertEqual(cm.records[0].getMessage(), msg)\n                 finally:\n                     server.server_close()\n+\n+\n+@override_settings(ROOT_URLCONF=\"servers.urls\")\n+class LiveServerViews(LiveServerTestCase):\n+    available_apps = []\n+\n+    def test_head_content_length_removed(self):\n+        conn = HTTPConnection(\n+            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n+        )\n+\n+        conn.request(\"HEAD\", \"/head_view/?content-length=0\")\n+        response = conn.getresponse()\n+        self.assertIsNone(response.getheader(\"Content-Length\"))\n+        conn.close()\n+\n+    def test_head_content_length_set(self):\n+        conn = HTTPConnection(\n+            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n+        )\n+        conn.request(\"HEAD\", \"/head_view/?content-length=11151978\")\n+        response = conn.getresponse()\n+        self.assertEqual(response.getheader(\"Content-Length\"), \"11151978\")\n+        conn.close()",
+    "violations": [
+      {
+        "type": "",
+        "line": 216,
+        "review_comment": "We could test this with `WSGIRequestHandler`, e.g.\r\n```diff\r\ndiff --git a/tests/servers/test_basehttp.py b/tests/servers/test_basehttp.py\r\nindex 1e535e933e..cc4701114a 100644\r\n--- a/tests/servers/test_basehttp.py\r\n+++ b/tests/servers/test_basehttp.py\r\n@@ -161,6 +161,45 @@ class WSGIRequestHandlerTestCase(SimpleTestCase):\r\n         )\r\n         self.assertNotIn(b\"Connection: close\\r\\n\", lines)\r\n \r\n+    def test_non_zero_content_length_set_head_request(self):\r\n+        hello_world_body = b\"<!DOCTYPE html><html><body>Hello World</body></html>\"\r\n+        content_length = len(hello_world_body)\r\n+\r\n+        def test_app(environ, start_response):\r\n+            \"\"\"\r\n+            A WSGI app that returns a hello world with non-zero Content-Length.\r\n+            \"\"\"\r\n+            start_response(\"200 OK\", [(\"Content-length\", str(content_length))])\r\n+            return [hello_world_body]\r\n+\r\n+        rfile = BytesIO(b\"HEAD / HTTP/1.0\\r\\n\")\r\n+        rfile.seek(0)\r\n+\r\n+        wfile = UnclosableBytesIO()\r\n+\r\n+        def makefile(mode, *a, **kw):\r\n+            if mode == \"rb\":\r\n+                return rfile\r\n+            elif mode == \"wb\":\r\n+                return wfile\r\n+\r\n+        request = Stub(makefile=makefile)\r\n+        server = Stub(base_environ={}, get_app=lambda: test_app)\r\n+\r\n+        # Prevent logging from appearing in test output.\r\n+        with self.assertLogs(\"django.server\", \"INFO\"):\r\n+            # Instantiating a handler runs the request as side effect.\r\n+            WSGIRequestHandler(request, \"192.168.0.2\", server)\r\n+\r\n+        wfile.seek(0)\r\n+        lines = list(wfile.readlines())\r\n+        body = lines[-1]\r\n+        # The body is not returned in a HEAD response.\r\n+        self.assertEqual(body, b\"\\r\\n\")\r\n+        # Non-zero Content-Length is not removed.\r\n+        self.assertEqual(lines[-2], f\"Content-length: {content_length}\\r\\n\".encode())\r\n+        self.assertNotIn(b\"Connection: close\\r\\n\", lines)\r\n+\r\n \r\n class WSGIServerTestCase(SimpleTestCase):\r\n     request_factory = RequestFactory()\r\n\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_broken_pipe_errors",
+      "start_line": 207,
+      "end_line": 230,
+      "code": "    def test_broken_pipe_errors(self):\n        \"\"\"WSGIServer handles broken pipe errors.\"\"\"\n        request = WSGIRequest(self.request_factory.get(\"/\").environ)\n        client_address = (\"192.168.2.0\", 8080)\n        msg = f\"- Broken pipe from {client_address}\"\n        tests = [\n            BrokenPipeError,\n            ConnectionAbortedError,\n            ConnectionResetError,\n        ]\n        for exception in tests:\n            with self.subTest(exception=exception):\n                try:\n                    server = WSGIServer((\"localhost\", 0), WSGIRequestHandler)\n                    try:\n                        raise exception()\n                    except Exception:\n                        with captured_stderr() as err:\n                            with self.assertLogs(\"django.server\", \"INFO\") as cm:\n                                server.handle_error(request, client_address)\n                        self.assertEqual(err.getvalue(), \"\")\n                        self.assertEqual(cm.records[0].getMessage(), msg)\n                finally:\n                    server.server_close()",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/servers/test_basehttp.py",
+    "chunk_id": "PR17643_1437999510",
+    "diff": "@@ -189,3 +190,27 @@ def test_broken_pipe_errors(self):\n                         self.assertEqual(cm.records[0].getMessage(), msg)\n                 finally:\n                     server.server_close()\n+\n+\n+@override_settings(ROOT_URLCONF=\"servers.urls\")\n+class LiveServerViews(LiveServerTestCase):\n+    available_apps = []\n+\n+    def test_head_content_length_removed(self):\n+        conn = HTTPConnection(\n+            LiveServerViews.server_thread.host, LiveServerViews.server_thread.port\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 202,
+        "review_comment": "`test_head_content_length_removed` scenario is already covered by `servers.test_basehttp.WSGIRequestHandlerTestCase.test_no_body_returned_for_head_requests`, so it should be enough to add a new `WSGIRequestHandler` test (see https://github.com/django/django/pull/17643#discussion_r1437997140)."
+      }
+    ],
+    "ast_context": {
+      "type": "sliding_window",
+      "name": "",
+      "start_line": 192,
+      "end_line": 212,
+      "code": "            WSGIRequestHandler(request, \"192.168.0.2\", server)\n\n        wfile.seek(0)\n        lines = list(wfile.readlines())\n        body = lines[-1]\n        # The body is not returned in a HEAD response.\n        self.assertEqual(body, b\"\\r\\n\")\n        # Non-zero Content-Length is not removed.\n        self.assertEqual(lines[-2], f\"Content-length: {content_length}\\r\\n\".encode())\n        self.assertNotIn(b\"Connection: close\\r\\n\", lines)\n\n\nclass WSGIServerTestCase(SimpleTestCase):\n    request_factory = RequestFactory()\n\n    def test_broken_pipe_errors(self):\n        \"\"\"WSGIServer handles broken pipe errors.\"\"\"\n        request = WSGIRequest(self.request_factory.get(\"/\").environ)\n        client_address = (\"192.168.2.0\", 8080)\n        msg = f\"- Broken pipe from {client_address}\"\n        tests = [",
+      "fallback": true
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1436310517",
+    "diff": "@@ -280,6 +282,8 @@ def message(self):\n             # Use cached DNS_NAME for performance\n             msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n         for name, value in self.extra_headers.items():\n+            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n+                raise ValueError(\"Cannot insert repeated headers\")\n             if name.lower() != \"from\":  # From is already handled\n                 msg[name] = value",
+    "violations": [
+      {
+        "type": "",
+        "line": 293,
+        "review_comment": "An alternative to raising an exception, could be assigning the same way we do for `from`.\r\n\r\nThe behaviour change would then be that the headers in `extra_headers` will silently be ignored - it's probably safer to raise for users, so that they are made aware of the change."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1436310973",
+    "diff": "@@ -359,14 +358,17 @@ def test_to_header(self):\n             \"Subject\",\n             \"Content\",\n             \"bounce@example.com\",\n-            [\"list-subscriber@example.com\", \"list-subscriber2@example.com\"],\n-            headers={\"To\": \"mailing-list@example.com\"},",
+    "violations": [
+      {
+        "type": "",
+        "line": 363,
+        "review_comment": "Please add a test to assert that the new exception raises :)"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_from_header",
+      "start_line": 361,
+      "end_line": 373,
+      "code": "    def test_from_header(self):\n        \"\"\"\n        Make sure we can manually set the From header (#9214)\n        \"\"\"\n        email = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"From\": \"from@example.com\"},\n        )\n        message = email.message()\n        self.assertEqual(message[\"From\"], \"from@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1436311377",
+    "diff": "@@ -280,6 +282,8 @@ def message(self):\n             # Use cached DNS_NAME for performance\n             msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n         for name, value in self.extra_headers.items():\n+            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 290,
+        "review_comment": "Why the `msg[name] is not None` condition? :)"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1436311932",
+    "diff": "@@ -258,6 +258,8 @@ def get_connection(self, fail_silently=False):\n         return self.connection\n \n     def message(self):\n+        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n+",
+    "violations": [
+      {
+        "type": "naming_convention",
+        "line": 267,
+        "review_comment": "This shouldn't be defined as a variable in the method.\r\nCould we move it and make it as a class attribute instead?\r\n\r\nAnd we make probably make it a tuple :)"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1436490430",
+    "diff": "@@ -280,6 +282,8 @@ def message(self):\n             # Use cached DNS_NAME for performance\n             msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n         for name, value in self.extra_headers.items():\n+            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 290,
+        "review_comment": "Yeah, I would outright forbid the headers that can be set via our public API and not only if they are not set otherwise. It might also be worth to move it up to `__init__` then?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1436492317",
+    "diff": "@@ -280,6 +282,8 @@ def message(self):\n             # Use cached DNS_NAME for performance\n             msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n         for name, value in self.extra_headers.items():\n+            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 290,
+        "review_comment": "Mhm looking at https://code.djangoproject.com/ticket/17444 we have to be very careful with this change. Looks like we explicitly want to support overriding `to` via `extra_headers` :/"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1436492671",
+    "diff": "@@ -359,14 +358,17 @@ def test_to_header(self):\n             \"Subject\",\n             \"Content\",\n             \"bounce@example.com\",\n-            [\"list-subscriber@example.com\", \"list-subscriber2@example.com\"],\n-            headers={\"To\": \"mailing-list@example.com\"},",
+    "violations": [
+      {
+        "type": "",
+        "line": 363,
+        "review_comment": "I do not think it is wise to alter an existing test and change it's behavior. The test imo shows why we probably cannot raise an exception but have to prefer `extra_headers` over the init kwargs?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_from_header",
+      "start_line": 361,
+      "end_line": 373,
+      "code": "    def test_from_header(self):\n        \"\"\"\n        Make sure we can manually set the From header (#9214)\n        \"\"\"\n        email = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"From\": \"from@example.com\"},\n        )\n        message = email.message()\n        self.assertEqual(message[\"From\"], \"from@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1436498301",
+    "diff": "@@ -359,14 +358,17 @@ def test_to_header(self):\n             \"Subject\",\n             \"Content\",\n             \"bounce@example.com\",\n-            [\"list-subscriber@example.com\", \"list-subscriber2@example.com\"],\n-            headers={\"To\": \"mailing-list@example.com\"},",
+    "violations": [
+      {
+        "type": "",
+        "line": 363,
+        "review_comment": "I don't think so, to me the existing `test_to_header` explicitly tests that `extra_data` overrides the `to` argument (whereas the existing from handling simply ignores the value in `extra_headers` if I read it correctly). So we most likely have to keep this behavior."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_from_header",
+      "start_line": 361,
+      "end_line": 373,
+      "code": "    def test_from_header(self):\n        \"\"\"\n        Make sure we can manually set the From header (#9214)\n        \"\"\"\n        email = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"From\": \"from@example.com\"},\n        )\n        message = email.message()\n        self.assertEqual(message[\"From\"], \"from@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1437103625",
+    "diff": "@@ -263,9 +268,6 @@ def message(self):\n         msg = self._create_message(msg)\n         msg[\"Subject\"] = self.subject\n         msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n-        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n-        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n-        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)",
+    "violations": [
+      {
+        "type": "",
+        "line": 268,
+        "review_comment": "`_set_list_header_if_not_empty` is now unused in the class. Could we still use it? Or should it be deleted? (but that should maybe be documented then)"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1437266625",
+    "diff": "@@ -263,9 +268,6 @@ def message(self):\n         msg = self._create_message(msg)\n         msg[\"Subject\"] = self.subject\n         msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n-        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n-        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n-        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)",
+    "violations": [
+      {
+        "type": "",
+        "line": 268,
+        "review_comment": "Seems unnecessary indeed.\r\n\r\nI'd suggest deleting it :) Since it's an [internal API](https://docs.djangoproject.com/en/5.0/misc/api-stability/#apis-marked-as-internal), I think there is no need to document the change."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1437829502",
+    "diff": "@@ -205,6 +205,22 @@ def test_cc_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"Cc\"], \"foo@example.com\")\n \n+    def test_cc_not_repeated(self):\n+        message = EmailMessage(\n+            \"Subject\",\n+            \"Content\",\n+            \"bounce@example.com\",\n+            [\"to@example.com\"],\n+            cc=[\"foo@example.com\"],\n+            headers={\"Cc\": \"override@example.com\"},\n+        ).message()\n+\n+        count_cc = 0\n+        for el in list(message.raw_items()):\n+            if \"Cc\" in el:\n+                count_cc += 1\n+        self.assertEqual(count_cc, 1)",
+    "violations": [
+      {
+        "type": "",
+        "line": 222,
+        "review_comment": "You can probably simplify this statement (and the ones in the other tests) using:\r\n```suggestion\r\n        count_cc = list(message.raw_items()).count(\"Cc\")\r\n        self.assertEqual(count_cc, 1)\r\n```\r\n\r\n"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_cc_in_headers_only",
+      "start_line": 219,
+      "end_line": 227,
+      "code": "    def test_cc_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"Cc\": \"foo@example.com\"},\n        ).message()\n        self.assertEqual(message[\"Cc\"], \"foo@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1438061586",
+    "diff": "@@ -393,6 +426,28 @@ def test_to_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"To\"], \"to@example.com\")\n \n+    def test_to_not_repeated(self):\n+        \"\"\"\n+        Make sure that to is not repeated (#35033)\n+        \"\"\"\n+        email = EmailMessage(\n+            subject=\"test subject\",\n+            body=\"test body\",\n+            from_email=\"from@example.com\",\n+            to=[\"guy1@example.com\"],\n+            headers={\n+                \"To\": \", \".join(\n+                    [\"guy1@example.com\", \"guy2@example.com\", \"guy3@example.com\"]\n+                ),",
+    "violations": [
+      {
+        "type": "",
+        "line": 441,
+        "review_comment": "There is no need to use `join()` for static strings\r\n```suggestion\r\n                \"To\": \"person1@example.com, person2@example.com\",\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_reply_to_in_headers_only",
+      "start_line": 434,
+      "end_line": 442,
+      "code": "    def test_reply_to_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"from@example.com\",\n            [\"to@example.com\"],\n            headers={\"Reply-To\": \"reply_to@example.com\"},\n        ).message()\n        self.assertEqual(message[\"Reply-To\"], \"reply_to@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1438062202",
+    "diff": "@@ -393,6 +426,28 @@ def test_to_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"To\"], \"to@example.com\")\n \n+    def test_to_not_repeated(self):\n+        \"\"\"\n+        Make sure that to is not repeated (#35033)\n+        \"\"\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 432,
+        "review_comment": "Please remove ticket numbers from docstrings. Also, to add more explanation, docstrings should state the expected behavior and omit prefixes like \"Make sure\" since all tests ensure things. This guideline is from [Python coding style](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/#python-style).\r\n\r\nPersonally, I'd remove docstring from new test methods as test method names are self-explanatory.\r\n"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_reply_to_header",
+      "start_line": 420,
+      "end_line": 432,
+      "code": "    def test_reply_to_header(self):\n        \"\"\"\n        Specifying 'Reply-To' in headers should override reply_to.\n        \"\"\"\n        email = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            reply_to=[\"foo@example.com\"],\n        )\n        message = email.message()\n        self.assertEqual(message[\"Reply-To\"], \"foo@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1438063005",
+    "diff": "@@ -384,6 +400,23 @@ def test_to_header(self):\n             email.to, [\"list-subscriber@example.com\", \"list-subscriber2@example.com\"]\n         )\n \n+        email = EmailMessage(\n+            subject=\"test subject\",\n+            body=\"test body\",\n+            from_email=\"from@example.com\",\n+            to=[\"guy1@example.com\"],\n+            headers={\n+                \"To\": \", \".join(\n+                    [\"guy1@example.com\", \"guy2@example.com\", \"guy3@example.com\"]\n+                ),\n+            },\n+        )\n+        message = email.message()\n+        self.assertEqual(\n+            message[\"To\"], \"guy1@example.com, guy2@example.com, guy3@example.com\"\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 417,
+        "review_comment": "This assertion could be moved to the `test_to_not_repeated` without repeating everything else."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_to_in_headers_only",
+      "start_line": 411,
+      "end_line": 418,
+      "code": "    def test_to_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            headers={\"To\": \"to@example.com\"},\n        ).message()\n        self.assertEqual(message[\"To\"], \"to@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1438065077",
+    "diff": "@@ -205,6 +205,22 @@ def test_cc_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"Cc\"], \"foo@example.com\")\n \n+    def test_cc_not_repeated(self):\n+        message = EmailMessage(\n+            \"Subject\",\n+            \"Content\",\n+            \"bounce@example.com\",\n+            [\"to@example.com\"],\n+            cc=[\"foo@example.com\"],\n+            headers={\"Cc\": \"override@example.com\"},\n+        ).message()\n+\n+        count_cc = 0\n+        for el in list(message.raw_items()):",
+    "violations": [
+      {
+        "type": "",
+        "line": 219,
+        "review_comment": "`raw_items()` is an undocumented method. What do you think about using `get_all()` instead (e.g. `get_all(\"cc\")`)?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_cc_in_headers_only",
+      "start_line": 219,
+      "end_line": 227,
+      "code": "    def test_cc_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"Cc\": \"foo@example.com\"},\n        ).message()\n        self.assertEqual(message[\"Cc\"], \"foo@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1438103673",
+    "diff": "@@ -393,6 +409,23 @@ def test_to_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"To\"], \"to@example.com\")\n \n+    def test_to_not_repeated(self):\n+        email = EmailMessage(\n+            subject=\"test subject\",\n+            body=\"test body\",\n+            from_email=\"from@example.com\",\n+            to=[\"guy1@example.com\"],\n+            headers={\"To\": \"guy1@example.com, guy2@example.com, guy3@example.com\"},\n+        )\n+        message = email.message()\n+        count_to = len(message.get_all(\"To\"))\n+\n+        self.assertEqual(count_to, 1)",
+    "violations": [
+      {
+        "type": "",
+        "line": 423,
+        "review_comment": "I would assert values not only the number of headers\r\n```suggestion\r\n        self.assertEqual(\r\n            message.get_all(\"To\"),\r\n            [\"guy1@example.com, guy2@example.com, guy3@example.com\"],\r\n        )     \r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_reply_to_header",
+      "start_line": 420,
+      "end_line": 432,
+      "code": "    def test_reply_to_header(self):\n        \"\"\"\n        Specifying 'Reply-To' in headers should override reply_to.\n        \"\"\"\n        email = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            reply_to=[\"foo@example.com\"],\n        )\n        message = email.message()\n        self.assertEqual(message[\"Reply-To\"], \"foo@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1438103948",
+    "diff": "@@ -393,6 +409,23 @@ def test_to_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"To\"], \"to@example.com\")\n \n+    def test_to_not_repeated(self):\n+        email = EmailMessage(\n+            subject=\"test subject\",\n+            body=\"test body\",\n+            from_email=\"from@example.com\",\n+            to=[\"guy1@example.com\"],",
+    "violations": [
+      {
+        "type": "",
+        "line": 417,
+        "review_comment": "It's confusing that `to` contains a value that is also in `headers[\"To\"]`."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_to_in_headers_only",
+      "start_line": 411,
+      "end_line": 418,
+      "code": "    def test_to_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            headers={\"To\": \"to@example.com\"},\n        ).message()\n        self.assertEqual(message[\"To\"], \"to@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1439422417",
+    "diff": "@@ -282,6 +284,10 @@ def message(self):\n         for name, value in self.extra_headers.items():\n             if name.lower() != \"from\":  # From is already handled\n                 msg[name] = value\n+        for header, value_header in self.headers_with_one_occurrence.items():\n+            if self.extra_headers.get(header) is None:\n+                if value_header:\n+                    msg[header] = \", \".join(str(v) for v in value_header)",
+    "violations": [
+      {
+        "type": "",
+        "line": 290,
+        "review_comment": "Values from `extra_headers` should be already in the `msg`. I'd change to `msg` and add a comment:\r\n```suggestion\r\n            # extra_headers takes precedence over to/cc/reply_to parameters.\r\n            if msg.get(header) is None and value_header:\r\n                msg[header] = \", \".join(str(v) for v in value_header)\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "message",
+      "start_line": 265,
+      "end_line": 298,
+      "code": "    def message(self):\n        HEADER_WITH_ONE_OCCURRENCE = [\"to\", \"reply-to\", \"cc\"]\n\n        encoding = self.encoding or settings.DEFAULT_CHARSET\n        msg = SafeMIMEText(self.body, self.content_subtype, encoding)\n        msg = self._create_message(msg)\n        msg[\"Subject\"] = self.subject\n        msg[\"From\"] = self.extra_headers.get(\"From\", self.from_email)\n        self._set_list_header_if_not_empty(msg, \"To\", self.to)\n        self._set_list_header_if_not_empty(msg, \"Cc\", self.cc)\n        self._set_list_header_if_not_empty(msg, \"Reply-To\", self.reply_to)\n\n        # Email header names are case-insensitive (RFC 2045), so we have to\n        # accommodate that when doing comparisons.\n        header_names = [key.lower() for key in self.extra_headers]\n        if \"date\" not in header_names:\n            # formatdate() uses stdlib methods to format the date, which use\n            # the stdlib/OS concept of a timezone, however, Django sets the\n            # TZ environment variable based on the TIME_ZONE setting which\n            # will get picked up by formatdate().\n            msg[\"Date\"] = formatdate(localtime=settings.EMAIL_USE_LOCALTIME)\n        if \"message-id\" not in header_names:\n            # Use cached DNS_NAME for performance\n            msg[\"Message-ID\"] = make_msgid(domain=DNS_NAME)\n        for name, value in self.extra_headers.items():\n            if name.lower() in HEADER_WITH_ONE_OCCURRENCE and msg[name] is not None:\n                raise ValueError(\"Cannot insert repeated headers\")\n            if name.lower() != \"from\":  # From is already handled\n                msg[name] = value\n        for header, value_header in self.headers_with_one_occurrence.items():\n            # extra_headers takes precedence over to/cc/bcc/reply_to parameters.\n            if msg.get(header) is None and value_header:\n                msg[header] = \", \".join(str(v) for v in value_header)\n        return msg",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1439423418",
+    "diff": "@@ -248,6 +248,11 @@ def __init__(\n                 else:\n                     self.attach(*attachment)\n         self.extra_headers = headers or {}\n+        self.headers_with_one_occurrence = {\n+            \"To\": self.to,\n+            \"Reply-To\": self.reply_to,\n+            \"Cc\": self.cc,",
+    "violations": [
+      {
+        "type": "",
+        "line": 253,
+        "review_comment": "Shouldn't we keep the same order?\r\n```suggestion\r\n            \"To\": self.to,\r\n            \"Cc\": self.cc,\r\n            \"Reply-To\": self.reply_to,\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "__init__",
+      "start_line": 199,
+      "end_line": 256,
+      "code": "    def __init__(\n        self,\n        subject=\"\",\n        body=\"\",\n        from_email=None,\n        to=None,\n        bcc=None,\n        connection=None,\n        attachments=None,\n        headers=None,\n        cc=None,\n        reply_to=None,\n    ):\n        \"\"\"\n        Initialize a single email message (which can be sent to multiple\n        recipients).\n        \"\"\"\n        if to:\n            if isinstance(to, str):\n                raise TypeError('\"to\" argument must be a list or tuple')\n            self.to = list(to)\n        else:\n            self.to = []\n        if cc:\n            if isinstance(cc, str):\n                raise TypeError('\"cc\" argument must be a list or tuple')\n            self.cc = list(cc)\n        else:\n            self.cc = []\n        if bcc:\n            if isinstance(bcc, str):\n                raise TypeError('\"bcc\" argument must be a list or tuple')\n            self.bcc = list(bcc)\n        else:\n            self.bcc = []\n        if reply_to:\n            if isinstance(reply_to, str):\n                raise TypeError('\"reply_to\" argument must be a list or tuple')\n            self.reply_to = list(reply_to)\n        else:\n            self.reply_to = []\n        self.from_email = from_email or settings.DEFAULT_FROM_EMAIL\n        self.subject = subject\n        self.body = body or \"\"\n        self.attachments = []\n        if attachments:\n            for attachment in attachments:\n                if isinstance(attachment, MIMEBase):\n                    self.attach(attachment)\n                else:\n                    self.attach(*attachment)\n        self.extra_headers = headers or {}\n        self.headers_with_one_occurrence = {\n            \"To\": self.to,\n            \"Cc\": self.cc,\n            \"Reply-To\": self.reply_to,\n        }\n        self.connection = connection",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1439429608",
+    "diff": "@@ -205,6 +205,20 @@ def test_cc_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"Cc\"], \"foo@example.com\")\n \n+    def test_cc_not_repeated(self):\n+        email = EmailMessage(\n+            \"Subject\",\n+            \"Content\",\n+            \"bounce@example.com\",\n+            [\"to@example.com\"],\n+            cc=[\"foo@example.com\"],\n+            headers={\"Cc\": \"override@example.com\"},\n+        )\n+        message = email.message()\n+\n+        self.assertEqual(message.get_all(\"Cc\"), [\"override@example.com\"])\n+        self.assertEqual(email.cc, [\"foo@example.com\"])",
+    "violations": [
+      {
+        "type": "",
+        "line": 220,
+        "review_comment": "Can we use `subTest()`? For example:\r\n```python\r\n    def test_headers_not_repeated(self):\r\n        tests = [\"to\", \"cc\", \"reply_to\"]\r\n        for header in tests:\r\n            with self.subTest(header=header):\r\n                email = EmailMessage(\r\n                    \"Subject\",\r\n                    \"Content\",\r\n                    from_email=\"bounce@example.com\",\r\n                    to=[\"to@example.com\"],\r\n                    **{\r\n                        header: [\"test@example.com\"],\r\n                        \"headers\": {header: \"precedence@example.com\"},\r\n                    },\r\n                )\r\n                message = email.message()\r\n                self.assertEqual(\r\n                    message.get_all(header.replace(\"_\", \"-\")),\r\n                    [\"precedence@example.com\"],\r\n                )\r\n                self.assertEqual(getattr(email, header), [\"test@example.com\"])\r\n```"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_cc_in_headers_only",
+      "start_line": 219,
+      "end_line": 227,
+      "code": "    def test_cc_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"Cc\": \"foo@example.com\"},\n        ).message()\n        self.assertEqual(message[\"Cc\"], \"foo@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1439432337",
+    "diff": "@@ -248,6 +248,11 @@ def __init__(\n                 else:\n                     self.attach(*attachment)\n         self.extra_headers = headers or {}\n+        self.headers_with_one_occurrence = {\n+            \"To\": self.to,\n+            \"Reply-To\": self.reply_to,\n+            \"Cc\": self.cc,",
+    "violations": [
+      {
+        "type": "",
+        "line": 253,
+        "review_comment": "Shouldn't we add `bcc` here?"
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "__init__",
+      "start_line": 199,
+      "end_line": 256,
+      "code": "    def __init__(\n        self,\n        subject=\"\",\n        body=\"\",\n        from_email=None,\n        to=None,\n        bcc=None,\n        connection=None,\n        attachments=None,\n        headers=None,\n        cc=None,\n        reply_to=None,\n    ):\n        \"\"\"\n        Initialize a single email message (which can be sent to multiple\n        recipients).\n        \"\"\"\n        if to:\n            if isinstance(to, str):\n                raise TypeError('\"to\" argument must be a list or tuple')\n            self.to = list(to)\n        else:\n            self.to = []\n        if cc:\n            if isinstance(cc, str):\n                raise TypeError('\"cc\" argument must be a list or tuple')\n            self.cc = list(cc)\n        else:\n            self.cc = []\n        if bcc:\n            if isinstance(bcc, str):\n                raise TypeError('\"bcc\" argument must be a list or tuple')\n            self.bcc = list(bcc)\n        else:\n            self.bcc = []\n        if reply_to:\n            if isinstance(reply_to, str):\n                raise TypeError('\"reply_to\" argument must be a list or tuple')\n            self.reply_to = list(reply_to)\n        else:\n            self.reply_to = []\n        self.from_email = from_email or settings.DEFAULT_FROM_EMAIL\n        self.subject = subject\n        self.body = body or \"\"\n        self.attachments = []\n        if attachments:\n            for attachment in attachments:\n                if isinstance(attachment, MIMEBase):\n                    self.attach(attachment)\n                else:\n                    self.attach(*attachment)\n        self.extra_headers = headers or {}\n        self.headers_with_one_occurrence = {\n            \"To\": self.to,\n            \"Cc\": self.cc,\n            \"Reply-To\": self.reply_to,\n        }\n        self.connection = connection",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "tests/mail/tests.py",
+    "chunk_id": "PR17642_1440361176",
+    "diff": "@@ -205,6 +205,20 @@ def test_cc_in_headers_only(self):\n         ).message()\n         self.assertEqual(message[\"Cc\"], \"foo@example.com\")\n \n+    def test_cc_not_repeated(self):\n+        email = EmailMessage(\n+            \"Subject\",\n+            \"Content\",\n+            \"bounce@example.com\",\n+            [\"to@example.com\"],\n+            cc=[\"foo@example.com\"],\n+            headers={\"Cc\": \"override@example.com\"},\n+        )\n+        message = email.message()\n+\n+        self.assertEqual(message.get_all(\"Cc\"), [\"override@example.com\"])\n+        self.assertEqual(email.cc, [\"foo@example.com\"])",
+    "violations": [
+      {
+        "type": "",
+        "line": 220,
+        "review_comment": "> In this case, do i have to remove all kinds of non-repeated tests (such as `test_cc_not_repeated`, `test_to_not_repeated`, etc. )?\r\n\r\nYes, they'd be redundant."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "test_cc_in_headers_only",
+      "start_line": 219,
+      "end_line": 227,
+      "code": "    def test_cc_in_headers_only(self):\n        message = EmailMessage(\n            \"Subject\",\n            \"Content\",\n            \"bounce@example.com\",\n            [\"to@example.com\"],\n            headers={\"Cc\": \"foo@example.com\"},\n        ).message()\n        self.assertEqual(message[\"Cc\"], \"foo@example.com\")",
+      "fallback": false
+    }
+  },
+  {
+    "repo": "django/django",
+    "file": "django/core/mail/message.py",
+    "chunk_id": "PR17642_1440399789",
+    "diff": "@@ -248,6 +248,12 @@ def __init__(\n                 else:\n                     self.attach(*attachment)\n         self.extra_headers = headers or {}\n+        self.headers_with_one_occurrence = {\n+            \"To\": self.to,\n+            \"Cc\": self.cc,\n+            \"Bcc\": self.bcc,",
+    "violations": [
+      {
+        "type": "",
+        "line": 254,
+        "review_comment": "OK, `Bcc` is a different story (can of worms), we should not include it in headers (check out ticket-18582 and a related ticket-28598). Please remove it from this patch."
+      }
+    ],
+    "ast_context": {
+      "type": "function_definition",
+      "name": "__init__",
+      "start_line": 199,
+      "end_line": 256,
+      "code": "    def __init__(\n        self,\n        subject=\"\",\n        body=\"\",\n        from_email=None,\n        to=None,\n        bcc=None,\n        connection=None,\n        attachments=None,\n        headers=None,\n        cc=None,\n        reply_to=None,\n    ):\n        \"\"\"\n        Initialize a single email message (which can be sent to multiple\n        recipients).\n        \"\"\"\n        if to:\n            if isinstance(to, str):\n                raise TypeError('\"to\" argument must be a list or tuple')\n            self.to = list(to)\n        else:\n            self.to = []\n        if cc:\n            if isinstance(cc, str):\n                raise TypeError('\"cc\" argument must be a list or tuple')\n            self.cc = list(cc)\n        else:\n            self.cc = []\n        if bcc:\n            if isinstance(bcc, str):\n                raise TypeError('\"bcc\" argument must be a list or tuple')\n            self.bcc = list(bcc)\n        else:\n            self.bcc = []\n        if reply_to:\n            if isinstance(reply_to, str):\n                raise TypeError('\"reply_to\" argument must be a list or tuple')\n            self.reply_to = list(reply_to)\n        else:\n            self.reply_to = []\n        self.from_email = from_email or settings.DEFAULT_FROM_EMAIL\n        self.subject = subject\n        self.body = body or \"\"\n        self.attachments = []\n        if attachments:\n            for attachment in attachments:\n                if isinstance(attachment, MIMEBase):\n                    self.attach(attachment)\n                else:\n                    self.attach(*attachment)\n        self.extra_headers = headers or {}\n        self.headers_with_one_occurrence = {\n            \"To\": self.to,\n            \"Cc\": self.cc,\n            \"Reply-To\": self.reply_to,\n        }\n        self.connection = connection",
+      "fallback": false
+    }
+  }
+]
