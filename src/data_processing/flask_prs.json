@@ -1,0 +1,1978 @@
+[
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR5127_1299206826",
+    "diff": "@@ -365,124 +226,18 @@ def __init__(\n         root_path: str | None = None,\n     ):\n         super().__init__(\n-            import_name=import_name,\n-            static_folder=static_folder,\n-            static_url_path=static_url_path,\n-            template_folder=template_folder,\n-            root_path=root_path,\n+            import_name,",
+    "violations": [
+      {
+        "type": "",
+        "line": 229,
+        "review_comment": "It's annoying to write, but these should be passed as keyword arguments, I don't like to rely on positions."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160676802",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 1021,
+        "review_comment": "```suggestion\r\n    headers = (\"Subdomain\", \"Endpoint\", \"Methods\", \"Rule\")\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160677272",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n     widths = (\n+        max(len(rule.subdomain) for rule in rules),\n         max(len(rule.endpoint) for rule in rules),\n         max(len(methods) for methods in rule_methods),\n         max(len(rule.rule) for rule in rules),\n     )\n     widths = [max(len(h), w) for h, w in zip(headers, widths)]\n-    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}\".format(*widths)\n-\n+    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}} {{3:<{3}}}\".format(*widths)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1029,
+        "review_comment": "Why just one space between the last two headers instead of two like before?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160724907",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n     widths = (\n+        max(len(rule.subdomain) for rule in rules),\n         max(len(rule.endpoint) for rule in rules),\n         max(len(methods) for methods in rule_methods),\n         max(len(rule.rule) for rule in rules),\n     )\n     widths = [max(len(h), w) for h, w in zip(headers, widths)]\n-    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}\".format(*widths)\n-\n+    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}} {{3:<{3}}}\".format(*widths)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1029,
+        "review_comment": "Look at the existing tests that now fail and adapt them."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160726217",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n     widths = (\n+        max(len(rule.subdomain) for rule in rules),\n         max(len(rule.endpoint) for rule in rules),\n         max(len(methods) for methods in rule_methods),\n         max(len(rule.rule) for rule in rules),\n     )\n     widths = [max(len(h), w) for h, w in zip(headers, widths)]\n-    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}\".format(*widths)\n-\n+    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}} {{3:<{3}}}\".format(*widths)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1029,
+        "review_comment": "Specifically, you need to fix the existing tests, which are now failing because you changed the output."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160727667",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n     widths = (\n+        max(len(rule.subdomain) for rule in rules),\n         max(len(rule.endpoint) for rule in rules),\n         max(len(methods) for methods in rule_methods),",
+    "violations": [
+      {
+        "type": "",
+        "line": 1025,
+        "review_comment": "Subdomain should be shown here before rule, not at the beginning of the table."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160728253",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n     widths = (\n+        max(len(rule.subdomain) for rule in rules),\n         max(len(rule.endpoint) for rule in rules),\n         max(len(methods) for methods in rule_methods),\n         max(len(rule.rule) for rule in rules),\n     )\n     widths = [max(len(h), w) for h, w in zip(headers, widths)]\n-    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}\".format(*widths)\n-\n+    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}} {{3:<{3}}}\".format(*widths)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1029,
+        "review_comment": "click one one of the tests (pick one of the linux ones) and check the output. you can also run the tests locally."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160728993",
+    "diff": "@@ -1018,20 +1018,22 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n     widths = (\n+        max(len(rule.subdomain) for rule in rules),",
+    "violations": [
+      {
+        "type": "",
+        "line": 1023,
+        "review_comment": "`subdomain` can be `None`, need to account for that."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR5044_1160884099",
+    "diff": "@@ -1018,22 +1018,39 @@ def routes_command(sort: str, all_methods: bool) -> None:\n         for rule in rules\n     ]\n \n-    headers = (\"Sub Domain\", \"Endpoint\", \"Methods\", \"Rule\")\n-    widths = (\n-        max(len(rule.subdomain) for rule in rules),\n-        max(len(rule.endpoint) for rule in rules),\n-        max(len(methods) for methods in rule_methods),\n-        max(len(rule.rule) for rule in rules),\n-    )\n-    widths = [max(len(h), w) for h, w in zip(headers, widths)]\n-    row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}} {{3:<{3}}}\".format(*widths)\n-    click.echo(row.format(*headers).strip())\n-    click.echo(row.format(*(\"-\" * width for width in widths)))\n-\n-    for rule, methods in zip(rules, rule_methods):\n-        click.echo(\n-            row.format(rule.subdomain, rule.endpoint, methods, rule.rule).rstrip()\n+    if max(len(rule.subdomain) for rule in rules if rule.subdomain is not None) == 0:\n+        headers = (\"Endpoint\", \"Methods\", \"Rule\")\n+        widths = (\n+            max(len(rule.endpoint) for rule in rules),\n+            max(len(methods) for methods in rule_methods),\n+            max(len(rule.rule) for rule in rules),\n         )\n+        widths = [max(len(h), w) for h, w in zip(headers, widths)]\n+        row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}\".format(*widths)\n+        click.echo(row.format(*headers).strip())\n+        click.echo(row.format(*(\"-\" * width for width in widths)))\n+\n+        for rule, methods in zip(rules, rule_methods):\n+            click.echo(row.format(rule.endpoint, methods, rule.rule).rstrip())\n+    else:\n+        headers_extended = (\"Endpoint\", \"Methods\", \"Subdomain\", \"Rule\")\n+        widths_extended = (\n+            max(len(rule.endpoint) for rule in rules),\n+            max(len(methods) for methods in rule_methods),\n+            max(len(rule.subdomain) for rule in rules if rule.subdomain is not None),\n+            max(len(rule.rule) for rule in rules),\n+        )\n+        widths_extended = [\n+            max(len(h), w) for h, w in zip(headers_extended, widths_extended)\n+        ]\n+        row = \"{{0:<{0}}}  {{1:<{1}}}  {{2:<{2}}}  {{3:<{3}}}\".format(*widths_extended)\n+        click.echo(row.format(*headers_extended).strip())\n+        click.echo(row.format(*(\"-\" * width for width in widths_extended)))\n+\n+        for rule, methods in zip(rules, rule_methods):\n+            click.echo(\n+                row.format(rule.endpoint, methods, rule.subdomain, rule.rule).rstrip()\n+            )",
+    "violations": [
+      {
+        "type": "",
+        "line": 1053,
+        "review_comment": "This duplicates most of the code twice. Instead, it should be refactored to support a variable number of columns."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4992_1114374958",
+    "diff": "@@ -245,7 +246,7 @@ def from_file(\n             app.config.from_file(\"config.json\", load=json.load)\n \n             import toml\n-            app.config.from_file(\"config.toml\", load=toml.load)\n+            app.config.from_file(\"config.toml\", load=toml.load, text=True)",
+    "violations": [
+      {
+        "type": "",
+        "line": 249,
+        "review_comment": "this parameter is a absolute lie - when true you take away the text and drop a buffer\r\n\r\nthis should be called `binary`\r\n\r\nand it should use the open mode "
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4992_1114375396",
+    "diff": "@@ -256,12 +257,18 @@ def from_file(\n         :param silent: Ignore the file if it doesn't exist.\n         :return: ``True`` if the file was loaded successfully.\n \n+        .. versionchanged:: 2.3.0\n+            Added optional boolean argument \"text\" (False by default).\n+            You can now use .toml config file by specifying \"text=True\".\n+\n         .. versionadded:: 2.0\n         \"\"\"\n         filename = os.path.join(self.root_path, filename)\n \n         try:\n             with open(filename) as f:\n+                if text:",
+    "violations": [
+      {
+        "type": "",
+        "line": 270,
+        "review_comment": "This should change what `open` does, not try to access `buffer` after the fact (someone else pointed out this wasn't documented as a public API).\r\n\r\nAlso, it's backwards, `text=True`, the default, should result in a text file, `False` should result in a binary file."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4992_1114379781",
+    "diff": "@@ -256,12 +257,18 @@ def from_file(\n         :param silent: Ignore the file if it doesn't exist.\n         :return: ``True`` if the file was loaded successfully.\n \n+        .. versionchanged:: 2.3.0",
+    "violations": [
+      {
+        "type": "",
+        "line": 260,
+        "review_comment": "Can drop the `.0`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4992_1114380087",
+    "diff": "@@ -245,7 +246,7 @@ def from_file(\n             app.config.from_file(\"config.json\", load=json.load)\n \n             import toml\n-            app.config.from_file(\"config.toml\", load=toml.load)\n+            app.config.from_file(\"config.toml\", load=toml.load, text=True)",
+    "violations": [
+      {
+        "type": "",
+        "line": 249,
+        "review_comment": "This still uses the `toml` library, it needs to change to `tomllib` to be a useful example of the parameter."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4992_1114381822",
+    "diff": "@@ -256,12 +257,18 @@ def from_file(\n         :param silent: Ignore the file if it doesn't exist.\n         :return: ``True`` if the file was loaded successfully.",
+    "violations": [
+      {
+        "type": "",
+        "line": 259,
+        "review_comment": "Need to add documentation for the parameter."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4992_1114383519",
+    "diff": "@@ -245,7 +246,7 @@ def from_file(\n             app.config.from_file(\"config.json\", load=json.load)\n \n             import toml\n-            app.config.from_file(\"config.toml\", load=toml.load)\n+            app.config.from_file(\"config.toml\", load=toml.load, text=True)",
+    "violations": [
+      {
+        "type": "",
+        "line": 249,
+        "review_comment": "I addressed this in my review."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4935_1061700721",
+    "diff": "@@ -358,6 +358,9 @@ def register(self, app: \"Flask\", options: dict) -> None:\n         :param options: Keyword arguments forwarded from\n             :meth:`~Flask.register_blueprint`.\n \n+        ,, versionchanged:: 2.3",
+    "violations": [
+      {
+        "type": "",
+        "line": 361,
+        "review_comment": "Should be `.` (period), not `,` (comma)."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4871_1024862491",
+    "diff": "@@ -272,11 +272,7 @@ def __init__(\n         self.url_prefix = url_prefix\n         self.subdomain = subdomain\n         self.deferred_functions: t.List[DeferredSetupFunction] = []\n-\n-        if url_defaults is None:\n-            url_defaults = {}\n-\n-        self.url_values_defaults = url_defaults\n+        self.url_values_defaults = {} if url_defaults is None else url_defaults",
+    "violations": [
+      {
+        "type": "",
+        "line": 275,
+        "review_comment": "This code fix does not seem to change anything."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4871_1024904399",
+    "diff": "@@ -272,11 +272,7 @@ def __init__(\n         self.url_prefix = url_prefix\n         self.subdomain = subdomain\n         self.deferred_functions: t.List[DeferredSetupFunction] = []\n-\n-        if url_defaults is None:\n-            url_defaults = {}\n-\n-        self.url_values_defaults = url_defaults\n+        self.url_values_defaults = {} if url_defaults is None else url_defaults",
+    "violations": [
+      {
+        "type": "",
+        "line": 275,
+        "review_comment": "Both options are perfectly valid, please do not send PRs with such minor changes. They are more noise than useful."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4856_1014670870",
+    "diff": "@@ -453,6 +453,15 @@ def extend(bp_dict, parent_dict):\n         for blueprint, bp_options in self._blueprints:\n             bp_options = bp_options.copy()\n             bp_url_prefix = bp_options.get(\"url_prefix\")\n+            bp_subdomain = bp_options.get(\"subdomain\")\n+\n+            if bp_subdomain is None:\n+                bp_subdomain = blueprint.subdomain\n+\n+            if state.subdomain is not None and bp_subdomain is None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 461,
+        "review_comment": "I think we should also consider what to do if `state.subdomain is not None and bp_subdomain is not None`. I think we should combine as `state.bp` (much like with the prefix). Would you expect it to work this way as well?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4856_1014724927",
+    "diff": "@@ -453,6 +453,15 @@ def extend(bp_dict, parent_dict):\n         for blueprint, bp_options in self._blueprints:\n             bp_options = bp_options.copy()\n             bp_url_prefix = bp_options.get(\"url_prefix\")\n+            bp_subdomain = bp_options.get(\"subdomain\")\n+\n+            if bp_subdomain is None:\n+                bp_subdomain = blueprint.subdomain\n+\n+            if state.subdomain is not None and bp_subdomain is None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 461,
+        "review_comment": "Given it might confuse it is probably safest to raise a ValueError/RuntimeError then if both are set. (This would be raised during initialization and so isn't likely to cause any issues for existing apps)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4856_1051581147",
+    "diff": "@@ -453,6 +453,15 @@ def extend(bp_dict, parent_dict):\n         for blueprint, bp_options in self._blueprints:\n             bp_options = bp_options.copy()\n             bp_url_prefix = bp_options.get(\"url_prefix\")\n+            bp_subdomain = bp_options.get(\"subdomain\")\n+\n+            if bp_subdomain is None:\n+                bp_subdomain = blueprint.subdomain\n+\n+            if state.subdomain is not None and bp_subdomain is None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 461,
+        "review_comment": "I've had quite a bit of time to think about this, and to talk to others about their expectations. I think we should combine the subdomains (much like we do for the paths). I think this is the clearest expectation for a nested blueprint i.e. that the routes defined within it nest both by path and subdomain. Could you update this PR to do so and then I'll merge."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_templating.py",
+    "chunk_id": "PR4840_998530715",
+    "diff": "@@ -114,6 +114,18 @@ def test_escaping_without_template_filename(app, client, req_ctx):\n     assert flask.render_template(\"mail.txt\", foo=\"<test>\") == \"<test> Mail\"\n \n \n+def test_escaping_svg(app, client):",
+    "violations": [
+      {
+        "type": "",
+        "line": 117,
+        "review_comment": "Don't need this test, it's just testing that Jinja works. At most, you wouuld test that `app.select_jinja_autoescape` returned `True` for a `.svg` filename."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/json/provider.py",
+    "chunk_id": "PR4692_920306595",
+    "diff": "@@ -0,0 +1,310 @@\n+from __future__ import annotations\n+\n+import dataclasses\n+import decimal\n+import json\n+import typing as t\n+import uuid\n+import weakref\n+from datetime import date\n+\n+from werkzeug.http import http_date\n+\n+from ..globals import request\n+\n+if t.TYPE_CHECKING:  # pragma: no cover\n+    from ..app import Flask\n+    from ..wrappers import Response\n+\n+\n+class JSONProvider:\n+    \"\"\"A standard set of JSON operations for an application. Subclasses\n+    of this can be used to customize JSON behavior or use different\n+    JSON libraries.\n+\n+    To implement a provider for a specific library, subclass this base\n+    class and implement at least :meth:`dumps` and :meth:`loads`. All\n+    other methods have default implementations.\n+\n+    To use a different provider, either subclass ``Flask`` and set\n+    :attr:`~flask.Flask.json_provider_class` to a provider class, or set\n+    :attr:`app.json <flask.Flask.json>` to an instance of the class.\n+\n+    :param app: An application instance. This will be stored as a\n+        :class:`weakref.proxy` on the :attr:`_app` attribute.\n+\n+    .. versionadded:: 2.2\n+    \"\"\"\n+\n+    def __init__(self, app: Flask) -> None:\n+        self._app = weakref.proxy(app)\n+\n+    def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:\n+        \"\"\"Serialize data as JSON.\n+\n+        :param obj: The data to serialize.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def dump(self, obj: t.Any, fp: t.IO[str], **kwargs: t.Any) -> None:\n+        \"\"\"Serialize data as JSON and write to a file.\n+\n+        :param obj: The data to serialize.\n+        :param fp: A file opened for writing text. Should use the UTF-8\n+            encoding to be valid JSON.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        fp.write(self.dumps(obj, **kwargs))\n+\n+    def loads(self, s: str | bytes, **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON.\n+\n+        :param s: Text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def load(self, fp: t.IO[t.AnyStr], **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON read from a file.\n+\n+        :param fp: A file opened for reading text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        return self.loads(fp.read(), **kwargs)\n+\n+    def _prepare_response_obj(\n+        self, args: t.Tuple[t.Any, ...], kwargs: t.Dict[str, t.Any]\n+    ) -> t.Any:\n+        if args and kwargs:\n+            raise TypeError(\"app.json.response() takes either args or kwargs, not both\")\n+\n+        if not args and not kwargs:\n+            return None\n+\n+        if len(args) == 1:\n+            return args[0]\n+\n+        return args or kwargs\n+\n+    def response(self, *args: t.Any, **kwargs: t.Any) -> Response:\n+        \"\"\"Serialize the given arguments as JSON, and return a\n+        :class:`~flask.Response` object with the ``application/json``\n+        mimetype.\n+\n+        The :func:`~flask.json.jsonify` function calls this method for\n+        the current application.\n+\n+        Either positional or keyword arguments can be given, not both.\n+        If no arguments are given, ``None`` is serialized.\n+\n+        :param args: A single value to serialize, or multiple values to\n+            treat as a list to serialize.\n+        :param kwargs: Treat as a dict to serialize.\n+        \"\"\"\n+        obj = self._prepare_response_obj(args, kwargs)\n+        return self._app.response_class(self.dumps(obj), mimetype=\"application/json\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 106,
+        "review_comment": "Worth a cls default_mimetype here to save extensions having to override this method and as matching with responses?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/json/provider.py",
+    "chunk_id": "PR4692_920417062",
+    "diff": "@@ -0,0 +1,310 @@\n+from __future__ import annotations\n+\n+import dataclasses\n+import decimal\n+import json\n+import typing as t\n+import uuid\n+import weakref\n+from datetime import date\n+\n+from werkzeug.http import http_date\n+\n+from ..globals import request\n+\n+if t.TYPE_CHECKING:  # pragma: no cover\n+    from ..app import Flask\n+    from ..wrappers import Response\n+\n+\n+class JSONProvider:\n+    \"\"\"A standard set of JSON operations for an application. Subclasses\n+    of this can be used to customize JSON behavior or use different\n+    JSON libraries.\n+\n+    To implement a provider for a specific library, subclass this base\n+    class and implement at least :meth:`dumps` and :meth:`loads`. All\n+    other methods have default implementations.\n+\n+    To use a different provider, either subclass ``Flask`` and set\n+    :attr:`~flask.Flask.json_provider_class` to a provider class, or set\n+    :attr:`app.json <flask.Flask.json>` to an instance of the class.\n+\n+    :param app: An application instance. This will be stored as a\n+        :class:`weakref.proxy` on the :attr:`_app` attribute.\n+\n+    .. versionadded:: 2.2\n+    \"\"\"\n+\n+    def __init__(self, app: Flask) -> None:\n+        self._app = weakref.proxy(app)\n+\n+    def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:\n+        \"\"\"Serialize data as JSON.\n+\n+        :param obj: The data to serialize.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def dump(self, obj: t.Any, fp: t.IO[str], **kwargs: t.Any) -> None:\n+        \"\"\"Serialize data as JSON and write to a file.\n+\n+        :param obj: The data to serialize.\n+        :param fp: A file opened for writing text. Should use the UTF-8\n+            encoding to be valid JSON.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        fp.write(self.dumps(obj, **kwargs))\n+\n+    def loads(self, s: str | bytes, **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON.\n+\n+        :param s: Text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def load(self, fp: t.IO[t.AnyStr], **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON read from a file.\n+\n+        :param fp: A file opened for reading text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        return self.loads(fp.read(), **kwargs)\n+\n+    def _prepare_response_obj(\n+        self, args: t.Tuple[t.Any, ...], kwargs: t.Dict[str, t.Any]\n+    ) -> t.Any:\n+        if args and kwargs:\n+            raise TypeError(\"app.json.response() takes either args or kwargs, not both\")\n+\n+        if not args and not kwargs:\n+            return None\n+\n+        if len(args) == 1:\n+            return args[0]\n+\n+        return args or kwargs\n+\n+    def response(self, *args: t.Any, **kwargs: t.Any) -> Response:\n+        \"\"\"Serialize the given arguments as JSON, and return a\n+        :class:`~flask.Response` object with the ``application/json``\n+        mimetype.\n+\n+        The :func:`~flask.json.jsonify` function calls this method for\n+        the current application.\n+\n+        Either positional or keyword arguments can be given, not both.\n+        If no arguments are given, ``None`` is serialized.\n+\n+        :param args: A single value to serialize, or multiple values to\n+            treat as a list to serialize.\n+        :param kwargs: Treat as a dict to serialize.\n+        \"\"\"\n+        obj = self._prepare_response_obj(args, kwargs)\n+        return self._app.response_class(self.dumps(obj), mimetype=\"application/json\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 106,
+        "review_comment": "@davidism, maybe add your orjson example to the documentation?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/json/provider.py",
+    "chunk_id": "PR4692_920502868",
+    "diff": "@@ -0,0 +1,310 @@\n+from __future__ import annotations\n+\n+import dataclasses\n+import decimal\n+import json\n+import typing as t\n+import uuid\n+import weakref\n+from datetime import date\n+\n+from werkzeug.http import http_date\n+\n+from ..globals import request\n+\n+if t.TYPE_CHECKING:  # pragma: no cover\n+    from ..app import Flask\n+    from ..wrappers import Response\n+\n+\n+class JSONProvider:\n+    \"\"\"A standard set of JSON operations for an application. Subclasses\n+    of this can be used to customize JSON behavior or use different\n+    JSON libraries.\n+\n+    To implement a provider for a specific library, subclass this base\n+    class and implement at least :meth:`dumps` and :meth:`loads`. All\n+    other methods have default implementations.\n+\n+    To use a different provider, either subclass ``Flask`` and set\n+    :attr:`~flask.Flask.json_provider_class` to a provider class, or set\n+    :attr:`app.json <flask.Flask.json>` to an instance of the class.\n+\n+    :param app: An application instance. This will be stored as a\n+        :class:`weakref.proxy` on the :attr:`_app` attribute.\n+\n+    .. versionadded:: 2.2\n+    \"\"\"\n+\n+    def __init__(self, app: Flask) -> None:\n+        self._app = weakref.proxy(app)\n+\n+    def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:\n+        \"\"\"Serialize data as JSON.\n+\n+        :param obj: The data to serialize.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def dump(self, obj: t.Any, fp: t.IO[str], **kwargs: t.Any) -> None:\n+        \"\"\"Serialize data as JSON and write to a file.\n+\n+        :param obj: The data to serialize.\n+        :param fp: A file opened for writing text. Should use the UTF-8\n+            encoding to be valid JSON.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        fp.write(self.dumps(obj, **kwargs))\n+\n+    def loads(self, s: str | bytes, **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON.\n+\n+        :param s: Text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def load(self, fp: t.IO[t.AnyStr], **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON read from a file.\n+\n+        :param fp: A file opened for reading text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        return self.loads(fp.read(), **kwargs)\n+\n+    def _prepare_response_obj(\n+        self, args: t.Tuple[t.Any, ...], kwargs: t.Dict[str, t.Any]\n+    ) -> t.Any:\n+        if args and kwargs:\n+            raise TypeError(\"app.json.response() takes either args or kwargs, not both\")\n+\n+        if not args and not kwargs:\n+            return None\n+\n+        if len(args) == 1:\n+            return args[0]\n+\n+        return args or kwargs\n+\n+    def response(self, *args: t.Any, **kwargs: t.Any) -> Response:\n+        \"\"\"Serialize the given arguments as JSON, and return a\n+        :class:`~flask.Response` object with the ``application/json``\n+        mimetype.\n+\n+        The :func:`~flask.json.jsonify` function calls this method for\n+        the current application.\n+\n+        Either positional or keyword arguments can be given, not both.\n+        If no arguments are given, ``None`` is serialized.\n+\n+        :param args: A single value to serialize, or multiple values to\n+            treat as a list to serialize.\n+        :param kwargs: Treat as a dict to serialize.\n+        \"\"\"\n+        obj = self._prepare_response_obj(args, kwargs)\n+        return self._app.response_class(self.dumps(obj), mimetype=\"application/json\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 106,
+        "review_comment": "ok, just a small suggestion"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/json/provider.py",
+    "chunk_id": "PR4692_923352802",
+    "diff": "@@ -0,0 +1,310 @@\n+from __future__ import annotations\n+\n+import dataclasses\n+import decimal\n+import json\n+import typing as t\n+import uuid\n+import weakref\n+from datetime import date\n+\n+from werkzeug.http import http_date\n+\n+from ..globals import request\n+\n+if t.TYPE_CHECKING:  # pragma: no cover\n+    from ..app import Flask\n+    from ..wrappers import Response\n+\n+\n+class JSONProvider:\n+    \"\"\"A standard set of JSON operations for an application. Subclasses\n+    of this can be used to customize JSON behavior or use different\n+    JSON libraries.\n+\n+    To implement a provider for a specific library, subclass this base\n+    class and implement at least :meth:`dumps` and :meth:`loads`. All\n+    other methods have default implementations.\n+\n+    To use a different provider, either subclass ``Flask`` and set\n+    :attr:`~flask.Flask.json_provider_class` to a provider class, or set\n+    :attr:`app.json <flask.Flask.json>` to an instance of the class.\n+\n+    :param app: An application instance. This will be stored as a\n+        :class:`weakref.proxy` on the :attr:`_app` attribute.\n+\n+    .. versionadded:: 2.2\n+    \"\"\"\n+\n+    def __init__(self, app: Flask) -> None:\n+        self._app = weakref.proxy(app)\n+\n+    def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:\n+        \"\"\"Serialize data as JSON.\n+\n+        :param obj: The data to serialize.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def dump(self, obj: t.Any, fp: t.IO[str], **kwargs: t.Any) -> None:\n+        \"\"\"Serialize data as JSON and write to a file.\n+\n+        :param obj: The data to serialize.\n+        :param fp: A file opened for writing text. Should use the UTF-8\n+            encoding to be valid JSON.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        fp.write(self.dumps(obj, **kwargs))\n+\n+    def loads(self, s: str | bytes, **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON.\n+\n+        :param s: Text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        raise NotImplementedError\n+\n+    def load(self, fp: t.IO[t.AnyStr], **kwargs: t.Any) -> t.Any:\n+        \"\"\"Deserialize data as JSON read from a file.\n+\n+        :param fp: A file opened for reading text or UTF-8 bytes.\n+        :param kwargs: May be passed to the underlying JSON library.\n+        \"\"\"\n+        return self.loads(fp.read(), **kwargs)\n+\n+    def _prepare_response_obj(\n+        self, args: t.Tuple[t.Any, ...], kwargs: t.Dict[str, t.Any]\n+    ) -> t.Any:\n+        if args and kwargs:\n+            raise TypeError(\"app.json.response() takes either args or kwargs, not both\")\n+\n+        if not args and not kwargs:\n+            return None\n+\n+        if len(args) == 1:\n+            return args[0]\n+\n+        return args or kwargs\n+\n+    def response(self, *args: t.Any, **kwargs: t.Any) -> Response:\n+        \"\"\"Serialize the given arguments as JSON, and return a\n+        :class:`~flask.Response` object with the ``application/json``\n+        mimetype.\n+\n+        The :func:`~flask.json.jsonify` function calls this method for\n+        the current application.\n+\n+        Either positional or keyword arguments can be given, not both.\n+        If no arguments are given, ``None`` is serialized.\n+\n+        :param args: A single value to serialize, or multiple values to\n+            treat as a list to serialize.\n+        :param kwargs: Treat as a dict to serialize.\n+        \"\"\"\n+        obj = self._prepare_response_obj(args, kwargs)\n+        return self._app.response_class(self.dumps(obj), mimetype=\"application/json\")\n+\n+\n+def _default(o: t.Any) -> t.Any:\n+    if isinstance(o, date):\n+        return http_date(o)\n+\n+    if isinstance(o, (decimal.Decimal, uuid.UUID)):\n+        return str(o)\n+\n+    if dataclasses and dataclasses.is_dataclass(o):\n+        return dataclasses.asdict(o)\n+\n+    if hasattr(o, \"__html__\"):\n+        return str(o.__html__())\n+\n+    raise TypeError(f\"Object of type {type(o).__name__} is not JSON serializable\")\n+\n+\n+class DefaultJSONProvider(JSONProvider):\n+    \"\"\"Provide JSON operations using Python's built-in :mod:`json`\n+    library. Serializes the following additional data types:\n+\n+    -   :class:`datetime.datetime` and :class:`datetime.date` are\n+        serialized to :rfc:`822` strings. This is the same as the HTTP\n+        date format.\n+    -   :class:`uuid.UUID` is serialized to a string.\n+    -   :class:`dataclasses.dataclass` is passed to\n+        :func:`dataclasses.asdict`.\n+    -   :class:`~markupsafe.Markup` (or any object with a ``__html__``\n+        method) will call the ``__html__`` method to get a string.\n+    \"\"\"\n+\n+    default: t.Callable[[t.Any], t.Any] = staticmethod(\n+        _default\n+    )  # type: ignore[assignment]\n+    \"\"\"Apply this function to any object that :meth:`json.dumps` does\n+    not know how to serialize. It should return a valid JSON type or\n+    raise a ``TypeError``.\n+    \"\"\"\n+",
+    "violations": [
+      {
+        "type": "",
+        "line": 146,
+        "review_comment": "What do you think about adding a dict_to_object hook here as well (for the loads side). Allows something like this,\r\n```python\r\nclass MoneyJSONProvider(DefaultJSONProvider):\r\n\r\n        @staticmethod\r\n        def default(object_):\r\n            if isinstance(object_, date):\r\n                return http_date(object_)\r\n            if isinstance(object_, (Decimal, UUID)):\r\n                return str(object_)\r\n            if is_dataclass(object_):\r\n                return asdict(object_)\r\n            if hasattr(object_, \"__html__\"):\r\n                return str(object_.__html__())\r\n            if isinstance(object_, Money):\r\n                return {'amount': object_.amount, 'currency': object_.currency}\r\n\r\n            raise TypeError(f\"Object of type {type(object_).__name__} is not JSON serializable\")\r\n\r\n        @staticmethod\r\n        def dict_to_object(dict_):\r\n            if 'amount' in dict_ and 'currency' in dict_:\r\n                return Money(Decimal(dict_['amount']), dict_['currency'])\r\n            else:\r\n                return dict_ \r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/globals.py",
+    "chunk_id": "PR4682_917122523",
+    "diff": "@@ -1,59 +1,107 @@\n import typing as t\n-from functools import partial\n+from contextvars import ContextVar\n \n from werkzeug.local import LocalProxy\n-from werkzeug.local import LocalStack\n \n if t.TYPE_CHECKING:  # pragma: no cover\n     from .app import Flask\n     from .ctx import _AppCtxGlobals\n+    from .ctx import AppContext\n+    from .ctx import RequestContext\n     from .sessions import SessionMixin\n     from .wrappers import Request\n \n-_request_ctx_err_msg = \"\"\"\\\n-Working outside of request context.\n \n-This typically means that you attempted to use functionality that needed\n-an active HTTP request.  Consult the documentation on testing for\n-information about how to avoid this problem.\\\n-\"\"\"\n-_app_ctx_err_msg = \"\"\"\\\n+class _FakeStack:\n+    def __init__(self, name: str, cv: ContextVar[t.Any]) -> None:\n+        self.name = name\n+        self.cv = cv\n+\n+    def _warn(self):\n+        import warnings\n+\n+        warnings.warn(\n+            f\"'_{self.name}_ctx_stack' is deprecated and will be\"\n+            \" removed in Flask 2.3. Use 'g' to store data, or\"\n+            f\" '{self.name}_ctx' to access the current context.\",\n+            DeprecationWarning,\n+            stacklevel=3,\n+        )\n+\n+    def push(self, obj: t.Any) -> None:\n+        self._warn()\n+        self.cv.set(obj)\n+\n+    def pop(self) -> t.Any:\n+        self._warn()\n+        ctx = self.cv.get(None)\n+        self.cv.set(None)\n+        return ctx\n+\n+    @property\n+    def top(self) -> t.Optional[t.Any]:\n+        self._warn()\n+        return self.cv.get(None)\n+\n+\n+_no_app_msg = \"\"\"\\\n Working outside of application context.\n \n This typically means that you attempted to use functionality that needed\n-to interface with the current application object in some way. To solve\n-this, set up an application context with app.app_context().  See the\n-documentation for more information.\\\n+the current application. To solve this, set up an application context\n+with app.app_context(). See the documentation for more information.\\\n \"\"\"\n+_cv_app: ContextVar[\"AppContext\"] = ContextVar(\"flask.app_ctx\")\n+__app_ctx_stack = _FakeStack(\"app\", _cv_app)\n+app_ctx: \"AppContext\" = LocalProxy(  # type: ignore[assignment]\n+    _cv_app, unbound_message=_no_app_msg\n+)\n+current_app: \"Flask\" = LocalProxy(  # type: ignore[assignment]\n+    _cv_app, \"app\", unbound_message=_no_app_msg\n+)\n+g: \"_AppCtxGlobals\" = LocalProxy(  # type: ignore[assignment]\n+    _cv_app, \"g\", unbound_message=_no_app_msg\n+)\n \n+_no_req_msg = \"\"\"\\\n+Working outside of request context.\n \n-def _lookup_req_object(name):\n-    top = _request_ctx_stack.top\n-    if top is None:\n-        raise RuntimeError(_request_ctx_err_msg)\n-    return getattr(top, name)\n+This typically means that you attempted to use functionality that needed\n+an active HTTP request. Consult the documentation on testing for\n+information about how to avoid this problem.\\\n+\"\"\"\n+_cv_req: ContextVar[\"RequestContext\"] = ContextVar(\"flask.request_ctx\")",
+    "violations": [
+      {
+        "type": "",
+        "line": 73,
+        "review_comment": "Can this be `_cv_request`? I need a `_cv_websocket` as well in Quart and `_cv_web` isn't very clear."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/scaffold.py",
+    "chunk_id": "PR4560_861198699",
+    "diff": "@@ -728,13 +714,32 @@ def _get_exc_class_and_code(\n         \"\"\"\n         exc_class: t.Type[Exception]\n         if isinstance(exc_class_or_code, int):\n-            exc_class = default_exceptions[exc_class_or_code]\n+            try:\n+                exc_class = default_exceptions[exc_class_or_code]\n+            except KeyError:\n+                raise KeyError(\n+                    f\"'{exc_class_or_code}' is not a recognized HTTP error\"\n+                    \" code. Use a subclass of HTTPException with that code\"\n+                    \" instead.\"\n+                ) from None\n         else:\n             exc_class = exc_class_or_code\n \n+        if isinstance(exc_class, Exception):\n+            raise ValueError(\n+                \"Tried to register a handler for an Exception instance\"\n+                f\" {exc_class!r}. Handlers can only be\"\n+                \" registered for Exception classes or HTTP error codes.\"\n+            )\n+\n+        # make sure `exc_class` is a class before checking subclass\n+        assert isinstance(",
+    "violations": [
+      {
+        "type": "",
+        "line": 736,
+        "review_comment": "I don't understand why this assert is needed."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_user_error_handler.py",
+    "chunk_id": "PR4560_861198993",
+    "diff": "@@ -14,15 +14,38 @@ class CustomException(Exception):\n     class UnacceptableCustomException(BaseException):\n         pass\n \n+    ACCEPT_INS_REPR = \"Acceptable_Instance_Repr()\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 17,
+        "review_comment": "These constants are unnecessary."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_user_error_handler.py",
+    "chunk_id": "PR4560_861199195",
+    "diff": "@@ -14,15 +14,38 @@ class CustomException(Exception):\n     class UnacceptableCustomException(BaseException):\n         pass\n \n+    ACCEPT_INS_REPR = \"Acceptable_Instance_Repr()\"\n+\n+    class AcceptableInstanceReprException(Exception):\n+        def __repr__(self):\n+            return ACCEPT_INS_REPR\n+\n+    UNACCEPT_INS_REPR = \"Unacceptable_Instance_Repr()\"\n+\n+    class UnacceptableInstanceReprException(BaseException):\n+        def __repr__(self):\n+            return UNACCEPT_INS_REPR\n+\n     @app.errorhandler(CustomException)\n     def custom_exception_handler(e):\n         assert isinstance(e, CustomException)\n         return \"custom\"\n \n-    with pytest.raises(\n-        AssertionError, match=\"Custom exceptions must be subclasses of Exception.\"\n-    ):\n+    with pytest.raises(AssertionError) as e:\n         app.register_error_handler(UnacceptableCustomException, None)\n+    assert (\n+        UnacceptableCustomException.__name__ + \" must be a subclass of Exception\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 37,
+        "review_comment": "Use `f\"\"` strings instead of concatenation."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/json/__init__.py",
+    "chunk_id": "PR4534_848640049",
+    "diff": "@@ -164,6 +168,9 @@ def loads(s: str, app: t.Optional[\"Flask\"] = None, **kwargs: t.Any) -> t.Any:\n         or defaults.\n     :param kwargs: Extra arguments passed to :func:`json.loads`.\n \n+    .. versionchanged:: 2.1",
+    "violations": [
+      {
+        "type": "",
+        "line": 171,
+        "review_comment": "This doesn't need a docstring changelog."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4479_827135654",
+    "diff": "@@ -97,6 +97,31 @@ def from_envvar(self, variable_name: str, silent: bool = False) -> bool:\n             )\n         return self.from_pyfile(rv, silent=silent)\n \n+    def from_prefixed_env(self, prefix: str = \"FLASK_\") -> bool:",
+    "violations": [
+      {
+        "type": "",
+        "line": 100,
+        "review_comment": "I'm not sure that the prefix should include the `_`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4479_833577239",
+    "diff": "@@ -97,6 +105,44 @@ def from_envvar(self, variable_name: str, silent: bool = False) -> bool:\n             )\n         return self.from_pyfile(rv, silent=silent)\n \n+    def from_prefixed_env(\n+        self,\n+        prefix: str = \"FLASK_\",",
+    "violations": [
+      {
+        "type": "",
+        "line": 110,
+        "review_comment": "I'm not really sure what other separator except `_` could be used, so I think this shouldn't include the separator. I tried `export a.b=c` and `export a-b=c` in ZSH and neither worked."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4479_833577273",
+    "diff": "@@ -97,6 +105,44 @@ def from_envvar(self, variable_name: str, silent: bool = False) -> bool:\n             )\n         return self.from_pyfile(rv, silent=silent)\n \n+    def from_prefixed_env(\n+        self,\n+        prefix: str = \"FLASK_\",\n+        *,\n+        loads: t.Callable[[t.Union[str, bytes]], t.Any] = _json_loads,\n+    ) -> bool:\n+        \"\"\"Updates the config from environment variables with the prefix.\n+\n+        Calling this method will result in every environment variable\n+        starting with **prefix** being placed into the configuration\n+        without the **prefix**. The prefix is configurable as an\n+        argument. Note that this method updates the existing config.\n+\n+        For example if there is an environment variable\n+        ``FLASK_SECRET_KEY`` with value ``secretly`` and the prefix is\n+        ``FLASK_`` the config will contain the key ``SECRET_KEY`` with\n+        the value ``secretly`` after calling this method.\n+\n+        The value of the environment variable will be passed to the\n+        **loads** parameter before being placed into the config. By\n+        default **loads** utilises the stdlib json.loads to parse the\n+        value, falling back to the value itself on parsing error.\n+\n+        :param loads: A callable that takes a str (or bytes) returns\n+            the parsed value.\n+        :return: Always returns ``True``.\n+\n+        .. versionadded:: 2.1.0\n+\n+        \"\"\"\n+        mapping = {}\n+        for raw_key, value in os.environ.items():\n+            if raw_key.startswith(prefix):\n+                key = raw_key[len(prefix) :]  # Use removeprefix with Python 3.9\n+                mapping[key] = loads(value)",
+    "violations": [
+      {
+        "type": "",
+        "line": 142,
+        "review_comment": "I think the `try/except Excetion` should be here so that users don't have to write wrappers for any library they decide to use."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_config.py",
+    "chunk_id": "PR4479_835554749",
+    "diff": "@@ -38,6 +38,68 @@ def test_config_from_file():\n     common_object_test(app)\n \n \n+def test_from_prefixed_env(monkeypatch):\n+    monkeypatch.setenv(\"FLASK_STRING\", \"value\")\n+    monkeypatch.setenv(\"FLASK_BOOL\", \"true\")\n+    monkeypatch.setenv(\"FLASK_INT\", \"1\")\n+    monkeypatch.setenv(\"FLASK_FLOAT\", \"1.2\")\n+    monkeypatch.setenv(\"FLASK_LIST\", \"[1, 2]\")\n+    monkeypatch.setenv(\"FLASK_DICT\", '{\"k\": \"v\"}')\n+    monkeypatch.setenv(\"NOT_FLASK_OTHER\", \"other\")\n+\n+    app = flask.Flask(__name__)\n+    app.config.from_prefixed_env()\n+\n+    assert app.config[\"STRING\"] == \"value\"\n+    assert app.config[\"BOOL\"] is True\n+    assert app.config[\"INT\"] == 1\n+    assert app.config[\"FLOAT\"] == 1.2\n+    assert app.config[\"LIST\"] == [1, 2]\n+    assert app.config[\"DICT\"] == {\"k\": \"v\"}\n+    assert \"OTHER\" not in app.config",
+    "violations": [
+      {
+        "type": "",
+        "line": 59,
+        "review_comment": "This is probably what was meant here:\r\n```py\r\nassert \"NOT_FLASK_OTHER\" not in app.config\r\n```\r\nJust some guess"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_config.py",
+    "chunk_id": "PR4479_835555552",
+    "diff": "@@ -38,6 +38,68 @@ def test_config_from_file():\n     common_object_test(app)\n \n \n+def test_from_prefixed_env(monkeypatch):\n+    monkeypatch.setenv(\"FLASK_STRING\", \"value\")\n+    monkeypatch.setenv(\"FLASK_BOOL\", \"true\")\n+    monkeypatch.setenv(\"FLASK_INT\", \"1\")\n+    monkeypatch.setenv(\"FLASK_FLOAT\", \"1.2\")\n+    monkeypatch.setenv(\"FLASK_LIST\", \"[1, 2]\")\n+    monkeypatch.setenv(\"FLASK_DICT\", '{\"k\": \"v\"}')\n+    monkeypatch.setenv(\"NOT_FLASK_OTHER\", \"other\")\n+\n+    app = flask.Flask(__name__)\n+    app.config.from_prefixed_env()\n+\n+    assert app.config[\"STRING\"] == \"value\"\n+    assert app.config[\"BOOL\"] is True\n+    assert app.config[\"INT\"] == 1\n+    assert app.config[\"FLOAT\"] == 1.2\n+    assert app.config[\"LIST\"] == [1, 2]\n+    assert app.config[\"DICT\"] == {\"k\": \"v\"}\n+    assert \"OTHER\" not in app.config",
+    "violations": [
+      {
+        "type": "",
+        "line": 59,
+        "review_comment": "`NOT_FLASK` is a prefix, `OTHER` is the config key (or not, in this case)."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_config.py",
+    "chunk_id": "PR4479_835557080",
+    "diff": "@@ -38,6 +38,68 @@ def test_config_from_file():\n     common_object_test(app)\n \n \n+def test_from_prefixed_env(monkeypatch):\n+    monkeypatch.setenv(\"FLASK_STRING\", \"value\")\n+    monkeypatch.setenv(\"FLASK_BOOL\", \"true\")\n+    monkeypatch.setenv(\"FLASK_INT\", \"1\")\n+    monkeypatch.setenv(\"FLASK_FLOAT\", \"1.2\")\n+    monkeypatch.setenv(\"FLASK_LIST\", \"[1, 2]\")\n+    monkeypatch.setenv(\"FLASK_DICT\", '{\"k\": \"v\"}')\n+    monkeypatch.setenv(\"NOT_FLASK_OTHER\", \"other\")\n+\n+    app = flask.Flask(__name__)\n+    app.config.from_prefixed_env()\n+\n+    assert app.config[\"STRING\"] == \"value\"\n+    assert app.config[\"BOOL\"] is True\n+    assert app.config[\"INT\"] == 1\n+    assert app.config[\"FLOAT\"] == 1.2\n+    assert app.config[\"LIST\"] == [1, 2]\n+    assert app.config[\"DICT\"] == {\"k\": \"v\"}\n+    assert \"OTHER\" not in app.config",
+    "violations": [
+      {
+        "type": "",
+        "line": 59,
+        "review_comment": "uh. I don't know what to say but let it be"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/ctx.py",
+    "chunk_id": "PR4348_758346696",
+    "diff": "@@ -130,7 +130,15 @@ def add_header(response):\n \n     .. versionadded:: 0.9\n     \"\"\"\n+    top = _request_ctx_stack.top\n+    if top is None:\n+        raise RuntimeError(\n+            \"This decorator can only be used at local scopes \"\n+            \"when a request context is on the stack. For instance within \"\n+            \"view functions.\"\n+        )\n     _request_ctx_stack.top._after_request_functions.append(f)",
+    "violations": [
+      {
+        "type": "",
+        "line": 140,
+        "review_comment": "You can directly do: `top._after_request_functions.append(f)` since you already defined `top` in line 133. Just a minor suggestion."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/ctx.py",
+    "chunk_id": "PR4334_747437160",
+    "diff": "@@ -130,7 +130,14 @@ def add_header(response):\n \n     .. versionadded:: 0.9\n     \"\"\"\n-    _request_ctx_stack.top._after_request_functions.append(f)\n+    try:\n+        _request_ctx_stack.top._after_request_functions.append(f)\n+    except Exception:",
+    "violations": [
+      {
+        "type": "",
+        "line": 135,
+        "review_comment": "Do not catch all exceptions wildly (and neither just swallow them, it should remain an exception). I pointed out code in another function that does the right thing - simply do the same here."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/scaffold.py",
+    "chunk_id": "PR4268_714104549",
+    "diff": "@@ -589,8 +589,8 @@ def teardown_request(self, f: TeardownCallable) -> TeardownCallable:\n         stack of active contexts.  This becomes relevant if you are using\n         such constructs in tests.\n \n-        Teardown functions must avoid raising exceptions, since they . If they\n-        execute code that might fail they\n+        Teardown functions must avoid raising exceptions, because if",
+    "violations": [
+      {
+        "type": "",
+        "line": 592,
+        "review_comment": "Sounds better with a stop: \"...raising exceptions. If they...\""
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/scaffold.py",
+    "chunk_id": "PR4268_714124905",
+    "diff": "@@ -589,7 +589,7 @@ def teardown_request(self, f: TeardownCallable) -> TeardownCallable:\n         stack of active contexts.  This becomes relevant if you are using\n         such constructs in tests.\n \n-        Teardown functions must avoid raising exceptions, because if\n+        Teardown functions must avoid raising exceptions. If\n         they execute code that might fail they\n         will have to surround the execution of these code by try/except",
+    "violations": [
+      {
+        "type": "",
+        "line": 594,
+        "review_comment": "\"that code with\" instead of \"these code by\""
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/scaffold.py",
+    "chunk_id": "PR4268_714125324",
+    "diff": "@@ -589,7 +589,7 @@ def teardown_request(self, f: TeardownCallable) -> TeardownCallable:\n         stack of active contexts.  This becomes relevant if you are using\n         such constructs in tests.\n \n-        Teardown functions must avoid raising exceptions, because if\n+        Teardown functions must avoid raising exceptions. If\n         they execute code that might fail they\n         will have to surround the execution of these code by try/except\n         statements and log occurring errors.",
+    "violations": [
+      {
+        "type": "",
+        "line": 595,
+        "review_comment": "\"any errors\" instead of \"occurring errors\""
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json.py",
+    "chunk_id": "PR4160_654803349",
+    "diff": "@@ -9,6 +10,11 @@\n from flask import json\n \n \n+def test_json_encode_decimal():\n+    decimal_ = decimal.Decimal(100)",
+    "violations": [
+      {
+        "type": "",
+        "line": 14,
+        "review_comment": "how about 0.03 instead of 100? :)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json.py",
+    "chunk_id": "PR4160_654805253",
+    "diff": "@@ -9,6 +10,11 @@\n from flask import json\n \n \n+def test_json_encode_decimal():\n+    decimal_ = decimal.Decimal(100)",
+    "violations": [
+      {
+        "type": "",
+        "line": 14,
+        "review_comment": "fyi django cast decimal to str instead of float https://github.com/django/django/blob/225d96533a8e05debd402a2bfe566487cc27d95f/django/core/serializers/json.py#L103"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json.py",
+    "chunk_id": "PR4160_654911700",
+    "diff": "@@ -9,6 +10,11 @@\n from flask import json\n \n \n+def test_json_encode_decimal():\n+    decimal_ = decimal.Decimal(0.003)\n+    assert flask.json.JSONEncoder().default(decimal_) == float(decimal_)",
+    "violations": [
+      {
+        "type": "",
+        "line": 15,
+        "review_comment": "I would prefer to call the json encoder in the normal way:\r\n\r\n```python \r\n    rv = flask.json.dumps(decimal.Decimal(0.003))\r\n    assert rv == '0.003'\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json.py",
+    "chunk_id": "PR4160_683882280",
+    "diff": "@@ -9,6 +10,11 @@\n from flask import json\n \n \n+def test_json_encode_decimal():\n+    decimal_ = decimal.Decimal(100)",
+    "violations": [
+      {
+        "type": "",
+        "line": 14,
+        "review_comment": "Thief said \"not int\" not \"float\". It should definitely be str, that's the only way to not lose precision (at the expense of losing the number type)."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/json/__init__.py",
+    "chunk_id": "PR4158_654779754",
+    "diff": "@@ -45,6 +46,8 @@ def default(self, o: t.Any) -> t.Any:\n         overriding how basic types like ``str`` or ``list`` are\n         serialized, they are handled before this method.\n         \"\"\"\n+        if isinstance(o, decimal.Decimal):\n+            return str(o)",
+    "violations": [
+      {
+        "type": "",
+        "line": 50,
+        "review_comment": "I'm not sure that's correct.. simplejson converts to a number, while your code converts to a string."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "examples/tutorial/flaskr/auth.py",
+    "chunk_id": "PR4139_646649552",
+    "diff": "@@ -49,6 +49,8 @@ def register():\n \n     Validates that the username is not already taken. Hashes the\n     password for security.\n+     .. versionchanged:: 2.0.2\n+        Return explanation (error message) to user when insert data to db failed.",
+    "violations": [
+      {
+        "type": "",
+        "line": 53,
+        "review_comment": "Same here. THis is not a public API, so it does not need this kind of versioning."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4131_646003444",
+    "diff": "@@ -107,7 +107,7 @@ def from_pyfile(self, filename: str, silent: bool = False) -> bool:\n                          root path.\n         :param silent: set to ``True`` if you want silent failure for missing\n                        files.\n-\n+        :return: bool.``True`` if able to update values in config, ``False`` otherwise.",
+    "violations": [
+      {
+        "type": "",
+        "line": 110,
+        "review_comment": "I think the read the docs CI build requires a blank line after this one to pass."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4131_646004114",
+    "diff": "@@ -107,7 +107,7 @@ def from_pyfile(self, filename: str, silent: bool = False) -> bool:\n                          root path.\n         :param silent: set to ``True`` if you want silent failure for missing\n                        files.\n-\n+        :return: bool.``True`` if able to update values in config, ``False`` otherwise.",
+    "violations": [
+      {
+        "type": "",
+        "line": 110,
+        "review_comment": "Also, remove the leading \"bool.\", and the trailing \", False otherwise.\", they're both redundant."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR4131_646007518",
+    "diff": "@@ -107,7 +107,7 @@ def from_pyfile(self, filename: str, silent: bool = False) -> bool:\n                          root path.\n         :param silent: set to ``True`` if you want silent failure for missing\n                        files.\n-\n+        :return: bool.``True`` if able to update values in config, ``False`` otherwise.",
+    "violations": [
+      {
+        "type": "",
+        "line": 110,
+        "review_comment": "\"True if values were loaded successfully.\" sounds right for all the methods."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR4115_641974802",
+    "diff": "@@ -1276,7 +1276,7 @@ def _find_error_handler(self, e: Exception) -> t.Optional[ErrorHandlerCallable]:\n         \"\"\"\n         exc_class, code = self._get_exc_class_and_code(type(e))\n \n-        for c in [code, None]:\n+        for c in [None] if code is None else [code, None]:",
+    "violations": [
+      {
+        "type": "",
+        "line": 1279,
+        "review_comment": "What about `for c in {code, None}:`? Reads more clearly clearer to me"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR4115_641975168",
+    "diff": "@@ -1276,7 +1276,7 @@ def _find_error_handler(self, e: Exception) -> t.Optional[ErrorHandlerCallable]:\n         \"\"\"\n         exc_class, code = self._get_exc_class_and_code(type(e))\n \n-        for c in [code, None]:\n+        for c in [None] if code is None else [code, None]:",
+    "violations": [
+      {
+        "type": "",
+        "line": 1279,
+        "review_comment": "Order isn't guaranteed for sets."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR4115_642058880",
+    "diff": "@@ -1276,7 +1276,7 @@ def _find_error_handler(self, e: Exception) -> t.Optional[ErrorHandlerCallable]:\n         \"\"\"\n         exc_class, code = self._get_exc_class_and_code(type(e))\n \n-        for c in [code, None]:\n+        for c in [None] if code is None else [code, None]:",
+    "violations": [
+      {
+        "type": "",
+        "line": 1279,
+        "review_comment": "Oh yea, the order matters."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4109_641962838",
+    "diff": "@@ -39,8 +39,8 @@\n ErrorHandlerCallable = t.Callable[[Exception], ResponseReturnValue]\n TeardownCallable = t.Callable[[t.Optional[BaseException]], \"Response\"]\n TemplateContextProcessorCallable = t.Callable[[], t.Dict[str, t.Any]]\n-TemplateFilterCallable = t.Callable[[t.Any], str]\n-TemplateGlobalCallable = t.Callable[[], t.Any]\n-TemplateTestCallable = t.Callable[[t.Any], bool]\n+TemplateFilterCallable = t.Callable[..., str]",
+    "violations": [
+      {
+        "type": "",
+        "line": 42,
+        "review_comment": "I think the return value here should be `t.Any` as well.."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4097_639974489",
+    "diff": "@@ -33,14 +33,20 @@\n     \"WSGIApplication\",\n ]\n \n+GenericException = t.TypeVar(\"GenericException\", bound=Exception, contravariant=True)\n+\n AppOrBlueprintKey = t.Optional[str]  # The App key is None, whereas blueprints are named\n AfterRequestCallable = t.Callable[[\"Response\"], \"Response\"]\n BeforeRequestCallable = t.Callable[[], None]\n-ErrorHandlerCallable = t.Callable[[Exception], ResponseReturnValue]\n TeardownCallable = t.Callable[[t.Optional[BaseException]], \"Response\"]\n TemplateContextProcessorCallable = t.Callable[[], t.Dict[str, t.Any]]\n TemplateFilterCallable = t.Callable[[t.Any], str]\n TemplateGlobalCallable = t.Callable[[], t.Any]\n TemplateTestCallable = t.Callable[[t.Any], bool]\n URLDefaultCallable = t.Callable[[str, dict], None]\n URLValuePreprocessorCallable = t.Callable[[t.Optional[str], t.Optional[dict]], None]\n+\n+\n+class ErrorHandlerCallable(t.Protocol[GenericException]):\n+    def __call__(self, error: GenericException, /) -> ResponseReturnValue:",
+    "violations": [
+      {
+        "type": "",
+        "line": 51,
+        "review_comment": "Apparently readthedocs doesn't accept this ..."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4097_639976494",
+    "diff": "@@ -33,14 +33,20 @@\n     \"WSGIApplication\",\n ]\n \n+GenericException = t.TypeVar(\"GenericException\", bound=Exception, contravariant=True)\n+\n AppOrBlueprintKey = t.Optional[str]  # The App key is None, whereas blueprints are named\n AfterRequestCallable = t.Callable[[\"Response\"], \"Response\"]\n BeforeRequestCallable = t.Callable[[], None]\n-ErrorHandlerCallable = t.Callable[[Exception], ResponseReturnValue]\n TeardownCallable = t.Callable[[t.Optional[BaseException]], \"Response\"]\n TemplateContextProcessorCallable = t.Callable[[], t.Dict[str, t.Any]]\n TemplateFilterCallable = t.Callable[[t.Any], str]\n TemplateGlobalCallable = t.Callable[[], t.Any]\n TemplateTestCallable = t.Callable[[t.Any], bool]\n URLDefaultCallable = t.Callable[[str, dict], None]\n URLValuePreprocessorCallable = t.Callable[[t.Optional[str], t.Optional[dict]], None]\n+\n+\n+class ErrorHandlerCallable(t.Protocol[GenericException]):\n+    def __call__(self, error: GenericException, /) -> ResponseReturnValue:",
+    "violations": [
+      {
+        "type": "",
+        "line": 51,
+        "review_comment": "I don't see how RTD is related here.\r\n\r\nAnyway, I think introducing syntax that doesn't work on all supported Python versions is not a good idea (I guess type checking would fail on those versions?)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4097_639991067",
+    "diff": "@@ -33,14 +33,20 @@\n     \"WSGIApplication\",\n ]\n \n+GenericException = t.TypeVar(\"GenericException\", bound=Exception, contravariant=True)\n+\n AppOrBlueprintKey = t.Optional[str]  # The App key is None, whereas blueprints are named\n AfterRequestCallable = t.Callable[[\"Response\"], \"Response\"]\n BeforeRequestCallable = t.Callable[[], None]\n-ErrorHandlerCallable = t.Callable[[Exception], ResponseReturnValue]\n TeardownCallable = t.Callable[[t.Optional[BaseException]], \"Response\"]\n TemplateContextProcessorCallable = t.Callable[[], t.Dict[str, t.Any]]\n TemplateFilterCallable = t.Callable[[t.Any], str]\n TemplateGlobalCallable = t.Callable[[], t.Any]\n TemplateTestCallable = t.Callable[[t.Any], bool]\n URLDefaultCallable = t.Callable[[str, dict], None]\n URLValuePreprocessorCallable = t.Callable[[t.Optional[str], t.Optional[dict]], None]\n+\n+\n+class ErrorHandlerCallable(t.Protocol[GenericException]):\n+    def __call__(self, error: GenericException, /) -> ResponseReturnValue:",
+    "violations": [
+      {
+        "type": "",
+        "line": 51,
+        "review_comment": "We need to wait until we drop Python 3.7 in 2023. Typing supports the same versions the code supports."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4097_640144896",
+    "diff": "@@ -33,14 +33,20 @@\n     \"WSGIApplication\",\n ]\n \n+GenericException = t.TypeVar(\"GenericException\", bound=Exception, contravariant=True)\n+\n AppOrBlueprintKey = t.Optional[str]  # The App key is None, whereas blueprints are named\n AfterRequestCallable = t.Callable[[\"Response\"], \"Response\"]\n BeforeRequestCallable = t.Callable[[], None]\n-ErrorHandlerCallable = t.Callable[[Exception], ResponseReturnValue]\n TeardownCallable = t.Callable[[t.Optional[BaseException]], \"Response\"]\n TemplateContextProcessorCallable = t.Callable[[], t.Dict[str, t.Any]]\n TemplateFilterCallable = t.Callable[[t.Any], str]\n TemplateGlobalCallable = t.Callable[[], t.Any]\n TemplateTestCallable = t.Callable[[t.Any], bool]\n URLDefaultCallable = t.Callable[[str, dict], None]\n URLValuePreprocessorCallable = t.Callable[[t.Optional[str], t.Optional[dict]], None]\n+\n+\n+class ErrorHandlerCallable(t.Protocol[GenericException]):\n+    def __call__(self, error: GenericException, /) -> ResponseReturnValue:",
+    "violations": [
+      {
+        "type": "",
+        "line": 51,
+        "review_comment": "fwiw we could use 3.9 for the RTD build. but if we need a version check anyway there's probably no need for that"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4097_641952837",
+    "diff": "@@ -33,15 +33,21 @@\n     \"WSGIApplication\",\n ]\n \n+GenericException = t.TypeVar(\"GenericException\", bound=Exception, contravariant=True)",
+    "violations": [
+      {
+        "type": "",
+        "line": 36,
+        "review_comment": "@davidism I vaguely remember we had performance concerns about Generics, which I think doesn't apply here. Could you confirm this is fine?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR4097_641956138",
+    "diff": "@@ -33,15 +33,21 @@\n     \"WSGIApplication\",\n ]\n \n+GenericException = t.TypeVar(\"GenericException\", bound=Exception, contravariant=True)",
+    "violations": [
+      {
+        "type": "",
+        "line": 36,
+        "review_comment": "This isn't a `Generic`, so it's fine in that regard. I have no idea what this type does though."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4074_634405632",
+    "diff": "@@ -269,19 +269,25 @@ def register(self, app: \"Flask\", options: dict) -> None:\n         :param first_registration: Whether this is the first time this\n             blueprint has been registered on the application.\n         \"\"\"\n-        first_registration = False\n-\n-        if self.name in app.blueprints:\n-            assert app.blueprints[self.name] is self, (\n-                \"A name collision occurred between blueprints\"\n-                f\" {self!r} and {app.blueprints[self.name]!r}.\"\n-                f\" Both share the same name {self.name!r}.\"\n-                f\" Blueprints that are created on the fly need unique\"\n-                f\" names.\"\n+        first_registration = True\n+\n+        for blueprint in app.blueprints.values():\n+            if blueprint is self:\n+                first_registration = False\n+\n+        name = (\n+            f\"{options.get('name_prefix', '')}.{options.get('name', self.name)}\".lstrip(\n+                \".\"\n+            )\n+        )\n+        if name in app.blueprints and app.blueprints[name] is not self:\n+            raise RuntimeError(\n+                f\"Blueprint name '{self.name}' \"\n+                f\"is already registered by {app.blueprints[self.name]}. \"\n+                \"Blueprints must have unique names\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 287,
+        "review_comment": "Sentence is missing a period."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4074_634405967",
+    "diff": "@@ -269,19 +269,25 @@ def register(self, app: \"Flask\", options: dict) -> None:\n         :param first_registration: Whether this is the first time this\n             blueprint has been registered on the application.\n         \"\"\"\n-        first_registration = False\n-\n-        if self.name in app.blueprints:\n-            assert app.blueprints[self.name] is self, (\n-                \"A name collision occurred between blueprints\"\n-                f\" {self!r} and {app.blueprints[self.name]!r}.\"\n-                f\" Both share the same name {self.name!r}.\"\n-                f\" Blueprints that are created on the fly need unique\"\n-                f\" names.\"\n+        first_registration = True\n+\n+        for blueprint in app.blueprints.values():\n+            if blueprint is self:\n+                first_registration = False\n+\n+        name = (\n+            f\"{options.get('name_prefix', '')}.{options.get('name', self.name)}\".lstrip(\n+                \".\"\n+            )\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 282,
+        "review_comment": "This formatting is weird, extract the `get` calls to variables to keep it from wrapping."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR4074_634406427",
+    "diff": "@@ -1783,8 +1783,13 @@ def inject_url_defaults(self, endpoint: str, values: dict) -> None:\n         \"\"\"\n         funcs: t.Iterable[URLDefaultCallable] = self.url_default_functions[None]\n         if \".\" in endpoint:\n-            bp = endpoint.rsplit(\".\", 1)[0]\n-            funcs = chain(funcs, self.url_default_functions[bp])\n+            bps: t.List[str] = [endpoint.rsplit(\".\", 1)[0]]",
+    "violations": [
+      {
+        "type": "",
+        "line": 1786,
+        "review_comment": "Why doesn't this use `request.blueprints`?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4074_634456135",
+    "diff": "@@ -269,19 +269,22 @@ def register(self, app: \"Flask\", options: dict) -> None:\n         :param first_registration: Whether this is the first time this\n             blueprint has been registered on the application.\n         \"\"\"\n-        first_registration = False\n-\n-        if self.name in app.blueprints:\n-            assert app.blueprints[self.name] is self, (\n-                \"A name collision occurred between blueprints\"\n-                f\" {self!r} and {app.blueprints[self.name]!r}.\"\n-                f\" Both share the same name {self.name!r}.\"\n-                f\" Blueprints that are created on the fly need unique\"\n-                f\" names.\"\n+        first_registration = True\n+\n+        for blueprint in app.blueprints.values():\n+            if blueprint is self:\n+                first_registration = False\n+\n+        self_name = options.get(\"name\", self.name)\n+        name = f\"{options.get('name_prefix', '')}.{self_name}\".lstrip(\".\")\n+        if name in app.blueprints and app.blueprints[name] is not self:\n+            raise RuntimeError(",
+    "violations": [
+      {
+        "type": "",
+        "line": 281,
+        "review_comment": "I think this should be a `ValueError`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4071_634206868",
+    "diff": "@@ -365,6 +365,7 @@ def add_url_rule(\n         rule: str,\n         endpoint: t.Optional[str] = None,\n         view_func: t.Optional[t.Callable] = None,\n+        provide_automatic_options: t.Optional[bool] = None,",
+    "violations": [
+      {
+        "type": "",
+        "line": 368,
+        "review_comment": "`self.record(lambda s: s.add_url_rule(rule, endpoint, view_func, provide_automatic_options=provide_automatic_options, **options))` is also required"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4071_635124781",
+    "diff": "@@ -376,9 +379,15 @@ def add_url_rule(\n         if view_func and hasattr(view_func, \"__name__\") and \".\" in view_func.__name__:\n             raise ValueError(\"'view_func' name may not contain a dot '.' character.\")\n \n-        self.record(lambda s: s.add_url_rule(rule, endpoint, view_func, **options))\n+        self.record(\n+            lambda s: s.add_url_rule(\n+                rule, endpoint, view_func, provide_automatic_options, **options",
+    "violations": [
+      {
+        "type": "",
+        "line": 384,
+        "review_comment": "`provide_automatic_options` was a keyword argument before (via options) and will need to be here as well."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4071_635125498",
+    "diff": "@@ -365,6 +365,7 @@ def add_url_rule(\n         rule: str,\n         endpoint: t.Optional[str] = None,\n         view_func: t.Optional[t.Callable] = None,\n+        provide_automatic_options: t.Optional[bool] = None,",
+    "violations": [
+      {
+        "type": "",
+        "line": 368,
+        "review_comment": "I think the changelog is clear enough. \r\n\r\nThe record is less concerning (typing wise) as it is perhaps solely used internally by Flask."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4071_636047197",
+    "diff": "@@ -376,9 +379,15 @@ def add_url_rule(\n         if view_func and hasattr(view_func, \"__name__\") and \".\" in view_func.__name__:\n             raise ValueError(\"'view_func' name may not contain a dot '.' character.\")\n \n-        self.record(lambda s: s.add_url_rule(rule, endpoint, view_func, **options))\n+        self.record(\n+            lambda s: s.add_url_rule(\n+                rule, endpoint, view_func, provide_automatic_options, **options",
+    "violations": [
+      {
+        "type": "",
+        "line": 384,
+        "review_comment": "Please squash the commits - a cleaner history is nice. This is targeting the correct branch, and I should be able to merge without the rebase, but go ahead if you'd like."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4063_633555435",
+    "diff": "@@ -344,17 +344,12 @@ def extend(bp_dict, parent_dict):\n                 app.cli.add_command(self.cli)\n \n         for blueprint, bp_options in self._blueprints:\n-            bp_options = bp_options.copy()",
+    "violations": [
+      {
+        "type": "",
+        "line": 347,
+        "review_comment": "Yes, otherwise you're mutating the shared state, so each parent registration will affect future registrations."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_blueprints.py",
+    "chunk_id": "PR4036_631778526",
+    "diff": "@@ -899,3 +899,51 @@ def grandchild_no():\n     assert client.get(\"/parent/no\").data == b\"Parent no\"\n     assert client.get(\"/parent/child/no\").data == b\"Parent no\"\n     assert client.get(\"/parent/child/grandchild/no\").data == b\"Grandchild no\"\n+\n+\n+def test_nested_blueprint_url_prefix(app, client):",
+    "violations": [
+      {
+        "type": "",
+        "line": 840,
+        "review_comment": "This test seems too convoluted for what it tests. Could you simplify it to test the prefix alone - for example using the snippet in #4037?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4036_632070613",
+    "diff": "@@ -340,11 +340,10 @@ def extend(bp_dict, parent_dict):\n                 app.cli.add_command(self.cli)\n \n         for blueprint, bp_options in self._blueprints:\n-            url_prefix = options.get(\"url_prefix\", \"\")\n-            if \"url_prefix\" in bp_options:\n-                url_prefix = (\n-                    url_prefix.rstrip(\"/\") + \"/\" + bp_options[\"url_prefix\"].lstrip(\"/\")\n-                )\n+            url_prefix = options.get(\"url_prefix\", self.url_prefix)",
+    "violations": [
+      {
+        "type": "",
+        "line": 343,
+        "review_comment": "I think this should be,\r\n```python\r\nurl_prefix = options.get(\"url_prefix\") or self.url_prefix\r\nbp_url_prefix = bp_options.get(\"url_prefix\") or blueprint.url_prefix\r\nif bp_url_prefix and url_prefix:\r\n    url_prefix = url_prefix.rstrip(\"/\") + \"/\" + bp_url_prefix.lstrip(\"/\")\r\n```\r\nAs it is possible for `url_prefix` to be in the options with a value of `None` and the net url_prefix to also be `None`. What do you think? (This is my [fix](https://gitlab.com/pgjones/quart/-/commit/29e4157583fd10bd504346fc3f319908339acc8d) for Quart)."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR4036_632120882",
+    "diff": "@@ -340,11 +340,10 @@ def extend(bp_dict, parent_dict):\n                 app.cli.add_command(self.cli)\n \n         for blueprint, bp_options in self._blueprints:\n-            url_prefix = options.get(\"url_prefix\", \"\")\n-            if \"url_prefix\" in bp_options:\n-                url_prefix = (\n-                    url_prefix.rstrip(\"/\") + \"/\" + bp_options[\"url_prefix\"].lstrip(\"/\")\n-                )\n+            url_prefix = options.get(\"url_prefix\", self.url_prefix)",
+    "violations": [
+      {
+        "type": "",
+        "line": 343,
+        "review_comment": "That makes sense, currently rebasing this PR, I'll make that change."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR4019_630959385",
+    "diff": "@@ -642,7 +642,9 @@ def safe_join(directory: str, *pathnames: str) -> str:\n     return path\n \n \n-def send_from_directory(directory: str, path: str, **kwargs: t.Any) -> \"Response\":\n+def send_from_directory(\n+    directory: str, path: str, filename: str, **kwargs: t.Any",
+    "violations": [
+      {
+        "type": "",
+        "line": 646,
+        "review_comment": "This is missing a `= None`"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR4019_631233819",
+    "diff": "@@ -666,12 +668,24 @@ def download_file(name):\n         ``directory``.\n     :param kwargs: Arguments to pass to :func:`send_file`.\n \n+    .. versionchanged:: 2.0\n+        ``path`` replaces the ``filename`` parameter.\n+\n     .. versionadded:: 2.0\n         Moved the implementation to Werkzeug. This is now a wrapper to\n         pass some Flask-specific arguments.\n \n     .. versionadded:: 0.5\n     \"\"\"\n+    if filename is not None:\n+        warnings.warn(\n+            \"The 'filename' parameter has been renamed to\"\n+            \" 'path'. The old name will be removed in Flask\"\n+            \" 2.1.\",\n+            DeprecationWarning,\n+            stacklevel=3,",
+    "violations": [
+      {
+        "type": "",
+        "line": 686,
+        "review_comment": "Was `stacklevel=3` intentional? Seems like it should be `2`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR4019_631240870",
+    "diff": "@@ -666,12 +668,24 @@ def download_file(name):\n         ``directory``.\n     :param kwargs: Arguments to pass to :func:`send_file`.\n \n+    .. versionchanged:: 2.0\n+        ``path`` replaces the ``filename`` parameter.\n+\n     .. versionadded:: 2.0\n         Moved the implementation to Werkzeug. This is now a wrapper to\n         pass some Flask-specific arguments.\n \n     .. versionadded:: 0.5\n     \"\"\"\n+    if filename is not None:\n+        warnings.warn(\n+            \"The 'filename' parameter has been renamed to\"\n+            \" 'path'. The old name will be removed in Flask\"\n+            \" 2.1.\",\n+            DeprecationWarning,\n+            stacklevel=3,",
+    "violations": [
+      {
+        "type": "",
+        "line": 686,
+        "review_comment": "I changed it to 2."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3989_624792215",
+    "diff": "@@ -1581,7 +1579,7 @@ def ensure_sync(self, func: t.Callable) -> t.Callable:\n         .. versionadded:: 2.0\n         \"\"\"\n         if iscoroutinefunction(func):\n-            return run_async(func)\n+            return async_to_sync(func)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1582,
+        "review_comment": "It still seems like the `async_to_sync` implementation is the only thing users will want to customize, rather than this entire `ensure_sync` method. The current design still requires users to duplicate this `iscoroutinefunction(...)` boilerplate. But it would be just as easy to parameterize the `async_to_sync` function instead, no?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3989_625072303",
+    "diff": "@@ -1581,10 +1579,41 @@ def ensure_sync(self, func: t.Callable) -> t.Callable:\n         .. versionadded:: 2.0\n         \"\"\"\n         if iscoroutinefunction(func):\n-            return run_async(func)\n+            return self.async_to_sync(func)\n \n         return func\n \n+    def async_to_sync(\n+        self, func: t.Callable[..., t.Coroutine]\n+    ) -> t.Callable[..., t.Any]:\n+        \"\"\"Return a sync function that will run the coroutine function *func*.\n+\n+        This can be used as so,::\n+\n+            result = app.async_to_async(func)(*args, **kwargs)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1593,
+        "review_comment": "```suggestion\r\n            result = app.async_to_sync(func)(*args, **kwargs)\r\n```\r\ntypo here"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_views.py",
+    "chunk_id": "PR3975_782234063",
+    "diff": "@@ -240,3 +240,55 @@ class View(GetView, OtherView):\n     assert client.get(\"/\").data == b\"GET\"\n     assert client.post(\"/\").status_code == 405\n     assert sorted(View.methods) == [\"GET\"]\n+\n+\n+def test_route_on_view(app):\n+    @app.route(\"/\", endpoint=\"index\")\n+    class Index(flask.views.View):\n+        methods = [\"GET\", \"POST\"]\n+\n+        def dispatch_request(self):\n+            return flask.request.method",
+    "violations": [
+      {
+        "type": "",
+        "line": 251,
+        "review_comment": "Why is it not a static method?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_views.py",
+    "chunk_id": "PR3975_782251636",
+    "diff": "@@ -240,3 +240,55 @@ class View(GetView, OtherView):\n     assert client.get(\"/\").data == b\"GET\"\n     assert client.post(\"/\").status_code == 405\n     assert sorted(View.methods) == [\"GET\"]\n+\n+\n+def test_route_on_view(app):\n+    @app.route(\"/\", endpoint=\"index\")\n+    class Index(flask.views.View):\n+        methods = [\"GET\", \"POST\"]\n+\n+        def dispatch_request(self):\n+            return flask.request.method",
+    "violations": [
+      {
+        "type": "",
+        "line": 251,
+        "review_comment": "Because that's not how it's defined. "
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/typing.py",
+    "chunk_id": "PR3973_620340680",
+    "diff": "@@ -0,0 +1,44 @@\n+import typing as t\n+\n+\n+if t.TYPE_CHECKING:\n+    from werkzeug.datastructures import Headers  # noqa: F401\n+    from .wrappers import Response  # noqa: F401\n+\n+# The possible types that are directly convertible or are a Response object.\n+ResponseValue = t.Union[\n+    \"Response\",\n+    t.AnyStr,\n+    t.Dict[str, t.Any],  # any jsonify-able dict\n+    t.Generator[t.AnyStr, None, None],\n+]\n+StatusCode = int\n+\n+# the possible types for an individual HTTP header\n+HeaderName = str\n+HeaderValue = t.Union[str, t.List[str], t.Tuple[str, ...]]\n+\n+# the possible types for HTTP headers\n+HeadersValue = t.Union[\n+    \"Headers\", t.Dict[HeaderName, HeaderValue], t.List[t.Tuple[HeaderName, HeaderValue]]\n+]\n+\n+# The possible types returned by a route function.\n+ResponseReturnValue = t.Union[",
+    "violations": [
+      {
+        "type": "",
+        "line": 28,
+        "review_comment": "Technically this can also include `wsgiref.types.WSGIApplication`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR3972_621271471",
+    "diff": "@@ -976,6 +976,12 @@ def routes_command(sort, all_methods):\n \n \n def main():\n+    if int(click.__version__[0]) < 8:\n+        warnings.warn(\n+            \"Using the `flask` cli with Click 7 is deprecated and\"\n+            \" will not be supported starting with Flask 2.1.\",",
+    "violations": [
+      {
+        "type": "",
+        "line": 985,
+        "review_comment": "Should add something about upgrading to Click 8."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/_compat.py",
+    "chunk_id": "PR3957_611653375",
+    "diff": "@@ -0,0 +1,19 @@\n+import asyncio\n+import functools\n+import inspect\n+import sys\n+\n+\n+def iscoroutinefunction(func):",
+    "violations": [
+      {
+        "type": "",
+        "line": 7,
+        "review_comment": "I don't want to bring back the `_compat` module, I killed that when dropping Python 2. :-)\r\n\r\nInstead, I would this after the imports in `app.py`:\r\n\r\n```python\r\nimport inspect\r\n\r\nif sys.version_info >= (3, 8):\r\n    iscoroutinefunction = inspect.iscoroutinefunction\r\nelse:\r\n    def iscoroutinefunction(func):\r\n        while inspect.ismethod(func):\r\n            func = func.__func__\r\n\r\n        while isinstance(func, functools.partial):\r\n            func = func.func\r\n\r\n        return inspect.iscoroutinefunction(func)\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/_compat.py",
+    "chunk_id": "PR3957_611653529",
+    "diff": "@@ -0,0 +1,19 @@\n+import asyncio\n+import functools\n+import inspect\n+import sys\n+\n+\n+def iscoroutinefunction(func):\n+    # Python < 3.8 does not correctly determine partially wrapped\n+    # coroutine functions are coroutine functions, hence the need for\n+    # this to exist. Code taken from CPython.\n+    if sys.version_info >= (3, 8):\n+        return asyncio.iscoroutinefunction(func)",
+    "violations": [
+      {
+        "type": "",
+        "line": 12,
+        "review_comment": "Should be `inspect.iscoroutinefunction` still. Same with below."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3918_589594749",
+    "diff": "@@ -435,8 +436,7 @@ def __init__(\n         #: you how often they got attached.\n         #:\n         #: .. versionadded:: 0.7\n-        self.blueprints = {}\n-        self._blueprint_order = []\n+        self.blueprints = OrderedDict()",
+    "violations": [
+      {
+        "type": "",
+        "line": 439,
+        "review_comment": "I think we can assume dicts are ordered for all Pythons we support. Dicts are ordered in PyPy 3.6 and CPython 3.6 as part of the implementation, and this became part of the language in 3.7. Neither Jython nor IronPython support Python 3."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3918_589615966",
+    "diff": "@@ -435,8 +436,7 @@ def __init__(\n         #: you how often they got attached.\n         #:\n         #: .. versionadded:: 0.7\n-        self.blueprints = {}\n-        self._blueprint_order = []\n+        self.blueprints = OrderedDict()",
+    "violations": [
+      {
+        "type": "",
+        "line": 439,
+        "review_comment": "The commit message says you're keeping `OrderedDict` to indicate that order matters, but given that it's a fairly internal API and we're not taking advantage of any of the differences enumerated in the docs, I don't think it's worth it right now. We can call out in the docstring that the registration order is retained."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/scaffold.py",
+    "chunk_id": "PR3918_589626548",
+    "diff": "@@ -375,7 +378,7 @@ def _register_error_handler(self, key, code_or_exception, f):\n                 \" instead.\"\n             )\n \n-        handlers = self.error_handler_spec.setdefault(key, {}).setdefault(code, {})\n+        handlers = self.error_handler_spec[key].setdefault(code, {})",
+    "violations": [
+      {
+        "type": "",
+        "line": 381,
+        "review_comment": "The second `setdefault` can also be replaced."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR3910_579413891",
+    "diff": "@@ -48,7 +48,13 @@ def find_best_app(script_info, module):\n             return app\n \n     # Otherwise find the only object that is a Flask instance.\n-    matches = [v for v in module.__dict__.values() if isinstance(v, Flask)]\n+    matches = []\n+    for v in module.__dict__.values():\n+        try:\n+            if isinstance(v, Flask):\n+                matches.append(v)\n+        except Exception:\n+            pass",
+    "violations": [
+      {
+        "type": "",
+        "line": 57,
+        "review_comment": "Please, handle the possible exceptions because unless you handle them both explicitly or implicitly are meaningless."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json_encoder.py",
+    "chunk_id": "PR3814_513519994",
+    "diff": "@@ -0,0 +1,15 @@\n+from flask.json import JSONEncoder\n+\n+\n+def test_encoder_html():\n+    class ObjectWithHTML:\n+        TEST_HTML = \"<p>test</p>\"\n+\n+        def __html__(self):\n+            return self.TEST_HTML\n+\n+    encoder = JSONEncoder()\n+    assert isinstance(encoder, JSONEncoder)",
+    "violations": [
+      {
+        "type": "",
+        "line": 12,
+        "review_comment": "This assert doesn't seem necessary."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json_encoder.py",
+    "chunk_id": "PR3814_513520314",
+    "diff": "@@ -0,0 +1,15 @@\n+from flask.json import JSONEncoder\n+\n+\n+def test_encoder_html():\n+    class ObjectWithHTML:\n+        TEST_HTML = \"<p>test</p>\"\n+\n+        def __html__(self):\n+            return self.TEST_HTML\n+\n+    encoder = JSONEncoder()\n+    assert isinstance(encoder, JSONEncoder)\n+    encoder_default = encoder.default(ObjectWithHTML())\n+    assert isinstance(encoder_default, str)",
+    "violations": [
+      {
+        "type": "",
+        "line": 14,
+        "review_comment": "This assert doesn't seem necessary."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json_encoder.py",
+    "chunk_id": "PR3814_513520907",
+    "diff": "@@ -0,0 +1,15 @@\n+from flask.json import JSONEncoder\n+\n+\n+def test_encoder_html():\n+    class ObjectWithHTML:\n+        TEST_HTML = \"<p>test</p>\"\n+\n+        def __html__(self):\n+            return self.TEST_HTML\n+\n+    encoder = JSONEncoder()\n+    assert isinstance(encoder, JSONEncoder)\n+    encoder_default = encoder.default(ObjectWithHTML())\n+    assert isinstance(encoder_default, str)\n+    assert encoder_default == ObjectWithHTML().TEST_HTML",
+    "violations": [
+      {
+        "type": "",
+        "line": 15,
+        "review_comment": "Just use a string, no need for a class attribute. (Also, since it's a class attribute you wouldn't need to make a new instance to get it.)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json_encoder.py",
+    "chunk_id": "PR3814_513522695",
+    "diff": "@@ -0,0 +1,15 @@\n+from flask.json import JSONEncoder\n+\n+\n+def test_encoder_html():\n+    class ObjectWithHTML:\n+        TEST_HTML = \"<p>test</p>\"\n+\n+        def __html__(self):\n+            return self.TEST_HTML\n+\n+    encoder = JSONEncoder()",
+    "violations": [
+      {
+        "type": "",
+        "line": 11,
+        "review_comment": "Use `json.dumps` rather than using the encoder directly, as that's not the typical use case."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json.py",
+    "chunk_id": "PR3814_513547442",
+    "diff": "@@ -0,0 +1,444 @@\n+import datetime\n+import io\n+import json\n+import uuid\n+from uuid import uuid4\n+\n+import pytest\n+from test_helpers import FixedOffset\n+from test_helpers import has_encoding\n+from werkzeug.http import http_date\n+\n+import flask\n+from flask import Markup\n+from flask.json import JSONEncoder\n+from flask.json.tag import JSONTag\n+from flask.json.tag import TaggedJSONSerializer\n+\n+\n+class TestJSON:",
+    "violations": [
+      {
+        "type": "",
+        "line": 19,
+        "review_comment": "Having a class is redundant now, these can all be module-level functions."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_json_tag.py",
+    "chunk_id": "PR3814_513548049",
+    "diff": "@@ -1,85 +0,0 @@\n-from datetime import datetime\n-from uuid import uuid4\n-\n-import pytest\n-\n-from flask import Markup\n-from flask.json.tag import JSONTag\n-from flask.json.tag import TaggedJSONSerializer\n-\n-\n-@pytest.mark.parametrize(",
+    "violations": [
+      {
+        "type": "",
+        "line": 11,
+        "review_comment": "This file shouldn't have been removed, it's testing other behavior."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR3799_508768825",
+    "diff": "@@ -284,11 +284,11 @@ def merge_dict_nested(self_dict, app_dict):\n \n         if cli_resolved_group is None:\n             app.cli.commands.update(self.cli.commands)\n-        elif cli_resolved_group is _sentinel:\n-            self.cli.name = self.name\n-            app.cli.add_command(self.cli)\n         else:\n-            self.cli.name = cli_resolved_group\n+            if cli_resolved_group is _sentinel:",
+    "violations": [
+      {
+        "type": "",
+        "line": 288,
+        "review_comment": "This change does not improve readability. Repeating a line once (or even twice) is perfectly fine; being overly DRY actually makes code harder to read here."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR3799_508769397",
+    "diff": "@@ -709,7 +706,7 @@ def convert(self, value, param, ctx):\n         except click.BadParameter:\n             value = click.STRING(value, param, ctx).lower()\n \n-            if value == \"adhoc\":\n+            if _isAdHoc(value):",
+    "violations": [
+      {
+        "type": "",
+        "line": 709,
+        "review_comment": "camelCase has no place in Python code (see PEP8). Also, you replace a very simple check with a function call where you now need to check the function first to see what it does!"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR3799_508769710",
+    "diff": "@@ -760,6 +757,11 @@ def _validate_key(ctx, param, value):\n     return value\n \n \n+def _isAdHoc(cert):\n+    \"\"\"Check is it adhoc\"\"\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 761,
+        "review_comment": "This docstring is the type of documentation that nobody really needs :) It's like \"loop over list\" above a loop..."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3799_508770395",
+    "diff": "@@ -292,7 +292,7 @@ def external_url_handler(error, endpoint, values):\n         url_adapter = reqctx.url_adapter\n         blueprint_name = request.blueprint\n \n-        if endpoint[:1] == \".\":\n+        if endpoint[0] == \".\":",
+    "violations": [
+      {
+        "type": "",
+        "line": 295,
+        "review_comment": "You are changing behavior here:\r\n\r\n```python\r\n>>> empty = ''\r\n>>> empty[:1]\r\n''\r\n>>> empty[0]\r\nTraceback (most recent call last):\r\n  File \"<stdin>\", line 1, in <module>\r\nIndexError: string index out of range\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3799_508770745",
+    "diff": "@@ -340,10 +340,14 @@ def external_url_handler(error, endpoint, values):\n     except BuildError as error:\n         # We need to inject the values again so that the app callback can\n         # deal with that sort of stuff.\n-        values[\"_external\"] = external\n-        values[\"_anchor\"] = anchor\n-        values[\"_method\"] = method\n-        values[\"_scheme\"] = scheme\n+        values.update(\n+            {\n+                \"_external\": external,\n+                \"_anchor\": anchor,\n+                \"_method\": method,\n+                \"_scheme\": scheme,\n+            }\n+        )",
+    "violations": [
+      {
+        "type": "",
+        "line": 350,
+        "review_comment": "This is longer and doesn't look better. The usecase for `dict.update()` is when you already have a sequence..."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3799_508771797",
+    "diff": "@@ -841,38 +845,37 @@ def _find_package_path(root_mod_name):\n         if spec.origin in {\"namespace\", None}:\n             return os.path.dirname(next(iter(spec.submodule_search_locations)))\n         # a package (with __init__.py)\n-        elif spec.submodule_search_locations:\n+        if spec.submodule_search_locations:\n             return os.path.dirname(os.path.dirname(spec.origin))\n         # just a normal module\n-        else:\n-            return os.path.dirname(spec.origin)\n+        return os.path.dirname(spec.origin)",
+    "violations": [
+      {
+        "type": "",
+        "line": 851,
+        "review_comment": "With the old code every return was on the same levl - now the last one is on a different level. Which option to choose is completely personal preference though, but I don't think sending PRs to projects you are not related to do make changes that are purely based on personal preference is helpful."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_helpers.py",
+    "chunk_id": "PR3786_502854024",
+    "diff": "@@ -912,14 +912,16 @@ def test_safe_join(self):\n             # Base directory is always considered safe\n             ((\"../\", \"a/b/c\"), \"../a/b/c\"),\n             ((\"/..\",), \"/..\"),\n-        )\n-\n-        for args, expected in passing:\n-            assert flask.safe_join(*args) == expected\n+        ),\n+    )\n+    def test_safe_join(self, passing):\n+        args = passing[0]",
+    "violations": [
+      {
+        "type": "",
+        "line": 918,
+        "review_comment": "Split this into multiple parameters. `(\"args\", \"expected\")` instead of `\"passing\"`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR3709_463709194",
+    "diff": "@@ -258,17 +293,16 @@ def register(self, app, options, first_registration=False):\n             self.cli.name = cli_resolved_group\n             app.cli.add_command(self.cli)\n \n-    def route(self, rule, **options):\n-        \"\"\"Like :meth:`Flask.route` but for a blueprint.  The endpoint for the\n-        :func:`url_for` function is prefixed with the name of the blueprint.\n-        \"\"\"\n-\n-        def decorator(f):\n-            endpoint = options.pop(\"endpoint\", f.__name__)\n-            self.add_url_rule(rule, endpoint, f, **options)\n-            return f\n+    # def route(self, rule, **options):",
+    "violations": [
+      {
+        "type": "",
+        "line": 296,
+        "review_comment": "leftover commented code"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR3708_462613986",
+    "diff": "@@ -241,6 +244,35 @@ def register(self, app, options, first_registration=False):\n                 endpoint=\"static\",\n             )\n \n+        # Merge app and self dictionaries.\n+        def merge_dict_lists(self_dict, app_dict):\n+            \"\"\"Merges self_dict into app_dict. Replaces None keys with self.name.\n+            Values of dict must be lists.\n+            \"\"\"\n+            for key, values in self_dict.items():\n+                key = self.name if key is None else f\"{self.name}\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 253,
+        "review_comment": "This line doesn't seem to make much sense. It's basically equivalent to `key = str(self.name`)`"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR3708_462624705",
+    "diff": "@@ -167,14 +167,17 @@ def __init__(\n         root_path=None,\n         cli_group=_sentinel,\n     ):\n-        _PackageBoundObject.__init__(\n-            self, import_name, template_folder, root_path=root_path\n+        Skeleton.__init__(",
+    "violations": [
+      {
+        "type": "",
+        "line": 170,
+        "review_comment": "Use `super()` here"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR3708_462625465",
+    "diff": "@@ -241,6 +244,35 @@ def register(self, app, options, first_registration=False):\n                 endpoint=\"static\",\n             )\n \n+        # Merge app and self dictionaries.\n+        def merge_dict_lists(self_dict, app_dict):\n+            \"\"\"Merges self_dict into app_dict. Replaces None keys with self.name.\n+            Values of dict must be lists.\n+            \"\"\"\n+            for key, values in self_dict.items():\n+                key = self.name if key is None else f\"{self.name}\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 253,
+        "review_comment": "The implementation is supposed to be: if None, use the blueprint name, otherwise prepend the blueprint name to the key.\r\n\r\n```python\r\nkey = self.name if key is None else f\"{self.name}.{key}\"\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3708_462626352",
+    "diff": "@@ -84,132 +84,46 @@ def wrapper_func(self, *args, **kwargs):\n     return update_wrapper(wrapper_func, f)\n \n \n-class Flask(_PackageBoundObject):\n-    \"\"\"The flask object implements a WSGI application and acts as the central\n-    object.  It is passed the name of the module or package of the\n-    application.  Once it is created it will act as a central registry for\n-    the view functions, the URL rules, template configuration and much more.\n-\n-    The name of the package is used to resolve resources from inside the\n-    package or the folder the module is contained in depending on if the\n-    package parameter resolves to an actual python package (a folder with\n-    an :file:`__init__.py` file inside) or a standard module (just a ``.py`` file).\n-\n-    For more information about resource loading, see :func:`open_resource`.\n-\n-    Usually you create a :class:`Flask` instance in your main module or\n-    in the :file:`__init__.py` file of your package like this::\n-\n-        from flask import Flask\n-        app = Flask(__name__)\n-\n-    .. admonition:: About the First Parameter\n-\n-        The idea of the first parameter is to give Flask an idea of what\n-        belongs to your application.  This name is used to find resources\n-        on the filesystem, can be used by extensions to improve debugging\n-        information and a lot more.\n-\n-        So it's important what you provide there.  If you are using a single\n-        module, `__name__` is always the correct value.  If you however are\n-        using a package, it's usually recommended to hardcode the name of\n-        your package there.\n-\n-        For example if your application is defined in :file:`yourapplication/app.py`\n-        you should create it with one of the two versions below::\n+class Skeleton(_PackageBoundObject):",
+    "violations": [
+      {
+        "type": "",
+        "line": 87,
+        "review_comment": "Move this (probably along with `_PackageBoundObject`) to a separate file, like `skeleton.py` (final name still pending). Right now it's making the diff really confusing."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3708_462627154",
+    "diff": "@@ -335,79 +170,33 @@ class Flask(_PackageBoundObject):\n         }\n     )\n \n-    #: The rule object to use for URL rules created.  This is used by\n-    #: :meth:`add_url_rule`.  Defaults to :class:`werkzeug.routing.Rule`.\n-    #:\n-    #: .. versionadded:: 0.7\n-    url_rule_class = Rule\n+    def __init__(\n+        self,\n+        import_name,\n+        template_folder,\n+        root_path=None,\n+        static_url_path=None,\n+        static_folder=\"static\",\n+        instance_relative_config=False,",
+    "violations": [
+      {
+        "type": "",
+        "line": 180,
+        "review_comment": "Blueprints don't have instance config or instance folders, so these shouldn't be in the skeleton."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3708_462627462",
+    "diff": "@@ -84,132 +84,46 @@ def wrapper_func(self, *args, **kwargs):\n     return update_wrapper(wrapper_func, f)\n \n \n-class Flask(_PackageBoundObject):\n-    \"\"\"The flask object implements a WSGI application and acts as the central\n-    object.  It is passed the name of the module or package of the\n-    application.  Once it is created it will act as a central registry for\n-    the view functions, the URL rules, template configuration and much more.\n-\n-    The name of the package is used to resolve resources from inside the\n-    package or the folder the module is contained in depending on if the\n-    package parameter resolves to an actual python package (a folder with\n-    an :file:`__init__.py` file inside) or a standard module (just a ``.py`` file).\n-\n-    For more information about resource loading, see :func:`open_resource`.\n-\n-    Usually you create a :class:`Flask` instance in your main module or\n-    in the :file:`__init__.py` file of your package like this::\n-\n-        from flask import Flask\n-        app = Flask(__name__)\n-\n-    .. admonition:: About the First Parameter\n-\n-        The idea of the first parameter is to give Flask an idea of what\n-        belongs to your application.  This name is used to find resources\n-        on the filesystem, can be used by extensions to improve debugging\n-        information and a lot more.\n-\n-        So it's important what you provide there.  If you are using a single\n-        module, `__name__` is always the correct value.  If you however are\n-        using a package, it's usually recommended to hardcode the name of\n-        your package there.\n-\n-        For example if your application is defined in :file:`yourapplication/app.py`\n-        you should create it with one of the two versions below::\n+class Skeleton(_PackageBoundObject):\n \n-            app = Flask('yourapplication')\n-            app = Flask(__name__.split('.')[0])\n-\n-        Why is that?  The application will work even with `__name__`, thanks\n-        to how resources are looked up.  However it will make debugging more\n-        painful.  Certain extensions can make assumptions based on the\n-        import name of your application.  For example the Flask-SQLAlchemy\n-        extension will look for the code in your application that triggered\n-        an SQL query in debug mode.  If the import name is not properly set\n-        up, that debugging information is lost.  (For example it would only\n-        pick up SQL queries in `yourapplication.app` and not\n-        `yourapplication.views.frontend`)\n-\n-    .. versionadded:: 0.7\n-       The `static_url_path`, `static_folder`, and `template_folder`\n-       parameters were added.\n+    #: Skeleton local JSON decoder class to use.\n+    #: Set to ``None`` to use the app's :class:`~flask.app.Flask.json_encoder`.\n+    json_encoder = None\n \n-    .. versionadded:: 0.8\n-       The `instance_path` and `instance_relative_config` parameters were\n-       added.\n-\n-    .. versionadded:: 0.11\n-       The `root_path` parameter was added.\n+    #: Skeleton local JSON decoder class to use.\n+    #: Set to ``None`` to use the app's :class:`~flask.app.Flask.json_decoder`.\n+    json_decoder = None\n \n-    .. versionadded:: 1.0\n-       The ``host_matching`` and ``static_host`` parameters were added.\n+    #: The name of the package or module that this app belongs to. Do not\n+    #: change this once it is set by the constructor.\n+    import_name = None\n \n-    .. versionadded:: 1.0\n-       The ``subdomain_matching`` parameter was added. Subdomain\n-       matching needs to be enabled manually now. Setting\n-       :data:`SERVER_NAME` does not implicitly enable it.\n+    #: Location of the template files to be added to the template lookup.\n+    #: ``None`` if templates should not be added.\n+    template_folder = None\n \n-    :param import_name: the name of the application package\n-    :param static_url_path: can be used to specify a different path for the\n-                            static files on the web.  Defaults to the name\n-                            of the `static_folder` folder.\n-    :param static_folder: The folder with static files that is served at\n-        ``static_url_path``. Relative to the application ``root_path``\n-        or an absolute path. Defaults to ``'static'``.\n-    :param static_host: the host to use when adding the static route.\n-        Defaults to None. Required when using ``host_matching=True``\n-        with a ``static_folder`` configured.\n-    :param host_matching: set ``url_map.host_matching`` attribute.\n-        Defaults to False.\n-    :param subdomain_matching: consider the subdomain relative to\n-        :data:`SERVER_NAME` when matching routes. Defaults to False.\n-    :param template_folder: the folder that contains the templates that should\n-                            be used by the application.  Defaults to\n-                            ``'templates'`` folder in the root path of the\n-                            application.\n-    :param instance_path: An alternative instance path for the application.\n-                          By default the folder ``'instance'`` next to the\n-                          package or module is assumed to be the instance\n-                          path.\n-    :param instance_relative_config: if set to ``True`` relative filenames\n-                                     for loading the config are assumed to\n-                                     be relative to the instance path instead\n-                                     of the application root.\n-    :param root_path: The path to the root of the application files.\n-        This should only be set manually when it can't be detected\n-        automatically, such as for namespace packages.\n-    \"\"\"\n+    #: Absolute path to the package on the filesystem. Used to look up\n+    #: resources contained in the package.\n+    root_path = None\n \n-    #: The class that is used for request objects.  See :class:`~flask.Request`\n-    #: for more information.\n-    request_class = Request\n+    # MARK: additional vars added from Flask.",
+    "violations": [
+      {
+        "type": "",
+        "line": 109,
+        "review_comment": "Most of these should probably stay in `Flask`, blueprints don't have things like a Jinja environment or config."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3708_462667615",
+    "diff": "@@ -84,132 +84,46 @@ def wrapper_func(self, *args, **kwargs):\n     return update_wrapper(wrapper_func, f)\n \n \n-class Flask(_PackageBoundObject):\n-    \"\"\"The flask object implements a WSGI application and acts as the central\n-    object.  It is passed the name of the module or package of the\n-    application.  Once it is created it will act as a central registry for\n-    the view functions, the URL rules, template configuration and much more.\n-\n-    The name of the package is used to resolve resources from inside the\n-    package or the folder the module is contained in depending on if the\n-    package parameter resolves to an actual python package (a folder with\n-    an :file:`__init__.py` file inside) or a standard module (just a ``.py`` file).\n-\n-    For more information about resource loading, see :func:`open_resource`.\n-\n-    Usually you create a :class:`Flask` instance in your main module or\n-    in the :file:`__init__.py` file of your package like this::\n-\n-        from flask import Flask\n-        app = Flask(__name__)\n-\n-    .. admonition:: About the First Parameter\n-\n-        The idea of the first parameter is to give Flask an idea of what\n-        belongs to your application.  This name is used to find resources\n-        on the filesystem, can be used by extensions to improve debugging\n-        information and a lot more.\n-\n-        So it's important what you provide there.  If you are using a single\n-        module, `__name__` is always the correct value.  If you however are\n-        using a package, it's usually recommended to hardcode the name of\n-        your package there.\n-\n-        For example if your application is defined in :file:`yourapplication/app.py`\n-        you should create it with one of the two versions below::\n+class Skeleton(_PackageBoundObject):\n \n-            app = Flask('yourapplication')\n-            app = Flask(__name__.split('.')[0])\n-\n-        Why is that?  The application will work even with `__name__`, thanks\n-        to how resources are looked up.  However it will make debugging more\n-        painful.  Certain extensions can make assumptions based on the\n-        import name of your application.  For example the Flask-SQLAlchemy\n-        extension will look for the code in your application that triggered\n-        an SQL query in debug mode.  If the import name is not properly set\n-        up, that debugging information is lost.  (For example it would only\n-        pick up SQL queries in `yourapplication.app` and not\n-        `yourapplication.views.frontend`)\n-\n-    .. versionadded:: 0.7\n-       The `static_url_path`, `static_folder`, and `template_folder`\n-       parameters were added.\n+    #: Skeleton local JSON decoder class to use.\n+    #: Set to ``None`` to use the app's :class:`~flask.app.Flask.json_encoder`.\n+    json_encoder = None\n \n-    .. versionadded:: 0.8\n-       The `instance_path` and `instance_relative_config` parameters were\n-       added.\n-\n-    .. versionadded:: 0.11\n-       The `root_path` parameter was added.\n+    #: Skeleton local JSON decoder class to use.\n+    #: Set to ``None`` to use the app's :class:`~flask.app.Flask.json_decoder`.\n+    json_decoder = None\n \n-    .. versionadded:: 1.0\n-       The ``host_matching`` and ``static_host`` parameters were added.\n+    #: The name of the package or module that this app belongs to. Do not\n+    #: change this once it is set by the constructor.\n+    import_name = None\n \n-    .. versionadded:: 1.0\n-       The ``subdomain_matching`` parameter was added. Subdomain\n-       matching needs to be enabled manually now. Setting\n-       :data:`SERVER_NAME` does not implicitly enable it.\n+    #: Location of the template files to be added to the template lookup.\n+    #: ``None`` if templates should not be added.\n+    template_folder = None\n \n-    :param import_name: the name of the application package\n-    :param static_url_path: can be used to specify a different path for the\n-                            static files on the web.  Defaults to the name\n-                            of the `static_folder` folder.\n-    :param static_folder: The folder with static files that is served at\n-        ``static_url_path``. Relative to the application ``root_path``\n-        or an absolute path. Defaults to ``'static'``.\n-    :param static_host: the host to use when adding the static route.\n-        Defaults to None. Required when using ``host_matching=True``\n-        with a ``static_folder`` configured.\n-    :param host_matching: set ``url_map.host_matching`` attribute.\n-        Defaults to False.\n-    :param subdomain_matching: consider the subdomain relative to\n-        :data:`SERVER_NAME` when matching routes. Defaults to False.\n-    :param template_folder: the folder that contains the templates that should\n-                            be used by the application.  Defaults to\n-                            ``'templates'`` folder in the root path of the\n-                            application.\n-    :param instance_path: An alternative instance path for the application.\n-                          By default the folder ``'instance'`` next to the\n-                          package or module is assumed to be the instance\n-                          path.\n-    :param instance_relative_config: if set to ``True`` relative filenames\n-                                     for loading the config are assumed to\n-                                     be relative to the instance path instead\n-                                     of the application root.\n-    :param root_path: The path to the root of the application files.\n-        This should only be set manually when it can't be detected\n-        automatically, such as for namespace packages.\n-    \"\"\"\n+    #: Absolute path to the package on the filesystem. Used to look up\n+    #: resources contained in the package.\n+    root_path = None\n \n-    #: The class that is used for request objects.  See :class:`~flask.Request`\n-    #: for more information.\n-    request_class = Request\n+    # MARK: additional vars added from Flask.",
+    "violations": [
+      {
+        "type": "",
+        "line": 109,
+        "review_comment": "`debug` is only a property of `Flask`, it shouldn't be in `Skeleton`. Same with at least the stuff related to the Jinja environment and Config."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "examples/tutorial/tests/conftest.py",
+    "chunk_id": "PR3646_437526061",
+    "diff": "@@ -8,15 +8,16 @@\n from flaskr.db import init_db\n \n # read in SQL for populating test data\n-with open(os.path.join(os.path.dirname(__file__), \"data.sql\"), \"rb\") as f:\n-    _data_sql = f.read().decode(\"utf8\")\n+with open(Path(__file__).parent / \"data.sql\", encoding=\"utf8\") as f:\n+    _data_sql = f.read()\n \n \n @pytest.fixture\n def app():\n     \"\"\"Create and configure a new app instance for each test.\"\"\"\n     # create a temporary file to isolate the database for each test\n-    db_fd, db_path = tempfile.mkstemp()\n+    db_path = TemporaryFile().name",
+    "violations": [
+      {
+        "type": "",
+        "line": 19,
+        "review_comment": "I reviewed this when I rewrote the tutorial, `mkstemp()` still seemed to be the easiest way to handle this in these tests. If we're going to change this, I'd rather use pytest's `tmp_path` fixture, but I think I tried that last time and couldn't find a satisfying solution.\r\n\r\nThis doesn't call `f.close()`, but tests need to clean up after themselves. You'd need to wrap the entire function in a `with` block. I didn't do that because it just pushed the indentation level out.\r\n\r\nThis is also making all the tests fail, because `TemporaryFile` does not create a visible name. You'd want `NamedTemporaryFile` in that case.\r\n"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "examples/tutorial/tests/conftest.py",
+    "chunk_id": "PR3646_437565857",
+    "diff": "@@ -8,15 +8,16 @@\n from flaskr.db import init_db\n \n # read in SQL for populating test data\n-with open(os.path.join(os.path.dirname(__file__), \"data.sql\"), \"rb\") as f:\n-    _data_sql = f.read().decode(\"utf8\")\n+with open(Path(__file__).parent / \"data.sql\", encoding=\"utf8\") as f:",
+    "violations": [
+      {
+        "type": "",
+        "line": 11,
+        "review_comment": "I guess this is ok? You want to use `Path.read_text()` here if you're looking to simplify things. This would make more sense as part of #3557."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR3604_446012157",
+    "diff": "@@ -565,14 +565,9 @@ def list_commands(self, ctx):\n         info = ctx.ensure_object(ScriptInfo)\n         try:\n             rv.update(info.load_app().cli.list_commands(ctx))\n-        except Exception:\n-            # Here we intentionally swallow all exceptions as we don't\n-            # want the help page to break if the app does not exist.\n-            # If someone attempts to use the command we try to create\n-            # the app again and this will give us the error.\n-            # However, we will not do so silently because that would confuse\n-            # users.\n-            traceback.print_exc()\n+        except NoAppException as e:\n+            # We don't want the help page to break if the app does not exist.\n+            print(\"Error:\", e, file=sys.stderr)",
+    "violations": [
+      {
+        "type": "",
+        "line": 570,
+        "review_comment": "Isn't it useful to have a full traceback?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/cli.py",
+    "chunk_id": "PR3604_446013626",
+    "diff": "@@ -565,14 +565,9 @@ def list_commands(self, ctx):\n         info = ctx.ensure_object(ScriptInfo)\n         try:\n             rv.update(info.load_app().cli.list_commands(ctx))\n-        except Exception:\n-            # Here we intentionally swallow all exceptions as we don't\n-            # want the help page to break if the app does not exist.\n-            # If someone attempts to use the command we try to create\n-            # the app again and this will give us the error.\n-            # However, we will not do so silently because that would confuse\n-            # users.\n-            traceback.print_exc()\n+        except NoAppException as e:\n+            # We don't want the help page to break if the app does not exist.\n+            print(\"Error:\", e, file=sys.stderr)",
+    "violations": [
+      {
+        "type": "",
+        "line": 570,
+        "review_comment": "In `flask --help` or `flask` without args? I'd say no... individual subcommands will still have the traceback AFAIU."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3574_409690609",
+    "diff": "@@ -1349,7 +1349,9 @@ def _get_exc_class_and_code(exc_class_or_code):\n         else:\n             exc_class = exc_class_or_code\n \n-        assert issubclass(exc_class, Exception)\n+        assert issubclass(\n+            exc_class, Exception\n+        ), \"Custom exceptions should be subclasses of ``Exception``\"",
+    "violations": [
+      {
+        "type": "",
+        "line": 1354,
+        "review_comment": "Remove ticks around Exception, this isn't ReST. Add a period at the end of the sentence. Change \"should\" to \"must\"."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3513_389948496",
+    "diff": "@@ -1256,11 +1260,11 @@ def index():\n             )\n \n         if provide_automatic_options is None:\n-            if \"OPTIONS\" not in methods:\n+            if \"OPTIONS\" in methods:\n+                provide_automatic_options = False\n+            else:",
+    "violations": [
+      {
+        "type": "",
+        "line": 1265,
+        "review_comment": "why not \r\n`provide_automatic_options = False if \"OPTIONS\" in methods else True`"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3513_389949820",
+    "diff": "@@ -1256,11 +1260,11 @@ def index():\n             )\n \n         if provide_automatic_options is None:\n-            if \"OPTIONS\" not in methods:\n+            if \"OPTIONS\" in methods:\n+                provide_automatic_options = False\n+            else:",
+    "violations": [
+      {
+        "type": "",
+        "line": 1265,
+        "review_comment": "Because there's other stuff going on in the `else` block."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3513_389950066",
+    "diff": "@@ -1256,11 +1260,11 @@ def index():\n             )\n \n         if provide_automatic_options is None:\n-            if \"OPTIONS\" not in methods:\n+            if \"OPTIONS\" in methods:\n+                provide_automatic_options = False\n+            else:",
+    "violations": [
+      {
+        "type": "",
+        "line": 1265,
+        "review_comment": "Absolutely not. First of all, this is just adding more complexity than needed as your code is just a more convoluted way of this:\r\n\r\n    provide_automatic_options = \"OPTIONS\" not in methods\r\n\r\nBut then, if you look a the whole code, you'll notice that the code in the else branch does more than just setting the variable to True..."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3513_389950138",
+    "diff": "@@ -2146,11 +2150,11 @@ def create_url_adapter(self, request):\n             # If subdomain matching is disabled (the default), use the\n             # default subdomain in all cases. This should be the default\n             # in Werkzeug but it currently does not have that feature.\n-            subdomain = (\n-                (self.url_map.default_subdomain or None)\n-                if not self.subdomain_matching\n-                else None\n-            )\n+            if self.subdomain_matching:\n+                subdomain = None\n+            else:\n+                subdomain = self.url_map.default_subdomain or None\n+",
+    "violations": [
+      {
+        "type": "",
+        "line": 2160,
+        "review_comment": "Why not\r\n`subdomain = None if self.subdomain_matching else self.url_map.default_subdomain`"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3513_389950422",
+    "diff": "@@ -2146,11 +2150,11 @@ def create_url_adapter(self, request):\n             # If subdomain matching is disabled (the default), use the\n             # default subdomain in all cases. This should be the default\n             # in Werkzeug but it currently does not have that feature.\n-            subdomain = (\n-                (self.url_map.default_subdomain or None)\n-                if not self.subdomain_matching\n-                else None\n-            )\n+            if self.subdomain_matching:\n+                subdomain = None\n+            else:\n+                subdomain = self.url_map.default_subdomain or None\n+",
+    "violations": [
+      {
+        "type": "",
+        "line": 2160,
+        "review_comment": "That would not convert `''` to `None` as the current code does."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_apps/helloworld/hello.py",
+    "chunk_id": "PR3512_382929021",
+    "diff": "@@ -6,3 +6,6 @@\n @app.route(\"/\")\n def hello():\n     return \"Hello World!\"\n+\n+if __name__==\"__main__:",
+    "violations": [
+      {
+        "type": "",
+        "line": 10,
+        "review_comment": "The formatting issues aside, this isn't even valid code (missing `\"`) - so not only does this PR not improve anything, it is actually broken and indicates that you never bothered to test the change you proposed. Please stop doing that, it's just unnecessary noise for any project receiving such PRs."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_templating.py",
+    "chunk_id": "PR3510_382200065",
+    "diff": "@@ -14,7 +14,7 @@\n import werkzeug.serving\n from jinja2 import TemplateNotFound\n \n-import flask\n+import flask , render_template ,render_template_string",
+    "violations": [
+      {
+        "type": "",
+        "line": 17,
+        "review_comment": "```python\r\nfrom flask import render_template\r\nfrom flask import render_template_string\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3419_343820747",
+    "diff": "@@ -41,6 +41,10 @@\n from .globals import session\n from .signals import message_flashed\n \n+if sys.version_info >= (3, 0):",
+    "violations": [
+      {
+        "type": "",
+        "line": 44,
+        "review_comment": "This is already handled in `flask._compat`"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3419_343821990",
+    "diff": "@@ -630,6 +634,21 @@ def send_file(\n             mtime = os.path.getmtime(filename)\n             fsize = os.path.getsize(filename)\n             headers[\"Content-Length\"] = fsize\n+\n+        elif isinstance(file,io.StringIO):\n+            \"\"\"\n+            Reaches String IO parsing to BytesIO\n+            \"\"\"\n+            mem = BytesIO()\n+            mem.write(file.getvalue().encode('utf-8'))\n+            mem.seek(0)\n+            file = mem",
+    "violations": [
+      {
+        "type": "",
+        "line": 645,
+        "review_comment": "Just do `file = BytesIO` initially"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3419_343822328",
+    "diff": "@@ -630,6 +634,21 @@ def send_file(\n             mtime = os.path.getmtime(filename)\n             fsize = os.path.getsize(filename)\n             headers[\"Content-Length\"] = fsize\n+\n+        elif isinstance(file,io.StringIO):\n+            \"\"\"\n+            Reaches String IO parsing to BytesIO\n+            \"\"\"\n+            mem = BytesIO()\n+            mem.write(file.getvalue().encode('utf-8'))\n+            mem.seek(0)\n+            file = mem\n+            try:\n+                fsize = file.getbuffer().nbytes",
+    "violations": [
+      {
+        "type": "",
+        "line": 647,
+        "review_comment": "Duplicates code below, `if/elif/elif` needs to be refactored to avoid that."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3412_341590564",
+    "diff": "@@ -1151,3 +1155,30 @@ def is_ip(value):\n             return True\n \n     return False\n+\n+\n+def run_async(func):\n+    \"\"\"Ensure that the async function is run on a different thread.\"\"\"\n+\n+    @wraps(func)\n+    def _wrapper(*args, **kwargs):\n+        call_result = Future()\n+        def _run():\n+            loop = asyncio.new_event_loop()\n+            try:\n+                result = loop.run_until_complete(func(*args, **kwargs))\n+            except Exception as error:\n+                call_result.set_exception(error)\n+            else:\n+                call_result.set_result(result)\n+            finally:\n+                loop.close()\n+\n+        loop_executor = ThreadPoolExecutor(max_workers=1)",
+    "violations": [
+      {
+        "type": "",
+        "line": 1177,
+        "review_comment": "Oh, right! Sorry, I understand now. Yes, you are making a brand new executor each time. So yes, concurrency works, but the expense of running an async view function is fairly high, the executor, the thread and the loop need to be created each time."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "setup.py",
+    "chunk_id": "PR3412_407085665",
+    "diff": "@@ -14,6 +14,7 @@\n         \"Jinja2>=2.10.1\",\n         \"itsdangerous>=0.24\",\n         \"click>=5.1\",\n+        \"asgiref>=3.2\",",
+    "violations": [
+      {
+        "type": "",
+        "line": 17,
+        "review_comment": "Let's move this to an \"async\" extra. Then need to mention it with the async docs."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3412_407085967",
+    "diff": "@@ -1122,3 +1124,39 @@ def is_ip(value):\n             return True\n \n     return False\n+\n+\n+def run_async(func):\n+    \"\"\"Return a sync function that will run the coroutine function *func*.\"\"\"\n+",
+    "violations": [
+      {
+        "type": "",
+        "line": 744,
+        "review_comment": "To make asgiref optional, try to import it here, so the first time `run_async` is used it can fail if it's not installed.\r\n\r\n```python\r\ntry:\r\n    import asgiref\r\nexcept ImportError:\r\n    raise RuntimeError(\"Install asgiref in order to run async views.\")\r\n```"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3412_407086875",
+    "diff": "@@ -2318,6 +2320,19 @@ def test_request_context(self, *args, **kwargs):\n         finally:\n             builder.close()\n \n+    def ensure_sync(self, func):\n+        \"\"\"Ensure that the returned function is sync and calls the async func.\n+\n+        .. versionadded:: 2?\n+\n+        Override if you wish to change how asynchronous functions are\n+        run.\n+        \"\"\"\n+        if asyncio.iscoroutinefunction(func):",
+    "violations": [
+      {
+        "type": "",
+        "line": 2331,
+        "review_comment": "This might be available in asgiref?\r\n\r\nIt seems like `asyncio.iscoroutinefunction` is only if you want to support the deprecated `@coroutine` decorated generator functions. Maybe use `inspect.iscoroutinefunction` since we only mention supporting `async def`?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3412_555200977",
+    "diff": "@@ -1122,3 +1123,45 @@ def is_ip(value):\n             return True\n \n     return False\n+\n+\n+def run_async(func):\n+    \"\"\"Return a sync function that will run the coroutine function *func*.\"\"\"\n+    try:\n+        from asgiref.sync import async_to_sync\n+    except ImportError:\n+        raise RuntimeError(\n+            \"Install Flask with the 'async' extra in order to use async views.\"\n+        )\n+\n+    @wraps(func)\n+    def outer(*args, **kwargs):\n+        \"\"\"This function grabs the current context for the inner function.\n+\n+        This is similar to the copy_current_xxx_context functions in the\n+        ctx module, except it has an async inner.\n+        \"\"\"\n+        ctx = None\n+        if _request_ctx_stack.top is not None:\n+            ctx = _request_ctx_stack.top.copy()\n+        elif _app_ctx_stack.top is not None:\n+            ctx = _app_ctx_stack.top.copy()",
+    "violations": [
+      {
+        "type": "",
+        "line": 1148,
+        "review_comment": "`AppContext` doesn't have a `copy` method."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/helpers.py",
+    "chunk_id": "PR3412_555204859",
+    "diff": "@@ -1122,3 +1123,45 @@ def is_ip(value):\n             return True\n \n     return False\n+\n+\n+def run_async(func):\n+    \"\"\"Return a sync function that will run the coroutine function *func*.\"\"\"\n+    try:\n+        from asgiref.sync import async_to_sync\n+    except ImportError:\n+        raise RuntimeError(\n+            \"Install Flask with the 'async' extra in order to use async views.\"\n+        )\n+\n+    @wraps(func)\n+    def outer(*args, **kwargs):\n+        \"\"\"This function grabs the current context for the inner function.\n+\n+        This is similar to the copy_current_xxx_context functions in the\n+        ctx module, except it has an async inner.\n+        \"\"\"\n+        ctx = None\n+        if _request_ctx_stack.top is not None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 760,
+        "review_comment": "When will this be `None`?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/blueprints.py",
+    "chunk_id": "PR3412_600869312",
+    "diff": "@@ -235,20 +236,40 @@ def register(self, app, options, first_registration=False):\n         # Merge blueprint data into parent.\n         if first_registration:\n \n-            def extend(bp_dict, parent_dict):\n+            def extend(bp_dict, parent_dict, ensure_sync=False):\n                 for key, values in bp_dict.items():\n                     key = self.name if key is None else f\"{self.name}.{key}\"\n+                    if ensure_sync:\n+                        values = [app.ensure_sync(func) for func in values]\n                     parent_dict[key].extend(values)\n \n             def update(bp_dict, parent_dict):\n                 for key, value in bp_dict.items():\n                     key = self.name if key is None else f\"{self.name}.{key}\"\n+                    value = defaultdict(\n+                        dict,\n+                        {\n+                            code: {\n+                                exc_class: app.ensure_sync(func)",
+    "violations": [
+      {
+        "type": "",
+        "line": 253,
+        "review_comment": "I know this is only used for the error handler spec, but this change makes the `update` method not generic, so it needs a different name."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR3398_334988255",
+    "diff": "@@ -176,31 +176,48 @@ class and has ``@property`` attributes, it needs to be\n             if key.isupper():\n                 self[key] = getattr(obj, key)\n \n-    def from_json(self, filename, silent=False):\n-        \"\"\"Updates the values in the config from a JSON file. This function\n-        behaves as if the JSON object was a dictionary and passed to the\n-        :meth:`from_mapping` function.\n+    def from_file(self, filename, loads, silent=False):\n+        \"\"\"Update the values in the config from a file that is loaded using\n+        the *loads* argument.  This method passes the loaded Mapping\n+        to the :meth:`from_mapping` function.\n \n         :param filename: the filename of the JSON file.  This can either be an\n                          absolute filename or a filename relative to the\n                          root path.\n+        :param loads: a callable that loads the file text and returned a\n+                      Mapping.\n+        :type loads: Callable[[str], Mapping].\n         :param silent: set to ``True`` if you want silent failure for missing\n                        files.\n \n-        .. versionadded:: 0.11\n+        .. versionadded:: 1.2\n         \"\"\"\n         filename = os.path.join(self.root_path, filename)\n-\n         try:\n-            with open(filename) as json_file:\n-                obj = json.loads(json_file.read())\n+            with open(filename) as file_:\n+                obj = loads(file_.read())",
+    "violations": [
+      {
+        "type": "",
+        "line": 198,
+        "review_comment": "Should this use `load(file_)`? If someone has a loader that doesn't support a file handle, they can wrap it as `lambda f: json.loads(f.read())`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/config.py",
+    "chunk_id": "PR3398_334988627",
+    "diff": "@@ -176,31 +176,48 @@ class and has ``@property`` attributes, it needs to be\n             if key.isupper():\n                 self[key] = getattr(obj, key)\n \n-    def from_json(self, filename, silent=False):\n-        \"\"\"Updates the values in the config from a JSON file. This function\n-        behaves as if the JSON object was a dictionary and passed to the\n-        :meth:`from_mapping` function.\n+    def from_file(self, filename, loads, silent=False):\n+        \"\"\"Update the values in the config from a file that is loaded using\n+        the *loads* argument.  This method passes the loaded Mapping\n+        to the :meth:`from_mapping` function.\n \n         :param filename: the filename of the JSON file.  This can either be an\n                          absolute filename or a filename relative to the\n                          root path.\n+        :param loads: a callable that loads the file text and returned a\n+                      Mapping.\n+        :type loads: Callable[[str], Mapping].\n         :param silent: set to ``True`` if you want silent failure for missing\n                        files.\n \n-        .. versionadded:: 0.11\n+        .. versionadded:: 1.2\n         \"\"\"\n         filename = os.path.join(self.root_path, filename)\n-\n         try:\n-            with open(filename) as json_file:\n-                obj = json.loads(json_file.read())\n+            with open(filename) as file_:\n+                obj = loads(file_.read())\n         except IOError as e:\n             if silent and e.errno in (errno.ENOENT, errno.EISDIR):\n                 return False\n             e.strerror = \"Unable to load configuration file (%s)\" % e.strerror\n             raise\n         return self.from_mapping(obj)\n \n+    def from_json(self, filename, silent=False):\n+        \"\"\"Updates the values in the config from a JSON file. This function\n+        behaves as if the JSON object was a dictionary and passed to the\n+        :meth:`from_mapping` function.\n+\n+        :param filename: the filename of the JSON file.  This can either be an\n+                         absolute filename or a filename relative to the\n+                         root path.\n+        :param silent: set to ``True`` if you want silent failure for missing\n+                       files.\n+\n+        .. versionadded:: 0.11\n+        \"\"\"\n+        return self.from_file(filename, json.loads, silent=silent)",
+    "violations": [
+      {
+        "type": "",
+        "line": 219,
+        "review_comment": "This should issue a `DeprecationWarning` to be removed in 2.0."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_config.py",
+    "chunk_id": "PR3398_334991098",
+    "diff": "@@ -46,6 +47,13 @@ def test_config_from_json():\n     common_object_test(app)\n \n \n+def test_config_from_file():",
+    "violations": [
+      {
+        "type": "",
+        "line": 43,
+        "review_comment": "Make this an optional dependency with [`pytest.importorskip`](https://docs.pytest.org/en/latest/skipping.html#skipping-on-a-missing-import-dependency) so users can run `pytest` directly for most contributions."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "tests/test_config.py",
+    "chunk_id": "PR3398_334991299",
+    "diff": "@@ -46,6 +47,13 @@ def test_config_from_json():\n     common_object_test(app)\n \n \n+def test_config_from_file():",
+    "violations": [
+      {
+        "type": "",
+        "line": 43,
+        "review_comment": "Rename to `test_config_from_toml_file`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/logging.py",
+    "chunk_id": "PR3328_312563872",
+    "diff": "@@ -72,7 +72,7 @@ def _has_config(logger):\n \n \n def create_logger(app):\n-    \"\"\"Get the the Flask apps's logger and configure it if needed.\n+    \"\"\"Get the Flask apps's logger and configure it if needed.",
+    "violations": [
+      {
+        "type": "",
+        "line": 75,
+        "review_comment": "Can you change \u201capps\u2019s\u201d to \u201capp\u2019s\u201d while you\u2019re at it?"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/debughelpers.py",
+    "chunk_id": "PR3255_291816868",
+    "diff": "@@ -143,20 +148,21 @@ def explain_template_loading_attempts(app, template, attempts):\n         for line in _dump_loader_info(loader):\n             info.append(\"       %s\" % line)\n \n-        if triple is None:\n-            detail = \"no match\"\n-        else:\n+        detail = \"no match\"\n+        if triple is not None:\n             detail = \"found (%r)\" % (triple[1] or \"<string>\")\n             total_found += 1\n+\n         info.append(\"       -> %s\" % detail)\n \n     seems_fishy = False",
+    "violations": [
+      {
+        "type": "",
+        "line": 158,
+        "review_comment": "i think you dont need this. "
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/debughelpers.py",
+    "chunk_id": "PR3255_292007843",
+    "diff": "@@ -122,12 +122,17 @@ def _dump_loader_info(loader):\n \n \n def explain_template_loading_attempts(app, template, attempts):\n-    \"\"\"This should help developers understand what failed\"\"\"\n+    \"\"\"This should help developers understand what failed\n+\n+    .. versionchanged:: 1.0.x\n+       Refactored codes.\n+    \"\"\"\n     info = ['Locating template \"%s\":' % template]\n     total_found = 0\n     blueprint = None\n     reqctx = _request_ctx_stack.top\n-    if reqctx is not None and reqctx.request.blueprint is not None:\n+\n+    if reqctx and reqctx.request.blueprint is not None:",
+    "violations": [
+      {
+        "type": "",
+        "line": 135,
+        "review_comment": "This line should not be changed. `if thing` and `if thing is not None` have different meanings. The later is also faster because it avoids bool conversion."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/debughelpers.py",
+    "chunk_id": "PR3255_292008239",
+    "diff": "@@ -143,20 +148,19 @@ def explain_template_loading_attempts(app, template, attempts):\n         for line in _dump_loader_info(loader):\n             info.append(\"       %s\" % line)\n \n-        if triple is None:\n-            detail = \"no match\"\n-        else:\n+        detail = \"no match\"\n+        if triple is not None:\n             detail = \"found (%r)\" % (triple[1] or \"<string>\")\n             total_found += 1\n+\n         info.append(\"       -> %s\" % detail)\n \n-    seems_fishy = False\n-    if total_found == 0:\n-        info.append(\"Error: the template could not be found.\")\n-        seems_fishy = True\n-    elif total_found > 1:\n-        info.append(\"Warning: multiple loaders returned a match for the template.\")\n-        seems_fishy = True\n+    info_msg = \"Error: the template could not be found.\"\n+    seems_fishy = True",
+    "violations": [
+      {
+        "type": "",
+        "line": 159,
+        "review_comment": "This appears to have changed the logic of `seems_fishy`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/debughelpers.py",
+    "chunk_id": "PR3255_292008625",
+    "diff": "@@ -122,12 +122,17 @@ def _dump_loader_info(loader):\n \n \n def explain_template_loading_attempts(app, template, attempts):\n-    \"\"\"This should help developers understand what failed\"\"\"\n+    \"\"\"This should help developers understand what failed\n+\n+    .. versionchanged:: 1.0.x",
+    "violations": [
+      {
+        "type": "",
+        "line": 127,
+        "review_comment": "This is not relevant to users, so should not have a changelog."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3253_292015327",
+    "diff": "@@ -1332,7 +1332,11 @@ def decorator(f):\n \n     @staticmethod\n     def _get_exc_class_and_code(exc_class_or_code):\n-        \"\"\"Ensure that we register only exceptions as handler keys\"\"\"\n+        \"\"\"Ensure that we register only exceptions as handler keys\n+\n+        :param exc_class_or_code: the class for the exception, or",
+    "violations": [
+      {
+        "type": "",
+        "line": 1337,
+        "review_comment": "\"Any exception class, or an HTTP status code as an integer.\""
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "src/flask/app.py",
+    "chunk_id": "PR3253_292015603",
+    "diff": "@@ -1332,7 +1332,11 @@ def decorator(f):\n \n     @staticmethod\n     def _get_exc_class_and_code(exc_class_or_code):\n-        \"\"\"Ensure that we register only exceptions as handler keys\"\"\"\n+        \"\"\"Ensure that we register only exceptions as handler keys\n+\n+        :param exc_class_or_code: the class for the exception, or",
+    "violations": [
+      {
+        "type": "",
+        "line": 1337,
+        "review_comment": "Wrap at 72 characters with one indent level (I know the existing docs aren't consistent about this)."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/app.py",
+    "chunk_id": "PR3235_289430435",
+    "diff": "@@ -2063,19 +2064,26 @@ def make_response(self, rv):\n                 status = headers = None\n             elif isinstance(rv, dict):\n                 rv = jsonify(rv)\n-            else:\n+            elif isinstance(rv, BaseResponse) or hasattr(rv, \"__call__\"):",
+    "violations": [
+      {
+        "type": "",
+        "line": 2067,
+        "review_comment": "Better to use `callable()` here rather than `hasattr(..., '__call__')`.\r\n\r\n(It would actually be `hasattr(obj.__class__, '__call__')` to test if something is callable.)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/app.py",
+    "chunk_id": "PR3235_289437911",
+    "diff": "@@ -2063,19 +2064,26 @@ def make_response(self, rv):\n                 status = headers = None\n             elif isinstance(rv, dict):\n                 rv = jsonify(rv)\n-            else:\n+            elif isinstance(rv, BaseResponse) or hasattr(rv, \"__call__\"):",
+    "violations": [
+      {
+        "type": "",
+        "line": 2067,
+        "review_comment": "(@lordmauve, agreed this should use `callable`, but your `hasattr(obj.__class__, '__call__')` looks like it returns true no matter what `obj` is, no?)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/app.py",
+    "chunk_id": "PR3235_289438091",
+    "diff": "@@ -2063,19 +2064,26 @@ def make_response(self, rv):\n                 status = headers = None\n             elif isinstance(rv, dict):\n                 rv = jsonify(rv)\n-            else:\n+            elif isinstance(rv, BaseResponse) or hasattr(rv, \"__call__\"):",
+    "violations": [
+      {
+        "type": "",
+        "line": 2067,
+        "review_comment": "Pretty sure those are EOL :P (and in any case, they are unsupported by the pallets projects)"
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/app.py",
+    "chunk_id": "PR3235_289456751",
+    "diff": "@@ -2063,19 +2064,26 @@ def make_response(self, rv):\n                 status = headers = None\n             elif isinstance(rv, dict):\n                 rv = jsonify(rv)\n-            else:\n+            elif isinstance(rv, BaseResponse) or hasattr(rv, \"__call__\"):",
+    "violations": [
+      {
+        "type": "",
+        "line": 2067,
+        "review_comment": "@jab You are right. Just trying to get to the point that dunder methods are looked up on the type of the thing, not the thing itself."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/testing.py",
+    "chunk_id": "PR3232_289447132",
+    "diff": "@@ -45,41 +44,72 @@ def make_test_environ_builder(\n         :class:`~werkzeug.test.EnvironBuilder`.\n     \"\"\"\n \n-    assert not (base_url or subdomain or url_scheme) or (base_url is not None) != bool(\n-        subdomain or url_scheme\n-    ), 'Cannot pass \"subdomain\" or \"url_scheme\" with \"base_url\".'\n+    def __init__(\n+        self,\n+        app,\n+        path=\"/\",\n+        base_url=None,\n+        subdomain=None,\n+        url_scheme=None,\n+        *args,\n+        **kwargs\n+    ):\n+        assert not (base_url or subdomain or url_scheme) or (\n+            base_url is not None\n+        ) != bool(\n+            subdomain or url_scheme\n+        ), 'Cannot pass \"subdomain\" or \"url_scheme\" with \"base_url\".'\n+\n+        if base_url is None:\n+            http_host = app.config.get(\"SERVER_NAME\") or \"localhost\"\n+            app_root = app.config[\"APPLICATION_ROOT\"]\n+\n+            if subdomain:\n+                http_host = \"{0}.{1}\".format(subdomain, http_host)\n+\n+            if url_scheme is None:\n+                url_scheme = app.config[\"PREFERRED_URL_SCHEME\"]\n+\n+            url = url_parse(path)\n+            base_url = \"{scheme}://{netloc}/{path}\".format(\n+                scheme=url.scheme or url_scheme,\n+                netloc=url.netloc or http_host,\n+                path=app_root.lstrip(\"/\"),\n+            )\n+            path = url.path\n \n-    if base_url is None:\n-        http_host = app.config.get(\"SERVER_NAME\") or \"localhost\"\n-        app_root = app.config[\"APPLICATION_ROOT\"]\n+            if url.query:\n+                sep = b\"?\" if isinstance(url.query, bytes) else \"?\"\n+                path += sep + url.query\n \n-        if subdomain:\n-            http_host = \"{0}.{1}\".format(subdomain, http_host)\n+        if \"json\" in kwargs:",
+    "violations": [
+      {
+        "type": "",
+        "line": 85,
+        "review_comment": "Should be able to remove this part, since the base `EnvironBuilder` handles JSON."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/testing.py",
+    "chunk_id": "PR3232_289470538",
+    "diff": "@@ -45,41 +44,72 @@ def make_test_environ_builder(\n         :class:`~werkzeug.test.EnvironBuilder`.\n     \"\"\"\n \n-    assert not (base_url or subdomain or url_scheme) or (base_url is not None) != bool(\n-        subdomain or url_scheme\n-    ), 'Cannot pass \"subdomain\" or \"url_scheme\" with \"base_url\".'\n-\n-    if base_url is None:\n-        http_host = app.config.get(\"SERVER_NAME\") or \"localhost\"\n-        app_root = app.config[\"APPLICATION_ROOT\"]\n+    def __init__(\n+        self,\n+        app,\n+        path=\"/\",\n+        base_url=None,\n+        subdomain=None,\n+        url_scheme=None,\n+        *args,\n+        **kwargs\n+    ):\n+        assert not (base_url or subdomain or url_scheme) or (\n+            base_url is not None\n+        ) != bool(\n+            subdomain or url_scheme\n+        ), 'Cannot pass \"subdomain\" or \"url_scheme\" with \"base_url\".'\n+\n+        if base_url is None:\n+            http_host = app.config.get(\"SERVER_NAME\") or \"localhost\"\n+            app_root = app.config[\"APPLICATION_ROOT\"]\n+\n+            if subdomain:\n+                http_host = \"{0}.{1}\".format(subdomain, http_host)\n+\n+            if url_scheme is None:\n+                url_scheme = app.config[\"PREFERRED_URL_SCHEME\"]\n+\n+            url = url_parse(path)\n+            base_url = \"{scheme}://{netloc}/{path}\".format(\n+                scheme=url.scheme or url_scheme,\n+                netloc=url.netloc or http_host,\n+                path=app_root.lstrip(\"/\"),\n+            )\n+            path = url.path\n \n-        if subdomain:\n-            http_host = \"{0}.{1}\".format(subdomain, http_host)\n+            if url.query:\n+                sep = b\"?\" if isinstance(url.query, bytes) else \"?\"\n+                path += sep + url.query\n \n-        if url_scheme is None:\n-            url_scheme = app.config[\"PREFERRED_URL_SCHEME\"]\n+        self.app = app\n+        super(EnvironBuilder, self).__init__(path, base_url, *args, **kwargs)\n \n-        url = url_parse(path)\n-        base_url = \"{scheme}://{netloc}/{path}\".format(\n-            scheme=url.scheme or url_scheme,\n-            netloc=url.netloc or http_host,\n-            path=app_root.lstrip(\"/\"),\n-        )\n-        path = url.path\n+    def json_dumps(self, obj, **args):",
+    "violations": [
+      {
+        "type": "",
+        "line": 88,
+        "review_comment": "Use `**kwargs` for keyword args."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/testing.py",
+    "chunk_id": "PR3232_289470702",
+    "diff": "@@ -45,41 +44,72 @@ def make_test_environ_builder(\n         :class:`~werkzeug.test.EnvironBuilder`.\n     \"\"\"\n \n-    assert not (base_url or subdomain or url_scheme) or (base_url is not None) != bool(\n-        subdomain or url_scheme\n-    ), 'Cannot pass \"subdomain\" or \"url_scheme\" with \"base_url\".'\n+    def __init__(\n+        self,\n+        app,\n+        path=\"/\",\n+        base_url=None,\n+        subdomain=None,\n+        url_scheme=None,\n+        *args,\n+        **kwargs\n+    ):\n+        assert not (base_url or subdomain or url_scheme) or (\n+            base_url is not None\n+        ) != bool(\n+            subdomain or url_scheme\n+        ), 'Cannot pass \"subdomain\" or \"url_scheme\" with \"base_url\".'\n+\n+        if base_url is None:\n+            http_host = app.config.get(\"SERVER_NAME\") or \"localhost\"\n+            app_root = app.config[\"APPLICATION_ROOT\"]\n+\n+            if subdomain:\n+                http_host = \"{0}.{1}\".format(subdomain, http_host)\n+\n+            if url_scheme is None:\n+                url_scheme = app.config[\"PREFERRED_URL_SCHEME\"]\n+\n+            url = url_parse(path)\n+            base_url = \"{scheme}://{netloc}/{path}\".format(\n+                scheme=url.scheme or url_scheme,\n+                netloc=url.netloc or http_host,\n+                path=app_root.lstrip(\"/\"),\n+            )\n+            path = url.path\n \n-    if base_url is None:\n-        http_host = app.config.get(\"SERVER_NAME\") or \"localhost\"\n-        app_root = app.config[\"APPLICATION_ROOT\"]\n+            if url.query:\n+                sep = b\"?\" if isinstance(url.query, bytes) else \"?\"\n+                path += sep + url.query\n \n-        if subdomain:\n-            http_host = \"{0}.{1}\".format(subdomain, http_host)\n+        if \"json\" in kwargs:",
+    "violations": [
+      {
+        "type": "",
+        "line": 85,
+        "review_comment": "Yeah, that should work."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/app.py",
+    "chunk_id": "PR3221_289323631",
+    "diff": "@@ -741,13 +741,24 @@ def _get_templates_auto_reload(self):\n         rv = self.config[\"TEMPLATES_AUTO_RELOAD\"]\n         return rv if rv is not None else self.debug\n \n-    def _set_templates_auto_reload(self, value):",
+    "violations": [
+      {
+        "type": "",
+        "line": 744,
+        "review_comment": "You have deleted `_set_templates_auto_reload()` but not `_get_templates_auto_reload()`."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/app.py",
+    "chunk_id": "PR3221_289323771",
+    "diff": "@@ -855,13 +866,6 @@ def make_shell_context(self):\n     #: Default: ``'production'``\n     env = ConfigAttribute(\"ENV\")\n \n-    def _get_debug(self):\n-        return self.config[\"DEBUG\"]\n-\n-    def _set_debug(self, value):\n-        self.config[\"DEBUG\"] = value\n-        self.jinja_env.auto_reload = self.templates_auto_reload\n-\n     #: Whether debug mode is enabled. When using ``flask run`` to start",
+    "violations": [
+      {
+        "type": "",
+        "line": 869,
+        "review_comment": "This comment needs to be moved into a docstring inside the getter."
+      }
+    ]
+  },
+  {
+    "repo": "pallets/flask",
+    "file": "flask/helpers.py",
+    "chunk_id": "PR3221_289327384",
+    "diff": "@@ -951,20 +951,18 @@ def __init__(self, import_name, template_folder=None, root_path=None):\n         #: application has been discovered and blueprints registered.\n         self.cli = AppGroup()\n \n-    def _get_static_folder(self):\n+    @property\n+    def static_folder(self):\n+        \"\"\"\n+        The absolute path to the configured static folder.",
+    "violations": [
+      {
+        "type": "",
+        "line": 957,
+        "review_comment": "I don't know if Flask follows a docstring style guide, but I think pydocstyle would recommend that this docstring goes on one line."
+      }
+    ]
+  }
+]

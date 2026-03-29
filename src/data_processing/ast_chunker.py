@@ -3,6 +3,7 @@ import json
 import requests
 import time
 import re
+import argparse
 import tree_sitter
 import tree_sitter_python
 from dotenv import load_dotenv
@@ -14,35 +15,41 @@ HEADERS = {
     "Accept": "application/vnd.github.v3+json"
 }
 
-INPUT_FILE = "django_prs.json"
-OUTPUT_FILE = "django_ast_chunks.json"
-
 # Initialize Tree-sitter for modern python versions
 LANG = tree_sitter.Language(tree_sitter_python.language())
 parser = tree_sitter.Parser(LANG)
 
 def github_get(url):
     while True:
-        res = requests.get(url, headers=HEADERS)
-        if res.status_code == 200:
-            return res.json()
-        elif res.status_code in [403, 429]:
-            reset_time = int(res.headers.get("X-RateLimit-Reset", time.time() + 60))
-            sleep_time = max(0, reset_time - time.time()) + 1
-            print(f"Rate limited. Sleeping for {sleep_time} seconds...")
-            time.sleep(sleep_time)
-        elif res.status_code == 404:
-            return None
-        else:
-            print(f"Error {res.status_code}: {res.text}")
-            return None
+        try:
+            res = requests.get(url, headers=HEADERS, timeout=10)
+            if res.status_code == 200:
+                return res.json()
+            elif res.status_code in [403, 429]:
+                reset_time = int(res.headers.get("X-RateLimit-Reset", time.time() + 60))
+                sleep_time = max(0, reset_time - time.time()) + 1
+                print(f"Rate limited. Sleeping for {sleep_time} seconds...")
+                time.sleep(sleep_time)
+            elif res.status_code == 404:
+                return None
+            else:
+                print(f"Error {res.status_code}: {res.text}")
+                return None
+        except requests.exceptions.RequestException as e:
+            print(f"Network error: {e}. Retrying in 5 seconds...")
+            time.sleep(5)
 
 def fetch_raw_file(repo, sha, file_path):
     url = f"https://raw.githubusercontent.com/{repo}/{sha}/{file_path}"
-    res = requests.get(url, headers={"Authorization": f"token {GITHUB_TOKEN}"})
-    if res.status_code == 200:
-        return res.text
-    return None
+    while True:
+        try:
+            res = requests.get(url, headers={"Authorization": f"token {GITHUB_TOKEN}"}, timeout=15)
+            if res.status_code == 200:
+                return res.text
+            return None
+        except requests.exceptions.RequestException as e:
+            print(f"Network error: {e}. Retrying in 5 seconds...")
+            time.sleep(5)
 
 def find_target_node(node, target_row):
     """
@@ -62,12 +69,12 @@ def find_target_node(node, target_row):
                 
     return best_match
 
-def process_dataset():
-    if not os.path.exists(INPUT_FILE):
-        print(f"Input file {INPUT_FILE} not found. Ensure extraction has run.")
+def process_dataset(input_file, output_file):
+    if not os.path.exists(input_file):
+        print(f"Input file {input_file} not found. Ensure extraction has run.")
         return
         
-    with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    with open(input_file, "r", encoding="utf-8") as f:
         dataset = json.load(f)
         
     sha_cache = {}
@@ -169,10 +176,18 @@ def process_dataset():
         output_data.append(sample)
         
         # Save incrementally
-        with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=2)
 
-    print(f"\nFinished processing. Saved chunks to {OUTPUT_FILE}")
+    print(f"\nFinished processing. Saved chunks to {output_file}")
 
 if __name__ == "__main__":
-    process_dataset()
+    arg_parser = argparse.ArgumentParser(description="AST Chunking tool for arbitrary repos")
+    arg_parser.add_argument("repo", help="Target repository (e.g. pallets/flask)")
+    args = arg_parser.parse_args()
+    
+    repo_prefix = args.repo.split("/")[-1]
+    input_file = f"{repo_prefix}_prs.json"
+    output_file = f"{repo_prefix}_ast_chunks.json"
+    
+    process_dataset(input_file, output_file)

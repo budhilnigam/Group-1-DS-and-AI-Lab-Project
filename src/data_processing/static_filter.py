@@ -5,6 +5,7 @@ import time
 import re
 import subprocess
 import sys
+import argparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,30 +14,36 @@ HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}",
     "Accept": "application/vnd.github.v3+json"
 }
-
-INPUT_FILE = "django_ast_chunks.json"
-OUTPUT_FILE = "django_labeled_chunks.json"
 TEMP_FILE = ".temp_file.py"
 
 def github_get(url):
     while True:
-        res = requests.get(url, headers=HEADERS)
-        if res.status_code == 200:
-            return res.json()
-        elif res.status_code in [403, 429]:
-            reset = int(res.headers.get("X-RateLimit-Reset", time.time() + 60))
-            time.sleep(max(0, reset - time.time()) + 1)
-        elif res.status_code == 404:
-            return None
-        else:
-            return None
+        try:
+            res = requests.get(url, headers=HEADERS, timeout=10)
+            if res.status_code == 200:
+                return res.json()
+            elif res.status_code in [403, 429]:
+                reset = int(res.headers.get("X-RateLimit-Reset", time.time() + 60))
+                time.sleep(max(0, reset - time.time()) + 1)
+            elif res.status_code == 404:
+                return None
+            else:
+                return None
+        except requests.exceptions.RequestException as e:
+            print(f"Network error: {e}. Retrying in 5 seconds...")
+            time.sleep(5)
 
 def fetch_raw_file(repo, sha, file_path):
     url = f"https://raw.githubusercontent.com/{repo}/{sha}/{file_path}"
-    res = requests.get(url, headers={"Authorization": f"token {GITHUB_TOKEN}"})
-    if res.status_code == 200:
-        return res.text
-    return None
+    while True:
+        try:
+            res = requests.get(url, headers={"Authorization": f"token {GITHUB_TOKEN}"}, timeout=10)
+            if res.status_code == 200:
+                return res.text
+            return None
+        except requests.exceptions.RequestException as e:
+            print(f"Network error: {e}. Retrying in 5 seconds...")
+            time.sleep(5)
 
 def run_linters(target_line):
     # Allow a margin of ±1 lines since exact AST matching can sometimes skew by one line
@@ -95,12 +102,12 @@ def run_linters(target_line):
         
     return violation_matched
 
-def process_dataset():
-    if not os.path.exists(INPUT_FILE):
-        print(f"Input file {INPUT_FILE} not found. Run ast_chunker.py first.")
+def process_dataset(input_file, output_file):
+    if not os.path.exists(input_file):
+        print(f"Input file {input_file} not found. Run ast_chunker.py first.")
         return
         
-    with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    with open(input_file, "r", encoding="utf-8") as f:
         dataset = json.load(f)
         
     sha_cache = {}
@@ -157,13 +164,21 @@ def process_dataset():
             violations[0]["type"] = ""
             print(f"  -> No linter match on line {target_line}. Set to empty string.")
             
-        with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(dataset, f, indent=2)
 
     if os.path.exists(TEMP_FILE):
         os.remove(TEMP_FILE)
         
-    print(f"\nFinished static filtering. Saved dataset labels to {OUTPUT_FILE}")
+    print(f"\nFinished static filtering. Saved dataset labels to {output_file}")
 
 if __name__ == "__main__":
-    process_dataset()
+    parser = argparse.ArgumentParser(description="Static Filter tool for arbitrary repos")
+    parser.add_argument("repo", help="Target repository (e.g. pallets/flask)")
+    args = parser.parse_args()
+    
+    repo_prefix = args.repo.split("/")[-1]
+    input_file = f"{repo_prefix}_ast_chunks.json"
+    output_file = f"{repo_prefix}_labeled_chunks.json"
+    
+    process_dataset(input_file, output_file)
