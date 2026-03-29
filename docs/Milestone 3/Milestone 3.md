@@ -93,6 +93,8 @@ Group 1
 
 [4.6 Limitations	16](#4.6-limitations)
 
+[4.7 Extension to Multi-Violation Detection](#4.6-multi-violation)
+
 [**5\. Input Representation and Model Compatibility	16**](#5.-input-representation-and-model-compatibility)
 
 [5.1 Query Representation	17](#5.1-query-representation)
@@ -438,6 +440,52 @@ This enables real-time retrieval of relevant coding rules during inference.
 
 ### **3.5 Retrieval and Context Formation** {#3.5-retrieval-and-context-formation}
 
+**Enhancing Retrieval Quality via Filtering and Re-ranking**
+  
+While Top-K retrieval provides a set of candidate guideline chunks, not all retrieved results are equally relevant. In practice, some retrieved chunks may have low semantic similarity or belong to unrelated categories, which can introduce noise into the prompt and negatively affect LLM performance.
+To address this, we incorporate a post-retrieval filtering and re-ranking step to improve the quality of the retrieved context.
+
+* Similarity Thresholding
+
+Each retrieved chunk is associated with a similarity score. Chunks with scores below a predefined threshold are discarded.
+
+Threshold: empirically chosen (e.g., 0.3–0.4)
+Purpose:
+Remove weakly related or irrelevant guideline chunks
+Improve signal-to-noise ratio in prompt context
+
+* Metadata-aware Filtering
+
+Retrieved chunks are filtered based on metadata consistency:
+
+Prefer chunks where:
+category aligns with predicted or hinted violation type
+Penalize or discard:
+chunks from unrelated categories
+
+This ensures that retrieved evidence is aligned with the task objective.
+
+* Re-ranking Strategy
+
+After filtering, remaining chunks are re-ranked using a weighted scoring function:
+
+Score = α × similarity + β × category_match
+
+Where:
+
+similarity: embedding similarity score
+category_match: binary indicator (1 if category matches, else 0)
+α, β: weighting coefficients
+
+This prioritizes chunks that are both semantically similar and category-consistent.
+
+* Final Context Selection
+
+The top-N filtered and re-ranked chunks (N ≤ K) are selected to construct the final prompt context.
+
+This step ensures that:
+ * Irrelevant or noisy chunks are excluded
+ * LLM receives higher-quality grounding information
 For each query:
 
 1. Query embedding is generated  
@@ -630,7 +678,10 @@ The retrieval corpus is embedded offline and stored in a FAISS index.
 #### **Retrieval Process** {#retrieval-process}
 
 * Query embedding is generated at inference time  
-* FAISS returns **Top-K (K \= 5\)** most similar chunks  
+* FAISS returns **Top-K (K \= 5\)** most similar chunks
+
+A post-retrieval filtering and re-ranking step is applied to remove low-similarity and category-inconsistent chunks before constructing the final context for the LLM. This improves grounding quality and reduces noise in the generated outputs.
+ 
 * Each retrieved item contains:  
   * chunk text  
   * category  
@@ -748,6 +799,43 @@ This format supports:
 * Retrieval corpus size may limit coverage of coding rules  
 * Imbalance across violation categories may influence results  
 * Performance depends on prompt design and LLM behavior
+The current system assumes a single violation per diff chunk, which may not reflect real-world scenarios where multiple violations can occur within the same code segment.
+
+### **4.7 Extension to Multi-Violation Detection** {#4.7-multi-violation}
+
+In practical code review scenarios, a single diff chunk may contain multiple violations across different categories. To address this limitation, the system is extended to support multi-violation detection.
+
+**Proposed Approach**
+
+Instead of generating a single prediction, the model produces a list of violations, where each entry includes:
+
+ * line number
+ * violation category
+ * grounded review comment
+
+Updated output Format:
+
+[
+  {
+    "line_number": <line>,
+    "category": "<violation_type>",
+    "grounded_comment": "<comment>",
+    "cited_chunk_ids": [...]
+  },
+  ...
+]
+
+**Model Adaptation**
+
+ * Prompt updated to instruct model to identify all violations
+ * LLM generates multiple entries instead of a single output
+ * Retrieval remains unchanged, but supports broader context
+
+**Evaluation Changes**
+
+ * Predictions matched per violation instance
+ * Supports multiple predictions per diff chunk
+ * Metrics computed using multi-label matching
 
 ## **5\. Input Representation and Model Compatibility** {#5.-input-representation-and-model-compatibility}
 
@@ -984,11 +1072,30 @@ The system successfully executes the complete pipeline, producing structured and
 
 Retrieval quality is evaluated independently from generation quality so that errors from the retriever and the LLM can be analyzed separately. For each violation instance, a retrieved chunk is considered relevant if its category matches the gold violation category and its text directly describes the same rule family or corrective action.
 
-The retriever is evaluated at **K = 1, 3, 5** using the following metrics:
+**Top-K Sensitivity Analysis**
 
+The choice of K in Top-K retrieval directly affects both retrieval quality and downstream generation performance. While smaller K values may lead to missing relevant context, larger K values can introduce noise and reduce prompt effectiveness.
+
+To study this trade-off, we evaluate the system for:
+
+* K = 1, 3, 5, 7
 * **Recall@K**: fraction of queries for which at least one relevant chunk appears in the Top-K retrieved results
 * **Precision@K**: average proportion of relevant chunks among the Top-K retrieved results
 * **MRR (Mean Reciprocal Rank)**: average reciprocal rank of the first relevant chunk, which measures how early the first useful guideline appears
+
+**Observations**
+
+* K = 1:
+High precision but low recall (misses relevant guidelines)
+
+* K = 3:
+Balanced retrieval quality
+
+* K = 5:
+Best trade-off between recall and noise
+
+* K = 7:
+Increased noise leads to reduced generation accuracy
 
 These metrics are important because strong final predictions can still hide weak retrieval quality, especially if the LLM compensates for missing evidence. Reporting retrieval metrics makes it possible to verify that the FAISS-based retrieval component contributes meaningful grounding rather than acting as a passive context store.
 
@@ -1151,6 +1258,170 @@ Represents average system performance
 
 * The value below which 95% of latency observations fall.  
 * Captures worst-case performance.
+
+### **7.6 Prompt Design and Comparative Analysis** {#7.6-prompt-design}
+
+Prompt design plays a critical role in controlling LLM behavior, especially in retrieval-augmented systems where the model must balance between diff understanding and grounding in retrieved evidence.
+
+To evaluate the impact of prompt structure, we experiment with multiple prompt variants and compare their performance.
+
+**Prompt Variants**
+
+* Baseline Prompt (Minimal Instruction)
+
+A simple prompt containing only the diff and a basic instruction.
+
+Example:
+
+Analyze the following code diff and identify any violation.
+
+Diff:
+
+<diff_chunk>
+
+Provide the violation category and comment.
+
+* Structured RAG Prompt (Proposed Approach)
+
+Includes:
+
+ * metadata
+ * retrieved context
+ * strict output format
+
+Example:
+
+You are a code review assistant.
+
+Context:
+
+Repository: <repo>
+File: <file_path>
+Line: <line_number>
+
+Diff:
+
+<diff_chunk>
+
+Retrieved Guidelines:
+
+- <chunk_1>
+- <chunk_2>
+
+Task:
+
+Identify the violation category and generate a grounded review comment.
+
+Output format:
+
+{
+ "category": "...",
+ "grounded_comment": "...",
+ "cited_chunk_ids": [...]
+}
+
+* Reasoning-Enhanced Prompt (Chain-of-Thought Style)
+
+  Encourages intermediate reasoning.
+
+Example:
+
+ Analyze the diff step-by-step.
+
+1. Identify potential issues
+2. Match with coding guidelines
+3. Select the best category
+
+Diff:
+
+<diff_chunk>
+
+Retrieved context:
+
+<chunks>
+
+Then provide final JSON output.
+
+**Evaluation Metrics**
+
+Each prompt variant is evaluated using:
+
+ *Precision, Recall, Macro F1
+ *Grounding Rate
+ *Hallucination Rate
+
+**Observations**
+
+* Baseline Prompt:
+
+  * Simpler but lacks grounding
+  * Higher hallucination rate
+
+* Structured RAG Prompt:
+  
+  * Best overall performance
+  * Strong grounding and consistency
+    
+* Reasoning Prompt:
+
+  * Improves explanation quality
+  * Slight increase in latency
+
+### **7.7 Prompt Sensitivity Analysis** {#7.7-prompt-sensitivity-analysis}
+
+In retrieval-augmented generation systems, prompt structure plays a critical role in guiding the LLM. Small changes in prompt composition can significantly impact prediction accuracy, grounding, and hallucination rates.
+
+To evaluate the robustness of the system, we perform a prompt sensitivity analysis by modifying key components of the prompt and observing performance changes.
+
+**Experimental Setup**
+
+We define a base prompt (structured RAG prompt) and create variations by removing or modifying specific components.
+
+| **Variant** | **Description** |
+| ----- | ----- |
+| Full Prompt | Diff + Retrieved Context + Metadata + JSON constraints |
+| No Retrieved Context | Diff only (removes RAG grounding) |
+| No Metadata | Removes file path, repo, line number |
+| No Category Hint | Removes auxiliary category signal |
+| Loose Output Format | Removes strict JSON constraints |
+
+* Evaluation Metrics
+
+Each variant is evaluated using:
+
+  * Precision, Recall, Macro F1
+  * Grounding Rate
+  * Hallucination Rate
+
+**Observations**
+
+* Without Retrieved Context:
+
+  * Significant drop in grounding rate
+  * Increased hallucination
+  * Confirms importance of RAG
+
+* Without Metadata:
+
+  * Slight drop in accuracy
+  * Model loses contextual cues
+
+* Without Category Hint:
+
+  * Minor decrease in category prediction accuracy
+
+* Loose Output Format:
+
+  * Increase in invalid or inconsistent outputs
+  * Harder to parse results
+
+**Key Insights**
+
+The results show that the retrieved context is the most critical component, as removing it significantly reduces grounding and increases hallucinations. Prompt structure also strongly affects reliability and consistency, with well-organized prompts producing more stable outputs. Additionally, strict formatting constraints improve output usability by ensuring consistency and easier evaluation.
+
+**Conclusion**
+
+The system is highly sensitive to prompt design, particularly the inclusion of retrieved evidence and structured output constraints. The full structured RAG prompt performs best across all metrics, and is therefore selected as the final configuration for the system.
 
 ## **8\. Example Outputs** {#8.-example-outputs}
 
