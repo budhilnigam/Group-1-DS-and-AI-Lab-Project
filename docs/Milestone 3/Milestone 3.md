@@ -161,6 +161,14 @@ Group 1
 
 [7.4 Summary	23](#7.4-summary)
 
+[7.5 Latency Analysis](#7.5-latency-analysis)
+
+[7.6 Prompt Design and Comparative Analysis](#7.6-prompt-design)
+
+[7.7 Prompt Sensitivity Analysis](#7.7-prompt-sensitivity-analysis)
+
+[7.8 Chunking Strategy Evaluation](#7.8-chunking-strategy)
+
 [**8\. Example Outputs	23**](#8.-example-outputs)
 
 [8.1 Sample Output from RAG Pipeline	23](#8.1-sample-output-from-rag-pipeline)
@@ -1423,6 +1431,50 @@ The results show that the retrieved context is the most critical component, as r
 
 The system is highly sensitive to prompt design, particularly the inclusion of retrieved evidence and structured output constraints. The full structured RAG prompt performs best across all metrics, and is therefore selected as the final configuration for the system.
 
+### **7.8 Chunking Strategy Evaluation** {#7.8-chunking-strategy}
+
+Chunking plays a critical role in retrieval performance, as it determines how well guideline information is represented and retrieved. Poor chunking can either fragment useful information or introduce excessive noise.
+
+To validate the chosen chunking strategy, we experiment with different chunk sizes and overlap configurations.
+
+**Experimental Setup**
+
+We evaluate the following configurations:
+
+* Chunk Sizes
+  * Small: 100–200 tokens
+  * Medium (default): 200–400 tokens
+  * Large: 400–600 tokens
+* Overlap Strategies
+  * No overlap
+  * 20% overlap between adjacent chunks
+ 
+**Evaluation Metrics**
+
+Each configuration is evaluated using:
+
+* Retrieval metrics:
+  * Recall@K
+  * Precision@K
+* End-to-end performance:
+  * Precision, Recall, Macro F1
+ 
+**Observations**
+* Small chunks (100–200 tokens):
+  * High precision but lower recall
+  * Information fragmentation observed
+* Medium chunks (200–400 tokens):
+  * Best balance between recall and precision
+  * Most stable downstream performance
+* Large chunks (400–600 tokens):
+  * Higher recall but introduces noise
+  * Slight drop in generation accuracy
+* Overlap (20%):
+  * Improves recall slightly
+  * Increases redundancy and prompt size
+
+The 200–400 token chunk size without overlap provides the best trade-off between retrieval quality and downstream performance. This configuration is therefore retained in the final system.
+
 ## **8\. Example Outputs** {#8.-example-outputs}
 
 ### **8.1 Sample Output from RAG Pipeline** {#8.1-sample-output-from-rag-pipeline}
@@ -1437,6 +1489,7 @@ The system is highly sensitive to prompt design, particularly the inclusion of r
  "groq\_grounded\_comment": "Remove the unused imports of \`functools.partial\` and \`werkzeug.local.LocalStack\` to keep the module clean.",  
  "groq\_cited\_chunks": \["chunk\_0600", "chunk\_0571"\]  
 }
+
 
 ### **8.2 Interpretation** {#8.2-interpretation}
 
