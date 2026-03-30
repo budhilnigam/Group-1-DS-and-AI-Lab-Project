@@ -1,8 +1,8 @@
-## **Contribution - Milestone 2**
+## **Contribution - Milestone 4**
 
 ## **Overview**
 
-This document outlines the contributions made by each group member of Group 1 towards completing Milestone 2 of the DSAI Lab Project.
+This document outlines the contributions made by each group member of Group 1 towards completing Milestone 4 of the DSAI Lab Project.
 
 | Name | Email | Contribution | Review signature |
 | :---- | :---- | :---- | :---- |
