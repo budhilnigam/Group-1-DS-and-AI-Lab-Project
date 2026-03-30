@@ -53,7 +53,6 @@ This was the most critical evolution *after* basic extraction. We needed to map 
     *   **Alternative**: We considered using an LLM to label the comments.
     *   **Why Discarded**: Too expensive and prone to hallucination at the data preparation scale. Static analysis provides the "ground truth" we need for a scientific evaluation.
 
----
 
 ## 2. Chunking Strategies
 
@@ -90,11 +89,23 @@ For the static guideline documents (PEP8, repository-specific `.md` guides):
 *   **Constraint**: Chunks are limited to **200–400 tokens**.
 *   **Reasoning**: Each chunk should ideally represent exactly one style rule. If a chunk is too large, the retriever might bring in irrelevant rules that consume the LLM's prompt space.
 *   **Metadata Integration**: Each chunk is indexed with its source filename and a unique "rule ID" to allow the LLM to cite its sources during the review process (e.g., "According to PEP8, variable names should be snake_case...").
----
 
 ## 3. RAG Model Inference & Hyperparameter Experimentation
 
 ### 3.1 Overview
+
+FAISS vs Qdrant (Planned Transition)
+| Feature | FAISS (Current) | Qdrant (Planned) |
+|--|-||
+| Type | Library | Vector Database |
+| Metadata Filtering | Not supported | Native support |
+| Storage | External metadata mapping | Integrated payload storage |
+| Updates | Limited (append-only, complex delete) | Native upsert & delete |
+| Retrieval | Dense only | Dense + Hybrid (sparse + dense) |
+| Indexing | Manual ANN setup | Built-in HNSW |
+| Scalability | Experimental | Production-ready |
+
+**Rationale:** While FAISS enables fast similarity search, it lacks metadata-aware retrieval and flexible updates. This motivates our planned migration to Qdrant for improved retrieval quality and system scalability.
 
 Rather than training a model from scratch, we developed a **Retrieval-Augmented Generation (RAG)** system that combines:
 
@@ -106,7 +117,7 @@ The "training" phase in this context consists of **inference-time experimentatio
 ### 3.2 Dataset for Inference
 
 | Component | Description | Source |
-|:----------|:------------|:-------|
+|-||-|
 | **Evaluation Codeset** | 12–35 code samples with known violations and ground-truth PR review comments | PR extraction pipeline |
 | **Knowledge Base** | 1000+ PEP8 and project-specific guidelines | Chunked guideline documents |
 | **Embeddings Index** | FAISS index built from knowledge base chunks | FAISS dense embedding pipeline |
@@ -142,7 +153,7 @@ The "training" phase in this context consists of **inference-time experimentatio
 ### 3.4 Inference Configuration
 
 | Parameter | Value | Purpose |
-|:----------|:------|:--------|
+|-||--|
 | **Model** | `openai/gpt-oss-20b` | Open-source LLM via Groq API (20B parameters) |
 | **Retrieval Backend** | FAISS Dense | Efficient semantic search in high-dimensional space |
 | **Generation Backend** | Groq LLM | Real-time inference with rate limiting |
@@ -163,7 +174,7 @@ We systematically explored the impact of **temperature** (generation randomness)
 **Objective**: Rapid exploration of hyperparameter sensitivity on a small, curated dataset.
 
 | Temperature | K=1 | K=3 | K=5 | K=7 |
-|:------------|-----|-----|-----|-----|
+|--------|
 | **0.1** | Acc: 0.25 VR: 0.58 Valid: 7 | Acc: 0.33 VR: 1.00 Valid: 12 | Acc: 0.33 VR: 0.42 Valid: 5 | Acc: 0.42 VR: 0.92 Valid: 11 |
 | **0.3** | Acc: 0.25 VR: 1.00 Valid: 12 | Acc: 0.33 VR: 0.92 Valid: 11 | Acc: 0.33 VR: 0.92 Valid: 11 | — |
 
@@ -176,7 +187,7 @@ We systematically explored the impact of **temperature** (generation randomness)
 **Objective**: Validate hyperparameter findings on a larger, more representative dataset.
 
 | Temperature | K=1 | K=3 | K=5 | K=7 |
-|:------------|-----|-----|-----|-----|
+|--------|
 | **0.1** | Acc: 0.31 VR: 0.94 Valid: 33 | Acc: 0.34 VR: 0.94 Valid: 33 | Acc: 0.29 VR: 0.94 Valid: 33 | Acc: 0.26 VR: 0.83 Valid: 29 |
 | **0.3** | Acc: 0.37 VR: 0.94 Valid: 33 | — | — | — |
 
@@ -189,7 +200,7 @@ We systematically explored the impact of **temperature** (generation randomness)
 #### 3.5.3 Per-Class Performance Analysis (V2, Temp=0.1, K=1)
 
 | Violation Class | Precision | Recall | F1-Score | Support |
-|:----------------|-----------|--------|----------|---------|
+|------|
 | unused_import | 0.27 | 0.57 | 0.36 | 7 |
 | naming_convention | 0.50 | 0.29 | 0.36 | 7 |
 | mutable_default | 0.50 | 0.14 | 0.22 | 7 |
@@ -206,7 +217,7 @@ We systematically explored the impact of **temperature** (generation randomness)
 A critical metric is **valid JSON parse rate**, reflecting the model's ability to structure its response correctly.
 
 | Configuration | V1 Valid Rate | V2 Valid Rate |
-|:--------------|:-------------:|:-------------:|
+|--|-:|-:|
 | Temp=0.1, K=1 | 0.58 | 0.94 |
 | Temp=0.1, K=3 | 1.00 | 0.94 |
 | Temp=0.1, K=5 | 0.42 | 0.94 |
@@ -224,14 +235,13 @@ A critical metric is **valid JSON parse rate**, reflecting the model's ability t
 To improve stability and accuracy, we employed:
 
 | Technique | Implementation | Effect |
-|:----------|:---------------|:-------|
+|-||-|
 | Rate Limiting | Groq API configured with 30 RPM limit | Prevented quota exhaustion; ensured consistent model behavior |
 | Retry Logic | Up to 3 retries with exponential backoff | Improved reliability under transient API failures |
 | Prompt Engineering | Clear JSON schema + role definition | Increased valid parse rates from 0.58 to 1.0 |
 | Retrieval Diversification | Varied K values (1–7) | Balanced precision vs. recall based on dataset size |
 | Temperature Calibration | Tested 0.1 and 0.3 | Tuned randomness to dataset characteristics |
 
----
 
 ## 4. Results & Observations
 
@@ -305,12 +315,11 @@ To improve stability and accuracy, we employed:
 4. **Prompting Refinement**: Introduce few-shot examples in-context to guide the model toward systematic reasoning.
 5. **Multi-Stage Classification**: Cascade classifiers—first predict broad category, then refine via sub-classifiers specific to each violation type.
 
----
 
 ## 5. Model Artifacts
 
 | Artifact | Description | Location |
-|:---------|:------------|:---------|
+||||
 | **FAISS Index** | Pre-built dense embedding index of knowledge base | data/processed/faiss_db/ |
 | **Groq API Config** | Serialized API credentials & rate-limit settings | config/groq_config.json |
 | **Evaluation Results** | Raw predictions, parse quality, per-class metrics for all experiments | results/experiment_results_v{1,2}/ |
@@ -320,7 +329,6 @@ To improve stability and accuracy, we employed:
 
 All results are reproducible; random seeds and API configurations are fixed for deterministic outputs across runs.
 
----
 
 ## 6. Conclusion
 
@@ -328,3 +336,162 @@ Milestone 4 established a **RAG-based code review system** with systematic hyper
 
 > _Essence_:  
 > We transitioned from data extraction to inference-time model optimization, validating that a well-designed RAG pipeline can learn from structured knowledge—the foundation for building autonomous code review agents.
+
+Got it — here is **Section 7 in clean, fully copy-pasteable Markdown**, with proper headings, bold text, lists, and tables.
+
+
+## 7. Future Work: Migration from FAISS to Qdrant (Vector Database Optimization)
+
+While FAISS provided a fast and effective baseline for dense retrieval during experimentation, it exhibits several structural limitations when applied to a metadata-rich, evolving RAG pipeline such as ours. To address these constraints and improve retrieval quality, scalability, and maintainability, we plan to migrate our vector storage and retrieval layer to Qdrant in future iterations.
+
+
+### 7.1 Limitations of Current FAISS-Based Approach
+
+* **No Native Metadata Filtering**
+
+  * Retrieval is purely based on vector similarity
+  * Cannot restrict search space by repository, file path, PR ID, or violation category
+  * Leads to contextually irrelevant chunk retrieval
+
+* **External Metadata Management**
+
+  * Metadata is stored separately from the index
+  * Requires manual synchronization between vector indices and metadata mappings
+  * Increases risk of index–metadata inconsistency
+
+* **Limited Update & Deletion Support**
+
+  * Incremental updates are non-trivial
+  * Deletion or modification of vectors requires rebuilding or complex bookkeeping
+  * Not suitable for continuously growing PR datasets
+
+* **Lack of Hybrid Retrieval**
+
+  * Only supports dense vector similarity
+  * Cannot combine semantic similarity with keyword-based signals (e.g., variable names, function signatures)
+
+* **Scalability Constraints**
+
+  * Requires manual configuration for approximate nearest neighbor (ANN) indexing
+  * Does not provide built-in persistence, distributed querying, or production-grade APIs
+
+
+### 7.2 Motivation for Qdrant Migration
+
+Qdrant addresses the above limitations through:
+
+* **Integrated Vector + Metadata Storage**
+
+  * Each vector is stored alongside structured payload (metadata)
+  * Enables atomic consistency between embeddings and context
+
+* **Advanced Filtering Capabilities**
+
+  * Supports query-time filtering on metadata fields
+  * Example constraints:
+
+    * Same repository (e.g., flask, django)
+    * Same file path
+    * Same violation category
+  * Enables context-aware retrieval, improving relevance
+
+* **Efficient Incremental Updates**
+
+  * Supports upsert operations for adding/updating vectors
+  * Native deletion support
+  * Suitable for streaming PR ingestion pipelines
+
+* **Hybrid Retrieval (Dense + Sparse)**
+
+  * Combines semantic embeddings with lexical signals (BM25-like scoring)
+  * Particularly beneficial for:
+
+    * Code tokens
+    * Identifiers
+    * Naming conventions
+  * Expected to significantly improve recall on keyword-sensitive violations
+
+* **Optimized ANN Search (HNSW)**
+
+  * Built-in Hierarchical Navigable Small World (HNSW) indexing
+  * Tunable trade-off between speed and accuracy
+
+* **Production-Ready Infrastructure**
+
+  * REST/gRPC APIs
+  * Persistence and scalability
+  * Distributed deployment support
+
+
+### 7.3 Expected Improvements
+
+| Component           | Current (FAISS)  | With Qdrant             | Expected Impact                 |
+| :------------------ | :--------------- | :---------------------- | :------------------------------ |
+| Retrieval Relevance | Pure similarity  | Context-aware filtering | Reduced noise, higher precision |
+| Dataset Updates     | Manual / costly  | Native upsert/delete    | Real-time scalability           |
+| Metadata Handling   | External mapping | Integrated payload      | Simplified pipeline             |
+| Retrieval Strategy  | Dense only       | Hybrid (dense + sparse) | Improved recall                 |
+| Query Flexibility   | Limited          | Structured queries      | Better grounding                |
+| Scalability         | Experimental     | Production-ready        | Future-proof system             |
+
+
+
+### 7.4 Planned Architectural Changes
+
+**Current Pipeline:**
+
+```
+Query → Embedding → FAISS → Top-K → LLM
+```
+
+**Future Pipeline:**
+
+```
+Query → Embedding → Qdrant (Dense + Filter + Hybrid)
+      → Top-K (Filtered + Ranked)
+      → (Optional Re-ranking Stage)
+      → LLM
+```
+
+Key additions:
+
+* Metadata-aware retrieval layer
+* Hybrid scoring mechanism
+* Optional cross-encoder re-ranking (future extension)
+
+
+### 7.5 Integration Roadmap
+
+1. **Phase 1: Index Migration**
+
+   * Convert FAISS index to Qdrant collection
+   * Attach metadata payloads to each vector
+
+2. **Phase 2: Retrieval Refactor**
+
+   * Replace FAISS search calls with Qdrant query API
+   * Introduce metadata filtering (repo, file, violation)
+
+3. **Phase 3: Hybrid Retrieval**
+
+   * Integrate sparse vectors for keyword-aware search
+   * Tune weighting between dense and lexical signals
+
+4. **Phase 4: Evaluation & Benchmarking**
+
+   * Compare FAISS vs Qdrant on:
+
+     * Retrieval precision
+     * Downstream classification accuracy
+     * Latency
+
+
+### 7.6 Summary
+
+The migration from FAISS to Qdrant represents a transition from an experimental retrieval setup to a production-grade, context-aware vector database system.
+
+This change is expected to directly address current bottlenecks in retrieval precision and scalability, forming a critical foundation for improving overall RAG performance in subsequent milestones.
+
+
+If you want one last improvement (worth it for viva):
+I can compress this into a **5–6 line “elevator summary”** that you can directly say when asked *“why Qdrant?”*.
