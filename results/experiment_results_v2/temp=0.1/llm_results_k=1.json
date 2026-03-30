@@ -1,0 +1,1070 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "num_samples": 35,
+  "run_config": {
+    "retrieval_backend": "faiss_dense",
+    "generation_backend": "groq_llm",
+    "groq_rpm_limit": 30,
+    "groq_min_interval_seconds": 2.0,
+    "groq_max_retries": 3
+  },
+  "parse_quality": {
+    "total": 35,
+    "valid_count": 33,
+    "invalid_count": 2,
+    "valid_rate": 0.9429,
+    "status_counts": {
+      "json_ok": 33,
+      "json_parse_failed_and_line_parse_failed": 1,
+      "empty_response": 1
+    }
+  },
+  "metrics_raw": {
+    "accuracy": 0.3143,
+    "per_class": {
+      "indentation": {
+        "precision": 0.25,
+        "recall": 0.1429,
+        "f1": 0.1818,
+        "support": 7
+      },
+      "naming_convention": {
+        "precision": 0.5,
+        "recall": 0.2857,
+        "f1": 0.3636,
+        "support": 7
+      },
+      "unused_import": {
+        "precision": 0.2667,
+        "recall": 0.5714,
+        "f1": 0.3636,
+        "support": 7
+      },
+      "mutable_default": {
+        "precision": 0.5,
+        "recall": 0.1429,
+        "f1": 0.2222,
+        "support": 7
+      },
+      "documentation_formatting": {
+        "precision": 0.3,
+        "recall": 0.4286,
+        "f1": 0.3529,
+        "support": 7
+      }
+    }
+  },
+  "metrics_valid_only": {
+    "accuracy": 0.303,
+    "per_class": {
+      "indentation": {
+        "precision": 0.25,
+        "recall": 0.1429,
+        "f1": 0.1818,
+        "support": 7
+      },
+      "naming_convention": {
+        "precision": 0.5,
+        "recall": 0.2857,
+        "f1": 0.3636,
+        "support": 7
+      },
+      "unused_import": {
+        "precision": 0.2667,
+        "recall": 0.5714,
+        "f1": 0.3636,
+        "support": 7
+      },
+      "mutable_default": {
+        "precision": 0.5,
+        "recall": 0.1667,
+        "f1": 0.25,
+        "support": 6
+      },
+      "documentation_formatting": {
+        "precision": 0.25,
+        "recall": 0.3333,
+        "f1": 0.2857,
+        "support": 6
+      }
+    },
+    "num_valid_samples": 33
+  },
+  "results": [
+    {
+      "pr_id": "PR_9630",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 131,
+      "gold_category": "naming_convention",
+      "gold_comment": "The _yielded_ value is actually called `maybe_state` on Starlette's code. For consistency, let's keep the same name. async with original_context(app) as maybe_original_state: async with nested_context(app) as maybe_nested_state: yield {(maybe_original_state or {}), (maybe_nested_state or {})}",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Uncertain if there is an unused import; no imports are visible in the diff context.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Uncertain if there is an unused import; no imports are visible in the diff context.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7155,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4657",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/openapi/utils.py",
+      "line_number": 396,
+      "gold_category": "mutable_default",
+      "gold_comment": "No nees optional. Just do this. prefix: str=''",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "mutable_default",
+      "groq_predicted_category_valid_only": "mutable_default",
+      "groq_grounded_comment": "The evidence refers to a different function's mutable default argument; no mutable default is present in this diff, so uncertainty remains.",
+      "groq_cited_chunks": [
+        "chunk_0737"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"mutable_default\",\"grounded_comment\":\"The evidence refers to a different function's mutable default argument; no mutable default is present in this diff, so uncertainty remains.\",\"cited_chunk_ids\":[\"chunk_0737\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6924,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2028",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/openapi/utils.py",
+      "line_number": 327,
+      "gold_category": "mutable_default",
+      "gold_comment": "maybe terms_of_service: Optional[str] = None,",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "Uncertain if the function signature should be keyword-only; evidence is weak.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"Uncertain if the function signature should be keyword-only; evidence is weak.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0633",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.668,
+          "text": "Could we make keyword only since we start to have several parameters: self, *, params=None, non_default=tuple(), estimator_class=None, doc_link=\"\""
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_627",
+      "repo": "encode/httpx",
+      "file_path": "httpx/dispatch/connection_pool.py",
+      "line_number": 73,
+      "gold_category": "naming_convention",
+      "gold_comment": "We might want to name it \"expiry\" rather than \"timeout\". Yes ideally configurable, perhaps on the `PoolLimits`, but we could probably treat that as a second pass.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "No clear evidence of a naming convention violation; the comment refers to updating `self._pool_options` but does not indicate a naming issue.",
+      "groq_cited_chunks": [
+        "chunk_0250"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"No clear evidence of a naming convention violation; the comment refers to updating `self._pool_options` but does not indicate a naming issue.\",\"cited_chunk_ids\":[\"chunk_0250\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.7675,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_241",
+      "repo": "encode/httpx",
+      "file_path": "httpx/client.py",
+      "line_number": 61,
+      "gold_category": "mutable_default",
+      "gold_comment": "Should we have an explicit DEFAULT_... here instead of None?",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "I couldn't find evidence of a naming convention issue in the provided diff.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"I couldn't find evidence of a naming convention issue in the provided diff.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6802,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_1507",
+      "repo": "psf/requests",
+      "file_path": "requests/sessions.py",
+      "line_number": 445,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Why would we contradict ourselves in the documentation then? We documented the API before we made this change. This was to ensure the API (and its documentation) was correct.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The second `if` statement is not indented under the first, causing a syntax error or unintended logic.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The second `if` statement is not indented under the first, causing a syntax error or unintended logic.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6843,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_6036",
+      "repo": "psf/requests",
+      "file_path": "requests/exceptions.py",
+      "line_number": 37,
+      "gold_category": "indentation",
+      "gold_comment": "Can we add an empty line prior to the `__init__` here? That's already the style of this sub-module if not the entirety of `requests`",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The docstring for JSONDecodeError incorrectly uses \"it's\" instead of \"its\" and the sentence is missing a period.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The docstring for JSONDecodeError incorrectly uses \\\"it's\\\" instead of \\\"its\\\" and the sentence is missing a period.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.7016,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_1113",
+      "repo": "encode/httpx",
+      "file_path": "httpx/_client.py",
+      "line_number": 426,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Let's pull this in for now as it is. Welcome to follow up with docstring improvements later.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The last bullet point for base_url is incomplete, missing the rest of the sentence.",
+      "groq_cited_chunks": [
+        "chunk_0250"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The last bullet point for base_url is incomplete, missing the rest of the sentence.\",\"cited_chunk_ids\":[\"chunk_0250\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6815,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_804",
+      "repo": "encode/httpx",
+      "file_path": "httpx/_dispatch/asgi.py",
+      "line_number": 1,
+      "gold_category": "indentation",
+      "gold_comment": "Happy enough either way, but yeah it works nicer in more verbose cases like the httpcore API. Ie I'd rater we've got this kind of thing... async def request( self, method: bytes, url: Tuple[bytes, bytes, int, bytes], headers: List[Tuple[bytes, bytes]] = None, stream: ContentStream = None, timeout: Dict[Optional[float]] = None, ) -> Tuple[bytes, int, bytes, List[Tuple[bytes, bytes]], ContentStream]: Than this: async def request( self, method: bytes, url: typing.Tuple[bytes, bytes, int, bytes], headers: typing.List[typing.Tuple[bytes, bytes]] = None, stream: ContentStream = None, timeout: typing.Dict[typing.Optional[float]] = None, ) -> Tuple[bytes, int, bytes, typing.List[typing.Tuple[bytes, bytes]], ContentStream]:",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The file imports several modules (e.g., typing, Callable, Dict, List, Optional, Tuple) that are not referenced in the provided code, suggesting they may be unused imports, though the evidence is not definitive.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The file imports several modules (e.g., typing, Callable, Dict, List, Optional, Tuple) that are not referenced in the provided code, suggesting they may be unused imports, though the evidence is not definitive.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7056,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_9704",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/test_response_model_default_factory.py",
+      "line_number": 15,
+      "gold_category": "mutable_default",
+      "gold_comment": "message: str = Field(default_factory=lambda: \"Successful operation.\")",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "Add docstrings to the ResponseModel class and route handler functions to improve documentation.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"Add docstrings to the ResponseModel class and route handler functions to improve documentation.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6712,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4416",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 119,
+      "gold_category": "indentation",
+      "gold_comment": "if not field: return jsonable_encoder(response_content) To decrease the indentation level. The pattern is called early return.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Uncertain whether there is an unused import; evidence does not directly show it.",
+      "groq_cited_chunks": [
+        "chunk_0549"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Uncertain whether there is an unused import; evidence does not directly show it.\",\"cited_chunk_ids\":[\"chunk_0549\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6727,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4332",
+      "repo": "psf/requests",
+      "file_path": "requests/__init__.py",
+      "line_number": 75,
+      "gold_category": "naming_convention",
+      "gold_comment": "This should really be _check_cryptography because that's what we're concerned about.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Uncertain whether there is an unused import; evidence is weak.",
+      "groq_cited_chunks": [
+        "chunk_0410"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Uncertain whether there is an unused import; evidence is weak.\",\"cited_chunk_ids\":[\"chunk_0410\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0410",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6753,
+          "text": "Use `PY314` from `django.utils.version` if PY314: kwargs.setdefault(\"suggest_on_error\", True)"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2223",
+      "repo": "pallets/flask",
+      "file_path": "flask/helpers.py",
+      "line_number": 539,
+      "gold_category": "indentation",
+      "gold_comment": "Please put this in a separate variable, since the linewrapping here is awkward.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "It is unclear whether any of the imported modules are unused; further inspection is needed.",
+      "groq_cited_chunks": [
+        "chunk_0552"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"It is unclear whether any of the imported modules are unused; further inspection is needed.\",\"cited_chunk_ids\":[\"chunk_0552\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0552",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.7022,
+          "text": "* Use convenience imports whenever available. For example, do this ::"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3902",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/dependencies/utils.py",
+      "line_number": 173,
+      "gold_category": "indentation",
+      "gold_comment": "Decrease the indentation level as much as possible. if parent_node.refcount != 0: continue if task_group is not None: task_group.start_soon(parent_node.task, nodes, request, task_group) else: await parent_node.task(nodes, request, task_group)",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "No import statements are present in the provided diff context, so no unused imports can be identified.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"No import statements are present in the provided diff context, so no unused imports can be identified.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6893,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_20",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/test_dbmiddleware.py",
+      "line_number": 73,
+      "gold_category": "unused_import",
+      "gold_comment": "This class is unused",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Remove unused imports such as Starlette, transaction, JSONResponse, and TestClient to clean up the module.",
+      "groq_cited_chunks": [
+        "chunk_0407"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Remove unused imports such as Starlette, transaction, JSONResponse, and TestClient to clean up the module.\",\"cited_chunk_ids\":[\"chunk_0407\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0407",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7211,
+          "text": "You can remove the model: diff --git a/tests/queries/test_execute_sql.py b/tests/queries/test_execute_sql.py index 6e9e578093..213ac21f53 100644 --- a/tests/queries/test_execute_sql.py +++ b/tests/que"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2351",
+      "repo": "encode/httpx",
+      "file_path": "setup.py",
+      "line_number": 1,
+      "gold_category": "unused_import",
+      "gold_comment": "import sys from setuptools import setup",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "Uncertain whether the comment block formatting requires changes; further review is needed.",
+      "groq_cited_chunks": [
+        "chunk_0874"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"Uncertain whether the comment block formatting requires changes; further review is needed.\",\"cited_chunk_ids\":[\"chunk_0874\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0874",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.673,
+          "text": "I think you can remove the full comment between \"Note that depending on the Scipy version\" until \"requires the package pooch to be installed\""
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_5775",
+      "repo": "pallets/flask",
+      "file_path": "tests/test_helpers.py",
+      "line_number": 238,
+      "gold_category": "unused_import",
+      "gold_comment": "These imports should not be local to this function, and should not have spaces in between each one.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The indentation of the `index` function appears incorrect, but the evidence is limited.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The indentation of the `index` function appears incorrect, but the evidence is limited.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7086,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_628",
+      "repo": "encode/httpx",
+      "file_path": "httpx/dispatch/http2.py",
+      "line_number": 197,
+      "gold_category": "indentation",
+      "gold_comment": "Formatting (I've already had these, not sure why Black doesn't reformat them): def __init__(self, stream_id: int, connection: HTTP2Connection) -> None:",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "No evidence of unused imports in the provided diff; uncertainty remains.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"No evidence of unused imports in the provided diff; uncertainty remains.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6611,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3489",
+      "repo": "psf/requests",
+      "file_path": "tests/test_requests.py",
+      "line_number": 1076,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Yeah, we 100% do not support that because it's not a capability of any version of pickle as far as I can tell. The only reason `files` works while `data` doesn't is because we consume the file object during `prepare_body`. It may be worth changing the name or adding a docstring here for clarification on why this works.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Unable to confirm unused imports due to missing import context.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Unable to confirm unused imports due to missing import context.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7307,
+          "text": "`requests ` is used in web building and tests."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_1003",
+      "repo": "encode/httpx",
+      "file_path": "httpx/_models.py",
+      "line_number": 483,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "I've added the method back and documented & tested it.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "mutable_default",
+      "groq_predicted_category_valid_only": "mutable_default",
+      "groq_grounded_comment": "Uncertain: the provided diff does not contain a mutable default argument, so no evidence of a mutable default issue.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"mutable_default\",\"grounded_comment\":\"Uncertain: the provided diff does not contain a mutable default argument, so no evidence of a mutable default issue.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.7021,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_274",
+      "repo": "encode/httpx",
+      "file_path": "tests/client/test_cookies.py",
+      "line_number": 81,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "This test has a typo in the name, maybe change name to `test_setting_client_cookies_to_cookiejar()`?",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "Uncertain whether the docstring formatting is problematic; it is concise but could be more descriptive.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"Uncertain whether the docstring formatting is problematic; it is concise but could be more descriptive.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0942",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6686,
+          "text": "The docstring states, “The test client should reload logging configuration,” but this is not related to the test client (`django.test.Client`). The implementation is actually about the `setting_change"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4134",
+      "repo": "psf/requests",
+      "file_path": "requests/utils.py",
+      "line_number": 615,
+      "gold_category": "indentation",
+      "gold_comment": "We don't need this newline.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The indentation of the code block under the `if value is not None:` statement is incorrect, causing syntax errors.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The indentation of the code block under the `if value is not None:` statement is incorrect, causing syntax errors.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0243",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.7044,
+          "text": "I can revert these changes without test failures Also I see you've been renaming `clean_name` to `cleaned_name` but haven't here, I think we can either leave the variable name or rename it consistentl"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_778",
+      "repo": "encode/httpx",
+      "file_path": "httpx/config.py",
+      "line_number": 375,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "That might be a bit unclear at first, yes… Basically we want to allow `Retries()` OR `Retries(<int>)` OR `retries(<int>, <CustomRetryLimits>)`, but disallow `Retries(<CustomRetryLimits>)`, because that case is a bit ambiguous: do we mean \"use the default number of retries\", or \"skip retrying on connection failures\"? Hence the part in the docs about \"explicitly passing the number of times to retry on connection failures\".",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Unable to confirm an unused import in the provided code snippet; no evidence of imports present.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Unable to confirm an unused import in the provided code snippet; no evidence of imports present.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6919,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3979",
+      "repo": "psf/requests",
+      "file_path": "tests/test_utils.py",
+      "line_number": 629,
+      "gold_category": "unused_import",
+      "gold_comment": "May as well just import this directly from compat.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "It is unclear whether the import of winreg/_winreg is unused, as it is referenced in the test; further inspection is needed.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"It is unclear whether the import of winreg/_winreg is unused, as it is referenced in the test; further inspection is needed.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7217,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_162",
+      "repo": "encode/httpx",
+      "file_path": "httpx/exceptions.py",
+      "line_number": 6,
+      "gold_category": "mutable_default",
+      "gold_comment": "Could we use `request: BaseRequest = None, response: BaseResponse = None` here? Would be better to have the tighter checking if possible.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "json_parse_failed_and_line_parse_failed",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.7206,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2730",
+      "repo": "fastapi/fastapi",
+      "file_path": "docs_src/async_sql_databases/tutorial001.py",
+      "line_number": 63,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Yes, I also have updated the docs to have a short explanation about it.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7247,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4682",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/globals.py",
+      "line_number": 73,
+      "gold_category": "naming_convention",
+      "gold_comment": "Oh yeah, I used the shorter name while I was working and forgot to change it.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Remove the unused imports of `partial` from `functools` and `LocalStack` from `werkzeug.local` to improve clarity.",
+      "groq_cited_chunks": [
+        "chunk_0575"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Remove the unused imports of `partial` from `functools` and `LocalStack` from `werkzeug.local` to improve clarity.\",\"cited_chunk_ids\":[\"chunk_0575\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0575",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.7029,
+          "text": "The `from module import function` statement is not used in the code. Removing it will improve clarity."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4332",
+      "repo": "psf/requests",
+      "file_path": "requests/__init__.py",
+      "line_number": 77,
+      "gold_category": "naming_convention",
+      "gold_comment": "And cryptography is still capitalized here.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Uncertain whether any imports are unused in this snippet; evidence does not directly reference this file.",
+      "groq_cited_chunks": [
+        "chunk_0410"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Uncertain whether any imports are unused in this snippet; evidence does not directly reference this file.\",\"cited_chunk_ids\":[\"chunk_0410\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0410",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6753,
+          "text": "Use `PY314` from `django.utils.version` if PY314: kwargs.setdefault(\"suggest_on_error\", True)"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3923",
+      "repo": "psf/requests",
+      "file_path": "tests/test_requests.py",
+      "line_number": 1820,
+      "gold_category": "unused_import",
+      "gold_comment": "Also, I'm not sure if you're going to back this commit out, but if not, `decode_unicode` doesn't seem to be used for anything here in this tests current configuration.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The import of lxml.etree via pytest.importorskip is not used in the test, indicating an unused import.",
+      "groq_cited_chunks": [
+        "chunk_0470"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The import of lxml.etree via pytest.importorskip is not used in the test, indicating an unused import.\",\"cited_chunk_ids\":[\"chunk_0470\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0470",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7012,
+          "text": "etree = pytest.importorskip(\"lxml.etree\")"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_1297",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/dependencies/utils.py",
+      "line_number": 587,
+      "gold_category": "naming_convention",
+      "gold_comment": "Merge this condition to the upper one. Avoid nested conditions if you do not have to.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "The variable name 'dependant' is misspelled; it should be 'dependent' to follow standard naming conventions.",
+      "groq_cited_chunks": [
+        "chunk_0213"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"The variable name 'dependant' is misspelled; it should be 'dependent' to follow standard naming conventions.\",\"cited_chunk_ids\":[\"chunk_0213\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0213",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6939,
+          "text": "I think we could use more explicit variable names to convey that those are not expected to match the currently used version numbers. EXAMPLE_MIN_DEPENDENT_PACKAGES = {"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_305",
+      "repo": "encode/httpx",
+      "file_path": "httpx/models.py",
+      "line_number": 64,
+      "gold_category": "unused_import",
+      "gold_comment": "Hmm, that's annoying, adding that `if` statement upsets flake8 becuase `BaseMiddleware` is not being used 😕",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The evidence suggests unused imports may exist, but the diff does not show any imports, so uncertainty remains.",
+      "groq_cited_chunks": [
+        "chunk_0549"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The evidence suggests unused imports may exist, but the diff does not show any imports, so uncertainty remains.\",\"cited_chunk_ids\":[\"chunk_0549\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.724,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4534",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 427,
+      "gold_category": "mutable_default",
+      "gold_comment": "Could you please amend it like below? self.dependencies = list(dependencies) or []",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The comment about truncating the description on a form feed character is not reflected in the code, potentially misleading developers.",
+      "groq_cited_chunks": [
+        "chunk_0936"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The comment about truncating the description on a form feed character is not reflected in the code, potentially misleading developers.\",\"cited_chunk_ids\":[\"chunk_0936\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0936",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.7002,
+          "text": "for these details, I agree now that these long heading must stay (and then be ignored by the linter). Having said that, there are some links that could be shortened or better wrapped, but we can get t"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2013",
+      "repo": "pallets/flask",
+      "file_path": "flask/app.py",
+      "line_number": 1639,
+      "gold_category": "naming_convention",
+      "gold_comment": "I don't understand, if it is internal, why not prefix it with an underscore?",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The docstring contains a typo: 'repsonse' should be 'response'.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The docstring contains a typo: 'repsonse' should be 'response'.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0604",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6537,
+          "text": "It looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called "
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_1863",
+      "repo": "pallets/flask",
+      "file_path": "flask/cli.py",
+      "line_number": 401,
+      "gold_category": "unused_import",
+      "gold_comment": "This import is not even needed; `sys` is already imported on the top level.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The snippet shows code that is indented as if inside a block, which could be a syntax error; however, the evidence is limited.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The snippet shows code that is indented as if inside a block, which could be a syntax error; however, the evidence is limited.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0748",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.7005,
+          "text": "Default argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4381",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 339,
+      "gold_category": "mutable_default",
+      "gold_comment": "Hmm, how about making `methods=[\"GET\"]` the default?",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "Uncertain if any naming convention issues exist; no clear evidence in this snippet.",
+      "groq_cited_chunks": [
+        "chunk_0375"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"Uncertain if any naming convention issues exist; no clear evidence in this snippet.\",\"cited_chunk_ids\":[\"chunk_0375\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0375",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6816,
+          "text": "`set_method_name` could be called `set_method_request` as a more intuitive variable name."
+        }
+      ]
+    }
+  ]
+}

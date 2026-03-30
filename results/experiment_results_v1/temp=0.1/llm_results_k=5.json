@@ -1,0 +1,767 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "num_samples": 12,
+  "run_config": {
+    "retrieval_backend": "faiss_dense",
+    "generation_backend": "groq_llm",
+    "groq_rpm_limit": 30,
+    "groq_min_interval_seconds": 2.0,
+    "groq_max_retries": 3
+  },
+  "parse_quality": {
+    "total": 12,
+    "valid_count": 5,
+    "invalid_count": 7,
+    "valid_rate": 0.4167,
+    "status_counts": {
+      "empty_response": 6,
+      "json_ok": 5,
+      "json_parse_failed_and_line_parse_failed": 1
+    }
+  },
+  "metrics_raw": {
+    "accuracy": 0.3333,
+    "per_class": {
+      "indentation": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0,
+        "support": 2
+      },
+      "naming_convention": {
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0,
+        "support": 2
+      },
+      "unused_import": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0,
+        "support": 2
+      },
+      "mutable_default": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 0
+      },
+      "documentation_formatting": {
+        "precision": 0.4444,
+        "recall": 0.6667,
+        "f1": 0.5333,
+        "support": 6
+      }
+    }
+  },
+  "metrics_valid_only": {
+    "accuracy": 0.4,
+    "per_class": {
+      "indentation": {
+        "precision": 0.0,
+        "recall": 0,
+        "f1": 0,
+        "support": 0
+      },
+      "naming_convention": {
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0,
+        "support": 1
+      },
+      "unused_import": {
+        "precision": 0.0,
+        "recall": 0,
+        "f1": 0,
+        "support": 0
+      },
+      "mutable_default": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 0
+      },
+      "documentation_formatting": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "support": 4
+      }
+    },
+    "num_valid_samples": 5
+  },
+  "results": [
+    {
+      "pr_id": "PR_5775",
+      "repo": "pallets/flask",
+      "file_path": "tests/test_helpers.py",
+      "line_number": 238,
+      "gold_category": "unused_import",
+      "gold_comment": "These imports should not be local to this function, and should not have spaces in between each one.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7086,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.673,
+          "text": "`requests ` is used in web building and tests."
+        },
+        {
+          "chunk_id": "chunk_0430",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.663,
+          "text": "This unguarded import causes an error running the test suite in an environment without `redis` installed. ERROR: cache.tests (unittest.loader._FailedTest.cache.tests) ---------------------------------"
+        },
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6595,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6573,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4992",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/config.py",
+      "line_number": 259,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Need to add documentation for the parameter.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The second 'with' statement is incorrectly indented, causing a syntax error; it should be aligned with the first 'with' and the body should be indented under it.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The second 'with' statement is incorrectly indented, causing a syntax error; it should be aligned with the first 'with' and the body should be indented under it.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0454",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6454,
+          "text": "Hi Matthew, yes the `_read_method_doc` can be removed. Should I remove it in this PR?"
+        },
+        {
+          "chunk_id": "chunk_0406",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6449,
+          "text": "I don't know. Using a normal import seems to work fine. I'll change it."
+        },
+        {
+          "chunk_id": "chunk_0607",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.644,
+          "text": "Can you make `_validate_meta` handle `None` instead?"
+        },
+        {
+          "chunk_id": "chunk_0551",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6438,
+          "text": "# try/except try: import yaml except ImportError: yaml = None"
+        },
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6436,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4682",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/globals.py",
+      "line_number": 73,
+      "gold_category": "naming_convention",
+      "gold_comment": "Oh yeah, I used the shorter name while I was working and forgot to change it.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The `partial` import from `functools` is not used in this module; removing it would clean up the code.",
+      "groq_cited_chunks": [
+        "chunk_0575",
+        "chunk_0584",
+        "chunk_0600",
+        "chunk_0571",
+        "chunk_0564"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The `partial` import from `functools` is not used in this module; removing it would clean up the code.\",\"cited_chunk_ids\":[\"chunk_0575\",\"chunk_0584\",\"chunk_0600\",\"chunk_0571\",\"chunk_0564\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0575",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.7029,
+          "text": "The `from module import function` statement is not used in the code. Removing it will improve clarity."
+        },
+        {
+          "chunk_id": "chunk_0584",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.6962,
+          "text": "This import statement isn't used anywhere in the module; consider removing it to keep the code clean."
+        },
+        {
+          "chunk_id": "chunk_0600",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.6938,
+          "text": "The `functools` import appears unnecessary here; removing unused imports helps with maintainability."
+        },
+        {
+          "chunk_id": "chunk_0571",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.6934,
+          "text": "This import appears to be leftover from a previous implementation. Please remove it if it’s no longer needed."
+        },
+        {
+          "chunk_id": "chunk_0564",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.6926,
+          "text": "It looks like this import is not being used anywhere in the code. Consider removing it to keep the code clean and maintainable."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4560",
+      "repo": "pallets/flask",
+      "file_path": "tests/test_user_error_handler.py",
+      "line_number": 17,
+      "gold_category": "unused_import",
+      "gold_comment": "These constants are unnecessary.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.7162,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6915,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        },
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6767,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6589,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0407",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6501,
+          "text": "You can remove the model: diff --git a/tests/queries/test_execute_sql.py b/tests/queries/test_execute_sql.py index 6e9e578093..213ac21f53 100644 --- a/tests/queries/test_execute_sql.py +++ b/tests/que"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4534",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/json/__init__.py",
+      "line_number": 171,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "This doesn't need a docstring changelog.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The module imports `json` but never uses it; removing the import will clean up the code.",
+      "groq_cited_chunks": [
+        "chunk_0589"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The module imports `json` but never uses it; removing the import will clean up the code.\",\"cited_chunk_ids\":[\"chunk_0589\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0589",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.7215,
+          "text": "This module imports `json`, but I don't see it being used anywhere—please verify if it's necessary."
+        },
+        {
+          "chunk_id": "chunk_0616",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6863,
+          "text": "to_pandas_kwargs = {} if to_pandas_kwargs is None else to_pandas_kwargs"
+        },
+        {
+          "chunk_id": "chunk_0752",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6726,
+          "text": "The default argument `my_dict={}` is mutable and can cause unintended side effects if modified. Replace it with `None` and initialize the dictionary within the function body."
+        },
+        {
+          "chunk_id": "chunk_0702",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.672,
+          "text": "Mutable default arguments like 'options={}' can cause side effects; refactor to use None as default and create a new object inside the function."
+        },
+        {
+          "chunk_id": "chunk_0799",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6708,
+          "text": "Mutable default arguments like lists or dictionaries can lead to shared state across function calls, which is often a source of bugs. Use `None` as the default and initialize the object inside the fun"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4479",
+      "repo": "pallets/flask",
+      "file_path": "tests/test_config.py",
+      "line_number": 59,
+      "gold_category": "naming_convention",
+      "gold_comment": "`NOT_FLASK` is a prefix, `OTHER` is the config key (or not, in this case).",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0748",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6815,
+          "text": "Default argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0699",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6636,
+          "text": "Default argument for 'config' is a mutable dictionary; switch to None and initialize within the function to avoid shared state across calls."
+        },
+        {
+          "chunk_id": "chunk_0755",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6605,
+          "text": "The use of a mutable default argument `config={}` is risky as it can be modified across calls. Consider using `None` and initializing the dictionary inside the function."
+        },
+        {
+          "chunk_id": "chunk_0529",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6602,
+          "text": "Would importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant."
+        },
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6583,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4268",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/scaffold.py",
+      "line_number": 595,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "\"any errors\" instead of \"occurring errors\"",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The documentation contains repeated sentences and inconsistent formatting, which should be cleaned up for clarity.",
+      "groq_cited_chunks": [
+        "chunk_0961"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The documentation contains repeated sentences and inconsistent formatting, which should be cleaned up for clarity.\",\"cited_chunk_ids\":[\"chunk_0961\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.7391,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6622,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0644",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.6579,
+          "text": "in this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar("
+        },
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6555,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        },
+        {
+          "chunk_id": "chunk_0604",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6531,
+          "text": "It looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called "
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4268",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/scaffold.py",
+      "line_number": 594,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "\"that code with\" instead of \"these code by\"",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The documentation contains duplicated sentences and inconsistent formatting, which should be cleaned up for clarity.",
+      "groq_cited_chunks": [
+        "chunk_0961"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The documentation contains duplicated sentences and inconsistent formatting, which should be cleaned up for clarity.\",\"cited_chunk_ids\":[\"chunk_0961\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.7391,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6622,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0644",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.6579,
+          "text": "in this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar("
+        },
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6555,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        },
+        {
+          "chunk_id": "chunk_0604",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6531,
+          "text": "It looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called "
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4268",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/scaffold.py",
+      "line_number": 592,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Sounds better with a stop: \"...raising exceptions. If they...\"",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "json_parse_failed_and_line_parse_failed",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The comment block contains duplicated and poorly formatted sentences, making the documentation unclear.\",\"cited_chunk_ids\":[\"chunk_0961",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.7391,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6622,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0644",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.6579,
+          "text": "in this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar("
+        },
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6555,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        },
+        {
+          "chunk_id": "chunk_0604",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6531,
+          "text": "It looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called "
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4131",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/config.py",
+      "line_number": 110,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "Also, remove the leading \"bool.\", and the trailing \", False otherwise.\", they're both redundant.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0603",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6445,
+          "text": "(General note for this and following comments: I haven't read every single comment from #18215, so apologies if I raise something that was already discussed and agreed. Feel free to redirect me to the"
+        },
+        {
+          "chunk_id": "chunk_0319",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6363,
+          "text": "found_files[prefixed_path] = (storage, path) Should this by prefexed_path, it was in the original. I think it should be here too."
+        },
+        {
+          "chunk_id": "chunk_0607",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6246,
+          "text": "Can you make `_validate_meta` handle `None` instead?"
+        },
+        {
+          "chunk_id": "chunk_0748",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6215,
+          "text": "Default argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0551",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6093,
+          "text": "# try/except try: import yaml except ImportError: yaml = None"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4131",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/config.py",
+      "line_number": 110,
+      "gold_category": "indentation",
+      "gold_comment": "I think the read the docs CI build requires a blank line after this one to pass.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0603",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6445,
+          "text": "(General note for this and following comments: I haven't read every single comment from #18215, so apologies if I raise something that was already discussed and agreed. Feel free to redirect me to the"
+        },
+        {
+          "chunk_id": "chunk_0319",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6363,
+          "text": "found_files[prefixed_path] = (storage, path) Should this by prefexed_path, it was in the original. I think it should be here too."
+        },
+        {
+          "chunk_id": "chunk_0607",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6246,
+          "text": "Can you make `_validate_meta` handle `None` instead?"
+        },
+        {
+          "chunk_id": "chunk_0748",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6215,
+          "text": "Default argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0551",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6093,
+          "text": "# try/except try: import yaml except ImportError: yaml = None"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4074",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/blueprints.py",
+      "line_number": 282,
+      "gold_category": "indentation",
+      "gold_comment": "This formatting is weird, extract the `get` calls to variables to keep it from wrapping.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6604,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0240",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.654,
+          "text": "I went with `remappable_names` for the decorator parameter. (It's posarg-only now, so this doesn't appear in calling code.) And then `remapped_*` for the internal variables during the remapping proces"
+        },
+        {
+          "chunk_id": "chunk_0021",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6508,
+          "text": "This might be time to fight indentation inflation 😄 What do you think about something like: source_admin = None if source_model_name: app_label, model_name = source_model_name.split(\".\", 1) try: sourc"
+        },
+        {
+          "chunk_id": "chunk_0294",
+          "category": "naming_convention",
+          "source_type": "project_guideline",
+          "score": 0.6462,
+          "text": "* Use underscores, not camelCase, for variable, function and method names (i.e. ``poll.get_unique_voters()``, not ``poll.getUniqueVoters()``)."
+        },
+        {
+          "chunk_id": "chunk_0299",
+          "category": "naming_convention",
+          "source_type": "pep8",
+          "score": 0.6413,
+          "text": "for use via from M import * should use the __all__ mechanism to prevent exporting globals, or use the older convention of prefixing such globals with an underscore (which you might want to do to indic"
+        }
+      ]
+    }
+  ]
+}

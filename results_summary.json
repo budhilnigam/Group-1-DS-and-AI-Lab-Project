@@ -1,0 +1,458 @@
+{
+  "experiment_results_v1": {
+    "temp=0.1": {
+      "1": {
+        "accuracy": 0.25,
+        "valid_rate": 0.5833,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.375,
+            "recall": 0.5,
+            "f1": 0.4286,
+            "support": 6
+          }
+        }
+      },
+      "3": {
+        "accuracy": 0.3333,
+        "valid_rate": 1.0,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0.0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.6667,
+            "recall": 0.6667,
+            "f1": 0.6667,
+            "support": 6
+          }
+        }
+      },
+      "5": {
+        "accuracy": 0.3333,
+        "valid_rate": 0.4167,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.4444,
+            "recall": 0.6667,
+            "f1": 0.5333,
+            "support": 6
+          }
+        }
+      },
+      "7": {
+        "accuracy": 0.4167,
+        "valid_rate": 0.9167,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.3333,
+            "recall": 0.5,
+            "f1": 0.4,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.6667,
+            "recall": 0.6667,
+            "f1": 0.6667,
+            "support": 6
+          }
+        }
+      }
+    },
+    "temp=0.3": {
+      "1": {
+        "accuracy": 0.25,
+        "valid_rate": 1.0,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0.0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5,
+            "support": 6
+          }
+        }
+      },
+      "3": {
+        "accuracy": 0.3333,
+        "valid_rate": 0.9167,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0.0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.6667,
+            "recall": 0.6667,
+            "f1": 0.6667,
+            "support": 6
+          }
+        }
+      },
+      "5": {
+        "accuracy": 0.3333,
+        "valid_rate": 0.9167,
+        "num_samples": 12,
+        "per_class": {
+          "indentation": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "naming_convention": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "unused_import": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0,
+            "support": 2
+          },
+          "mutable_default": {
+            "precision": 0.0,
+            "recall": 0,
+            "f1": 0,
+            "support": 0
+          },
+          "documentation_formatting": {
+            "precision": 0.6667,
+            "recall": 0.6667,
+            "f1": 0.6667,
+            "support": 6
+          }
+        }
+      }
+    }
+  },
+  "experiment_results_v2": {
+    "temp=0.1": {
+      "1": {
+        "accuracy": 0.3143,
+        "valid_rate": 0.9429,
+        "num_samples": 35,
+        "per_class": {
+          "indentation": {
+            "precision": 0.25,
+            "recall": 0.1429,
+            "f1": 0.1818,
+            "support": 7
+          },
+          "naming_convention": {
+            "precision": 0.5,
+            "recall": 0.2857,
+            "f1": 0.3636,
+            "support": 7
+          },
+          "unused_import": {
+            "precision": 0.2667,
+            "recall": 0.5714,
+            "f1": 0.3636,
+            "support": 7
+          },
+          "mutable_default": {
+            "precision": 0.5,
+            "recall": 0.1429,
+            "f1": 0.2222,
+            "support": 7
+          },
+          "documentation_formatting": {
+            "precision": 0.3,
+            "recall": 0.4286,
+            "f1": 0.3529,
+            "support": 7
+          }
+        }
+      },
+      "3": {
+        "accuracy": 0.3429,
+        "valid_rate": 0.9429,
+        "num_samples": 35,
+        "per_class": {
+          "indentation": {
+            "precision": 0.4,
+            "recall": 0.2857,
+            "f1": 0.3333,
+            "support": 7
+          },
+          "naming_convention": {
+            "precision": 0.1667,
+            "recall": 0.1429,
+            "f1": 0.1538,
+            "support": 7
+          },
+          "unused_import": {
+            "precision": 0.4167,
+            "recall": 0.7143,
+            "f1": 0.5263,
+            "support": 7
+          },
+          "mutable_default": {
+            "precision": 0.3333,
+            "recall": 0.1429,
+            "f1": 0.2,
+            "support": 7
+          },
+          "documentation_formatting": {
+            "precision": 0.3333,
+            "recall": 0.4286,
+            "f1": 0.375,
+            "support": 7
+          }
+        }
+      },
+      "5": {
+        "accuracy": 0.2857,
+        "valid_rate": 0.9429,
+        "num_samples": 35,
+        "per_class": {
+          "indentation": {
+            "precision": 0.3333,
+            "recall": 0.2857,
+            "f1": 0.3077,
+            "support": 7
+          },
+          "naming_convention": {
+            "precision": 0.1667,
+            "recall": 0.1429,
+            "f1": 0.1538,
+            "support": 7
+          },
+          "unused_import": {
+            "precision": 0.3,
+            "recall": 0.4286,
+            "f1": 0.3529,
+            "support": 7
+          },
+          "mutable_default": {
+            "precision": 0.3333,
+            "recall": 0.1429,
+            "f1": 0.2,
+            "support": 7
+          },
+          "documentation_formatting": {
+            "precision": 0.3,
+            "recall": 0.4286,
+            "f1": 0.3529,
+            "support": 7
+          }
+        }
+      },
+      "7": {
+        "accuracy": 0.2571,
+        "valid_rate": 0.8286,
+        "num_samples": 35,
+        "per_class": {
+          "indentation": {
+            "precision": 0.6667,
+            "recall": 0.2857,
+            "f1": 0.4,
+            "support": 7
+          },
+          "naming_convention": {
+            "precision": 0.1667,
+            "recall": 0.1429,
+            "f1": 0.1538,
+            "support": 7
+          },
+          "unused_import": {
+            "precision": 0.3,
+            "recall": 0.4286,
+            "f1": 0.3529,
+            "support": 7
+          },
+          "mutable_default": {
+            "precision": 0.5,
+            "recall": 0.1429,
+            "f1": 0.2222,
+            "support": 7
+          },
+          "documentation_formatting": {
+            "precision": 0.1429,
+            "recall": 0.2857,
+            "f1": 0.1905,
+            "support": 7
+          }
+        }
+      }
+    },
+    "temp=0.3": {
+      "1": {
+        "accuracy": 0.3714,
+        "valid_rate": 0.9429,
+        "num_samples": 35,
+        "per_class": {
+          "indentation": {
+            "precision": 0.6,
+            "recall": 0.4286,
+            "f1": 0.5,
+            "support": 7
+          },
+          "naming_convention": {
+            "precision": 0.1667,
+            "recall": 0.1429,
+            "f1": 0.1538,
+            "support": 7
+          },
+          "unused_import": {
+            "precision": 0.3,
+            "recall": 0.4286,
+            "f1": 0.3529,
+            "support": 7
+          },
+          "mutable_default": {
+            "precision": 0.4,
+            "recall": 0.2857,
+            "f1": 0.3333,
+            "support": 7
+          },
+          "documentation_formatting": {
+            "precision": 0.4444,
+            "recall": 0.5714,
+            "f1": 0.5,
+            "support": 7
+          }
+        }
+      }
+    }
+  }
+}

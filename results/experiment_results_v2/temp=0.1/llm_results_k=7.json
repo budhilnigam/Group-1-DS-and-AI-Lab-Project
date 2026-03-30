@@ -1,0 +1,2539 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "num_samples": 35,
+  "run_config": {
+    "retrieval_backend": "faiss_dense",
+    "generation_backend": "groq_llm",
+    "groq_rpm_limit": 30,
+    "groq_min_interval_seconds": 2.0,
+    "groq_max_retries": 3
+  },
+  "parse_quality": {
+    "total": 35,
+    "valid_count": 29,
+    "invalid_count": 6,
+    "valid_rate": 0.8286,
+    "status_counts": {
+      "json_ok": 29,
+      "json_parse_failed_and_line_parse_failed": 3,
+      "empty_response": 3
+    }
+  },
+  "metrics_raw": {
+    "accuracy": 0.2571,
+    "per_class": {
+      "indentation": {
+        "precision": 0.6667,
+        "recall": 0.2857,
+        "f1": 0.4,
+        "support": 7
+      },
+      "naming_convention": {
+        "precision": 0.1667,
+        "recall": 0.1429,
+        "f1": 0.1538,
+        "support": 7
+      },
+      "unused_import": {
+        "precision": 0.3,
+        "recall": 0.4286,
+        "f1": 0.3529,
+        "support": 7
+      },
+      "mutable_default": {
+        "precision": 0.5,
+        "recall": 0.1429,
+        "f1": 0.2222,
+        "support": 7
+      },
+      "documentation_formatting": {
+        "precision": 0.1429,
+        "recall": 0.2857,
+        "f1": 0.1905,
+        "support": 7
+      }
+    }
+  },
+  "metrics_valid_only": {
+    "accuracy": 0.3103,
+    "per_class": {
+      "indentation": {
+        "precision": 0.6667,
+        "recall": 0.4,
+        "f1": 0.5,
+        "support": 5
+      },
+      "naming_convention": {
+        "precision": 0.1667,
+        "recall": 0.2,
+        "f1": 0.1818,
+        "support": 5
+      },
+      "unused_import": {
+        "precision": 0.3,
+        "recall": 0.5,
+        "f1": 0.375,
+        "support": 6
+      },
+      "mutable_default": {
+        "precision": 0.5,
+        "recall": 0.1667,
+        "f1": 0.25,
+        "support": 6
+      },
+      "documentation_formatting": {
+        "precision": 0.25,
+        "recall": 0.2857,
+        "f1": 0.2667,
+        "support": 7
+      }
+    },
+    "num_valid_samples": 29
+  },
+  "results": [
+    {
+      "pr_id": "PR_5285",
+      "repo": "psf/requests",
+      "file_path": "requests/models.py",
+      "line_number": 108,
+      "gold_category": "indentation",
+      "gold_comment": "There is a missing space before the comma.",
+      "predicted_category_hint": "indentation",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The indentation of the return statements is inconsistent, causing unreachable code; adjust the indentation to align the if/else blocks properly.",
+      "groq_cited_chunks": [
+        "chunk_0003"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The indentation of the return statements is inconsistent, causing unreachable code; adjust the indentation to align the if/else blocks properly.\",\"cited_chunk_ids\":[\"chunk_0003\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0229",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.712,
+          "text": "Per the Django code style, f-string should not include function/method calls in it. So: width = int(arg) return f\"{value:^{width}}\""
+        },
+        {
+          "chunk_id": "chunk_0003",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.7106,
+          "text": "Looks like a blank line accidentally got deleted here. (The code reads fine either way, but Django usually aims for minimal diffs in changes.)"
+        },
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.7053,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0827",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6974,
+          "text": "Can you add a `# TODO(infer_string)` here? At some point we should avoid bubbling up those pyarrow errors"
+        },
+        {
+          "chunk_id": "chunk_0009",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6931,
+          "text": "I tried spanning the full line length, but flake8 fails with 'E501 line too long (95 > 88 characters)'. Django's line limit is 88 characters, so I had to split the f-string to pass the linting checks."
+        },
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.688,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0021",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6858,
+          "text": "This might be time to fight indentation inflation 😄 What do you think about something like: source_admin = None if source_model_name: app_label, model_name = source_model_name.split(\".\", 1) try: sourc"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3516",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/applications.py",
+      "line_number": 135,
+      "gold_category": "naming_convention",
+      "gold_comment": "Rather than repeating the same type annotation over and over, define an alias?",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "No evidence of unused imports in this diff; consider reviewing imports in the file for potential unused imports.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"No evidence of unused imports in this diff; consider reviewing imports in the file for potential unused imports.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7015,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0225",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6738,
+          "text": "I assume we'd prefer this rather than mocking `get_start_method()` to return `forkserver`/`spawn`?"
+        },
+        {
+          "chunk_id": "chunk_0609",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6698,
+          "text": "This warning needs to be raised anytime `future_stack` is specified by a user, not just when it is False. To do that, you need to change the default value of the argument to `lib.no_default` and then "
+        },
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6562,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        },
+        {
+          "chunk_id": "chunk_0914",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6544,
+          "text": "# class AsyncBytesIteratorResource(Protocol, SupportsAclose, AsyncIterator[bytes]): ..."
+        },
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6521,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        },
+        {
+          "chunk_id": "chunk_0967",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6465,
+          "text": "I feel like this is inconsistent and I would be tempted to have backend: str \"\"\"The name of the backend the task will run on\"\"\" queue_name: str \"\"\"The name of the queue the task will run on\"\"\" Given `"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_14789",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/utils.py",
+      "line_number": 10,
+      "gold_category": "unused_import",
+      "gold_comment": "`needs_py_lt_314` wasn't used",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The reason strings in the skip markers are concise but could be expanded for clarity.",
+      "groq_cited_chunks": [
+        "chunk_0961"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The reason strings in the skip markers are concise but could be expanded for clarity.\",\"cited_chunk_ids\":[\"chunk_0961\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.7036,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6965,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        },
+        {
+          "chunk_id": "chunk_0410",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6927,
+          "text": "Use `PY314` from `django.utils.version` if PY314: kwargs.setdefault(\"suggest_on_error\", True)"
+        },
+        {
+          "chunk_id": "chunk_0213",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6758,
+          "text": "I think we could use more explicit variable names to convey that those are not expected to match the currently used version numbers. EXAMPLE_MIN_DEPENDENT_PACKAGES = {"
+        },
+        {
+          "chunk_id": "chunk_0529",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6747,
+          "text": "Would importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant."
+        },
+        {
+          "chunk_id": "chunk_0430",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6668,
+          "text": "This unguarded import causes an error running the test suite in an environment without `redis` installed. ERROR: cache.tests (unittest.loader._FailedTest.cache.tests) ---------------------------------"
+        },
+        {
+          "chunk_id": "chunk_0247",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6647,
+          "text": "Not naming \"array\" either `y_true` or `y_pred` because some metrics have different names for them. I think we could rename them into `y_1` and `y_2` in `_check_targets` to not confuse people while the"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_12199",
+      "repo": "fastapi/fastapi",
+      "file_path": "docs_src/query_param_models/tutorial001.py",
+      "line_number": 14,
+      "gold_category": "mutable_default",
+      "gold_comment": "Pydantic does a deep copy of default mutables, so in this case it's not a problem.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "mutable_default",
+      "groq_predicted_category_valid_only": "mutable_default",
+      "groq_grounded_comment": "Avoid using a mutable default for the 'tags' field; use default_factory instead.",
+      "groq_cited_chunks": [
+        "chunk_0610",
+        "chunk_0611",
+        "chunk_0633"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"mutable_default\",\"grounded_comment\":\"Avoid using a mutable default for the 'tags' field; use default_factory instead.\",\"cited_chunk_ids\":[\"chunk_0610\",\"chunk_0611\",\"chunk_0633\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0610",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6921,
+          "text": "Your proposal is using a default mutable parameter, which is considered a bad practice (for good reason), and I assume will also break the CI as ruff has a rule for it. I understand that the current i"
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.689,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0611",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6864,
+          "text": "So the problem with this typing is that this will accept `select([\"a,\"b\"], [\"c\", \"d\"])` That's why I suggested the following: def select(self, arg0: list[Hashable] | Hashable = ...) -> pd.DataFrame: ."
+        },
+        {
+          "chunk_id": "chunk_0295",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6843,
+          "text": "I think ParamDict should also use `estimator_class` instead of `estimator_type`"
+        },
+        {
+          "chunk_id": "chunk_0633",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6831,
+          "text": "Could we make keyword only since we start to have several parameters: self, *, params=None, non_default=tuple(), estimator_class=None, doc_link=\"\""
+        },
+        {
+          "chunk_id": "chunk_0280",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6783,
+          "text": "Do you prefer \"query_formatter\" over \"query\"? The console handler is \"console\"."
+        },
+        {
+          "chunk_id": "chunk_0479",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6756,
+          "text": "pa = import_optional_dependency(\"pyarrow\") Got it . Let's wrap this in `import_optional_dependency` just to future proof a little bit ( I think we validate the `adbc_driver_manager` import higher up)"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3927",
+      "repo": "psf/requests",
+      "file_path": "requests/adapters.py",
+      "line_number": 206,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "So, this docstring needs to be reworded. Let's have it be: `Either a boolean, in which case it controls whether we verify the server's TLS certificate, or a string, in which case it must be a path to a CA bundle to use`.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Remove the unused urllib import to streamline the code.",
+      "groq_cited_chunks": [
+        "chunk_0593"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Remove the unused urllib import to streamline the code.\",\"cited_chunk_ids\":[\"chunk_0593\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0245",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6495,
+          "text": "I think it would be clearer to explicitly include `provider` in the params list (rather than popping it out of `kwargs` in the function body): def get_connection(backend=None, fail_silently=False, , p"
+        },
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6433,
+          "text": "`requests ` is used in web building and tests."
+        },
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6413,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0408",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6276,
+          "text": "I don't see any use of this function in the code, except in: i18n_info = self._verify_i18n_urls(item_for_verification) if not hasattr(self, \"_sample_i18n_info\"): self._sample_i18n_info = i18n_info But"
+        },
+        {
+          "chunk_id": "chunk_0593",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.6159,
+          "text": "There's an import of `urllib` that isn't utilized; consider removing it to streamline the code."
+        },
+        {
+          "chunk_id": "chunk_0126",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6074,
+          "text": "Yes, that's true. Let's commit your first version. For a while, I am thinking about a good term to rename the \"router\" param into something that fits both, the `MetadataRequest` and the `MetadataRoute"
+        },
+        {
+          "chunk_id": "chunk_0605",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6046,
+          "text": "> It was more a way to signify that this isn't just a string like 'self' that goes in the header. It's a placeholder to specify where the generated nonce should go. My value suggestion was poor, it co"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2371",
+      "repo": "pallets/flask",
+      "file_path": "flask/app.py",
+      "line_number": 1007,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "shouldn't the `blueprint` param be documented too?",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The docstring is incorrectly terminated with an extra closing triple quote after the first line, causing the string to end prematurely and the following text to be treated as code.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The docstring is incorrectly terminated with an extra closing triple quote after the first line, causing the string to end prematurely and the following text to be treated as code.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6474,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0021",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6451,
+          "text": "This might be time to fight indentation inflation 😄 What do you think about something like: source_admin = None if source_model_name: app_label, model_name = source_model_name.split(\".\", 1) try: sourc"
+        },
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6382,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0479",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.634,
+          "text": "pa = import_optional_dependency(\"pyarrow\") Got it . Let's wrap this in `import_optional_dependency` just to future proof a little bit ( I think we validate the `adbc_driver_manager` import higher up)"
+        },
+        {
+          "chunk_id": "chunk_0478",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6253,
+          "text": "for the suggestion . I'm going to use `import_optional_dependency` and change the order so we preserve existing behavior: pa = import_optional_dependency(\"pyarrow\") from adbc_driver_manager import Err"
+        },
+        {
+          "chunk_id": "chunk_0429",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6242,
+          "text": "Ahh good suggestion, should I also move the psycopg2 adapt import into the module level as well?"
+        },
+        {
+          "chunk_id": "chunk_0299",
+          "category": "naming_convention",
+          "source_type": "pep8",
+          "score": 0.6238,
+          "text": "for use via from M import * should use the __all__ mechanism to prevent exporting globals, or use the older convention of prefixing such globals with an underscore (which you might want to do to indic"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_11194",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/test_request_form_file.py",
+      "line_number": 1,
+      "gold_category": "unused_import",
+      "gold_comment": "from typing_extensions import Annotated",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "Uncertain if there are any naming convention issues; no evidence found.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"Uncertain if there are any naming convention issues; no evidence found.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.675,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6728,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0950",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6652,
+          "text": "You can fix the formatting with pre-commit. The docs have a section about it. It's also good to create a development environment. To fix the formatting, setup pre-commit and run pre-commit run --files"
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6646,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0332",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6635,
+          "text": "i see a lot of tests defined in the same file which have capitalized POST, was following the same convention."
+        },
+        {
+          "chunk_id": "chunk_0806",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6568,
+          "text": "Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from = _array_api_for_test"
+        },
+        {
+          "chunk_id": "chunk_0354",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6538,
+          "text": "can you name this file just `test_map.py`"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3799",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/cli.py",
+      "line_number": 761,
+      "gold_category": "naming_convention",
+      "gold_comment": "Yea, Its my problem from go, start write everywhere camecase, can fx this",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "The function name `_isAdHoc` uses camelCase; Python convention prefers snake_case, e.g., `_is_adhoc`.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"The function name `_isAdHoc` uses camelCase; Python convention prefers snake_case, e.g., `_is_adhoc`.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0507",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6715,
+          "text": "The `_check_auc` function is still also defined above the test function but not used anymore. I think you can remove it"
+        },
+        {
+          "chunk_id": "chunk_0488",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6669,
+          "text": "Although I can probably check for `ArrowDtype(pa.string())` without importing it by comparing for equality with `\"string[pyarrow]\"`"
+        },
+        {
+          "chunk_id": "chunk_0479",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6618,
+          "text": "pa = import_optional_dependency(\"pyarrow\") Got it . Let's wrap this in `import_optional_dependency` just to future proof a little bit ( I think we validate the `adbc_driver_manager` import higher up)"
+        },
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6474,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        },
+        {
+          "chunk_id": "chunk_0827",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6472,
+          "text": "Can you add a `# TODO(infer_string)` here? At some point we should avoid bubbling up those pyarrow errors"
+        },
+        {
+          "chunk_id": "chunk_0095",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6459,
+          "text": "new_dtype = \"bool[pyarrow]\" if isinstance(obj.dtype, ArrowDtype) else None result = obj._constructor(result, index=obj.index, name=obj.name, copy=False, dtype=new_dtype) Or something of the sort would"
+        },
+        {
+          "chunk_id": "chunk_0806",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6426,
+          "text": "Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from = _array_api_for_test"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_14258",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/test_router_circular_import.py",
+      "line_number": 12,
+      "gold_category": "unused_import",
+      "gold_comment": "import pytest from fastapi import APIRouter def test_router_circular_import(): router = APIRouter() with pytest.raises(AssertionError, match=\"Cannot include router into itself\"): router.include_router(router) `app` is not needed here, and calling `router.include_router` after `app.include_router(router)` wrong",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "It is unclear whether any imports are unused; both pytest and APIRouter appear to be used in the test.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"It is unclear whether any imports are unused; both pytest and APIRouter appear to be used in the test.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0448",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6894,
+          "text": "I tried that and faced a circular import error both while testing and running unit tests , please let me know if there is a way to avoid that when I move it to the top `\"ImportError: cannot import nam"
+        },
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.681,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        },
+        {
+          "chunk_id": "chunk_0529",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6807,
+          "text": "Would importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant."
+        },
+        {
+          "chunk_id": "chunk_0475",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6671,
+          "text": "Curious why this needs importing since it's already in the `conftest.py`"
+        },
+        {
+          "chunk_id": "chunk_0409",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6655,
+          "text": "Oh, I included the decorators from your first test. Sorry -- I omitted both those and the imports."
+        },
+        {
+          "chunk_id": "chunk_0402",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6616,
+          "text": "This test passes without the late import; can you move it to the module?"
+        },
+        {
+          "chunk_id": "chunk_0467",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6563,
+          "text": "I have removed the `importorskip(\"tables\")` and included `from pandas.tests.io.pytables.common import tables`. pandas._testing as tm from pandas.tests.io.pytables.common import tables _ = tables Howev"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4534",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 427,
+      "gold_category": "mutable_default",
+      "gold_comment": "Could you please amend it like below? self.dependencies = list(dependencies) or []",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "json_parse_failed_and_line_parse_failed",
+      "llm_raw_response": "{\"category",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0936",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.7002,
+          "text": "for these details, I agree now that these long heading must stay (and then be ignored by the linter). Having said that, there are some links that could be shortened or better wrapped, but we can get t"
+        },
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6865,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        },
+        {
+          "chunk_id": "chunk_0929",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6856,
+          "text": "Will need documenting in HttpResponseRedirect docs."
+        },
+        {
+          "chunk_id": "chunk_0009",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.683,
+          "text": "I tried spanning the full line length, but flake8 fails with 'E501 line too long (95 > 88 characters)'. Django's line limit is 88 characters, so I had to split the f-string to pass the linting checks."
+        },
+        {
+          "chunk_id": "chunk_0879",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.674,
+          "text": "In this field I would remove empty lines and use docstring instead of comments to put valuable information."
+        },
+        {
+          "chunk_id": "chunk_0021",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6712,
+          "text": "This might be time to fight indentation inflation 😄 What do you think about something like: source_admin = None if source_model_name: app_label, model_name = source_model_name.split(\".\", 1) try: sourc"
+        },
+        {
+          "chunk_id": "chunk_0309",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6675,
+          "text": "`item` is not very intuitive. It gets clearer when you read its description. Maybe `field` would be more intuitive ?"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3979",
+      "repo": "psf/requests",
+      "file_path": "requests/compat.py",
+      "line_number": 40,
+      "gold_category": "unused_import",
+      "gold_comment": "It may be better to follow something closer to the import convention of the other modules, rather than use `\\`. from urllib import ( quote, unquote, quote_plus, unquote_plus, urlencode, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment)",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Remove the urllib imports that are not used in the file to keep the code clean.",
+      "groq_cited_chunks": [
+        "chunk_0593",
+        "chunk_0558"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Remove the urllib imports that are not used in the file to keep the code clean.\",\"cited_chunk_ids\":[\"chunk_0593\",\"chunk_0558\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.7466,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0593",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.7073,
+          "text": "There's an import of `urllib` that isn't utilized; consider removing it to streamline the code."
+        },
+        {
+          "chunk_id": "chunk_0490",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6885,
+          "text": "from pandas.compat import IS64"
+        },
+        {
+          "chunk_id": "chunk_0558",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6699,
+          "text": "* Remove ``import`` statements that are no longer used when you change code. :pypi:`flake8` will identify these imports for you. If an unused import needs to remain for backwards-compatibility, mark t"
+        },
+        {
+          "chunk_id": "chunk_0475",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6694,
+          "text": "Curious why this needs importing since it's already in the `conftest.py`"
+        },
+        {
+          "chunk_id": "chunk_0479",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6685,
+          "text": "pa = import_optional_dependency(\"pyarrow\") Got it . Let's wrap this in `import_optional_dependency` just to future proof a little bit ( I think we validate the `adbc_driver_manager` import higher up)"
+        },
+        {
+          "chunk_id": "chunk_0522",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6684,
+          "text": "I also had to import `aggregation` from pyamg. I also moved the post-import processing out of the try/except to avoid spurious errors getting caught as a missing pyamg."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_6036",
+      "repo": "psf/requests",
+      "file_path": "requests/exceptions.py",
+      "line_number": 37,
+      "gold_category": "indentation",
+      "gold_comment": "Can we add an empty line prior to the `__init__` here? That's already the style of this sub-module if not the entirety of `requests`",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "Uncertain whether the docstring formatting meets style guidelines; no evidence of a formatting issue.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"Uncertain whether the docstring formatting meets style guidelines; no evidence of a formatting issue.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.7016,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        },
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6896,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0922",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6824,
+          "text": "(\"supports_json_field\")"
+        },
+        {
+          "chunk_id": "chunk_0386",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6772,
+          "text": "Fairly generic name for an exception. You may be `StaticFileProcessingError` or `FileProcessingError`? You might also want to inherit from a more concrete exception; see also: https://docs.python.org/"
+        },
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.6734,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6649,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0410",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6613,
+          "text": "Use `PY314` from `django.utils.version` if PY314: kwargs.setdefault(\"suggest_on_error\", True)"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2730",
+      "repo": "fastapi/fastapi",
+      "file_path": "docs_src/async_sql_databases/tutorial001.py",
+      "line_number": 74,
+      "gold_category": "naming_convention",
+      "gold_comment": "I have changed it to `note_id` in latest series of commits.",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "json_parse_failed_and_line_parse_failed",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The endpoint functions lack docstrings, which may be a documentation formatting issue, but evidence is weak.\",\"cited_chunk_ids\":[\"chunk_0902\",\"chunk",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7247,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0902",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.7047,
+          "text": "I think the docstring is off here and I also think we should implement the async function (here just raise the `NotImplementedError` error) as we haven't documented that we are doing this for folks an"
+        },
+        {
+          "chunk_id": "chunk_0604",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.672,
+          "text": "It looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called "
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6669,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0907",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6601,
+          "text": "Let's document somehow that raw SQL from `.extra(order_by=...` is not fathomed here."
+        },
+        {
+          "chunk_id": "chunk_0033",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6522,
+          "text": "I would probably also indent the code line (which prevents it from becoming filled if someone runs the script again): Return a dictionary of {field_name: (field_name_other_table, other_table)} represe"
+        },
+        {
+          "chunk_id": "chunk_0912",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6499,
+          "text": "Agree, however I would just test a single iterable, as the docstring says \"only do basic tests to ensure its API hasn't changed.\" So like: def test_prefetch_related_objects_empty(self): prefetch_relat"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_612",
+      "repo": "encode/httpx",
+      "file_path": "httpx/dispatch/http2.py",
+      "line_number": 238,
+      "gold_category": "indentation",
+      "gold_comment": "- superfluous blank line",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The line following the else: statement is not indented, which will cause a syntax error.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The line following the else: statement is not indented, which will cause a syntax error.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6483,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6208,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6169,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0942",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6151,
+          "text": "The docstring states, “The test client should reload logging configuration,” but this is not related to the test client (`django.test.Client`). The implementation is actually about the `setting_change"
+        },
+        {
+          "chunk_id": "chunk_0902",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6142,
+          "text": "I think the docstring is off here and I also think we should implement the async function (here just raise the `NotImplementedError` error) as we haven't documented that we are doing this for folks an"
+        },
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.614,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6081,
+          "text": "`requests ` is used in web building and tests."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2730",
+      "repo": "fastapi/fastapi",
+      "file_path": "docs_src/async_sql_databases/tutorial001.py",
+      "line_number": 69,
+      "gold_category": "naming_convention",
+      "gold_comment": ", I have changed `stmt` back to `query`.",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The diff snippet contains no docstrings, so it is unclear whether documentation formatting issues exist; a review of the file’s full documentation is required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The diff snippet contains no docstrings, so it is unclear whether documentation formatting issues exist; a review of the file’s full documentation is required.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7247,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0902",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.7047,
+          "text": "I think the docstring is off here and I also think we should implement the async function (here just raise the `NotImplementedError` error) as we haven't documented that we are doing this for folks an"
+        },
+        {
+          "chunk_id": "chunk_0604",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.672,
+          "text": "It looks like `value()` was only necessary when we considered adding support for its usage as a window function so it can be entirely removed now. As for `finalize` it appears that it won't be called "
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6669,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0907",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6601,
+          "text": "Let's document somehow that raw SQL from `.extra(order_by=...` is not fathomed here."
+        },
+        {
+          "chunk_id": "chunk_0033",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6522,
+          "text": "I would probably also indent the code line (which prevents it from becoming filled if someone runs the script again): Return a dictionary of {field_name: (field_name_other_table, other_table)} represe"
+        },
+        {
+          "chunk_id": "chunk_0912",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6499,
+          "text": "Agree, however I would just test a single iterable, as the docstring says \"only do basic tests to ensure its API hasn't changed.\" So like: def test_prefetch_related_objects_empty(self): prefetch_relat"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4353",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 389,
+      "gold_category": "indentation",
+      "gold_comment": "Reverse the condition and add the continue statement to decrease the indentation level.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6944,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        },
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6827,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6633,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0616",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6628,
+          "text": "to_pandas_kwargs = {} if to_pandas_kwargs is None else to_pandas_kwargs"
+        },
+        {
+          "chunk_id": "chunk_0752",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6614,
+          "text": "The default argument `my_dict={}` is mutable and can cause unintended side effects if modified. Replace it with `None` and initialize the dictionary within the function body."
+        },
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6594,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        },
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6581,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_1991",
+      "repo": "fastapi/fastapi",
+      "file_path": "docs_src/websockets/tutorial003.py",
+      "line_number": 61,
+      "gold_category": "mutable_default",
+      "gold_comment": "self.active_connections: MutableSet[_IdEq[WebSocket]] = set()",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The module’s docstring starts with an unexpected `</html>` tag and lacks proper formatting, which should be corrected to provide clear documentation.",
+      "groq_cited_chunks": [
+        "chunk_0902",
+        "chunk_0834"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The module’s docstring starts with an unexpected `</html>` tag and lacks proper formatting, which should be corrected to provide clear documentation.\",\"cited_chunk_ids\":[\"chunk_0902\",\"chunk_0834\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6951,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6775,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0902",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6662,
+          "text": "I think the docstring is off here and I also think we should implement the async function (here just raise the `NotImplementedError` error) as we haven't documented that we are doing this for folks an"
+        },
+        {
+          "chunk_id": "chunk_0042",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6576,
+          "text": "Suggesting: if all(isinstance(a, (list, tuple)) and len(a) == 2 for a in settings.ADMINS): warnings.warn( \"Using (name, address) pairs in the ADMINS setting is deprecated.\" \" Replace with a list of em"
+        },
+        {
+          "chunk_id": "chunk_0834",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6477,
+          "text": "The NonceRenderable class is not documented but is being used in tests (line 4) and imported by django.forms.widgets. If this is intended to be part of the public API (which it appears to be, given it"
+        },
+        {
+          "chunk_id": "chunk_0937",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6462,
+          "text": "Yep, Mariusz wasn't disputing that; he was suggesting to reduce the verbosity of your comment. When you check other uses of these hints in comments you will see that they apply to the statement direct"
+        },
+        {
+          "chunk_id": "chunk_0016",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6415,
+          "text": "Same here: with self.assertRaisesMessage(AssertionError, f\"abc: {msg}\"):"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_9704",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/test_response_model_default_factory.py",
+      "line_number": 15,
+      "gold_category": "mutable_default",
+      "gold_comment": "message: str = Field(default_factory=lambda: \"Successful operation.\")",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "No unused imports detected, but evidence is weak.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"No unused imports detected, but evidence is weak.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6712,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.661,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0529",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6539,
+          "text": "Would importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant."
+        },
+        {
+          "chunk_id": "chunk_0407",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6537,
+          "text": "You can remove the model: diff --git a/tests/queries/test_execute_sql.py b/tests/queries/test_execute_sql.py index 6e9e578093..213ac21f53 100644 --- a/tests/queries/test_execute_sql.py +++ b/tests/que"
+        },
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6515,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6504,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6494,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_627",
+      "repo": "encode/httpx",
+      "file_path": "httpx/dispatch/connection_pool.py",
+      "line_number": 132,
+      "gold_category": "mutable_default",
+      "gold_comment": "I don’t think that’s necessary, because even if we mutate the list (which we never actually do here) then it’s already separate from the connection set so it shouldn’t have any incidence.",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "No naming convention issues detected in the provided diff, but evidence is weak.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"No naming convention issues detected in the provided diff, but evidence is weak.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6886,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6852,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0245",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6553,
+          "text": "I think it would be clearer to explicitly include `provider` in the params list (rather than popping it out of `kwargs` in the function body): def get_connection(backend=None, fail_silently=False, , p"
+        },
+        {
+          "chunk_id": "chunk_0403",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6377,
+          "text": "def get_connection_params(self): conn_params = self.settings_dict[\"OPTIONS\"].copy() # RemovedInDjango70Warning: When deprecation period ends, remove # \"use_returning_into\" logic from conn_params. if \""
+        },
+        {
+          "chunk_id": "chunk_0902",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.619,
+          "text": "I think the docstring is off here and I also think we should implement the async function (here just raise the `NotImplementedError` error) as we haven't documented that we are doing this for folks an"
+        },
+        {
+          "chunk_id": "chunk_0371",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6141,
+          "text": "I’m unsure whether it would be better to add pagination as a property within the `ChangeList` in the `changelist_view`, and then add `result_list` and `result_count`. This is something I’m thinking ab"
+        },
+        {
+          "chunk_id": "chunk_0914",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6089,
+          "text": "# class AsyncBytesIteratorResource(Protocol, SupportsAclose, AsyncIterator[bytes]): ..."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_756",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/encoders.py",
+      "line_number": 144,
+      "gold_category": "indentation",
+      "gold_comment": "I retained the previous behaviour but since I am using explicit instance checking now instead of catching a keyerror all the exception catching was moved 1 indentation to the left. It is the github diff displaying that makes it looks as if I changed this.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0095",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6886,
+          "text": "new_dtype = \"bool[pyarrow]\" if isinstance(obj.dtype, ArrowDtype) else None result = obj._constructor(result, index=obj.index, name=obj.name, copy=False, dtype=new_dtype) Or something of the sort would"
+        },
+        {
+          "chunk_id": "chunk_0616",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6765,
+          "text": "to_pandas_kwargs = {} if to_pandas_kwargs is None else to_pandas_kwargs"
+        },
+        {
+          "chunk_id": "chunk_0857",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6661,
+          "text": "Since the `owner` object can be the type name (str), we return that string if the given `obj` is a string, otherwise we return the object's type name. I think in documentation, there should not be any"
+        },
+        {
+          "chunk_id": "chunk_0713",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6643,
+          "text": "Using mutable defaults like lists or dicts can cause data to leak between calls; prefer None as default and instantiate inside the function."
+        },
+        {
+          "chunk_id": "chunk_0719",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6642,
+          "text": "Avoid using mutable types like lists or dictionaries as default arguments. This can lead to unintended side effects when the default value is modified."
+        },
+        {
+          "chunk_id": "chunk_0644",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.6622,
+          "text": "in this case. # Correct: def foo(x): if x >= 0: return math.sqrt(x) else: return None def bar(x): if x < 0: return None return math.sqrt(x) # Wrong: def foo(x): if x >= 0: return math.sqrt(x) def bar("
+        },
+        {
+          "chunk_id": "chunk_0488",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6613,
+          "text": "Although I can probably check for `ArrowDtype(pa.string())` without importing it by comparing for equality with `\"string[pyarrow]\"`"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4381",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/routing.py",
+      "line_number": 339,
+      "gold_category": "mutable_default",
+      "gold_comment": "Hmm, how about making `methods=[\"GET\"]` the default?",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "Uncertain whether naming convention issues exist in this snippet; no direct evidence indicates a problem.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"Uncertain whether naming convention issues exist in this snippet; no direct evidence indicates a problem.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0375",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6816,
+          "text": "`set_method_name` could be called `set_method_request` as a more intuitive variable name."
+        },
+        {
+          "chunk_id": "chunk_0126",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6787,
+          "text": "Yes, that's true. Let's commit your first version. For a while, I am thinking about a good term to rename the \"router\" param into something that fits both, the `MetadataRequest` and the `MetadataRoute"
+        },
+        {
+          "chunk_id": "chunk_0245",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6744,
+          "text": "I think it would be clearer to explicitly include `provider` in the params list (rather than popping it out of `kwargs` in the function body): def get_connection(backend=None, fail_silently=False, , p"
+        },
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.671,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        },
+        {
+          "chunk_id": "chunk_0268",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6626,
+          "text": "I think the renaming would be very useful for people unfamiliar with metadata routing like me: `_get_metadata_request` returns a `MetadataRequest`, `get_metadata_router` returns a `MetadataRouter`, al"
+        },
+        {
+          "chunk_id": "chunk_0339",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6573,
+          "text": "renaming the variable to `requests` to keep it short, and the function name should now be clear"
+        },
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6573,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2304",
+      "repo": "pallets/flask",
+      "file_path": "flask/app.py",
+      "line_number": 1465,
+      "gold_category": "naming_convention",
+      "gold_comment": "This should be written in the imperative: `Find` rather than `Finds`",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The docstring for _find_error_handler is malformed, with duplicate lines and missing closing triple quotes, which should be corrected.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The docstring for _find_error_handler is malformed, with duplicate lines and missing closing triple quotes, which should be corrected.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0245",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6745,
+          "text": "I think it would be clearer to explicitly include `provider` in the params list (rather than popping it out of `kwargs` in the function body): def get_connection(backend=None, fail_silently=False, , p"
+        },
+        {
+          "chunk_id": "chunk_0021",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6605,
+          "text": "This might be time to fight indentation inflation 😄 What do you think about something like: source_admin = None if source_model_name: app_label, model_name = source_model_name.split(\".\", 1) try: sourc"
+        },
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.6541,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0562",
+          "category": "unused_import",
+          "source_type": "linter_rule",
+          "score": 0.6535,
+          "text": "F401 (Flake8): Module imported but unused. Remove imports that are not used in the file. Unused imports make code harder to read and maintain. Use __all__ to declare public API if needed."
+        },
+        {
+          "chunk_id": "chunk_0313",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6491,
+          "text": "Since this is a `classmethod,` it doesn't really take into account instance level requests. So I've renamed it to `_get_class_level_metadata_request_values`."
+        },
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6484,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        },
+        {
+          "chunk_id": "chunk_0446",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6458,
+          "text": "It should be from pandas.tests.io.pytables.common import tables See the pre-commit section for how to run code checks. It will catch errors like this."
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_11807",
+      "repo": "fastapi/fastapi",
+      "file_path": "tests/django/conftest.py",
+      "line_number": 55,
+      "gold_category": "unused_import",
+      "gold_comment": "this creates an authenticated session, so we can test if the user is logged in or not. The reason why the import is here is mostly because we need Django to be configured before importing any model 😊",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "No unused imports detected in the provided diff.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"No unused imports detected in the provided diff.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7183,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0407",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7154,
+          "text": "You can remove the model: diff --git a/tests/queries/test_execute_sql.py b/tests/queries/test_execute_sql.py index 6e9e578093..213ac21f53 100644 --- a/tests/queries/test_execute_sql.py +++ b/tests/que"
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6986,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0430",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6986,
+          "text": "This unguarded import causes an error running the test suite in an environment without `redis` installed. ERROR: cache.tests (unittest.loader._FailedTest.cache.tests) ---------------------------------"
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6895,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0475",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6845,
+          "text": "Curious why this needs importing since it's already in the `conftest.py`"
+        },
+        {
+          "chunk_id": "chunk_0470",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6769,
+          "text": "etree = pytest.importorskip(\"lxml.etree\")"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_5285",
+      "repo": "psf/requests",
+      "file_path": "tests/test_requests.py",
+      "line_number": 2277,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "# checking that there is no change in case of python 2",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "Uncertain whether any imports are unused in this diff; evidence does not directly indicate an unused import.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"Uncertain whether any imports are unused in this diff; evidence does not directly indicate an unused import.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7229,
+          "text": "`requests ` is used in web building and tests."
+        },
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6899,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6898,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0806",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6875,
+          "text": "Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from = _array_api_for_test"
+        },
+        {
+          "chunk_id": "chunk_0272",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6828,
+          "text": "These two tests are great, though I'm still concerned about lines containing only whitespace that are longer than the requested `width`. For example, the regression test below passes on commit 9a729fb"
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6737,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0827",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6735,
+          "text": "Can you add a `# TODO(infer_string)` here? At some point we should avoid bubbling up those pyarrow errors"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3984",
+      "repo": "psf/requests",
+      "file_path": "requests/models.py",
+      "line_number": 809,
+      "gold_category": "naming_convention",
+      "gold_comment": "Yep, I'm on board with 's suggestion. That seems the most readable option out of what's been suggested. The only minor input I have is standardizing the use of `_` in `ends_with` vs `startswith` in the variable names.",
+      "predicted_category_hint": "indentation",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "empty_response",
+      "llm_raw_response": "",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0009",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.7109,
+          "text": "I tried spanning the full line length, but flake8 fails with 'E501 line too long (95 > 88 characters)'. Django's line limit is 88 characters, so I had to split the f-string to pass the linting checks."
+        },
+        {
+          "chunk_id": "chunk_0018",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.7013,
+          "text": "I understand your rationale, but let me share a counter-view: A line break already introduces a natural pause, like taking a breath, so placing a space at the start of the next line creates, IMHO, a s"
+        },
+        {
+          "chunk_id": "chunk_0019",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6986,
+          "text": "OK. (This used to be called \"breaking lines at natural places,\" and I guess now has been branded semantic line breaks. Also some Python discussion.) I try put the space at the beginning of the continu"
+        },
+        {
+          "chunk_id": "chunk_0044",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6851,
+          "text": "Leave an empty line without any spaces on it, and flake8 should be OK. (It might help to adjust your editor to show whitespace.)"
+        },
+        {
+          "chunk_id": "chunk_0041",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.68,
+          "text": "Ah yes, I didn't mean to put a newline between `c` and `|zzz` in my example. It is okay for the new code to not work in cases where the old one already throws a `TemplateSyntaxError`. The linting erro"
+        },
+        {
+          "chunk_id": "chunk_0155",
+          "category": "indentation",
+          "source_type": "augmented",
+          "score": 0.6774,
+          "text": "The use of multiple blank lines here is excessive. PEP 8 recommends using a single blank line to separate sections."
+        },
+        {
+          "chunk_id": "chunk_0272",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6762,
+          "text": "These two tests are great, though I'm still concerned about lines containing only whitespace that are longer than the requested `width`. For example, the regression test below passes on commit 9a729fb"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_2306",
+      "repo": "pallets/flask",
+      "file_path": "tests/conftest.py",
+      "line_number": 26,
+      "gold_category": "indentation",
+      "gold_comment": "Blank line isn't needed here",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The imports `pkgutil` and `textwrap` are unused in this file and should be removed to clean up the code.",
+      "groq_cited_chunks": [
+        "chunk_0437",
+        "chunk_0475",
+        "chunk_0508"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The imports `pkgutil` and `textwrap` are unused in this file and should be removed to clean up the code.\",\"cited_chunk_ids\":[\"chunk_0437\",\"chunk_0475\",\"chunk_0508\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6856,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0437",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6847,
+          "text": "Unless you are going to use the import, you can just add this as a `.skip_if_no(\"scipy\")` decorator to the test"
+        },
+        {
+          "chunk_id": "chunk_0470",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6786,
+          "text": "etree = pytest.importorskip(\"lxml.etree\")"
+        },
+        {
+          "chunk_id": "chunk_0475",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6689,
+          "text": "Curious why this needs importing since it's already in the `conftest.py`"
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6687,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0508",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6669,
+          "text": "from sklearn.utils._testing import assert_allclose"
+        },
+        {
+          "chunk_id": "chunk_0430",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6646,
+          "text": "This unguarded import causes an error running the test suite in an environment without `redis` installed. ERROR: cache.tests (unittest.loader._FailedTest.cache.tests) ---------------------------------"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_636",
+      "repo": "encode/httpx",
+      "file_path": "httpx/content.py",
+      "line_number": 38,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "> Does that mean we can async for chunk in content again Exactly, yes. It is used when handling redrect responses, that need to generate another request with a body. It happens to be true in all cases except if you pass `data=<async iterator>` in which case we're not able to replay/rewind the request. And yes, a decent docstring there would make sense.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The imports `json_dumps` and `urlencode` are not referenced anywhere in this file, so they should be removed to clean up unused imports.",
+      "groq_cited_chunks": [
+        "chunk_0593",
+        "chunk_0589"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The imports `json_dumps` and `urlencode` are not referenced anywhere in this file, so they should be removed to clean up unused imports.\",\"cited_chunk_ids\":[\"chunk_0593\",\"chunk_0589\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.7401,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0593",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.7248,
+          "text": "There's an import of `urllib` that isn't utilized; consider removing it to streamline the code."
+        },
+        {
+          "chunk_id": "chunk_0589",
+          "category": "unused_import",
+          "source_type": "augmented",
+          "score": 0.7183,
+          "text": "This module imports `json`, but I don't see it being used anywhere—please verify if it's necessary."
+        },
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6921,
+          "text": "`requests ` is used in web building and tests."
+        },
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6913,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0548",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6881,
+          "text": "# standard library import json from itertools import chain"
+        },
+        {
+          "chunk_id": "chunk_0520",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6857,
+          "text": "I wasn't aware of that, and maybe that had been discussed somewhere I missed. So I did a bit of searching and I have found `xpx` imported via `_array_api.py` in `sklearn/model_selection/_search.py` an"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_241",
+      "repo": "encode/httpx",
+      "file_path": "httpx/client.py",
+      "line_number": 61,
+      "gold_category": "mutable_default",
+      "gold_comment": "Should we have an explicit DEFAULT_... here instead of None?",
+      "predicted_category_hint": "naming_convention",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "I cannot find concrete evidence in the provided chunks that the parameter names violate the project's naming conventions, so I am uncertain about any naming issues.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"I cannot find concrete evidence in the provided chunks that the parameter names violate the project's naming conventions, so I am uncertain about any naming issues.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0250",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6802,
+          "text": "None. However, I've found a better alternative now, only updating `self._pool_options`. B/c extra `pool_options` will eventually be passed to the `ConnectionPool` class's `__init__` method by `from_ur"
+        },
+        {
+          "chunk_id": "chunk_0549",
+          "category": "unused_import",
+          "source_type": "project_guideline",
+          "score": 0.6786,
+          "text": "# Django from django.http import Http404 from django.http.response import ( Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse, cookie, )"
+        },
+        {
+          "chunk_id": "chunk_0010",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6552,
+          "text": "These need to span the full allowable length f\"Django version {version}, using settings {settings.SETTINGS_MODULE!r}\\n\" f\"Starting WSGI development server at \" f\"{self.protocol}://{addr}:{server_port}"
+        },
+        {
+          "chunk_id": "chunk_0823",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6442,
+          "text": "# RemovedInDjango70Warning: It's a transitional setting helpful in early # adoption of HTTPS as the new default protocol in urlize() when no # protocol is provided. # Set to True to assume HTTPS durin"
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6386,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0708",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.638,
+          "text": "The function's default argument 'response_headers={}' is mutable; change it to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0511",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6345,
+          "text": "We cannot use `xp` here, but we would need to use `xp_y_true` as `xp` will result in errors when `y_true` consists of strings. But yes we can fix this in the other PR you are working on or if required"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3398",
+      "repo": "pallets/flask",
+      "file_path": "tests/test_config.py",
+      "line_number": 43,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "I've removed it and added some docs instead.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "indentation",
+      "groq_predicted_category_valid_only": "indentation",
+      "groq_grounded_comment": "The function definitions lack proper indentation, causing syntax errors.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"indentation\",\"grounded_comment\":\"The function definitions lack proper indentation, causing syntax errors.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0529",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6854,
+          "text": "Would importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant."
+        },
+        {
+          "chunk_id": "chunk_0467",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.662,
+          "text": "I have removed the `importorskip(\"tables\")` and included `from pandas.tests.io.pytables.common import tables`. pandas._testing as tm from pandas.tests.io.pytables.common import tables _ = tables Howev"
+        },
+        {
+          "chunk_id": "chunk_0745",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6546,
+          "text": "Mutable default argument 'config_dict={}' can lead to persistent state issues; initialize with None and create a new dict inside the function."
+        },
+        {
+          "chunk_id": "chunk_0806",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6546,
+          "text": "Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from = _array_api_for_test"
+        },
+        {
+          "chunk_id": "chunk_0446",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6456,
+          "text": "It should be from pandas.tests.io.pytables.common import tables See the pre-commit section for how to run code checks. It will catch errors like this."
+        },
+        {
+          "chunk_id": "chunk_0755",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6436,
+          "text": "The use of a mutable default argument `config={}` is risky as it can be modified across calls. Consider using `None` and initializing the dictionary inside the function."
+        },
+        {
+          "chunk_id": "chunk_0354",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6435,
+          "text": "can you name this file just `test_map.py`"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4560",
+      "repo": "pallets/flask",
+      "file_path": "tests/test_user_error_handler.py",
+      "line_number": 17,
+      "gold_category": "unused_import",
+      "gold_comment": "These constants are unnecessary.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": null,
+      "groq_grounded_comment": "Unable to parse response; review required.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": false,
+      "llm_parse_status": "json_parse_failed_and_line_parse_failed",
+      "llm_raw_response": "{\"category",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0643",
+          "category": "mutable_default",
+          "source_type": "pep8",
+          "score": 0.7162,
+          "text": "over an explicit def statement (i.e. that it can be embedded inside a larger expression) Design exception hierarchies based on the distinctions that code catching the exceptions is likely to need, rat"
+        },
+        {
+          "chunk_id": "chunk_0352",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6915,
+          "text": "Most of the exceptions from django core do not use the `Error` prefix (only FieldError and ValidationError use it). Also: * `InvalidTask` derives from `Exception` but `InvalidTaskBackend` derives from"
+        },
+        {
+          "chunk_id": "chunk_0961",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6767,
+          "text": "See: https://docs.pytest.org/en/stable/reference/reference.html#pytest.xfail for the function and https://docs.pytest.org/en/stable/how-to/skipping.html#xfail-mark-test-functions-as-expected-to-fail f"
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6589,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0407",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6501,
+          "text": "You can remove the model: diff --git a/tests/queries/test_execute_sql.py b/tests/queries/test_execute_sql.py index 6e9e578093..213ac21f53 100644 --- a/tests/queries/test_execute_sql.py +++ b/tests/que"
+        },
+        {
+          "chunk_id": "chunk_0446",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.649,
+          "text": "It should be from pandas.tests.io.pytables.common import tables See the pre-commit section for how to run code checks. It will catch errors like this."
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6459,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_13982",
+      "repo": "fastapi/fastapi",
+      "file_path": "fastapi/encoders.py",
+      "line_number": 97,
+      "gold_category": "unused_import",
+      "gold_comment": "We don't need `generate_encoders_by_class_tuples` and `encoders_by_class_tuples` anymore",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "mutable_default",
+      "groq_predicted_category_valid_only": "mutable_default",
+      "groq_grounded_comment": "No evidence of mutable default arguments detected in the provided diff context.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"mutable_default\",\"grounded_comment\":\"No evidence of mutable default arguments detected in the provided diff context.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6847,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        },
+        {
+          "chunk_id": "chunk_0914",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6565,
+          "text": "# class AsyncBytesIteratorResource(Protocol, SupportsAclose, AsyncIterator[bytes]): ..."
+        },
+        {
+          "chunk_id": "chunk_0608",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6504,
+          "text": "I think either way is fine, just wanted to mention this could be `args: tuple[Any, ...] = ()` since tuples are immutable."
+        },
+        {
+          "chunk_id": "chunk_0713",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6503,
+          "text": "Using mutable defaults like lists or dicts can cause data to leak between calls; prefer None as default and instantiate inside the function."
+        },
+        {
+          "chunk_id": "chunk_0337",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6482,
+          "text": "I'm going to amend the function name to `yield_mixed_namespace_input_permutations` as well, to make this point clear."
+        },
+        {
+          "chunk_id": "chunk_0261",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6478,
+          "text": "The casing style is weird. Why not `InputArray`? Or maybe we could even more explicit names for these named tuples `NamespaceAndDeviceToMoveFrom` and `NamespaceAndDeviceToMoveTo`. Or we could stick to"
+        },
+        {
+          "chunk_id": "chunk_0260",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6472,
+          "text": "One question I do have (that I obliquely referenced in the PR description) - what level of API stability should we be aiming for? Should these be renamed back to snake_case so the only change to this "
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_4766",
+      "repo": "psf/requests",
+      "file_path": "tests/test_requests.py",
+      "line_number": 907,
+      "gold_category": "indentation",
+      "gold_comment": "These asserts can be done at the same indentation as the `with` block.",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "unused_import",
+      "groq_predicted_category_valid_only": "unused_import",
+      "groq_grounded_comment": "The diff does not contain any unused imports, and the available evidence for unused imports is weak in this context.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"unused_import\",\"grounded_comment\":\"The diff does not contain any unused imports, and the available evidence for unused imports is weak in this context.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0460",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7043,
+          "text": "`requests ` is used in web building and tests."
+        },
+        {
+          "chunk_id": "chunk_0288",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.7036,
+          "text": "Sorry I didn't notice this earlier, but would the names around this `register_tests` call be more accurate if they mentioned `None`/`null` instead of empty strings? Something like `test_%s_serializer_"
+        },
+        {
+          "chunk_id": "chunk_0529",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6834,
+          "text": "Would importing `check_array_api_metric` from `test_common.py` work? I see it's got redundant 'sample_weight' and multioutput stuff but the logic seems to be there to ignore this if not relevant."
+        },
+        {
+          "chunk_id": "chunk_0332",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.6767,
+          "text": "i see a lot of tests defined in the same file which have capitalized POST, was following the same convention."
+        },
+        {
+          "chunk_id": "chunk_0401",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6721,
+          "text": "That seems like a bugfix. Here's a play test case showing that when the right hand side is an expression: diff --git a/tests/postgres_tests/test_array.py b/tests/postgres_tests/test_array.py index d6d"
+        },
+        {
+          "chunk_id": "chunk_0806",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6666,
+          "text": "Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from = _array_api_for_test"
+        },
+        {
+          "chunk_id": "chunk_0099",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6658,
+          "text": "There is a formatting issue in the `_check_sample_weight` call: missing whitespace after the comma before `ensure_non_negative=True` (`dtype=X.dtype,ensure_non_negative=True`). This will fail style ch"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3799",
+      "repo": "pallets/flask",
+      "file_path": "src/flask/cli.py",
+      "line_number": 761,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "This docstring is the type of documentation that nobody really needs :) It's like \"loop over list\" above a loop...",
+      "predicted_category_hint": "unused_import",
+      "groq_predicted_category": "naming_convention",
+      "groq_predicted_category_valid_only": "naming_convention",
+      "groq_grounded_comment": "The function name `_isAdHoc` uses camel case; Python convention prefers snake_case, e.g., `_is_adhoc`.",
+      "groq_cited_chunks": [],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"naming_convention\",\"grounded_comment\":\"The function name `_isAdHoc` uses camel case; Python convention prefers snake_case, e.g., `_is_adhoc`.\",\"cited_chunk_ids\":[]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0507",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6715,
+          "text": "The `_check_auc` function is still also defined above the test function but not used anymore. I think you can remove it"
+        },
+        {
+          "chunk_id": "chunk_0488",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6669,
+          "text": "Although I can probably check for `ArrowDtype(pa.string())` without importing it by comparing for equality with `\"string[pyarrow]\"`"
+        },
+        {
+          "chunk_id": "chunk_0479",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6618,
+          "text": "pa = import_optional_dependency(\"pyarrow\") Got it . Let's wrap this in `import_optional_dependency` just to future proof a little bit ( I think we validate the `adbc_driver_manager` import higher up)"
+        },
+        {
+          "chunk_id": "chunk_0629",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6474,
+          "text": "Ok , I'll remove it then. The `params = {} if params is None else params` is there because the params are forwarded with a starred expression `params` which raises an error if applied to `None`. I had"
+        },
+        {
+          "chunk_id": "chunk_0827",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6472,
+          "text": "Can you add a `# TODO(infer_string)` here? At some point we should avoid bubbling up those pyarrow errors"
+        },
+        {
+          "chunk_id": "chunk_0095",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6459,
+          "text": "new_dtype = \"bool[pyarrow]\" if isinstance(obj.dtype, ArrowDtype) else None result = obj._constructor(result, index=obj.index, name=obj.name, copy=False, dtype=new_dtype) Or something of the sort would"
+        },
+        {
+          "chunk_id": "chunk_0806",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6426,
+          "text": "Would be neat if the test looked like this: def test_move_to_array_api_conversions(array_input, reference): \"\"\"Check conversion between various namespace-device-pairs.\"\"\" xp_from = _array_api_for_test"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_3221",
+      "repo": "pallets/flask",
+      "file_path": "flask/app.py",
+      "line_number": 869,
+      "gold_category": "documentation_formatting",
+      "gold_comment": "This comment needs to be moved into a docstring inside the getter.",
+      "predicted_category_hint": "mutable_default",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The comment describing debug mode is incomplete, missing the rest of the sentence, which makes the documentation unclear.",
+      "groq_cited_chunks": [
+        "chunk_0942"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The comment describing debug mode is incomplete, missing the rest of the sentence, which makes the documentation unclear.\",\"cited_chunk_ids\":[\"chunk_0942\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0748",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.7276,
+          "text": "Default argument 'settings={'debug': False}' is mutable; change to None and initialize inside the function to avoid unintended side effects."
+        },
+        {
+          "chunk_id": "chunk_0942",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6755,
+          "text": "The docstring states, “The test client should reload logging configuration,” but this is not related to the test client (`django.test.Client`). The implementation is actually about the `setting_change"
+        },
+        {
+          "chunk_id": "chunk_0745",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.658,
+          "text": "Mutable default argument 'config_dict={}' can lead to persistent state issues; initialize with None and create a new dict inside the function."
+        },
+        {
+          "chunk_id": "chunk_0737",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6542,
+          "text": "Default argument 'settings={'mode': 'fast'}' is mutable; consider setting it to None and creating a new dict inside the function to prevent side effects."
+        },
+        {
+          "chunk_id": "chunk_0603",
+          "category": "mutable_default",
+          "source_type": "review_comment",
+          "score": 0.6466,
+          "text": "(General note for this and following comments: I haven't read every single comment from #18215, so apologies if I raise something that was already discussed and agreed. Feel free to redirect me to the"
+        },
+        {
+          "chunk_id": "chunk_0010",
+          "category": "indentation",
+          "source_type": "review_comment",
+          "score": 0.6451,
+          "text": "These need to span the full allowable length f\"Django version {version}, using settings {settings.SETTINGS_MODULE!r}\\n\" f\"Starting WSGI development server at \" f\"{self.protocol}://{addr}:{server_port}"
+        },
+        {
+          "chunk_id": "chunk_0414",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.6436,
+          "text": "`import logging` is already present at the top of the file, so there is no need to import it again inside the override_settings"
+        }
+      ]
+    },
+    {
+      "pr_id": "PR_176",
+      "repo": "encode/httpx",
+      "file_path": "httpx/client.py",
+      "line_number": 69,
+      "gold_category": "naming_convention",
+      "gold_comment": "Can we rename this param to just middlewares?",
+      "predicted_category_hint": "documentation_formatting",
+      "groq_predicted_category": "documentation_formatting",
+      "groq_predicted_category_valid_only": "documentation_formatting",
+      "groq_grounded_comment": "The inline TODO comment could be better documented in a docstring, but evidence is weak.",
+      "groq_cited_chunks": [
+        "chunk_0917",
+        "chunk_0902",
+        "chunk_0914"
+      ],
+      "llm_parse_valid": true,
+      "llm_parse_status": "json_ok",
+      "llm_raw_response": "{\"category\":\"documentation_formatting\",\"grounded_comment\":\"The inline TODO comment could be better documented in a docstring, but evidence is weak.\",\"cited_chunk_ids\":[\"chunk_0917\",\"chunk_0902\",\"chunk_0914\"]}",
+      "retrieval_backend": "faiss_dense",
+      "generation_backend": "groq_llm",
+      "retrieved_chunks": [
+        {
+          "chunk_id": "chunk_0425",
+          "category": "unused_import",
+          "source_type": "review_comment",
+          "score": 0.7346,
+          "text": "import asyncio from django.db import new_connection, async_connections, DEFAULT_DB_ALIAS from django.test import TransactionTestCase, skipUnlessDBFeature (\"supports_async\") class NestedConnectionTest("
+        },
+        {
+          "chunk_id": "chunk_0245",
+          "category": "naming_convention",
+          "source_type": "review_comment",
+          "score": 0.7251,
+          "text": "I think it would be clearer to explicitly include `provider` in the params list (rather than popping it out of `kwargs` in the function body): def get_connection(backend=None, fail_silently=False, , p"
+        },
+        {
+          "chunk_id": "chunk_0917",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.7033,
+          "text": "# backend and testing that everything works well with free-threaded Python is a"
+        },
+        {
+          "chunk_id": "chunk_0902",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6987,
+          "text": "I think the docstring is off here and I also think we should implement the async function (here just raise the `NotImplementedError` error) as we haven't documented that we are doing this for folks an"
+        },
+        {
+          "chunk_id": "chunk_0914",
+          "category": "documentation_formatting",
+          "source_type": "review_comment",
+          "score": 0.6965,
+          "text": "# class AsyncBytesIteratorResource(Protocol, SupportsAclose, AsyncIterator[bytes]): ..."
+        },
+        {
+          "chunk_id": "chunk_0721",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6951,
+          "text": "Consider replacing the mutable default argument with `None` to prevent shared state issues. Mutable defaults can lead to hard-to-debug problems in multi-call scenarios."
+        },
+        {
+          "chunk_id": "chunk_0734",
+          "category": "mutable_default",
+          "source_type": "augmented",
+          "score": 0.6905,
+          "text": "Consider replacing the mutable default argument with `None` to avoid shared state issues. Mutable defaults can lead to hard-to-debug problems in multi-call scenarios."
+        }
+      ]
+    }
+  ]
+}
