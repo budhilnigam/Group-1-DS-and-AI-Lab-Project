@@ -95,15 +95,16 @@ For the static guideline documents (PEP8, repository-specific `.md` guides):
 ### 3.1 Overview
 
 FAISS vs Qdrant (Planned Transition)
-| Feature | FAISS (Current) | Qdrant (Planned) |
-|--|-||
-| Type | Library | Vector Database |
-| Metadata Filtering | Not supported | Native support |
-| Storage | External metadata mapping | Integrated payload storage |
-| Updates | Limited (append-only, complex delete) | Native upsert & delete |
-| Retrieval | Dense only | Dense + Hybrid (sparse + dense) |
-| Indexing | Manual ANN setup | Built-in HNSW |
-| Scalability | Experimental | Production-ready |
+
+| Feature              | FAISS (Current)                     | Qdrant (Planned)                  |
+|----------------------|-------------------------------------|-----------------------------------|
+| Type                 | Library                            | Vector Database                   |
+| Metadata Filtering   | Not supported                     | Native support                    |
+| Storage              | External metadata mapping          | Integrated payload storage        |
+| Updates              | Limited (append-only, complex delete) | Native upsert & delete           |
+| Retrieval            | Dense only                        | Dense + Hybrid (sparse + dense)   |
+| Indexing             | Manual ANN setup                  | Built-in HNSW                     |
+| Scalability          | Experimental                      | Production-ready                  |
 
 **Rationale:** While FAISS enables fast similarity search, it lacks metadata-aware retrieval and flexible updates. This motivates our planned migration to Qdrant for improved retrieval quality and system scalability.
 
@@ -116,12 +117,12 @@ The "training" phase in this context consists of **inference-time experimentatio
 
 ### 3.2 Dataset for Inference
 
-| Component | Description | Source |
-|-||-|
-| **Evaluation Codeset** | 12–35 code samples with known violations and ground-truth PR review comments | PR extraction pipeline |
-| **Knowledge Base** | 1000+ PEP8 and project-specific guidelines | Chunked guideline documents |
-| **Embeddings Index** | FAISS index built from knowledge base chunks | FAISS dense embedding pipeline |
-| **Violation Categories** | 5 core classes: `unused_import`, `indentation`, `naming_convention`, `mutable_default`, `documentation_formatting` | Linter-mapped dataset |
+| Component            | Description                        | Source                            |
+|----------------------|------------------------------------|-----------------------------------|
+| Evaluation Codeset   | 12–35 code samples with known violations and ground-truth PR review comments | PR extraction pipeline           |
+| Knowledge Base       | 1000+ PEP8 and project-specific guidelines | Chunked guideline documents      |
+| Embeddings Index     | FAISS index built from knowledge base chunks | FAISS dense embedding pipeline   |
+| Violation Categories | 5 core classes: `unused_import`, `indentation`, `naming_convention`, `mutable_default`, `documentation_formatting` | Linter-mapped dataset |
 
 ### 3.3 RAG System Architecture
 
@@ -153,7 +154,7 @@ The "training" phase in this context consists of **inference-time experimentatio
 ### 3.4 Inference Configuration
 
 | Parameter | Value | Purpose |
-|-||--|
+| - | - | - |
 | **Model** | `openai/gpt-oss-20b` | Open-source LLM via Groq API (20B parameters) |
 | **Retrieval Backend** | FAISS Dense | Efficient semantic search in high-dimensional space |
 | **Generation Backend** | Groq LLM | Real-time inference with rate limiting |
@@ -174,9 +175,9 @@ We systematically explored the impact of **temperature** (generation randomness)
 **Objective**: Rapid exploration of hyperparameter sensitivity on a small, curated dataset.
 
 | Temperature | K=1 | K=3 | K=5 | K=7 |
-|--------|
-| **0.1** | Acc: 0.25 VR: 0.58 Valid: 7 | Acc: 0.33 VR: 1.00 Valid: 12 | Acc: 0.33 VR: 0.42 Valid: 5 | Acc: 0.42 VR: 0.92 Valid: 11 |
-| **0.3** | Acc: 0.25 VR: 1.00 Valid: 12 | Acc: 0.33 VR: 0.92 Valid: 11 | Acc: 0.33 VR: 0.92 Valid: 11 | — |
+|-------------|------|------|------|------|
+| 0.1         | Acc: 0.25 VR: 0.58 Valid: 7 | Acc: 0.33 VR: 1.00 Valid: 12 | Acc: 0.33 VR: 0.42 Valid: 5 | Acc: 0.42 VR: 0.92 Valid: 11 |
+| 0.3         | Acc: 0.25 VR: 1.00 Valid: 12 | Acc: 0.33 VR: 0.92 Valid: 11 | Acc: 0.33 VR: 0.92 Valid: 11 | — |
 
 **Key Finding**: Temperature 0.1 + K=7 achieved the highest accuracy **(0.4167)** in V1, suggesting that:
 - **Lower temperature** reduces hallucination and focuses the model on likely categories
@@ -187,9 +188,9 @@ We systematically explored the impact of **temperature** (generation randomness)
 **Objective**: Validate hyperparameter findings on a larger, more representative dataset.
 
 | Temperature | K=1 | K=3 | K=5 | K=7 |
-|--------|
-| **0.1** | Acc: 0.31 VR: 0.94 Valid: 33 | Acc: 0.34 VR: 0.94 Valid: 33 | Acc: 0.29 VR: 0.94 Valid: 33 | Acc: 0.26 VR: 0.83 Valid: 29 |
-| **0.3** | Acc: 0.37 VR: 0.94 Valid: 33 | — | — | — |
+|-------------|------|------|------|------|
+| 0.1         | Acc: 0.31 VR: 0.94 Valid: 33 | Acc: 0.34 VR: 0.94 Valid: 33 | Acc: 0.29 VR: 0.94 Valid: 33 | Acc: 0.26 VR: 0.83 Valid: 29 |
+| 0.3         | Acc: 0.37 VR: 0.94 Valid: 33 | — | — | — |
 
 **Key Finding**: Temperature 0.3 + K=1 achieved the best accuracy in V2 **(0.3714)**, indicating:
 - Slightly higher temperature enhances diversity in reasoning, improving classification on the larger dataset
@@ -199,13 +200,13 @@ We systematically explored the impact of **temperature** (generation randomness)
 
 #### 3.5.3 Per-Class Performance Analysis (V2, Temp=0.1, K=1)
 
-| Violation Class | Precision | Recall | F1-Score | Support |
-|------|
-| unused_import | 0.27 | 0.57 | 0.36 | 7 |
-| naming_convention | 0.50 | 0.29 | 0.36 | 7 |
-| mutable_default | 0.50 | 0.14 | 0.22 | 7 |
-| indentation | 0.25 | 0.14 | 0.18 | 7 |
-| documentation_formatting | 0.30 | 0.43 | 0.35 | 7 |
+| Violation Class         | Precision | Recall | F1-Score | Support |
+|-------------------------|-----------|--------|----------|---------|
+| unused_import           | 0.27      | 0.57   | 0.36     | 7       |
+| naming_convention       | 0.50      | 0.29   | 0.36     | 7       |
+| mutable_default         | 0.50      | 0.14   | 0.22     | 7       |
+| indentation             | 0.25      | 0.14   | 0.18     | 7       |
+| documentation_formatting| 0.30      | 0.43   | 0.35     | 7       |
 
 **Observations**:
 - **Strengths**: naming_convention and mutable_default show highest precision (0.50), indicating the retriever effectively identifies convention-related guidance.
@@ -216,14 +217,14 @@ We systematically explored the impact of **temperature** (generation randomness)
 
 A critical metric is **valid JSON parse rate**, reflecting the model's ability to structure its response correctly.
 
-| Configuration | V1 Valid Rate | V2 Valid Rate |
-|--|-:|-:|
-| Temp=0.1, K=1 | 0.58 | 0.94 |
-| Temp=0.1, K=3 | 1.00 | 0.94 |
-| Temp=0.1, K=5 | 0.42 | 0.94 |
-| Temp=0.1, K=7 | 0.92 | 0.83 |
-| Temp=0.3, K=1 | 1.00 | 0.94 |
-| **Average** | **0.78** | **0.91** |
+| Configuration       | V1 Valid Rate | V2 Valid Rate |
+|---------------------|---------------|---------------|
+| Temp=0.1, K=1      | 0.58          | 0.94          |
+| Temp=0.1, K=3      | 1.00          | 0.94          |
+| Temp=0.1, K=5      | 0.42          | 0.94          |
+| Temp=0.1, K=7      | 0.92          | 0.83          |
+| Temp=0.3, K=1      | 1.00          | 0.94          |
+| **Average**        | **0.78**      | **0.91**      |
 
 **Key Insight**: V2 demonstrates **significantly higher parse quality (0.91 vs. 0.78)**, likely due to:
 1. **Better prompt engineering** after initial experiments refined the instruction set
@@ -235,12 +236,55 @@ A critical metric is **valid JSON parse rate**, reflecting the model's ability t
 To improve stability and accuracy, we employed:
 
 | Technique | Implementation | Effect |
-|-||-|
+|-|-|-|
 | Rate Limiting | Groq API configured with 30 RPM limit | Prevented quota exhaustion; ensured consistent model behavior |
 | Retry Logic | Up to 3 retries with exponential backoff | Improved reliability under transient API failures |
 | Prompt Engineering | Clear JSON schema + role definition | Increased valid parse rates from 0.58 to 1.0 |
 | Retrieval Diversification | Varied K values (1–7) | Balanced precision vs. recall based on dataset size |
 | Temperature Calibration | Tested 0.1 and 0.3 | Tuned randomness to dataset characteristics |
+
+### 3.8 Retrieval Prompt Template
+
+The prompt template used to construct grounded, strict-scope prompts for the LLM is shown below (extracted from `notebooks/retrieval_prompting_strategy.ipynb`). The template enforces category constraints, evidence citation, and a strict JSON-only output schema.
+
+```text
+You are a Python code-review assistant in a RAG system.
+
+Task:
+- Review ONLY the provided diff context and retrieved evidence.
+- Focus ONLY on these categories: indentation, naming_convention, unused_import, mutable_default, documentation_formatting.
+- Do NOT comment on functionality correctness, security, architecture, or testing strategy.
+- If evidence is weak, state uncertainty explicitly in grounded_comment.
+- Use predicted_category_hint only as a weak prior, not as a hard constraint.
+
+Context:
+- repo: {repo}
+- pr_id: {pr_id}
+- file_path: {file_path}
+- line_number: {line_number}
+- predicted_category_hint: {predicted_category}
+
+Diff chunk:
+{diff_chunk}
+
+Retrieved evidence (top-k):
+{evidence_block}
+
+Output requirements:
+- Return EXACTLY one JSON object only.
+- Do not include markdown fences, prose, or extra keys.
+- category must be one of: [indentation, naming_convention, unused_import, mutable_default, documentation_formatting]
+- cited_chunk_ids must be a JSON array of chunk IDs (or empty array)
+
+Expected JSON schema:
+{
+  "category": "<one allowed category>",
+  "grounded_comment": "<single actionable sentence grounded in evidence>",
+  "cited_chunk_ids": ["chunk_0001", "chunk_0042"]
+}
+```
+
+This template is used by `build_prompt()` in the notebook and is saved alongside retrieval examples for inspection and reproducibility.
 
 
 ## 4. Results & Observations
