@@ -1,0 +1,1041 @@
+sample_id,repo,source_path,strategy,rank,score,source_type,category,guideline_text,query_preview
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,1,0.6203207,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,2,0.60370713,pylint,naming_convention,W3201 (bad-dunder-name): Dunder method name is incorrect or not a recognized Python special method name.,"Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,3,0.6007284,ruff,naming_convention,N807: Function name should not start and end with double underscores (__). Dunder names are reserved for Python special methods.,"Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,4,0.5957695,ruff,unused_import,"Be cautious when auto-removing unused imports in __init__.py files, as these may be intentional re-exports that form the module's public API.","Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,5,0.5937929,ruff,mutable_default,"B006 example fix: Instead of 'def func(items=[]):', write 'def func(items=None):' and then 'if items is None: items = []' inside the function body.","Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,6,0.59106624,ruff,documentation_formatting,D402: First line of the docstring should not be the function's signature. Describe the behavior instead.,"Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,7,0.5891223,ruff,mutable_default,"B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.","Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,8,0.5838695,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,9,0.58324504,ruff,documentation_formatting,D417: Missing argument descriptions in the docstring. All function parameters should be documented.,"Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_1_full_file,10,0.5826511,ruff,naming_convention,N815: Variable in class scope should not use mixedCase. Use snake_case instead.,"Repository: kannan-dedsec/synthetic-sklearn | File: custom_transformer.py
+""""""Custom transformer for removing outliers from a dataset.
+
+This module provides a custom transformer that can be used to identify and
+remove outliers from a dataset based on the interq"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,1,0.6049465,django_guidelines,unused_import,"Modules should not use settings stored in django.conf.settings at the top level, i.e. evaluated when the module is imported.","Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,2,0.60441077,django_guidelines,unused_import,Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.,"Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,3,0.6026156,django_guidelines,unused_import,"Put imports in these groups: future, standard library, third-party libraries, other Django components, local Django component, try/excepts.","Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,4,0.60214895,django_guidelines,unused_import,"Use convenience imports whenever available. For example, import from django.views instead of django.views.generic.base.","Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,5,0.60214573,ruff,unused_import,"Be cautious when auto-removing unused imports in __init__.py files, as these may be intentional re-exports that form the module's public API.","Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,6,0.5939949,django_guidelines,documentation_formatting,The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.,"Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,7,0.59357214,django_guidelines,naming_convention,"The order of model inner classes and standard methods should be: all database fields, custom manager attributes, class Meta, __str__ and magic methods, save(), get_absolute_url(), then any custom methods.","Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,8,0.59018385,django_review_comment,unused_import,It looks like the `json` import on line 11 is not being used anywhere in the file. You can safely remove it to keep the code clean and maintainable.,"Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,9,0.5850759,ruff,documentation_formatting,D100: Missing docstring in public module. Public modules should have a docstring describing their purpose and exported objects.,"Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_1_full_file,10,0.58152324,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"Repository: kannan-dedsec/synthetic-django | File: urls.py
+""""""
+Root URL configuration for the Django project.
+
+This module defines the URL routes for the project, including:
+- The admin interface
+- API endpoints
+- Authentication-related views
+
+Namespaces are u"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,1,0.65106654,django_review_comment,mutable_default,Using a mutable default argument like `set()` can lead to unexpected behavior since the same set instance will be shared across all calls to `_create_article`. Consider using `None` as the default and initializing a new ,"Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,2,0.62810755,django_guidelines,naming_convention,"The order of model inner classes and standard methods should be: all database fields, custom manager attributes, class Meta, __str__ and magic methods, save(), get_absolute_url(), then any custom methods.","Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,3,0.61766124,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,4,0.61651087,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,5,0.6058026,django_review_comment,indentation,Please replace the tabs with spaces in the `handle_article_tags_change` function to maintain consistent indentation throughout the file. This will help improve code readability and prevent potential issues in the future.,"Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,6,0.5963961,django_guidelines,unused_import,"Use convenience imports whenever available. For example, import from django.views instead of django.views.generic.base.","Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,7,0.5929274,django_review_comment,indentation,It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.,"Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,8,0.5852883,django_guidelines,unused_import,"Modules should not use settings stored in django.conf.settings at the top level, i.e. evaluated when the module is imported.","Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,9,0.58009934,django_guidelines,unused_import,Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.,"Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_1_full_file,10,0.5737797,django_review_comment,mutable_default,Using a mutable default argument like `filters={}` can lead to unexpected behavior due to shared state across function calls. Consider using `None` as the default and initializing `filters` inside the function if itâ€™s ,"Repository: kannan-dedsec/synthetic-django | File: managers.py
+""""""
+Custom QuerySet and Manager for handling published articles.
+This module defines a custom QuerySet and Manager to simplify
+and enhance queries on the Article model.
+""""""
+
+from django.db import m"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,1,0.64010787,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,2,0.62673485,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,3,0.60967296,pylint,naming_convention,W3201 (bad-dunder-name): Dunder method name is incorrect or not a recognized Python special method name.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,4,0.60855484,ruff,mutable_default,"B006 example fix: Instead of 'def func(items=[]):', write 'def func(items=None):' and then 'if items is None: items = []' inside the function body.","Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,5,0.6039009,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,6,0.6036918,ruff,documentation_formatting,D100: Missing docstring in public module. Public modules should have a docstring describing their purpose and exported objects.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,7,0.6018884,pylint,naming_convention,C0132 (typevar-name-mismatch): TypeVar name does not match the variable it is assigned to.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,8,0.60086095,ruff,naming_convention,N807: Function name should not start and end with double underscores (__). Dunder names are reserved for Python special methods.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,9,0.60047185,ruff,unused_import,"Be cautious when auto-removing unused imports in __init__.py files, as these may be intentional re-exports that form the module's public API.","Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_1_full_file,10,0.6002501,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"Repository: kannan-dedsec/synthetic-sklearn | File: tests/test_models.py
+import os
+import sys
+import re
+import pytest
+from sklearn.datasets import load_iris, load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Sta"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,1,0.6350504,fastapi_review_comment,documentation_formatting,The multi-line docstring in get_current_user is missing a blank line after the summary and the closing quotes are placed incorrectly; please follow PEP 257 formatting for readability and consistency.,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,2,0.6319588,fastapi_review_comment,naming_convention,It's best to stick with the snake_case naming convention for test functions in Python. Please rename `testCreateItem` to `test_create_item` to maintain consistency with PEP 8 guidelines.,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,3,0.6256232,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,4,0.62252945,fastapi_review_comment,documentation_formatting,Consider adding a docstring to the `validate_secret_key` method to explain its purpose and the expected input. This will improve clarity for anyone reading the code in the future.,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,5,0.6168196,fastapi_review_comment,naming_convention,Consider renaming `sample_items` to `sampleItems` for consistency with the camelCase naming convention used throughout the codebase. This will help maintain a uniform style and improve readability.,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,6,0.61298287,fastapi_review_comment,unused_import,It looks like the `json` import on line 3 isn't being used anywhere in the file. Consider removing it to keep the code clean and avoid any confusion.,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,7,0.61103606,fastapi_review_comment,mutable_default,Using a mutable default argument like `session_data={}` can lead to unexpected behavior since the same instance is shared across function calls. Consider using `None` as the default and initializing the dictionary inside,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,8,0.6094301,fastapi_review_comment,mutable_default,Using a mutable default argument like `extra_data={}` in `validate_database_url` can lead to unexpected behavior due to shared state across function calls. Please change it to `extra_data=None` and initialize inside the ,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,9,0.60809016,fastapi_review_comment,unused_import,It looks like the `json` import on line 10 is not being used in the file. Consider removing it to keep the code clean and maintainable.,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_1_full_file,10,0.60785437,fastapi_review_comment,indentation,Looks like the indentation in get_current_user switched from 4 spaces to a mix of tabs and spacesâ€”can you standardize it to 4 spaces throughout for consistency and to avoid potential issues?,"Repository: kannan-dedsec/synthetic-fastapi | File: tests/test_users.py
+""""""
+Pytest test suite for user endpoints in the FastAPI project.
+
+Covers:
+    - User creation
+    - User retrieval
+    - User update
+    - Listing users
+
+Assumes the FastAPI app is importe"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,1,0.71196723,fastapi_review_comment,naming_convention,"For consistency with our naming conventions, please consider renaming `createItem` to `create_item` to follow the snake_case style commonly used in Python. This will help maintain readability and uniformity across the co","Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,2,0.70557666,fastapi_review_comment,naming_convention,Let's stick to the Python naming conventions and rename `updateItem` to `update_item` to maintain consistency with the rest of the codebase. This will help improve readability and maintainability.,"Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,3,0.69415545,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,4,0.6814091,fastapi_review_comment,naming_convention,"Good job keeping naming consistent, but let's stick with snake_case for variable names (e.g., item_id, owner_id) to align with Python conventions and improve readability throughout the codebase.","Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,5,0.68070877,fastapi_review_comment,naming_convention,Consider renaming `sample_items` to `sampleItems` for consistency with the camelCase naming convention used throughout the codebase. This will help maintain a uniform style and improve readability.,"Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,6,0.67466056,fastapi_review_comment,naming_convention,Let's stick with snake_case for function and argument names to maintain consistency with Python's naming conventionsâ€”please revert getItem to get_item and itemId/ownerId to item_id/owner_id.,"Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,7,0.6579707,fastapi_review_comment,naming_convention,It's best to stick with the snake_case naming convention for test functions in Python. Please rename `testCreateItem` to `test_create_item` to maintain consistency with PEP 8 guidelines.,"Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,8,0.6514162,fastapi_review_comment,naming_convention,"It's generally more Pythonic to use snake_case for function names, so please consider renaming `listItems` back to `list_items` for consistency with PEP 8 guidelines.","Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,9,0.65138316,ruff,mutable_default,"B006 example fix: Instead of 'def func(items=[]):', write 'def func(items=None):' and then 'if items is None: items = []' inside the function body.","Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_1_full_file,10,0.65046364,fastapi_review_comment,naming_convention,Let's stick to the PEP 8 style guide for function naming and use `get_item` instead of `getItem` for consistency with the rest of the codebase. This will help maintain readability and adherence to Python conventions.,"Repository: kannan-dedsec/synthetic-fastapi | File: schemas/item.py
+""""""
+Pydantic schemas for Item models in FastAPI project.
+
+Defines ItemCreate, ItemUpdate, and ItemResponse data structures
+with field validation and example data.
+""""""
+
+from typing import Optio"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,1,0.6241077,fastapi_review_comment,documentation_formatting,The multi-line docstring in get_current_user is missing a blank line after the summary and the closing quotes are placed incorrectly; please follow PEP 257 formatting for readability and consistency.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,2,0.6155731,fastapi_review_comment,documentation_formatting,Consider adding a docstring to the `validate_secret_key` method to explain its purpose and the expected input. This will improve clarity for anyone reading the code in the future.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,3,0.6148157,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,4,0.6118946,fastapi_review_comment,unused_import,It looks like the `json` import on line 3 isn't being used anywhere in the file. Consider removing it to keep the code clean and avoid any confusion.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,5,0.6074892,fastapi_review_comment,naming_convention,Let's stick to the Python naming conventions and rename `updateItem` to `update_item` to maintain consistency with the rest of the codebase. This will help improve readability and maintainability.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,6,0.60555434,fastapi_review_comment,unused_import,It looks like the `json` import on line 10 is not being used in the file. Consider removing it to keep the code clean and maintainable.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,7,0.6023758,ruff,unused_import,"Be cautious when auto-removing unused imports in __init__.py files, as these may be intentional re-exports that form the module's public API.","Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,8,0.59497,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,9,0.59457016,fastapi_review_comment,mutable_default,Using a mutable default argument like `session_data={}` can lead to unexpected behavior since the same instance is shared across function calls. Consider using `None` as the default and initializing the dictionary inside,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_1_full_file,10,0.5944326,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"Repository: kannan-dedsec/synthetic-fastapi | File: routers/auth.py
+""""""
+Authentication router module for FastAPI project.
+
+Defines endpoints for OAuth2 password flow, token refresh,
+and user information retrieval.
+""""""
+
+from typing import Optional
+from datetime"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,1,0.6841606,django_guidelines,unused_import,"Use convenience imports whenever available. For example, import from django.views instead of django.views.generic.base.","Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,2,0.6448545,django_review_comment,mutable_default,Using a mutable default argument like `set()` can lead to unexpected behavior since the same set instance will be shared across all calls to `_create_article`. Consider using `None` as the default and initializing a new ,"Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,3,0.63943994,django_guidelines,unused_import,Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.,"Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,4,0.6382196,django_review_comment,indentation,Please replace the tabs with spaces in the `handle_article_tags_change` function to maintain consistent indentation throughout the file. This will help improve code readability and prevent potential issues in the future.,"Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,5,0.63556516,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,6,0.6340366,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,7,0.63398755,django_review_comment,indentation,It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.,"Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,8,0.6239692,ruff,documentation_formatting,D100: Missing docstring in public module. Public modules should have a docstring describing their purpose and exported objects.,"Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,9,0.620479,django_guidelines,naming_convention,"The order of model inner classes and standard methods should be: all database fields, custom manager attributes, class Meta, __str__ and magic methods, save(), get_absolute_url(), then any custom methods.","Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_1_full_file,10,0.61449146,django_guidelines,unused_import,"Put imports in these groups: future, standard library, third-party libraries, other Django components, local Django component, try/excepts.","Repository: kannan-dedsec/synthetic-django | File: views.py
+""""""
+Views module for managing articles in the application.
+
+This module contains class-based views for listing articles, viewing
+a single article's details, and creating new articles. It uses Django's"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,1,0.6564255,django_review_comment,documentation_formatting,The docstring for `test_empty_form` should remain concise and informative; let's convert it back to a single line or ensure it's properly formatted if it needs to be multi-line. This will improve readability and maintain,"Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,2,0.6554843,django_review_comment,naming_convention,The function name `testSlugGeneration` should be in snake_case to maintain consistency with the naming conventions used in Python. Please rename it to `test_slug_generation`.,"Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,3,0.64317113,django_review_comment,documentation_formatting,It looks like the docstring was removed from the `test_valid_form` function. Please consider adding it back to maintain clarity about the purpose of the test and to follow our documentation standards.,"Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,4,0.6396426,django_review_comment,mutable_default,Using a mutable default argument like `set()` can lead to unexpected behavior since the same set instance will be shared across all calls to `_create_article`. Consider using `None` as the default and initializing a new ,"Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,5,0.6374263,django_review_comment,documentation_formatting,"The docstring on line 9 can be simplified back to a single line for better readability. You can change it to `""""""TestCase for validating ExampleForm behavior.""""""` to maintain clarity without unnecessary formatting.","Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,6,0.6370034,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,7,0.635818,django_guidelines,unused_import,"Use convenience imports whenever available. For example, import from django.views instead of django.views.generic.base.","Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,8,0.63176,django_review_comment,naming_convention,"Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.","Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,9,0.6313804,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_1_full_file,10,0.62480485,django_review_comment,indentation,Please replace the tabs with spaces in the `handle_article_tags_change` function to maintain consistent indentation throughout the file. This will help improve code readability and prevent potential issues in the future.,"Repository: kannan-dedsec/synthetic-django | File: tests/test_views.py
+import os
+import sys
+import re
+""""""
+Unit tests for views in the Django application.
+
+This module contains test cases for the following views:
+- Article list view
+- Article detail view
+- Crea"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,1,0.6049012,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,2,0.59919786,ruff,mutable_default,"B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.","Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,3,0.5916573,ruff,documentation_formatting,D417: Missing argument descriptions in the docstring. All function parameters should be documented.,"Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,4,0.58607435,ruff,mutable_default,"B006 example fix: Instead of 'def func(items=[]):', write 'def func(items=None):' and then 'if items is None: items = []' inside the function body.","Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,5,0.58388484,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,6,0.57994866,pylint,naming_convention,W3201 (bad-dunder-name): Dunder method name is incorrect or not a recognized Python special method name.,"Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,7,0.57878184,pep8,naming_convention,"Modules should have short, all-lowercase names. Underscores can be used in the module name if it improves readability.","Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,8,0.5772461,pylint,naming_convention,C0132 (typevar-name-mismatch): TypeVar name does not match the variable it is assigned to.,"Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,9,0.5756574,flake8,unused_import,F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.,"Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_1_full_file,10,0.5748062,ruff,unused_import,F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.,"Repository: kannan-dedsec/synthetic-sklearn | File: hyperparameter_tuning.py
+""""""hyperparameter_tuning.py
+
+This module provides functions for hyperparameter tuning using Grid Search,
+Random Search, and Bayesian Optimization with Scikit-learn. It includes
+parame"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,1,0.72108173,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,2,0.7008923,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,3,0.7008269,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,4,0.69105685,ruff,indentation,"Ruff E111: Indentation is not a multiple of the configured indent-width (default 4). Per PEP 8, use 4 spaces per indentation level.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,5,0.6872933,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,6,0.6834477,flake8,unused_import,F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,7,0.6817987,pep8,naming_convention,"Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,8,0.6805521,ruff,documentation_formatting,"D206: Docstring should be indented with spaces, not tabs.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,9,0.6801429,ruff,documentation_formatting,D207: Docstring is under-indented. Adjust indentation to match the opening triple quotes.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_2_regex_intelligent,10,0.67862535,ruff,documentation_formatting,D208: Docstring is over-indented. Reduce indentation to match the opening triple quotes.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: filteredData, fitTransform, lowerBound, upperBound ; mutable-default patterns: 2 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention, unus"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,1,0.7258797,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,2,0.7246891,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,3,0.7120503,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,4,0.709911,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,5,0.70372,django_guidelines,unused_import,Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,6,0.7034991,django_guidelines,documentation_formatting,The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,7,0.7031497,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,8,0.7027566,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,9,0.69826055,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_2_regex_intelligent,10,0.69164646,django_review_comment,unused_import,It looks like the import statement for `json` on line 3 is not being used anywhere in the file. Consider removing it to keep the code clean and improve readability.,"repo family: django ; import statements count: 2 ; camelCase identifiers: urlPatterns ; mutable-default patterns: 0 ; non-4-space indentation lines: 6 ; docstring markers count: 2 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,1,0.732468,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,2,0.7258219,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,3,0.7153045,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,4,0.7134483,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,5,0.71028864,django_guidelines,documentation_formatting,The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,6,0.70906246,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,7,0.70864856,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,8,0.70783055,django_review_comment,indentation,"It looks like the indentation for the `clean_title` method has changed from 4 spaces to 6 spaces, which can affect code readability and consistency. Please revert it back to 4 spaces to maintain uniformity with the rest ","repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,9,0.70183116,django_review_comment,indentation,Please replace the tabs with spaces in the `handle_article_tags_change` function to maintain consistent indentation throughout the file. This will help improve code readability and prevent potential issues in the future.,"repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_2_regex_intelligent,10,0.6996329,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","repo family: django ; import statements count: 2 ; camelCase identifiers: byAuthor, withinDateRange ; mutable-default patterns: 4 ; non-4-space indentation lines: 0 ; docstring markers count: 24 ; focus on naming_convention, unused_import, indentation, mutable"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,1,0.7222086,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,2,0.710762,flake8,unused_import,F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,3,0.7053766,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,4,0.7022083,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,5,0.6945373,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,6,0.6922936,ruff,documentation_formatting,"D206: Docstring should be indented with spaces, not tabs.","repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,7,0.6915624,pep8,naming_convention,"Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.","repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,8,0.68448645,ruff,documentation_formatting,D207: Docstring is under-indented. Adjust indentation to match the opening triple quotes.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,9,0.6835066,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_2_regex_intelligent,10,0.6833801,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","repo family: scikit-learn ; import statements count: 12 ; camelCase identifiers: none ; mutable-default patterns: 3 ; non-4-space indentation lines: 0 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,1,0.7222547,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,2,0.7214327,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,3,0.71914184,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,4,0.7070911,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,5,0.6993055,fastapi_review_comment,indentation,The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,6,0.6982393,flake8,unused_import,F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,7,0.694458,fastapi_review_comment,indentation,"It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the co","repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,8,0.6941047,fastapi_review_comment,indentation,"It looks like the indentation in the `UserBase` class has changed from 4 spaces to 2 spaces. Consistency in indentation is crucial for readability and to avoid potential issues, so please ensure that it remains at 4 spac","repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,9,0.693529,fastapi_review_comment,documentation_formatting,Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 convention,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_2_regex_intelligent,10,0.6924478,fastapi_review_comment,documentation_formatting,The multi-line docstring in `db_session_context` needs a blank line after the summary and clearer formattingâ€”letâ€™s follow PEP 257 for readability and consistency.,"repo family: fastapi ; import statements count: 7 ; camelCase identifiers: none ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 18 ; focus on naming_convention, unused_import, indentation, mutable_default, documentat"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,1,0.72017986,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,2,0.7110119,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,3,0.7099149,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,4,0.7024224,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,5,0.6960391,fastapi_review_comment,indentation,The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,6,0.6929023,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,7,0.6910603,fastapi_review_comment,naming_convention,Consider renaming `sample_items` to `sampleItems` for consistency with the camelCase naming convention used throughout the codebase. This will help maintain a uniform style and improve readability.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,8,0.68750006,fastapi_review_comment,documentation_formatting,Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 convention,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,9,0.687487,ruff,naming_convention,N811: Constant imported as non-constant. Constants should remain UPPER_CASE when imported.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_2_regex_intelligent,10,0.68710285,ruff,naming_convention,N812: Lowercase imported as non-lowercase. Do not alias a lowercase import to an uppercase name.,"repo family: fastapi ; import statements count: 3 ; camelCase identifiers: nameNotBlank, priceTwoDecimals ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, m"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,1,0.70596766,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,2,0.7049591,fastapi_review_comment,indentation,Noticed the TokenResponse class is using 2-space indentation instead of the project's standard 4 spacesâ€”let's keep it consistent to avoid confusion and maintain readability.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,3,0.70292413,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,4,0.7022315,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,5,0.6926203,fastapi_review_comment,indentation,The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,6,0.68808746,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,7,0.68771267,fastapi_review_comment,documentation_formatting,Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 convention,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,8,0.68767095,fastapi_review_comment,indentation,"It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the co","repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,9,0.68653023,fastapi_review_comment,indentation,The indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file; please revert it to 4 spaces to maintain uniformity and improve readability.,"repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_2_regex_intelligent,10,0.68634427,fastapi_review_comment,indentation,"It looks like the indentation in the `UserBase` class has changed from 4 spaces to 2 spaces. Consistency in indentation is crucial for readability and to avoid potential issues, so please ensure that it remains at 4 spac","repo family: fastapi ; import statements count: 12 ; camelCase identifiers: tokenUrl ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 10 ; focus on naming_convention, unused_import, indentation, mutable_default, docum"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,1,0.7226553,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,2,0.71990854,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,3,0.719123,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,4,0.717772,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,5,0.71291673,django_guidelines,documentation_formatting,The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,6,0.7072876,django_review_comment,indentation,It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,7,0.7069614,django_review_comment,documentation_formatting,It looks like the docstring was removed from the `test_valid_form` function. Please consider adding it back to maintain clarity about the purpose of the test and to follow our documentation standards.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,8,0.706403,django_review_comment,documentation_formatting,The docstring for `test_empty_form` should remain concise and informative; let's convert it back to a single line or ensure it's properly formatted if it needs to be multi-line. This will improve readability and maintain,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,9,0.70560014,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_2_regex_intelligent,10,0.7038449,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: django ; import statements count: 11 ; camelCase identifiers: formValid ; mutable-default patterns: 0 ; non-4-space indentation lines: 25 ; docstring markers count: 14 ; focus on naming_convention, unused_import, indentation, mutable_default, docu"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,1,0.71368206,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,2,0.7114042,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,3,0.71084565,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,4,0.70250213,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,5,0.69625413,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,6,0.6943617,django_guidelines,documentation_formatting,The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,7,0.69350725,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,8,0.6913737,django_review_comment,naming_convention,"Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.","repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,9,0.6882603,django_guidelines,unused_import,Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.,"repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_2_regex_intelligent,10,0.6827248,pep8,naming_convention,"Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.","repo family: django ; import statements count: 7 ; camelCase identifiers: assertContains, assertEqual, assertNotEqual, assertTrue, setUp ; mutable-default patterns: 0 ; non-4-space indentation lines: 0 ; docstring markers count: 12 ; focus on naming_convention"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,1,0.7050279,ruff,naming_convention,N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,2,0.6976085,flake8,unused_import,F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,3,0.69436485,ruff,naming_convention,N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,4,0.68421453,pylint,unused_import,W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,5,0.683579,ruff,naming_convention,N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,6,0.6815016,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,7,0.6782444,pep8,naming_convention,"Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,8,0.66207075,pylint,unused_import,W0614 (unused-wildcard-import): A wildcard import (from module import *) was used but not all imported names are utilized. Use explicit imports instead.,"repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,9,0.6590017,pep8,naming_convention,"Modules should have short, all-lowercase names. Underscores can be used in the module name if it improves readability.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_2_regex_intelligent,10,0.6587398,ruff,indentation,"Ruff E111: Indentation is not a multiple of the configured indent-width (default 4). Per PEP 8, use 4 spaces per indentation level.","repo family: scikit-learn ; import statements count: 4 ; camelCase identifiers: bayesianOptimizationTuning, getDefaultParamGrids, gridSearchTuning, randomSearchTuning ; mutable-default patterns: 2 ; non-4-space indentation lines: 3 ; docstring markers count: 8"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,1,0.67620134,ruff,documentation_formatting,D211: No blank lines allowed before class docstring (mutually exclusive with D203).,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,2,0.6662011,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,3,0.66294384,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,4,0.6577129,pylint,documentation_formatting,C0112 (empty-docstring): Docstring is present but empty. Either add meaningful content or remove the empty docstring.,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,5,0.65729606,pep8,naming_convention,"Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.","repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,6,0.65608084,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,7,0.65367913,ruff,documentation_formatting,D107: Missing docstring in __init__ method. The __init__ method should document the constructor arguments and behavior.,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,8,0.653602,ruff,documentation_formatting,D417: Missing argument descriptions in the docstring. All function parameters should be documented.,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,9,0.6533199,ruff,indentation,"Ruff E111: Indentation is not a multiple of the configured indent-width (default 4). Per PEP 8, use 4 spaces per indentation level.","repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,strategy_3_static,10,0.65270126,ruff,documentation_formatting,D210: No whitespace allowed surrounding docstring text.,"repo family: scikit-learn ; flake8 findings: 5 (rc=1) ; pylint findings: 13 (rc=20) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,1,0.7474899,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,2,0.73590696,django_review_comment,naming_convention,"Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.","repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,3,0.7248337,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,4,0.7238345,django_review_comment,naming_convention,The function name `testSlugGeneration` should be in snake_case to maintain consistency with the naming conventions used in Python. Please rename it to `test_slug_generation`.,"repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,5,0.718614,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,6,0.7124819,django_review_comment,naming_convention,"The function name `test_category_relationship` is correctly using snake_case, which is the standard convention in Python. Please ensure that any future function names remain consistent with this style for better readabil","repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,7,0.7120227,django_review_comment,documentation_formatting,The docstring for `test_empty_form` should remain concise and informative; let's convert it back to a single line or ensure it's properly formatted if it needs to be multi-line. This will improve readability and maintain,"repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,8,0.7107435,django_review_comment,documentation_formatting,"The docstring is missing a blank line after the summary, which is required for proper formatting. Please add a blank line before the detailed description to improve readability and adhere to PEP 257.","repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,9,0.71041816,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,strategy_3_static,10,0.70988,django_guidelines,documentation_formatting,Use flake8 to check for problems in this area. Note that the .flake8 file excludes some errors that are not considered gross violations.,"repo family: django ; flake8 findings: 1 (rc=1) ; pylint findings: 5 (rc=18) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,1,0.75151205,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,2,0.7249724,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,3,0.7210394,django_review_comment,naming_convention,"Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.","repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,4,0.7177148,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,5,0.71106786,django_review_comment,indentation,It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.,"repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,6,0.70996034,django_review_comment,documentation_formatting,"The multiline docstring for the `subject` argument could be simplified back to a single line for clarity and consistency with the rest of the argument descriptions. It helps maintain a clean and concise format, especiall","repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,7,0.70908386,django_guidelines,documentation_formatting,Use flake8 to check for problems in this area. Note that the .flake8 file excludes some errors that are not considered gross violations.,"repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,8,0.7063944,django_review_comment,documentation_formatting,"The docstring is missing a blank line after the summary, which is required for proper formatting. Please add a blank line before the detailed description to improve readability and adhere to PEP 257.","repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,9,0.705955,django_review_comment,naming_convention,The function name `testSlugGeneration` should be in snake_case to maintain consistency with the naming conventions used in Python. Please rename it to `test_slug_generation`.,"repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,strategy_3_static,10,0.7057214,django_review_comment,documentation_formatting,The docstring for `test_empty_form` should remain concise and informative; let's convert it back to a single line or ensure it's properly formatted if it needs to be multi-line. This will improve readability and maintain,"repo family: django ; flake8 findings: 11 (rc=1) ; pylint findings: 14 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, mutable default argument avoidance, snake_case naming convention"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,1,0.66400623,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,2,0.6580213,ruff,documentation_formatting,D211: No blank lines allowed before class docstring (mutually exclusive with D203).,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,3,0.6537863,pylint,documentation_formatting,C0112 (empty-docstring): Docstring is present but empty. Either add meaningful content or remove the empty docstring.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,4,0.64790803,ruff,documentation_formatting,D205: One blank line required between the summary line and the description in a multi-line docstring.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,5,0.64780426,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,6,0.64736605,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,7,0.64571106,ruff,documentation_formatting,D100: Missing docstring in public module. Public modules should have a docstring describing their purpose and exported objects.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,8,0.64303124,ruff,documentation_formatting,D107: Missing docstring in __init__ method. The __init__ method should document the constructor arguments and behavior.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,9,0.6429833,ruff,documentation_formatting,D101: Missing docstring in public class. Every public class should have a docstring.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,strategy_3_static,10,0.63949764,ruff,documentation_formatting,D417: Missing argument descriptions in the docstring. All function parameters should be documented.,"repo family: scikit-learn ; flake8 findings: 7 (rc=1) ; pylint findings: 36 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,1,0.7076926,fastapi_review_comment,documentation_formatting,The multi-line docstring in `db_session_context` needs a blank line after the summary and clearer formattingâ€”letâ€™s follow PEP 257 for readability and consistency.,"repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,2,0.6910604,fastapi_review_comment,documentation_formatting,Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 convention,"repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,3,0.6890342,fastapi_review_comment,documentation_formatting,The docstring format here needs to be fixed; please ensure that there's a blank line before the multi-line docstring for better readability and adherence to conventions.,"repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,4,0.6869652,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,5,0.6856878,fastapi_review_comment,indentation,The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.,"repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,6,0.684564,fastapi_review_comment,indentation,The indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file; please revert it to 4 spaces to maintain uniformity and improve readability.,"repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,7,0.6786798,fastapi_review_comment,indentation,"It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the co","repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,8,0.6721044,fastapi_review_comment,documentation_formatting,The multi-line docstring in get_current_user is missing a blank line after the summary and the closing quotes are placed incorrectly; please follow PEP 257 formatting for readability and consistency.,"repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,9,0.6713979,fastapi_review_comment,indentation,"It looks like the indentation in the `UserBase` class has changed from 4 spaces to 2 spaces. Consistency in indentation is crucial for readability and to avoid potential issues, so please ensure that it remains at 4 spac","repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,strategy_3_static,10,0.66959625,ruff,unused_import,"For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.","repo family: fastapi ; flake8 findings: 4 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 2 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,1,0.7166965,fastapi_review_comment,documentation_formatting,The multi-line docstring in `db_session_context` needs a blank line after the summary and clearer formattingâ€”letâ€™s follow PEP 257 for readability and consistency.,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,2,0.70228255,fastapi_review_comment,documentation_formatting,Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 convention,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,3,0.70078564,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,4,0.69703054,fastapi_review_comment,documentation_formatting,The docstring format here needs to be fixed; please ensure that there's a blank line before the multi-line docstring for better readability and adherence to conventions.,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,5,0.6921319,fastapi_review_comment,indentation,The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,6,0.6869348,fastapi_review_comment,naming_convention,"It's generally more Pythonic to use snake_case for function names, so please consider renaming `listItems` back to `list_items` for consistency with PEP 8 guidelines.","repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,7,0.68580866,ruff,documentation_formatting,D211: No blank lines allowed before class docstring (mutually exclusive with D203).,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,8,0.6801365,fastapi_review_comment,indentation,The indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file; please revert it to 4 spaces to maintain uniformity and improve readability.,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,9,0.6775239,ruff,documentation_formatting,D205: One blank line required between the summary line and the description in a multi-line docstring.,"repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,strategy_3_static,10,0.6755992,fastapi_review_comment,indentation,"It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the co","repo family: fastapi ; flake8 findings: 2 (rc=1) ; pylint findings: 21 (rc=30) ; doc-format signals: 7 ; targeted topics: blank lines and whitespace formatting, docstrings for decorated functions/classes, documentation and docstring coverage, documentation_for"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,1,0.7089972,fastapi_review_comment,documentation_formatting,The multi-line docstring in `db_session_context` needs a blank line after the summary and clearer formattingâ€”letâ€™s follow PEP 257 for readability and consistency.,"repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,2,0.6915177,fastapi_review_comment,documentation_formatting,Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 convention,"repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,3,0.69050527,fastapi_review_comment,documentation_formatting,The docstring format here needs to be fixed; please ensure that there's a blank line before the multi-line docstring for better readability and adherence to conventions.,"repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,4,0.6858578,fastapi_review_comment,naming_convention,"It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.","repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,5,0.6840923,fastapi_review_comment,indentation,The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.,"repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,6,0.6823485,fastapi_review_comment,indentation,The indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file; please revert it to 4 spaces to maintain uniformity and improve readability.,"repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,7,0.67654026,fastapi_review_comment,indentation,"It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the co","repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,8,0.67306536,fastapi_review_comment,documentation_formatting,The multi-line docstring in get_current_user is missing a blank line after the summary and the closing quotes are placed incorrectly; please follow PEP 257 formatting for readability and consistency.,"repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,9,0.66893935,fastapi_review_comment,naming_convention,"It's generally more Pythonic to use snake_case for function names, so please consider renaming `listItems` back to `list_items` for consistency with PEP 8 guidelines.","repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,strategy_3_static,10,0.6687747,fastapi_review_comment,indentation,"It looks like the indentation in the `UserBase` class has changed from 4 spaces to 2 spaces. Consistency in indentation is crucial for readability and to avoid potential issues, so please ensure that it remains at 4 spac","repo family: fastapi ; flake8 findings: 8 (rc=1) ; pylint findings: 17 (rc=22) ; doc-format signals: 3 ; targeted topics: blank lines and whitespace formatting, documentation_formatting for missing/too-small docstrings, snake_case naming convention, unused imp"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,1,0.75022304,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,2,0.72558874,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,3,0.7164591,django_guidelines,documentation_formatting,Use flake8 to check for problems in this area. Note that the .flake8 file excludes some errors that are not considered gross violations.,"repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,4,0.7156832,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,5,0.710333,django_review_comment,naming_convention,"Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.","repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,6,0.70896494,django_review_comment,indentation,It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.,"repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,7,0.7062464,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,8,0.7058375,django_review_comment,documentation_formatting,"The docstring is missing a blank line after the summary, which is required for proper formatting. Please add a blank line before the detailed description to improve readability and adhere to PEP 257.","repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,9,0.70548224,django_review_comment,indentation,"It looks like the indentation for the `clean_title` method has changed from 4 spaces to 6 spaces, which can affect code readability and consistency. Please revert it back to 4 spaces to maintain uniformity with the rest ","repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,strategy_3_static,10,0.69982314,django_review_comment,unused_import,"It looks like the `os` and `sys` imports are unused, as well as the newly added `re` import. Consider removing them to keep the code clean and focused.","repo family: django ; flake8 findings: 22 (rc=1) ; pylint findings: 43 (rc=30) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, indentation and spacing rules, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,1,0.7374918,django_review_comment,indentation,The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.,"repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,2,0.71015275,django_guidelines,documentation_formatting,Use flake8 to check for problems in this area. Note that the .flake8 file excludes some errors that are not considered gross violations.,"repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,3,0.7080788,django_review_comment,naming_convention,"Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.","repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,4,0.7065953,django_review_comment,indentation,"The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.","repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,5,0.7065631,django_review_comment,documentation_formatting,"The docstring is missing a blank line after the summary, which is required for proper formatting. Please add a blank line before the detailed description to improve readability and adhere to PEP 257.","repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,6,0.69723487,django_review_comment,indentation,The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.,"repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,7,0.6938997,django_review_comment,documentation_formatting,The docstring for `test_empty_form` should remain concise and informative; let's convert it back to a single line or ensure it's properly formatted if it needs to be multi-line. This will improve readability and maintain,"repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,8,0.69134384,django_review_comment,indentation,"It looks like the indentation for the `clean_title` method has changed from 4 spaces to 6 spaces, which can affect code readability and consistency. Please revert it back to 4 spaces to maintain uniformity with the rest ","repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,9,0.6907005,django_review_comment,naming_convention,The function name `testSlugGeneration` should be in snake_case to maintain consistency with the naming conventions used in Python. Please rename it to `test_slug_generation`.,"repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,strategy_3_static,10,0.6905264,django_review_comment,indentation,"It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”space","repo family: django ; flake8 findings: 6 (rc=1) ; pylint findings: 16 (rc=22) ; doc-format signals: 0 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, snake_case naming convention, unused import cleanup"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,1,0.65992796,ruff,documentation_formatting,D211: No blank lines allowed before class docstring (mutually exclusive with D203).,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,2,0.6587552,ruff,documentation_formatting,D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,3,0.6539903,pylint,documentation_formatting,C0112 (empty-docstring): Docstring is present but empty. Either add meaningful content or remove the empty docstring.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,4,0.6503972,ruff,documentation_formatting,D205: One blank line required between the summary line and the description in a multi-line docstring.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,5,0.64456373,ruff,documentation_formatting,D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,6,0.64296407,ruff,documentation_formatting,D213: Multi-line docstring summary should start at the second line (mutually exclusive with D212).,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,7,0.6428583,ruff,documentation_formatting,D200: One-line docstring should fit on one line. Do not spread a short docstring across multiple lines.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,8,0.6418656,ruff,documentation_formatting,D210: No whitespace allowed surrounding docstring text.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,9,0.64176154,ruff,documentation_formatting,D101: Missing docstring in public class. Every public class should have a docstring.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,strategy_3_static,10,0.63992155,ruff,documentation_formatting,D100: Missing docstring in public module. Public modules should have a docstring describing their purpose and exported objects.,"repo family: scikit-learn ; flake8 findings: 8 (rc=1) ; pylint findings: 19 (rc=30) ; doc-format signals: 1 ; targeted topics: blank lines and whitespace formatting, documentation and docstring coverage, documentation_formatting for missing/too-small docstring"

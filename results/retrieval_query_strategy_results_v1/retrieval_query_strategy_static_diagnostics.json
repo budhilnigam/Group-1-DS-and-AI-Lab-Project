@@ -1,0 +1,1964 @@
+[
+  {
+    "sample_id": "synthetic-sklearn_PR_24",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 20,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 9,
+          "col": 1,
+          "code": "F401",
+          "message": "'typing.Tuple' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 27,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (85 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 56,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (88 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 63,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (90 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 73,
+          "col": 43,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 73,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-sklearn_PR_24_custom_transformer\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 24,
+          "col": 8,
+          "code": "C0103",
+          "message": "Attribute name \"lowerBound\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 25,
+          "col": 8,
+          "code": "C0103",
+          "message": "Attribute name \"upperBound\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 27,
+          "col": 18,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 27,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 27,
+          "col": 35,
+          "code": "W0613",
+          "message": "Unused argument 'y'",
+          "symbol": "unused-argument"
+        },
+        {
+          "tool": "pylint",
+          "line": 46,
+          "col": 24,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 59,
+          "col": 8,
+          "code": "C0103",
+          "message": "Variable name \"filteredData\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 63,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"fitTransform\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 63,
+          "col": 27,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 63,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value {} as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 9,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused Tuple imported from typing",
+          "symbol": "unused-import"
+        }
+      ],
+      "doc_signals": [],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "mutable default argument avoidance",
+        "snake_case naming convention",
+        "unused import cleanup"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-django_PR_36",
+    "repo": "kannan-dedsec/synthetic-django",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 18,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 25,
+          "col": 2,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 25,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-django_PR_36_urls\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 13,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.contrib'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 14,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.urls'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 16,
+          "col": 0,
+          "code": "C0103",
+          "message": "Constant name \"urlPatterns\" doesn't conform to UPPER_CASE naming style",
+          "symbol": "invalid-name"
+        }
+      ],
+      "doc_signals": [],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "snake_case naming convention"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-django_PR_24",
+    "repo": "kannan-dedsec/synthetic-django",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 22,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 42,
+          "col": 41,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 42,
+          "col": 43,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 42,
+          "col": 56,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 42,
+          "col": 58,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 42,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (81 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 93,
+          "col": 41,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 93,
+          "col": 43,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 93,
+          "col": 56,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 93,
+          "col": 58,
+          "code": "E251",
+          "message": "unexpected spaces around keyword / parameter equals"
+        },
+        {
+          "tool": "flake8",
+          "line": 93,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (81 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 102,
+          "col": 73,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 102,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-django_PR_24_managers\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 7,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.db'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 8,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.utils.timezone'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 32,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"byAuthor\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 32,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 42,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"withinDateRange\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 42,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 42,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value {} as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 83,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"byAuthor\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 83,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 93,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"withinDateRange\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 93,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 93,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value {} as argument",
+          "symbol": "dangerous-default-value"
+        }
+      ],
+      "doc_signals": [],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "mutable default argument avoidance",
+        "snake_case naming convention"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-sklearn_PR_38",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 22,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 1,
+          "col": 1,
+          "code": "F401",
+          "message": "'os' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 2,
+          "col": 1,
+          "code": "F401",
+          "message": "'sys' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 3,
+          "col": 1,
+          "code": "F401",
+          "message": "'re' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 52,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (93 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 65,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (93 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 82,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (93 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 89,
+          "col": 61,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 89,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0114",
+          "message": "Missing module docstring",
+          "symbol": "missing-module-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-sklearn_PR_38_tests_test_models\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 4,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'pytest'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 5,
+          "col": 0,
+          "code": "E0611",
+          "message": "No name 'load_boston' in module 'sklearn.datasets'",
+          "symbol": "no-name-in-module"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 18,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 4,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 26,
+          "code": "W0613",
+          "message": "Unused argument 'y'",
+          "symbol": "unused-argument"
+        },
+        {
+          "tool": "pylint",
+          "line": 22,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 22,
+          "col": 24,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 19,
+          "col": 8,
+          "code": "W0201",
+          "message": "Attribute 'scaler' defined outside __init__",
+          "symbol": "attribute-defined-outside-init"
+        },
+        {
+          "tool": "pylint",
+          "line": 30,
+          "col": 11,
+          "code": "E1101",
+          "message": "Instance of 'tuple' has no 'data' member",
+          "symbol": "no-member"
+        },
+        {
+          "tool": "pylint",
+          "line": 30,
+          "col": 22,
+          "code": "E1101",
+          "message": "Instance of 'tuple' has no 'target' member",
+          "symbol": "no-member"
+        },
+        {
+          "tool": "pylint",
+          "line": 40,
+          "col": 0,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        }
+      ],
+      "doc_signals": [
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "fit",
+          "line": 18,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "transform",
+          "line": 22,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        }
+      ],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "documentation and docstring coverage",
+        "documentation_formatting for missing/too-small docstrings",
+        "mutable default argument avoidance",
+        "snake_case naming convention",
+        "unused import cleanup"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-fastapi_PR_38",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 22,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 20,
+          "col": 1,
+          "code": "F401",
+          "message": "'os' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 21,
+          "col": 1,
+          "code": "F401",
+          "message": "'sys' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 22,
+          "col": 1,
+          "code": "F401",
+          "message": "'re' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 111,
+          "col": 39,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 111,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-fastapi_PR_38_tests_test_users\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'pytest'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 16,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'fastapi.testclient'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'app.main'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 38,
+          "col": 23,
+          "code": "W0621",
+          "message": "Redefining name 'sample_user_payload' from outer scope",
+          "symbol": "line 28) (redefined-outer-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 45,
+          "col": 21,
+          "code": "W0621",
+          "message": "Redefining name 'sample_user_payload' from outer scope",
+          "symbol": "line 28) (redefined-outer-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 55,
+          "col": 18,
+          "code": "W0621",
+          "message": "Redefining name 'create_sample_user' from outer scope",
+          "symbol": "line 38) (redefined-outer-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 66,
+          "col": 21,
+          "code": "W0621",
+          "message": "Redefining name 'create_sample_user' from outer scope",
+          "symbol": "line 38) (redefined-outer-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 88,
+          "col": 20,
+          "code": "W0621",
+          "message": "Redefining name 'create_sample_user' from outer scope",
+          "symbol": "line 38) (redefined-outer-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 20,
+          "col": 0,
+          "code": "C0411",
+          "message": "standard import \"os\" should be placed before third party imports \"pytest\", \"fastapi.testclient.TestClient\", \"app.main.app\"",
+          "symbol": "wrong-import-order"
+        },
+        {
+          "tool": "pylint",
+          "line": 21,
+          "col": 0,
+          "code": "C0411",
+          "message": "standard import \"sys\" should be placed before third party imports \"pytest\", \"fastapi.testclient.TestClient\", \"app.main.app\"",
+          "symbol": "wrong-import-order"
+        },
+        {
+          "tool": "pylint",
+          "line": 22,
+          "col": 0,
+          "code": "C0411",
+          "message": "standard import \"re\" should be placed before third party imports \"pytest\", \"fastapi.testclient.TestClient\", \"app.main.app\"",
+          "symbol": "wrong-import-order"
+        },
+        {
+          "tool": "pylint",
+          "line": 20,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused import os",
+          "symbol": "unused-import"
+        },
+        {
+          "tool": "pylint",
+          "line": 21,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused import sys",
+          "symbol": "unused-import"
+        }
+      ],
+      "doc_signals": [
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "test_create_user",
+          "line": 45,
+          "missing_docstring": false,
+          "too_small_docstring": true,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "test_list_users",
+          "line": 88,
+          "missing_docstring": false,
+          "too_small_docstring": true,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        }
+      ],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "documentation_formatting for missing/too-small docstrings",
+        "snake_case naming convention",
+        "unused import cleanup"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-fastapi_PR_34",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 30,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 145,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (86 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 151,
+          "col": 10,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 151,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-fastapi_PR_34_schemas_item\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 47,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 47,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"name_mustNotBeBlank\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 47,
+          "col": 4,
+          "code": "E0213",
+          "message": "Method 'name_mustNotBeBlank' should have \"self\" as first argument",
+          "symbol": "no-self-argument"
+        },
+        {
+          "tool": "pylint",
+          "line": 53,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 53,
+          "col": 4,
+          "code": "E0213",
+          "message": "Method 'description_strip' should have \"self\" as first argument",
+          "symbol": "no-self-argument"
+        },
+        {
+          "tool": "pylint",
+          "line": 59,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 59,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"price_mustHaveTwoDecimals\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 59,
+          "col": 4,
+          "code": "E0213",
+          "message": "Method 'price_mustHaveTwoDecimals' should have \"self\" as first argument",
+          "symbol": "no-self-argument"
+        },
+        {
+          "tool": "pylint",
+          "line": 69,
+          "col": 4,
+          "code": "W0107",
+          "message": "Unnecessary pass statement",
+          "symbol": "unnecessary-pass"
+        },
+        {
+          "tool": "pylint",
+          "line": 101,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 101,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"nameNotBlank\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 101,
+          "col": 4,
+          "code": "E0213",
+          "message": "Method 'nameNotBlank' should have \"self\" as first argument",
+          "symbol": "no-self-argument"
+        },
+        {
+          "tool": "pylint",
+          "line": 107,
+          "col": 4,
+          "code": "C0116",
+          "message": "Missing function or method docstring",
+          "symbol": "missing-function-docstring"
+        }
+      ],
+      "doc_signals": [
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "name_mustNotBeBlank",
+          "line": 47,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": true,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "description_strip",
+          "line": 53,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": true,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "price_mustHaveTwoDecimals",
+          "line": 59,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": true,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "nameNotBlank",
+          "line": 101,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": true,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "description_strip",
+          "line": 107,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": true,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "priceTwoDecimals",
+          "line": 113,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": true,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 1
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "class",
+          "name": "Config",
+          "line": 139,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        }
+      ],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "docstrings for decorated functions/classes",
+        "documentation and docstring coverage",
+        "documentation_formatting for missing/too-small docstrings",
+        "snake_case naming convention"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-fastapi_PR_31",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 22,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 10,
+          "col": 1,
+          "code": "F401",
+          "message": "'os' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 11,
+          "col": 1,
+          "code": "F401",
+          "message": "'sys' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 12,
+          "col": 1,
+          "code": "F401",
+          "message": "'re' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 14,
+          "col": 1,
+          "code": "F401",
+          "message": "'fastapi.Request' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 92,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (82 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 128,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (82 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 144,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (82 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 152,
+          "col": 6,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 152,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-fastapi_PR_31_routers_auth\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 14,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'fastapi'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'fastapi.security'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'jose'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 21,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'core.config'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 22,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'models.user'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 23,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'services.auth'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 36,
+          "col": 0,
+          "code": "C0115",
+          "message": "Missing class docstring",
+          "symbol": "missing-class-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 42,
+          "col": 0,
+          "code": "C0115",
+          "message": "Missing class docstring",
+          "symbol": "missing-class-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 46,
+          "col": 0,
+          "code": "C0115",
+          "message": "Missing class docstring",
+          "symbol": "missing-class-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 71,
+          "col": 8,
+          "code": "W0707",
+          "message": "Consider explicitly re-raising using 'except JWTError as exc' and 'raise credentials_exception from exc'",
+          "symbol": "raise-missing-from"
+        },
+        {
+          "tool": "pylint",
+          "line": 124,
+          "col": 8,
+          "code": "W0707",
+          "message": "Consider explicitly re-raising using 'except JWTError as exc' and 'raise HTTPException",
+          "symbol": "status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid refresh token') from exc' (raise-missing-from"
+        },
+        {
+          "tool": "pylint",
+          "line": 10,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused import os",
+          "symbol": "unused-import"
+        },
+        {
+          "tool": "pylint",
+          "line": 11,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused import sys",
+          "symbol": "unused-import"
+        }
+      ],
+      "doc_signals": [
+        {
+          "type": "documentation_formatting",
+          "node_type": "class",
+          "name": "TokenResponse",
+          "line": 36,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "class",
+          "name": "RefreshRequest",
+          "line": 42,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        },
+        {
+          "type": "documentation_formatting",
+          "node_type": "class",
+          "name": "UserResponse",
+          "line": 46,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        }
+      ],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "documentation_formatting for missing/too-small docstrings",
+        "snake_case naming convention",
+        "unused import cleanup"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-django_PR_39",
+    "repo": "kannan-dedsec/synthetic-django",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 30,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 9,
+          "col": 1,
+          "code": "F401",
+          "message": "'os' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 10,
+          "col": 1,
+          "code": "F401",
+          "message": "'sys' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 11,
+          "col": 1,
+          "code": "F401",
+          "message": "'re' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 17,
+          "col": 1,
+          "code": "F401",
+          "message": "'django.views.generic.edit.FormMixin' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 23,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 26,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 27,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 28,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 29,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 31,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 39,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 42,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 43,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 44,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        },
+        {
+          "tool": "flake8",
+          "line": 46,
+          "col": 3,
+          "code": "E111",
+          "message": "indentation is not a multiple of 4"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 23,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 26,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 27,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 28,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 29,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 31,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 32,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 4 spaces, expected 8",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 35,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 4 spaces, expected 8",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 39,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 42,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 43,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 44,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 46,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 2 spaces, expected 4",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 47,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 4 spaces, expected 8",
+          "symbol": "bad-indentation"
+        },
+        {
+          "tool": "pylint",
+          "line": 50,
+          "col": 0,
+          "code": "W0311",
+          "message": "Bad indentation. Found 4 spaces, expected 8",
+          "symbol": "bad-indentation"
+        }
+      ],
+      "doc_signals": [],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "indentation and spacing rules",
+        "snake_case naming convention",
+        "unused import cleanup"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-django_PR_35",
+    "repo": "kannan-dedsec/synthetic-django",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 22,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 1,
+          "col": 1,
+          "code": "F401",
+          "message": "'os' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 2,
+          "col": 1,
+          "code": "F401",
+          "message": "'sys' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 3,
+          "col": 1,
+          "code": "F401",
+          "message": "'re' imported but unused"
+        },
+        {
+          "tool": "flake8",
+          "line": 43,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (85 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 74,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (89 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 78,
+          "col": 52,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 78,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0114",
+          "message": "Missing module docstring",
+          "symbol": "missing-module-docstring"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-django_PR_35_tests_test_views\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 4,
+          "col": 0,
+          "code": "W0105",
+          "message": "String statement has no effect",
+          "symbol": "pointless-string-statement"
+        },
+        {
+          "tool": "pylint",
+          "line": 13,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.test'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 13,
+          "col": 0,
+          "code": "C0413",
+          "message": "Import \"from django.test import TestCase, Client\" should be placed at the top of the module",
+          "symbol": "wrong-import-position"
+        },
+        {
+          "tool": "pylint",
+          "line": 14,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.urls'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 14,
+          "col": 0,
+          "code": "C0413",
+          "message": "Import \"from django.urls import reverse\" should be placed at the top of the module",
+          "symbol": "wrong-import-position"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'django.contrib.auth.models'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "C0413",
+          "message": "Import \"from django.contrib.auth.models import User\" should be placed at the top of the module",
+          "symbol": "wrong-import-position"
+        },
+        {
+          "tool": "pylint",
+          "line": 16,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'articles.models'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 16,
+          "col": 0,
+          "code": "C0413",
+          "message": "Import \"from articles.models import Article\" should be placed at the top of the module",
+          "symbol": "wrong-import-position"
+        },
+        {
+          "tool": "pylint",
+          "line": 24,
+          "col": 4,
+          "code": "C0103",
+          "message": "Method name \"setUp\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused import os",
+          "symbol": "unused-import"
+        },
+        {
+          "tool": "pylint",
+          "line": 2,
+          "col": 0,
+          "code": "W0611",
+          "message": "Unused import sys",
+          "symbol": "unused-import"
+        }
+      ],
+      "doc_signals": [],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "documentation and docstring coverage",
+        "snake_case naming convention",
+        "unused import cleanup"
+      ]
+    }
+  },
+  {
+    "sample_id": "synthetic-sklearn_PR_30",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "diagnostics": {
+      "flake8_rc": 1,
+      "flake8_error": "",
+      "pylint_rc": 30,
+      "pylint_error": "",
+      "flake8_findings": [
+        {
+          "tool": "flake8",
+          "line": 33,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (82 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 54,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (96 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 55,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (92 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 74,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (89 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 80,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (82 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 86,
+          "col": 35,
+          "code": "E127",
+          "message": "continuation line over-indented for visual indent"
+        },
+        {
+          "tool": "flake8",
+          "line": 86,
+          "col": 80,
+          "code": "E501",
+          "message": "line too long (87 > 79 characters)"
+        },
+        {
+          "tool": "flake8",
+          "line": 107,
+          "col": 6,
+          "code": "W292",
+          "message": "no newline at end of file"
+        }
+      ],
+      "pylint_findings": [
+        {
+          "tool": "pylint",
+          "line": 107,
+          "col": 0,
+          "code": "C0304",
+          "message": "Final newline missing",
+          "symbol": "missing-final-newline"
+        },
+        {
+          "tool": "pylint",
+          "line": 1,
+          "col": 0,
+          "code": "C0103",
+          "message": "Module name \"synthetic-sklearn_PR_30_hyperparameter_tuning\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 12,
+          "col": 0,
+          "code": "E0401",
+          "message": "Unable to import 'skopt'",
+          "symbol": "import-error"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "C0103",
+          "message": "Function name \"gridSearchTuning\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 18,
+          "col": 4,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "R0913",
+          "message": "Too many arguments",
+          "symbol": "7/5) (too-many-arguments"
+        },
+        {
+          "tool": "pylint",
+          "line": 15,
+          "col": 0,
+          "code": "R0917",
+          "message": "Too many positional arguments",
+          "symbol": "7/5) (too-many-positional-arguments"
+        },
+        {
+          "tool": "pylint",
+          "line": 43,
+          "col": 0,
+          "code": "C0103",
+          "message": "Function name \"randomSearchTuning\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 46,
+          "col": 4,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 43,
+          "col": 0,
+          "code": "W0102",
+          "message": "Dangerous default value [] as argument",
+          "symbol": "dangerous-default-value"
+        },
+        {
+          "tool": "pylint",
+          "line": 43,
+          "col": 0,
+          "code": "R0913",
+          "message": "Too many arguments",
+          "symbol": "8/5) (too-many-arguments"
+        },
+        {
+          "tool": "pylint",
+          "line": 43,
+          "col": 0,
+          "code": "R0917",
+          "message": "Too many positional arguments",
+          "symbol": "8/5) (too-many-positional-arguments"
+        },
+        {
+          "tool": "pylint",
+          "line": 60,
+          "col": 0,
+          "code": "C0103",
+          "message": "Function name \"bayesianOptimizationTuning\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        },
+        {
+          "tool": "pylint",
+          "line": 63,
+          "col": 4,
+          "code": "C0103",
+          "message": "Argument name \"X\" doesn't conform to snake_case naming style",
+          "symbol": "invalid-name"
+        }
+      ],
+      "doc_signals": [
+        {
+          "type": "documentation_formatting",
+          "node_type": "function",
+          "name": "getDefaultParamGrids",
+          "line": 91,
+          "missing_docstring": true,
+          "too_small_docstring": false,
+          "has_decorators": false,
+          "has_async": false,
+          "has_complex_constructs": false,
+          "complexity_count": 0
+        }
+      ],
+      "targets": [
+        "blank lines and whitespace formatting",
+        "documentation and docstring coverage",
+        "documentation_formatting for missing/too-small docstrings",
+        "indentation and spacing rules",
+        "mutable default argument avoidance",
+        "snake_case naming convention"
+      ]
+    }
+  }
+]

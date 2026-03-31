@@ -1,0 +1,4 @@
+strategy,avg_score,median_score,min_score,max_score,rows
+strategy_2_regex_intelligent,0.699603544,0.7008596,0.6587398,0.732468,100
+strategy_3_static,0.686860856,0.689769735,0.63949764,0.75151205,100
+strategy_1_full_file,0.6166981007,0.60899247,0.5737797,0.71196723,100
