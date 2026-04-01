@@ -179,7 +179,9 @@ repos: ['kannan-dedsec/synthetic-django']
         "violation_category": "unused_import",
         "review_comment": "Remove unused import 'sys'."
       },
-      {
+    ]
+  }
+]
        
 
 

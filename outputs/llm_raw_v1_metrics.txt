@@ -1,0 +1,16 @@
+=== Parsed Input Summary ===
+Ground-truth PRs: 97
+Predicted PRs with parsed JSON: 16
+PRs ignored due to empty/non-JSON batch response: 8
+
+=== Violation Count Comparison ===
+analyzed_pr_count: 16
+
+=== Category-wise Metrics ===
+category                      precision     recall         f1     tp     fp     fn  line_ok  line_bad     
+-----------------------------------------------------------------------------------------------------     
+documentation_formatting         0.0000     0.0000     0.0000      0      0     12        0         0     
+indentation                      0.8333     0.5556     0.6667      5      1      4        0         6     
+mutable_default                  1.0000     0.7692     0.8696     10      0      3        6         4     
+naming_convention                1.0000     0.8182     0.9000     18      0      4        6        12     
+unused_import                    1.0000     0.8065     0.8929     25      0      6       19         6  
