@@ -1,0 +1,185 @@
+ID: synthetic-django_PR_24 | repo: kannan-dedsec/synthetic-django | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_24_managers.py
+  GT Category: naming_convention | examples: ['camelCase function name: byAuthor', 'camelCase function name: withinDateRange']
+  GT Category: mutable_default | examples: ["Mutable default [] for param 'author_id'", "Mutable default [] for param 'start_date'"]
+  Metrics for category='naming_convention', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=4
+  Metrics for category='naming_convention', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=4
+  Metrics for category='naming_convention', K=5: Recall@5=1.000 | Precision@5=0.400 | MRR@5=0.250 | GT_count=4
+  Metrics for category='naming_convention', K=7: Recall@7=1.000 | Precision@7=0.286 | MRR@7=0.250 | GT_count=4
+  Metrics for category='mutable_default', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=6
+  Metrics for category='mutable_default', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=6
+  Metrics for category='mutable_default', K=5: Recall@5=0.000 | Precision@5=0.000 | MRR@5=0.000 | GT_count=6
+  Metrics for category='mutable_default', K=7: Recall@7=0.000 | Precision@7=0.000 | MRR@7=0.000 | GT_count=6
+  Retrieved: (chunk_index=0, time_taken=0.8179556142838139, payload={'text': "The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.", 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0222'})
+  Retrieved: (chunk_index=1, time_taken=0.8179556142838139, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=2, time_taken=0.8179556142838139, payload={'text': 'The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.', 'category': 'documentation_formatting', 'source_type': 'django_guidelines', 'chunk_id': 'chunk_0130'})
+  Retrieved: (chunk_index=3, time_taken=0.8179556142838139, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=4, time_taken=0.8179556142838139, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=5, time_taken=0.8179556142838139, payload={'text': "It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”spaces are generally preferred in Python projects.", 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0243'})
+  Retrieved: (chunk_index=6, time_taken=0.8179556142838139, payload={'text': 'It looks like the indentation for the `clean_title` method has changed from 4 spaces to 6 spaces, which can affect code readability and consistency. Please revert it back to 4 spaces to maintain uniformity with the rest of the codebase.', 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0230'})
+---
+ID: synthetic-django_PR_35 | repo: kannan-dedsec/synthetic-django | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_35_tests_test_views.py
+  GT Category: unused_import | examples: ['Unused import: os', 'Unused import: sys']
+  GT Category: documentation_formatting | examples: ['Module docstring placed after imports']
+  Metrics for category='unused_import', K=1: Recall@1=1.000 | Precision@1=1.000 | MRR@1=1.000 | GT_count=3
+  Metrics for category='unused_import', K=3: Recall@3=1.000 | Precision@3=0.333 | MRR@3=1.000 | GT_count=3
+  Metrics for category='unused_import', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=1.000 | GT_count=3
+  Metrics for category='unused_import', K=7: Recall@7=1.000 | Precision@7=0.143 | MRR@7=1.000 | GT_count=3
+  Metrics for category='documentation_formatting', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=1
+  Metrics for category='documentation_formatting', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=1
+  Metrics for category='documentation_formatting', K=5: Recall@5=0.000 | Precision@5=0.000 | MRR@5=0.000 | GT_count=1
+  Metrics for category='documentation_formatting', K=7: Recall@7=1.000 | Precision@7=0.143 | MRR@7=0.143 | GT_count=1
+  Retrieved: (chunk_index=0, time_taken=0.809170957139161, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=1, time_taken=0.809170957139161, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=2, time_taken=0.809170957139161, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=3, time_taken=0.809170957139161, payload={'text': "The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.", 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0222'})
+  Retrieved: (chunk_index=4, time_taken=0.809170957139161, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=5, time_taken=0.809170957139161, payload={'text': "Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.", 'category': 'naming_convention', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0258'})
+  Retrieved: (chunk_index=6, time_taken=0.809170957139161, payload={'text': 'The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.', 'category': 'documentation_formatting', 'source_type': 'django_guidelines', 'chunk_id': 'chunk_0130'})
+---
+ID: synthetic-django_PR_36 | repo: kannan-dedsec/synthetic-django | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_36_urls.py
+  GT Category: naming_convention | examples: ['camelCase variable: urlPatterns']
+  Metrics for category='naming_convention', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=1
+  Metrics for category='naming_convention', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=1
+  Metrics for category='naming_convention', K=5: Recall@5=1.000 | Precision@5=0.400 | MRR@5=0.250 | GT_count=1
+  Metrics for category='naming_convention', K=7: Recall@7=1.000 | Precision@7=0.286 | MRR@7=0.250 | GT_count=1
+  Retrieved: (chunk_index=0, time_taken=0.8074960857130853, payload={'text': "The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.", 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0222'})
+  Retrieved: (chunk_index=1, time_taken=0.8074960857130853, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=2, time_taken=0.8074960857130853, payload={'text': 'The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.', 'category': 'documentation_formatting', 'source_type': 'django_guidelines', 'chunk_id': 'chunk_0130'})
+  Retrieved: (chunk_index=3, time_taken=0.8074960857130853, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=4, time_taken=0.8074960857130853, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=5, time_taken=0.8074960857130853, payload={'text': 'Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.', 'category': 'unused_import', 'source_type': 'django_guidelines', 'chunk_id': 'chunk_0147'})
+  Retrieved: (chunk_index=6, time_taken=0.8074960857130853, payload={'text': "It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the fileâ€”spaces are generally preferred in Python projects.", 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0243'})
+---
+ID: synthetic-django_PR_39 | repo: kannan-dedsec/synthetic-django | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_39_views.py
+  GT Category: unused_import | examples: ['Unused import: os', 'Unused import: sys']
+  GT Category: naming_convention | examples: ['camelCase function name: formValid']
+  GT Category: indentation | examples: ['Non-4-space indent (2 spaces)', 'Non-4-space indent (4 spaces)']
+  GT Category: documentation_formatting | examples: ["Docstring indentation doesn't match block", "Docstring indentation doesn't match block"]
+  Metrics for category='unused_import', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=4
+  Metrics for category='unused_import', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=4
+  Metrics for category='unused_import', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=0.200 | GT_count=4
+  Metrics for category='unused_import', K=7: Recall@7=1.000 | Precision@7=0.143 | MRR@7=0.200 | GT_count=4
+  Metrics for category='naming_convention', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=1
+  Metrics for category='naming_convention', K=3: Recall@3=1.000 | Precision@3=0.333 | MRR@3=0.500 | GT_count=1
+  Metrics for category='naming_convention', K=5: Recall@5=1.000 | Precision@5=0.400 | MRR@5=0.500 | GT_count=1
+  Metrics for category='naming_convention', K=7: Recall@7=1.000 | Precision@7=0.286 | MRR@7=0.500 | GT_count=1
+  Metrics for category='indentation', K=1: Recall@1=1.000 | Precision@1=1.000 | MRR@1=1.000 | GT_count=6
+  Metrics for category='indentation', K=3: Recall@3=1.000 | Precision@3=0.667 | MRR@3=1.000 | GT_count=6
+  Metrics for category='indentation', K=5: Recall@5=1.000 | Precision@5=0.400 | MRR@5=1.000 | GT_count=6
+  Metrics for category='indentation', K=7: Recall@7=1.000 | Precision@7=0.429 | MRR@7=1.000 | GT_count=6
+  Metrics for category='documentation_formatting', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=11
+  Metrics for category='documentation_formatting', K=3: Recall@3=1.000 | Precision@3=0.333 | MRR@3=0.333 | GT_count=11
+  Metrics for category='documentation_formatting', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=0.333 | GT_count=11
+  Metrics for category='documentation_formatting', K=7: Recall@7=1.000 | Precision@7=0.286 | MRR@7=0.333 | GT_count=11
+  Retrieved: (chunk_index=0, time_taken=0.7976781285750414, payload={'text': "The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.", 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0222'})
+  Retrieved: (chunk_index=1, time_taken=0.7976781285750414, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=2, time_taken=0.7976781285750414, payload={'text': 'The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.', 'category': 'documentation_formatting', 'source_type': 'django_guidelines', 'chunk_id': 'chunk_0130'})
+  Retrieved: (chunk_index=3, time_taken=0.7976781285750414, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=4, time_taken=0.7976781285750414, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=5, time_taken=0.7976781285750414, payload={'text': 'It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.', 'category': 'indentation', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0231'})
+  Retrieved: (chunk_index=6, time_taken=0.7976781285750414, payload={'text': 'It looks like the docstring was removed from the `test_valid_form` function. Please consider adding it back to maintain clarity about the purpose of the test and to follow our documentation standards.', 'category': 'documentation_formatting', 'source_type': 'django_review_comment', 'chunk_id': 'chunk_0261'})
+---
+ID: synthetic-fastapi_PR_31 | repo: kannan-dedsec/synthetic-fastapi | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-fastapi_PR_31_routers_auth.py
+  GT Category: unused_import | examples: ['Unused import: os', 'Unused import: sys']
+  Metrics for category='unused_import', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=4
+  Metrics for category='unused_import', K=3: Recall@3=1.000 | Precision@3=0.333 | MRR@3=0.500 | GT_count=4
+  Metrics for category='unused_import', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=0.500 | GT_count=4
+  Metrics for category='unused_import', K=7: Recall@7=1.000 | Precision@7=0.143 | MRR@7=0.500 | GT_count=4
+  Retrieved: (chunk_index=0, time_taken=0.7985137857197385, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=1, time_taken=0.7985137857197385, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=2, time_taken=0.7985137857197385, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=3, time_taken=0.7985137857197385, payload={'text': "Noticed the TokenResponse class is using 2-space indentation instead of the project's standard 4 spacesâ€”let's keep it consistent to avoid confusion and maintain readability.", 'category': 'indentation', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0271'})
+  Retrieved: (chunk_index=4, time_taken=0.7985137857197385, payload={'text': 'It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the codebase.', 'category': 'indentation', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0297'})
+  Retrieved: (chunk_index=5, time_taken=0.7985137857197385, payload={'text': "It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.", 'category': 'naming_convention', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0290'})
+  Retrieved: (chunk_index=6, time_taken=0.7985137857197385, payload={'text': 'The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.', 'category': 'indentation', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0287'})
+---
+ID: synthetic-fastapi_PR_34 | repo: kannan-dedsec/synthetic-fastapi | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-fastapi_PR_34_schemas_item.py
+  GT Category: naming_convention | examples: ['camelCase function name: name_mustNotBeBlank', 'camelCase function name: price_mustHaveTwoDecimals']
+  Metrics for category='naming_convention', K=1: Recall@1=1.000 | Precision@1=1.000 | MRR@1=1.000 | GT_count=4
+  Metrics for category='naming_convention', K=3: Recall@3=1.000 | Precision@3=0.667 | MRR@3=1.000 | GT_count=4
+  Metrics for category='naming_convention', K=5: Recall@5=1.000 | Precision@5=0.800 | MRR@5=1.000 | GT_count=4
+  Metrics for category='naming_convention', K=7: Recall@7=1.000 | Precision@7=0.857 | MRR@7=1.000 | GT_count=4
+  Retrieved: (chunk_index=0, time_taken=0.806926414287383, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=1, time_taken=0.806926414287383, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=2, time_taken=0.806926414287383, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=3, time_taken=0.806926414287383, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=4, time_taken=0.806926414287383, payload={'text': "It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.", 'category': 'naming_convention', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0290'})
+  Retrieved: (chunk_index=5, time_taken=0.806926414287383, payload={'text': 'Consider renaming `sample_items` to `sampleItems` for consistency with the camelCase naming convention used throughout the codebase. This will help maintain a uniform style and improve readability.', 'category': 'naming_convention', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0300'})
+  Retrieved: (chunk_index=6, time_taken=0.806926414287383, payload={'text': 'N811: Constant imported as non-constant. Constants should remain UPPER_CASE when imported.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0052'})
+---
+ID: synthetic-fastapi_PR_38 | repo: kannan-dedsec/synthetic-fastapi | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-fastapi_PR_38_tests_test_users.py
+  GT Category: unused_import | examples: ['Unused import: os', 'Unused import: sys']
+  Metrics for category='unused_import', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=3
+  Metrics for category='unused_import', K=3: Recall@3=1.000 | Precision@3=0.333 | MRR@3=0.500 | GT_count=3
+  Metrics for category='unused_import', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=0.500 | GT_count=3
+  Metrics for category='unused_import', K=7: Recall@7=1.000 | Precision@7=0.143 | MRR@7=0.500 | GT_count=3
+  Retrieved: (chunk_index=0, time_taken=0.8068412714305201, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=1, time_taken=0.8068412714305201, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=2, time_taken=0.8068412714305201, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=3, time_taken=0.8068412714305201, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=4, time_taken=0.8068412714305201, payload={'text': 'The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.', 'category': 'indentation', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0287'})
+  Retrieved: (chunk_index=5, time_taken=0.8068412714305201, payload={'text': 'It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the codebase.', 'category': 'indentation', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0297'})
+  Retrieved: (chunk_index=6, time_taken=0.8068412714305201, payload={'text': "It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.", 'category': 'naming_convention', 'source_type': 'fastapi_review_comment', 'chunk_id': 'chunk_0290'})
+---
+ID: synthetic-sklearn_PR_24 | repo: kannan-dedsec/synthetic-sklearn | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-sklearn_PR_24_custom_transformer.py
+  GT Category: unused_import | examples: ['Unused import: Tuple']
+  GT Category: naming_convention | examples: ['camelCase attribute: self.lowerBound', 'camelCase attribute: self.upperBound']
+  GT Category: mutable_default | examples: ["Mutable default [] for param 'X'", "Mutable default {} for param 'X'"]
+  Metrics for category='unused_import', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=1
+  Metrics for category='unused_import', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=1
+  Metrics for category='unused_import', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=0.200 | GT_count=1
+  Metrics for category='unused_import', K=7: Recall@7=1.000 | Precision@7=0.143 | MRR@7=0.200 | GT_count=1
+  Metrics for category='naming_convention', K=1: Recall@1=1.000 | Precision@1=1.000 | MRR@1=1.000 | GT_count=6
+  Metrics for category='naming_convention', K=3: Recall@3=1.000 | Precision@3=1.000 | MRR@3=1.000 | GT_count=6
+  Metrics for category='naming_convention', K=5: Recall@5=1.000 | Precision@5=0.800 | MRR@5=1.000 | GT_count=6
+  Metrics for category='naming_convention', K=7: Recall@7=1.000 | Precision@7=0.571 | MRR@7=1.000 | GT_count=6
+  Metrics for category='mutable_default', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=2
+  Metrics for category='mutable_default', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=2
+  Metrics for category='mutable_default', K=5: Recall@5=0.000 | Precision@5=0.000 | MRR@5=0.000 | GT_count=2
+  Metrics for category='mutable_default', K=7: Recall@7=0.000 | Precision@7=0.000 | MRR@7=0.000 | GT_count=2
+  Retrieved: (chunk_index=0, time_taken=1.0474070999937664, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=1, time_taken=1.0474070999937664, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=2, time_taken=1.0474070999937664, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=3, time_taken=1.0474070999937664, payload={'text': 'Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.', 'category': 'naming_convention', 'source_type': 'pep8', 'chunk_id': 'chunk_0035'})
+  Retrieved: (chunk_index=4, time_taken=1.0474070999937664, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=5, time_taken=1.0474070999937664, payload={'text': 'D208: Docstring is over-indented. Reduce indentation to match the opening triple quotes.', 'category': 'documentation_formatting', 'source_type': 'ruff', 'chunk_id': 'chunk_0111'})
+  Retrieved: (chunk_index=6, time_taken=1.0474070999937664, payload={'text': 'D207: Docstring is under-indented. Adjust indentation to match the opening triple quotes.', 'category': 'documentation_formatting', 'source_type': 'ruff', 'chunk_id': 'chunk_0110'})
+---
+ID: synthetic-sklearn_PR_30 | repo: kannan-dedsec/synthetic-sklearn | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-sklearn_PR_30_hyperparameter_tuning.py
+  GT Category: naming_convention | examples: ['camelCase function name: gridSearchTuning', 'camelCase function name: randomSearchTuning']
+  GT Category: mutable_default | examples: ["Mutable default [] for param 'scoring'", "Mutable default [] for param 'scoring'"]
+  Metrics for category='naming_convention', K=1: Recall@1=1.000 | Precision@1=1.000 | MRR@1=1.000 | GT_count=4
+  Metrics for category='naming_convention', K=3: Recall@3=1.000 | Precision@3=0.667 | MRR@3=1.000 | GT_count=4
+  Metrics for category='naming_convention', K=5: Recall@5=1.000 | Precision@5=0.600 | MRR@5=1.000 | GT_count=4
+  Metrics for category='naming_convention', K=7: Recall@7=1.000 | Precision@7=0.571 | MRR@7=1.000 | GT_count=4
+  Metrics for category='mutable_default', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=2
+  Metrics for category='mutable_default', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=2
+  Metrics for category='mutable_default', K=5: Recall@5=0.000 | Precision@5=0.000 | MRR@5=0.000 | GT_count=2
+  Metrics for category='mutable_default', K=7: Recall@7=0.000 | Precision@7=0.000 | MRR@7=0.000 | GT_count=2
+  Retrieved: (chunk_index=0, time_taken=0.8181706857202309, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=1, time_taken=0.8181706857202309, payload={'text': 'F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.', 'category': 'unused_import', 'source_type': 'flake8', 'chunk_id': 'chunk_0067'})
+  Retrieved: (chunk_index=2, time_taken=0.8181706857202309, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=3, time_taken=0.8181706857202309, payload={'text': 'Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.', 'category': 'naming_convention', 'source_type': 'pep8', 'chunk_id': 'chunk_0035'})
+  Retrieved: (chunk_index=4, time_taken=0.8181706857202309, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=5, time_taken=0.8181706857202309, payload={'text': 'For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.', 'category': 'unused_import', 'source_type': 'ruff', 'chunk_id': 'chunk_0068'})
+  Retrieved: (chunk_index=6, time_taken=0.8181706857202309, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+---
+ID: synthetic-sklearn_PR_38 | repo: kannan-dedsec/synthetic-sklearn | resolved: C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-sklearn_PR_38_tests_test_models.py
+  GT Category: unused_import | examples: ['Unused import: os', 'Unused import: sys']
+  GT Category: mutable_default | examples: ["Mutable default [] for param 'X'", "Mutable default [] for param 'iris_data'"]
+  Metrics for category='unused_import', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=3
+  Metrics for category='unused_import', K=3: Recall@3=1.000 | Precision@3=0.333 | MRR@3=0.500 | GT_count=3
+  Metrics for category='unused_import', K=5: Recall@5=1.000 | Precision@5=0.200 | MRR@5=0.500 | GT_count=3
+  Metrics for category='unused_import', K=7: Recall@7=1.000 | Precision@7=0.286 | MRR@7=0.500 | GT_count=3
+  Metrics for category='mutable_default', K=1: Recall@1=0.000 | Precision@1=0.000 | MRR@1=0.000 | GT_count=3
+  Metrics for category='mutable_default', K=3: Recall@3=0.000 | Precision@3=0.000 | MRR@3=0.000 | GT_count=3
+  Metrics for category='mutable_default', K=5: Recall@5=0.000 | Precision@5=0.000 | MRR@5=0.000 | GT_count=3
+  Metrics for category='mutable_default', K=7: Recall@7=0.000 | Precision@7=0.000 | MRR@7=0.000 | GT_count=3
+  Retrieved: (chunk_index=0, time_taken=0.8038294571368689, payload={'text': 'N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0054'})
+  Retrieved: (chunk_index=1, time_taken=0.8038294571368689, payload={'text': 'F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.', 'category': 'unused_import', 'source_type': 'flake8', 'chunk_id': 'chunk_0067'})
+  Retrieved: (chunk_index=2, time_taken=0.8038294571368689, payload={'text': 'N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0058'})
+  Retrieved: (chunk_index=3, time_taken=0.8038294571368689, payload={'text': 'N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.', 'category': 'naming_convention', 'source_type': 'ruff', 'chunk_id': 'chunk_0055'})
+  Retrieved: (chunk_index=4, time_taken=0.8038294571368689, payload={'text': 'Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.', 'category': 'naming_convention', 'source_type': 'pep8', 'chunk_id': 'chunk_0035'})
+  Retrieved: (chunk_index=5, time_taken=0.8038294571368689, payload={'text': 'W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.', 'category': 'unused_import', 'source_type': 'pylint', 'chunk_id': 'chunk_0073'})
+  Retrieved: (chunk_index=6, time_taken=0.8038294571368689, payload={'text': 'D207: Docstring is under-indented. Adjust indentation to match the opening triple quotes.', 'category': 'documentation_formatting', 'source_type': 'ruff', 'chunk_id': 'chunk_0110'})
+---
