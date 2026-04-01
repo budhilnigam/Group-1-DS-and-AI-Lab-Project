@@ -1,0 +1,510 @@
+Batch 1 - PR ids: ['synthetic-django_PR_21']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_21",
+    "llm_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 2 - PR ids: ['synthetic-django_PR_22']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_22",
+    "llm_reviews": [
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'cleanTitle' should be snake_case (e.g., clean_title)."
+      },
+      {
+        "line_number": 74,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'cleanName' should be snake_case (e.g., clean_name)."
+      }
+    ]
+  }
+]
+
+
+Batch 3 - PR ids: ['synthetic-django_PR_23']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 4 - PR ids: ['synthetic-django_PR_24']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_24",
+    "llm_reviews": [
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'byAuthor' violates snake_case; rename to 'by_author'."
+      },
+      {
+        "line_number": 31,
+        "violation_category": "mutable_default",
+        "review_comment": "Parameter 'author_id' has mutable default []; use None or remove default."
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'withinDateRange' violates snake_case; rename to 'within_date_range'."
+      },
+      {
+        "line_number": 41,
+        "violation_category": "mutable_default",
+        "review_comment": "Parameter 'start_date' has mutable default []; use None or remove default."
+      },
+      {
+        "line_number": 41,
+        "violation_category": "mutable_default",
+        "review_comment": "Parameter 'end_date' has mutable default {}; use None or remove default."
+      }
+    ]
+  }
+]
+
+
+Batch 5 - PR ids: ['synthetic-django_PR_25']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_25",
+    "llm_reviews": [
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 17,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 6 - PR ids: ['synthetic-django_PR_26']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 7 - PR ids: ['synthetic-django_PR_28']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_28",
+    "llm_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default [] with None and handle inside function."
+      },
+      {
+        "line_number": 51,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default {} with None and handle inside function."
+      },
+      {
+        "line_number": 61,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default {} with None and handle inside function."
+      }
+    ]
+  }
+]
+
+
+Batch 8 - PR ids: ['synthetic-django_PR_29']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 9 - PR ids: ['synthetic-django_PR_30']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 10 - PR ids: ['synthetic-django_PR_31']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_31",
+    "llm_reviews": [
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+       
+
+
+Batch 11 - PR ids: ['synthetic-django_PR_32']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_32",
+    "llm_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'createUser' should be snake_case. Rename to 'create_user'."
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "Inner function name '_createUser' should be snake_case. Rename to '_create_user'."
+      },
+      {
+        "line_number": 35,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'createCategory' should be snake_case. Rename to 'create_category'."
+      },
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "Inner function name '_createCategory' should be snake_case. Rename to '_create_category'."
+      }
+    ]
+  }
+]
+
+
+Batch 12 - PR ids: ['synthetic-django_PR_33']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_33",
+    "llm_reviews": [
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 4,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 5,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      },
+      {
+        "line_number": 13,
+        "violation_category": "indentation",
+        "review_comment": "Indent class docstring with 4 spaces."
+      },
+      {
+        "line_number": 15,
+        "violation_category": "indentation",
+        "review_comment": "Indent method definition with 4 spaces."
+      }
+    ]
+  }
+]
+
+
+Batch 13 - PR ids: ['synthetic-django_PR_34']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 14 - PR ids: ['synthetic-django_PR_35']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 15 - PR ids: ['synthetic-django_PR_36']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_36",
+    "llm_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable 'urlPatterns' should be snake_case."
+      },
+      {
+        "line_number": 17,
+        "violation_category": "indentation",
+        "review_comment": "Indentation should be 4 spaces per level; use 4 spaces instead of 2."
+      }
+    ]
+  }
+]
+
+
+Batch 16 - PR ids: ['synthetic-django_PR_37']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 17 - PR ids: ['synthetic-django_PR_38']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_38",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 36,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default [] with None and initialize inside function."
+      },
+      {
+        "line_number": 55,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default set with None and initialize inside function."
+      }
+    ]
+  }
+]
+
+
+Batch 18 - PR ids: ['synthetic-django_PR_39']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_39",
+    "llm_reviews": [
+      {
+        "line_number": 20,
+        "violation_category": "indentation",
+        "review_comment": "Indentation is 2 spaces; use 4 spaces per level."
+      },
+      {
+        "line_number": 36,
+        "violation_category": "indentation",
+        "review_comment": "Indentation is 2 spaces; use 4 spaces per level."
+      },
+      {
+        "line_number": 55,
+        "violation_category": "indentation",
+        "review_comment": "Indentation is 2 spaces; use 4 spaces per level."
+      },
+      {
+        "line_number": 66,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'formValid' should be snake_case: 'form_valid'."
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Imported module 'os' is not used."
+      }
+    ]
+  }
+]
+
+
+Batch 19 - PR ids: ['synthetic-django_PR_40']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_40",
+    "llm_reviews": [
+      {
+        "line_number": 22,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to snake_case: configure_environment."
+      },
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to snake_case: another_function."
+      },
+      {
+        "line_number": 42,
+        "violation_category": "mutable_default",
+        "review_comment": "Avoid mutable default: use None and set inside."
+      },
+      {
+        "line_number": 46,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to snake_case: yet_another_function."
+      },
+      {
+        "line_number": 46,
+        "violation_category": "mutable_default",
+        "review_comment": "Avoid mutable default: use None and set inside."
+      }
+    ]
+  }
+]
+
+
+Batch 20 - PR ids: ['synthetic-fastapi_PR_21']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_21",
+    "llm_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 21 - PR ids: ['synthetic-fastapi_PR_22']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_22",
+    "llm_reviews": [
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'getItem' should be snake_case. Rename to 'get_item'."
+      },
+      {
+        "line_number": 35,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'getItems' should be snake_case. Rename to 'get_items'."
+      },
+      {
+        "line_number": 59,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'createItem' should be snake_case. Rename to 'create_item'."
+      },
+      {
+        "line_number": 78,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'updateItem' should be snake_case. Rename to 'update_item'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import 'NoResultFound' on line 11. Remove it."
+      }
+    ]
+  }
+]
+
+
+Batch 22 - PR ids: ['synthetic-fastapi_PR_23']
+repos: ['kannan-dedsec/synthetic-fastapi']
+
+
+
+Batch 23 - PR ids: ['synthetic-fastapi_PR_24']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_24",
+    "llm_reviews": [
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'getDb' is camelCase; use snake_case like 'get_db'."
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Import 'Depends' is unused; remove it."
+      }
+    ]
+  }
+]
+
+
+Batch 24 - PR ids: ['synthetic-fastapi_PR_25']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_25",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'Optional'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+

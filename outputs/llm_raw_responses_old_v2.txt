@@ -1,0 +1,88 @@
+Batch 1 - PR ids: ['synthetic-django_PR_21']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_21",
+    "llm_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 2 - PR ids: ['synthetic-django_PR_22']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_22",
+    "llm_reviews": [
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'cleanTitle' should be snake_case. Rename to clean_title."
+      },
+      {
+        "line_number": 74,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'cleanName' should be snake_case. Rename to clean_name."
+      }
+    ]
+  }
+]
+
+
+Batch 3 - PR ids: ['synthetic-django_PR_23']
+repos: ['kannan-dedsec/synthetic-django']
+
+
+
+Batch 4 - PR ids: ['synthetic-django_PR_24']
+repos: ['kannan-dedsec/synthetic-django']
+[
+  {
+    "PR_ID": "synthetic-django_PR_24",
+    "llm_reviews": [
+      {
+        "line_number": 32,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'byAuthor' should be snake_case. Rename to 'by_author'."
+      },
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'withinDateRange' should be snake_case. Rename to 'within_date_range'."
+      },
+      {
+        "line_number": 32,
+        "violation_category": "mutable_default",
+        "review_comment": "Parameter 'author_id' uses mutable default []. Use None or a non-mutable default."
+      },
+      {
+        "line_number": 42,
+        "violation_category": "mutable_default",
+        "review_comment": "Parameter 'start_date' uses mutable default []. Use None or a non-mutable default."
+      },
+      {
+        "line_number": 42,
+        "violation_category": "mutable_default",
+        "review_comment": "Parameter 'end_date' uses mutable default {}. Use None or a non-mutable default."
+      }
+    ]
+  }
+]
+
+

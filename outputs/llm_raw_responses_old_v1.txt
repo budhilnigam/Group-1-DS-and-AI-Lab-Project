@@ -1,0 +1,532 @@
+PR id: DRY_RUN
+repo: DRY_RUN
+You are reviewing Python PR files for a code-quality benchmark dataset.
+
+You receive:
+- PR id
+- Python source file content
+- violations_json (the target violations to comment on)
+
+Project-specific violation taxonomy in this dataset:
+- naming_convention: camelCase names in Python (functions/params/variables/attributes)
+- indentation: non-4-space indentation or inconsistent block indentation
+- unused_import: imported symbol/module never used
+- mutable_default: default [] / {} in function parameters
+- documentation_formatting: docstring indentation/format mismatch
+
+Generation rules (strict):
+1) Return ONLY valid JSON array. No prose, no markdown.
+2) One output object per PR: {id, llm_reviews}.
+3) llm_reviews length must exactly match input violations_json length.
+4) Preserve each input violation's line_number and violation_category exactly as given.
+5) Produce one review_comment per input violation, in the same order.
+6) Important: never skip or merge the 5th violation. It must be handled as a normal full entry.
+7) review_comment style: short, concrete, technical; mention the exact issue and preferred fix.
+
+Output schema per review object:
+{"line_number": <int>, "violation_category": <string>, "review_comment": <string>}
+
+
+PR_ITEM_START
+id: synthetic-django_PR_21
+source_file: evaluation_files/synthetic-django_PR_21_admin.py
+violations_json: [{"line_number": 9, "violation_category": "unused_import", "review_comment": "Unused import: os"}, {"line_number": 10, "violation_category": "unused_import", "review_comment": "Unused import: sys"}, {"line_number": 11, "violation_category": "unused_import", "review_comment": "Unused import: re"}]
+source_code:
+```python
+"""
+Admin configuration for the blog application.
+
+This module defines the ModelAdmin classes for managing models in the Django
+admin interface. It includes configuration for displaying, searching, filtering,
+and managing fields in the admin interface.
+"""
+
+import os
+import sys
+import re
+
+from typing import Any, Optional
+
+from django.contrib import admin
+from django.db.models import QuerySet
+
+from .models import Article
+
+
+class ArticleAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the Article model.
+    """
+
+    list_display = ('title', 'author', 'publication_date', 'is_published')
+    search_fields = ('title', 'content', 'author__username')
+    list_filter = ('is_published', 'publication_date', 'author')
+    prepopulated_fields = {'slug': ('title',)}
+
+    def get_queryset(self, request: Any) -> QuerySet:
+        """
+        Customize the queryset to include additional annotations or filters.
+
+        Args:
+            request (Any): The current HttpRequest object.
+
+        Returns:
+            QuerySet: The queryset for the admin interface.
+        """
+        qs = super().get_queryset(request)
+        return qs
+
+    def save_model(
+        self, request: Any, obj: Article, form: Any, change: bool
+    ) -> None:
+        """
+        Override the save_model method to perform additional
+
+
+PR id: DRY_RUN
+repo: DRY_RUN
+You are reviewing Python PR files for a code-quality benchmark dataset.
+
+You receive:
+- PR id
+- Python source file content
+- violations_json (the target violations to comment on)
+
+Project-specific violation taxonomy in this dataset:
+- naming_convention: camelCase names in Python (functions/params/variables/attributes)
+- indentation: non-4-space indentation or inconsistent block indentation
+- unused_import: imported symbol/module never used
+- mutable_default: default [] / {} in function parameters
+- documentation_formatting: docstring indentation/format mismatch
+
+Generation rules (strict):
+1) Return ONLY valid JSON array. No prose, no markdown.
+2) One output object per PR: {id, llm_reviews}.
+3) llm_reviews length must exactly match input violations_json length.
+4) Preserve each input violation's line_number and violation_category exactly as given.
+5) Produce one review_comment per input violation, in the same order.
+6) Important: never skip or merge the 5th violation. It must be handled as a normal full entry.
+7) review_comment style: short, concrete, technical; mention the exact issue and preferred fix.
+
+Output schema per review object:
+{"line_number": <int>, "violation_category": <string>, "review_comment": <string>}
+
+
+PR_ITEM_START
+id: synthetic-django_PR_29
+source_file: evaluation_files/synthetic-django_PR_29_settings.py
+violations_json: [{"line_number": 9, "violation_category": "unused_import", "review_comment": "Unused import: os"}, {"line_number": 10, "violation_category": "unused_import", "review_comment": "Unused import: sys"}, {"line_number": 11, "violation_category": "unused_import", "review_comment": "Unused import: re"}, {"line_number": 19, "violation_category": "naming_convention", "review_comment": "camelCase variable: secretKey"}, {"line_number": 21, "violation_category": "naming_convention", "review_comment": "camelCase variable: allowedHosts"}]
+source_code:
+```python
+"""
+Django settings module for configuring the project.
+
+This module includes configuration for installed apps, middleware,
+databases, password validators, and templates. Update these settings
+as necessary to match the requirements of your project.
+"""
+
+import os
+import sys
+import re
+
+from pathlib import Path
+
+# Base Directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Security Settings
+secretKey = 'your-secret-key-here'
+DEBUG = True
+allowedHosts: list[str] = []
+
+# Installed Applications
+INSTALLED_APPS: list[str] = [
+  'django.contrib.admin',
+  'django.contrib.auth',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
+  # Third-party apps
+  # 'rest_framework',
+  # Project apps
+  # 'myapp',
+]
+
+# Middleware Configuration
+MIDDLEWARE: list[str] = [
+      'django.middleware.security.SecurityMiddleware',
+      'django.contrib.sessions.middleware.SessionMiddleware',
+      'django.middleware.common.CommonMiddleware',
+      'django.middleware.csrf.CsrfViewMiddleware',
+      'django.contrib.auth.m
+
+
+PR id: DRY_RUN
+repo: DRY_RUN
+You are reviewing Python PR files for a code-quality benchmark dataset.
+
+You receive:
+- PR id
+- Python source file content
+- violations_json (the target violations to comment on)
+
+Project-specific violation taxonomy in this dataset:
+- naming_convention: camelCase names in Python (functions/params/variables/attributes)
+- indentation: non-4-space indentation or inconsistent block indentation
+- unused_import: imported symbol/module never used
+- mutable_default: default [] / {} in function parameters
+- documentation_formatting: docstring indentation/format mismatch
+
+Generation rules (strict):
+1) Return ONLY valid JSON array. No prose, no markdown.
+2) One output object per PR: {id, llm_reviews}.
+3) llm_reviews length must exactly match input violations_json length.
+4) Preserve each input violation's line_number and violation_category exactly as given.
+5) Produce one review_comment per input violation, in the same order.
+6) Important: never skip or merge the 5th violation. It must be handled as a normal full entry.
+7) review_comment style: short, concrete, technical; mention the exact issue and preferred fix.
+
+Output schema per review object:
+{"line_number": <int>, "violation_category": <string>, "review_comment": <string>}
+
+
+PR_ITEM_START
+id: synthetic-django_PR_38
+source_file: evaluation_files/synthetic-django_PR_38_utils_validators.py
+violations_json: [{"line_number": 9, "violation_category": "unused_import", "review_comment": "Unused import: os"}, {"line_number": 10, "violation_category": "unused_import", "review_comment": "Unused import: sys"}, {"line_number": 36, "violation_category": "mutable_default", "review_comment": "Mutable default [] for param 'slug'"}, {"line_number": 55, "violation_category": "mutable_default", "review_comment": "Mutable default {'badword1', 'badword2', 'badword3'} for param 'value'"}]
+source_code:
+```python
+"""
+Custom validation utilities for Django models and forms.
+
+This module contains custom validators to be used across the Django project.
+The functions include validation for image file size, slug format, and profanity filtering.
+"""
+
+import re
+import os
+import sys
+from typing import Any, List
+
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_image_size(image: Any, max_size_mb: int = 5) -> None:
+    """
+    Validates that the uploaded image does not exceed the specified size.
+
+    Args:
+        image (Any): The image file to validate.
+        max_size_mb (int): The maximum allowed size in megabytes. Defaults to 5MB.
+
+    Raises:
+        ValidationError: If the image size exceeds the maximum allowed limit.
+    """
+    max_size_bytes = max_size_mb * 1024 * 1024
+    if image.size > max_size_bytes:
+        raise ValidationError(
+            _('Image size should not exceed %(max_size_mb)dMB.'),
+            params={'max_size_mb': max_size_mb},
+        )
+
+
+def validate_slug_format(slug: str, allowed_chars: List[str] = []) -> None:
+    """
+    Validates
+
+
+Batch 1 - PR ids: ['synthetic-django_PR_21', 'synthetic-django_PR_22', 'synthetic-django_PR_23', 'synthetic-django_PR_24', 'synthetic-django_PR_25', 'synthetic-django_PR_26', 'synthetic-django_PR_28']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django']
+[
+  {
+   
+
+
+Batch 2 - PR ids: ['synthetic-django_PR_29', 'synthetic-django_PR_30', 'synthetic-django_PR_31', 'synthetic-django_PR_32', 'synthetic-django_PR_33', 'synthetic-django_PR_34', 'synthetic-django_PR_35', 'synthetic-django_PR_36', 'synthetic-django_PR_37']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django']
+
+
+
+PR id: DRY_RUN
+repo: DRY_RUN
+You are reviewing Python PR files for a code-quality benchmark dataset.
+
+You receive:
+- PR id
+- Python source file content
+- violations_json (the target violations to comment on)
+
+Project-specific violation taxonomy in this dataset:
+- naming_convention: camelCase names in Python (functions/params/variables/attributes)
+- indentation: non-4-space indentation or inconsistent block indentation
+- unused_import: imported symbol/module never used
+- mutable_default: default [] / {} in function parameters
+- documentation_formatting: docstring indentation/format mismatch
+
+Generation rules (strict):
+1) Return ONLY valid JSON array. No prose, no markdown.
+2) One output object per PR: {id, llm_reviews}.
+3) llm_reviews length must exactly match input violations_json length.
+4) Preserve each input violation's line_number and violation_category exactly as given.
+5) Produce one review_comment per input violation, in the same order.
+6) Important: never skip or merge the 5th violation. It must be handled as a normal full entry.
+7) review_comment style: short, concrete, technical; mention the exact issue and preferred fix.
+
+Output schema per review object:
+{"line_number": <int>, "violation_category": <string>, "review_comment": <string>}
+
+
+PR_ITEM_START
+id: synthetic-django_PR_21
+source_file: evaluation_files/synthetic-django_PR_21_admin.py
+violations_json: [{"line_number": 9, "violation_category": "unused_import", "review_comment": "Unused import: os"}, {"line_number": 10, "violation_category": "unused_import", "review_comment": "Unused import: sys"}, {"line_number": 11, "violation_category": "unused_import", "review_comment": "Unused import: re"}]
+source_code:
+```python
+"""
+Admin configuration for the blog application.
+
+This module defines the ModelAdmin classes for managing models in the Django
+admin interface. It includes configuration for displaying, searching, filtering,
+and managing fields in the admin interface.
+"""
+
+import os
+import sys
+import re
+
+from typing import Any, Optional
+
+from django.contrib import admin
+from django.db.models import QuerySet
+
+from .models import Article
+
+
+class ArticleAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the Article model.
+    """
+
+    list_display = ('title', 'author', 'publication_date', 'is_published')
+    search_fields = ('title', 'content', 'author__username')
+    list_filter = ('is_published', 'publication_date', 'author')
+    prepopulated_fields = {'slug': ('title',)}
+
+    def get_queryset(self, request: Any) -> QuerySet:
+        """
+        Customize the queryset to include additional annotations or filters.
+
+        Args:
+            request (Any): The current HttpRequest object.
+
+        Returns:
+            QuerySet: The queryset for the admin interface.
+        """
+        qs = super().get_queryset(request)
+        return qs
+
+    def save_model(
+        self, request: Any, obj: Article, form: Any, change: bool
+    ) -> None:
+        """
+        Override the save_model method to perform additional
+
+
+PR id: DRY_RUN
+repo: DRY_RUN
+You are reviewing Python PR files for a code-quality benchmark dataset.
+
+You receive:
+- PR id
+- Python source file content
+- violations_json (the target violations to comment on)
+
+Project-specific violation taxonomy in this dataset:
+- naming_convention: camelCase names in Python (functions/params/variables/attributes)
+- indentation: non-4-space indentation or inconsistent block indentation
+- unused_import: imported symbol/module never used
+- mutable_default: default [] / {} in function parameters
+- documentation_formatting: docstring indentation/format mismatch
+
+Generation rules (strict):
+1) Return ONLY valid JSON array. No prose, no markdown.
+2) One output object per PR: {id, llm_reviews}.
+3) llm_reviews length must exactly match input violations_json length.
+4) Preserve each input violation's line_number and violation_category exactly as given.
+5) Produce one review_comment per input violation, in the same order.
+6) Important: never skip or merge the 5th violation. It must be handled as a normal full entry.
+7) review_comment style: short, concrete, technical; mention the exact issue and preferred fix.
+
+Output schema per review object:
+{"line_number": <int>, "violation_category": <string>, "review_comment": <string>}
+
+
+PR_ITEM_START
+id: synthetic-django_PR_29
+source_file: evaluation_files/synthetic-django_PR_29_settings.py
+violations_json: [{"line_number": 9, "violation_category": "unused_import", "review_comment": "Unused import: os"}, {"line_number": 10, "violation_category": "unused_import", "review_comment": "Unused import: sys"}, {"line_number": 11, "violation_category": "unused_import", "review_comment": "Unused import: re"}, {"line_number": 19, "violation_category": "naming_convention", "review_comment": "camelCase variable: secretKey"}, {"line_number": 21, "violation_category": "naming_convention", "review_comment": "camelCase variable: allowedHosts"}]
+source_code:
+```python
+"""
+Django settings module for configuring the project.
+
+This module includes configuration for installed apps, middleware,
+databases, password validators, and templates. Update these settings
+as necessary to match the requirements of your project.
+"""
+
+import os
+import sys
+import re
+
+from pathlib import Path
+
+# Base Directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Security Settings
+secretKey = 'your-secret-key-here'
+DEBUG = True
+allowedHosts: list[str] = []
+
+# Installed Applications
+INSTALLED_APPS: list[str] = [
+  'django.contrib.admin',
+  'django.contrib.auth',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
+  # Third-party apps
+  # 'rest_framework',
+  # Project apps
+  # 'myapp',
+]
+
+# Middleware Configuration
+MIDDLEWARE: list[str] = [
+      'django.middleware.security.SecurityMiddleware',
+      'django.contrib.sessions.middleware.SessionMiddleware',
+      'django.middleware.common.CommonMiddleware',
+      'django.middleware.csrf.CsrfViewMiddleware',
+      'django.contrib.auth.m
+
+
+PR id: DRY_RUN
+repo: DRY_RUN
+You are reviewing Python PR files for a code-quality benchmark dataset.
+
+You receive:
+- PR id
+- Python source file content
+- violations_json (the target violations to comment on)
+
+Project-specific violation taxonomy in this dataset:
+- naming_convention: camelCase names in Python (functions/params/variables/attributes)
+- indentation: non-4-space indentation or inconsistent block indentation
+- unused_import: imported symbol/module never used
+- mutable_default: default [] / {} in function parameters
+- documentation_formatting: docstring indentation/format mismatch
+
+Generation rules (strict):
+1) Return ONLY valid JSON array. No prose, no markdown.
+2) One output object per PR: {id, llm_reviews}.
+3) llm_reviews length must exactly match input violations_json length.
+4) Preserve each input violation's line_number and violation_category exactly as given.
+5) Produce one review_comment per input violation, in the same order.
+6) Important: never skip or merge the 5th violation. It must be handled as a normal full entry.
+7) review_comment style: short, concrete, technical; mention the exact issue and preferred fix.
+
+Output schema per review object:
+{"line_number": <int>, "violation_category": <string>, "review_comment": <string>}
+
+
+PR_ITEM_START
+id: synthetic-django_PR_38
+source_file: evaluation_files/synthetic-django_PR_38_utils_validators.py
+violations_json: [{"line_number": 9, "violation_category": "unused_import", "review_comment": "Unused import: os"}, {"line_number": 10, "violation_category": "unused_import", "review_comment": "Unused import: sys"}, {"line_number": 36, "violation_category": "mutable_default", "review_comment": "Mutable default [] for param 'slug'"}, {"line_number": 55, "violation_category": "mutable_default", "review_comment": "Mutable default {'badword1', 'badword2', 'badword3'} for param 'value'"}]
+source_code:
+```python
+"""
+Custom validation utilities for Django models and forms.
+
+This module contains custom validators to be used across the Django project.
+The functions include validation for image file size, slug format, and profanity filtering.
+"""
+
+import re
+import os
+import sys
+from typing import Any, List
+
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_image_size(image: Any, max_size_mb: int = 5) -> None:
+    """
+    Validates that the uploaded image does not exceed the specified size.
+
+    Args:
+        image (Any): The image file to validate.
+        max_size_mb (int): The maximum allowed size in megabytes. Defaults to 5MB.
+
+    Raises:
+        ValidationError: If the image size exceeds the maximum allowed limit.
+    """
+    max_size_bytes = max_size_mb * 1024 * 1024
+    if image.size > max_size_bytes:
+        raise ValidationError(
+            _('Image size should not exceed %(max_size_mb)dMB.'),
+            params={'max_size_mb': max_size_mb},
+        )
+
+
+def validate_slug_format(slug: str, allowed_chars: List[str] = []) -> None:
+    """
+    Validates
+
+
+Batch 1 - PR ids: ['synthetic-django_PR_21', 'synthetic-django_PR_22', 'synthetic-django_PR_23', 'synthetic-django_PR_24', 'synthetic-django_PR_25', 'synthetic-django_PR_26', 'synthetic-django_PR_28']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django']
+
+
+
+Batch 2 - PR ids: ['synthetic-django_PR_29', 'synthetic-django_PR_30', 'synthetic-django_PR_31', 'synthetic-django_PR_32', 'synthetic-django_PR_33', 'synthetic-django_PR_34', 'synthetic-django_PR_35', 'synthetic-django_PR_36', 'synthetic-django_PR_37']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django']
+
+
+
+Batch 3 - PR ids: ['synthetic-django_PR_38', 'synthetic-django_PR_39', 'synthetic-django_PR_40', 'synthetic-fastapi_PR_21', 'synthetic-fastapi_PR_22']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-fastapi', 'kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "id": "synthetic-django_PR_38",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+       
+
+
+Batch 1 - PR ids: ['synthetic-django_PR_21', 'synthetic-django_PR_22', 'synthetic-django_PR_23', 'synthetic-django_PR_24', 'synthetic-django_PR_25', 'synthetic-django_PR_26', 'synthetic-django_PR_28']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django']
+
+
+
+Batch 2 - PR ids: ['synthetic-django_PR_29', 'synthetic-django_PR_30', 'synthetic-django_PR_31', 'synthetic-django_PR_32', 'synthetic-django_PR_33', 'synthetic-django_PR_34', 'synthetic-django_PR_35', 'synthetic-django_PR_36', 'synthetic-django_PR_37']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django']
+
+
+
+Batch 3 - PR ids: ['synthetic-django_PR_38', 'synthetic-django_PR_39', 'synthetic-django_PR_40', 'synthetic-fastapi_PR_21', 'synthetic-fastapi_PR_22']
+repos: ['kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-django', 'kannan-dedsec/synthetic-fastapi', 'kannan-dedsec/synthetic-fastapi']
+
+
+
