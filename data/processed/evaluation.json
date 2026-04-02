@@ -4148,5 +4148,375 @@
         "review_comment": "Mutable default {} for param 'results'"
       }
     ]
+  },
+  {
+    "id": "manual_sklearn_estimator",
+    "repo": "manual/sklearn",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_sklearn_estimator.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 44,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.weights` is set during `fit()` but does not end with a trailing underscore. Per scikit-learn convention, attributes learned from data should be named `self.weights_`.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.interceptValue` should use a trailing underscore (e.g. `self.intercept_value_`) and follow snake_case naming per sklearn conventions.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.featureWeights` should end with a trailing underscore and use snake_case (e.g. `self.feature_weights_`).",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.trainingScore` is set in `fit()` but lacks a trailing underscore. Should be `self.training_score_`.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Class docstring uses Google-style `Args:` format. scikit-learn requires the NumPy docstring standard with `Parameters\n----------` sections.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses `Args:` instead of numpy-style `Parameters\n----------`. All scikit-learn docstrings must follow the numpy docstring standard.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses `Args:` / `Returns:` in Google format. Per sklearn guidelines, use numpy-style `Parameters` and `Returns` sections with underline separators.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style formatting. scikit-learn requires the NumPy docstring standard.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      }
+    ]
+  },
+  {
+    "id": "manual_django_models",
+    "repo": "manual/django",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_django_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "Django convention requires this method to be named `get_absolute_url` (snake_case). `getAbsoluteUrl` uses camelCase which violates Django coding style.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0155"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "The `__str__` method should appear before `get_absolute_url()` per Django's model method ordering convention: fields, Meta, __str__, save(), get_absolute_url(), custom methods.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0155"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "Field `statusField` uses camelCase. Django model field names should be all lowercase using underscores (e.g. `status_field` or simply `status`).",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0153"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "STATUS_CHOICES should be defined as a class attribute mapping with an all-uppercase name, but it uses a list of tuples instead of Django's recommended `models.TextChoices` or a mapping.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0156"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "naming_convention",
+        "review_comment": "The `__str__` method appears before `class Meta`. Per Django convention, the order should be: fields, Meta, __str__, save(), get_absolute_url(), custom methods.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0155"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "naming_convention",
+        "review_comment": "Method `getAbsoluteUrl` should be `get_absolute_url` per Django naming conventions. Use underscores, not camelCase, for method names.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0138"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring starts with 'Tests that' which is a preamble discouraged in Django. State the expected behavior directly: e.g. 'Return True if the task is past its due date.'",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      }
+    ]
+  },
+  {
+    "id": "manual_django_tests",
+    "repo": "manual/django",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_django_tests.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 21,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Test docstring uses the preamble 'Tests that'. Django convention says to state the expected behavior directly without preambles like 'Tests that' or 'Ensures that'.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring starts with 'Ensures that' which is a discouraged preamble in Django test docstrings. State the expected behavior directly.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Test docstring uses 'Tests that' preamble. Per Django coding style, describe the expected behavior without the 'Tests that' prefix.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      }
+    ]
+  },
+  {
+    "id": "manual_pandas_cleaning",
+    "repo": "manual/pandas",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_pandas_cleaning.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style `Args:` format. pandas follows the NumPy docstring convention — use `Parameters\n----------` with `name : type` on each line.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0170"
+      },
+      {
+        "line_number": 8,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Parameter `method` accepts a fixed set of values but uses plain text `('iqr' or 'zscore')`. pandas convention requires curly brackets: `{'iqr', 'zscore'}`.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0179"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "naming_convention",
+        "review_comment": "Local variable `zScores` uses camelCase. pandas follows PEP 8: use snake_case for variables (e.g. `z_scores`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style `Args:` format. Use numpy-style `Parameters\n----------` per pandas contributing guidelines.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0170"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `Df` uses CamelCase. Local variables should be lowercase with underscores per PEP 8 and pandas conventions.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `Col` uses CamelCase. Use snake_case for loop variables (e.g. `col`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style `Args:` format. pandas requires the NumPy docstring standard.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0170"
+      },
+      {
+        "line_number": 75,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `Result` uses CamelCase. Local variables should be snake_case (e.g. `result`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 78,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `minVal` uses camelCase. Use snake_case: `min_val`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 79,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `maxVal` uses camelCase. Use snake_case: `max_val`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      }
+    ]
+  },
+  {
+    "id": "manual_fastapi_users",
+    "repo": "manual/fastapi",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_fastapi_users.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 12,
+        "violation_category": "naming_convention",
+        "review_comment": "Module-level variable `Router` uses CamelCase. FastAPI follows PEP 8 — module-level variables should be snake_case (e.g. `router`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "Pydantic field `fullName` uses camelCase. Python convention is snake_case (e.g. `full_name`). Use `Field(alias='fullName')` if JSON compatibility is needed.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 26,
+        "violation_category": "naming_convention",
+        "review_comment": "Field `fullName` uses camelCase. Use snake_case per PEP 8.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "naming_convention",
+        "review_comment": "Field `isActive` uses camelCase. Use snake_case (e.g. `is_active`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `createUser` uses camelCase. FastAPI follows Ruff/PEP 8: function names should be lowercase snake_case (e.g. `create_user`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `getUser` uses camelCase. Use snake_case: `get_user`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "naming_convention",
+        "review_comment": "Parameter `userId` uses camelCase. Function arguments should be snake_case (e.g. `user_id`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0047"
+      },
+      {
+        "line_number": 76,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `updateUser` uses camelCase. Use snake_case: `update_user`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 91,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `deleteUser` and parameter `userId` use camelCase. Use snake_case: `delete_user`, `user_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 96,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `originalLen` uses camelCase. Local variables should be snake_case (e.g. `original_len`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      }
+    ]
+  },
+  {
+    "id": "manual_flask_blog",
+    "repo": "manual/flask",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_flask_blog.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `blogBp` uses camelCase. Flask blueprints should use snake_case naming (e.g. `blog_bp`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `listPosts` uses camelCase. Flask follows PEP 8: use snake_case for function names (e.g. `list_posts`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `viewPost` uses camelCase. Use snake_case: `view_post`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "Parameter `postId` uses camelCase. Use snake_case: `post_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0047"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `createPost` uses camelCase. Use snake_case: `create_post`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `newPost` uses camelCase. Use snake_case: `new_post`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `editPost` and parameter `postId` use camelCase. Use snake_case: `edit_post`, `post_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `deletePost` and parameter `postId` use camelCase. Use snake_case: `delete_post`, `post_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      }
+    ]
   }
 ]
