@@ -1,0 +1,31 @@
+TASK: Review each PR independently for strict Python PEP 8 violations.
+
+Report only clear, high-confidence findings in these categories:
+- naming_convention: snake_case for functions/variables/params, PascalCase for classes, UPPER_CASE for constants
+- indentation: 4 spaces per level only; flag tabs, non-multiples of 4, inconsistent blocks
+- unused_import: imported symbol is never used
+- mutable_default: [] or {} used as a function default
+- documentation_formatting: bad docstring indentation or misaligned triple quotes
+
+Rules:
+- Review each PR independently; do not compare PRs.
+- Report all clear findings; do not use an artificial per-PR cap.
+- Use exact line_number values.
+- Keep review_comment short, technical, and actionable with the direct fix.
+- Do not guess, infer, explain, or add extra context.
+
+Output exactly one JSON array in this shape:
+[
+  {
+    "PR_ID": "string",
+    "llm_reviews": [
+      {
+        "line_number": int,
+        "violation_category": "string",
+        "review_comment": "string"
+      }
+    ]
+  }
+]
+
+Return only JSON. No markdown. No reasoning text. No extra keys.

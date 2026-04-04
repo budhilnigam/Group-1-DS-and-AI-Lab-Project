@@ -1,0 +1,67 @@
+TASK: Detect STRICT PEP 8-style violations in Python code.
+
+PROCESSING RULES:
+- Process EACH PR independently.
+- After finishing ONE PR, immediately output its JSON object.
+- Do NOT wait for other PRs.
+- Do NOT analyze across PRs.
+
+VIOLATION TYPES (ONLY these):
+
+1) naming_convention:
+   - Functions, variables, parameters → must be snake_case
+   - Classes → must be PascalCase (CapWords)
+   - Constants → must be UPPER_CASE
+   - Flag:
+       * camelCase names in functions/variables/params
+       * PascalCase used for functions/variables
+       * snake_case used for class names
+
+2) indentation:
+   - Indentation must be exactly 4 spaces per level
+   - Flag:
+       * tabs used
+       * non-multiple of 4 spaces
+       * inconsistent indentation within block
+
+3) unused_import:
+   - Imported module/symbol not referenced anywhere in file
+
+4) mutable_default:
+   - Function parameters using [] or {} as default values
+
+5) documentation_formatting:
+   - Docstring indentation inconsistent with block level
+   - Misaligned triple quotes
+   - Broken or inconsistent docstring structure
+
+CONSTRAINTS:
+- Detect ONLY clear, high-confidence violations
+- Do NOT guess or infer
+- Be precise: exact line_number
+
+REVIEW COMMENT STYLE:
+- Short, technical, actionable
+- Mention issue + direct fix
+- No explanations
+
+OUTPUT (STRICT):
+Return ONLY a JSON array:
+[
+  {
+    "PR_ID": "string",
+    "llm_reviews": [
+      {
+        "line_number": int,
+        "violation_category": "string",
+        "review_comment": "string"
+      }
+    ]
+  }
+]
+
+CRITICAL:
+- No markdown
+- No explanations
+- No reasoning text
+- Output immediately per PR
