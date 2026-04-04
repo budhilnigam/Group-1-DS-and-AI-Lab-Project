@@ -1,0 +1,66 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: routers/items.py\n3: \n4: This module defines an APIRouter for item resources, providing CRUD endpoints\n5: with support for pagination and filtering via query parameters.\n6: \n7: Endpoints:\n8: - GET /items: List items with pagination and filtering\n9: - GET /items/{item_id}: Retrieve an item by ID\n10: - POST /items: Create a new item\n11: - PUT /items/{item_id}: Update an existing item\n12: - DELETE /items/{item_id}: Delete an item\n13: \n14: \"\"\"\n15: \n16: from typing import List, Optional\n17: from uuid import UUID, uuid4\n18: \n19: from fastapi import APIRouter, HTTPException, Query, status\n20: from pydantic import BaseModel, Field\n21: \n22: router = APIRouter(\n23:     prefix=\"/items\",\n24:     tags=[\"items\"],\n25: )\n26: \n27: \n28: class Item(BaseModel):\n29:     id: UUID = Field(default_factory=uuid4)\n30:     name: str\n31:     description: Optional[str] = None\n32:     price: float\n33:     in_stock: bool = True\n34:     category: Optional[str] = None\n35: \n36: \n37: class ItemCreate(BaseModel):\n38:     name: str = Field(..., max_length=100)\n39:     description: Optional[str] = Field(None, max_length=300)\n40:     price: float = Field(..., gt=0)\n41:     in_stock: bool = True\n42:     category: Optional[str] = Field(None, max_length=50)\n43: \n44: \n45: class ItemUpdate(BaseModel):\n46:     name: Optional[str] = Field(None, max_length=100)\n47:     description: Optional[str] = Field(None, max_length=300)\n48:     price: Optional[float] = Field(None, gt=0)\n49:     in_stock: Optional[bool] = None\n50:     category: Optional[str] = Field(None, max_length=50)\n51: \n52: \n53: # In-memory storage for demonstration\n54: _items_db: List[Item] = []\n55: \n56: \n57: @router.get(\n58:     \"\",\n59:     response_model=List[Item],\n60:     summary=\"List items with pagination and filtering\"\n61: )\n62: def list_items(\n63:     skip: int = Query(0, ge=0, description=\"Number of items to skip\"),\n64:     limit: int = Query(10, ge=1, le=100, description=\"Max items to return\"),\n65:     name: Optional[str] = Query(None, description=\"Filter by item name\"),\n66:     category: Optional[str] = Query(None, description=\"Filter by category\"),\n67:     min_price: Optional[float] = Query(None, ge=0, description=\"Minimum price\"),\n68:     max_price: Optional[float] = Query(None, ge=0, description=\"Maximum price\"),\n69:     in_stock: Optional[bool] = Query(None, description=\"Filter by stock status\"),\n70: ) -> List[Item]:\n71:     \"\"\"\n72:     Retrieve a list of items with optional pagination and filtering.\n73:     \"\"\"\n74:     filtered_items = _items_db\n75: \n76:     if name:\n77:         filtered_items = [item for item in filtered_items if name.lower() in item.name.lower()]\n78:     if category:\n79:         filtered_items = [item for item in filtered_items if item.category == category]\n80:     if min_price is not None:\n81:         filtered_items = [item for item in filtered_items if item.price >= min_price]\n82:     if max_price is not None:\n83:         filtered_items = [item for item in filtered_items if item.price <= max_price]\n84:     if in_stock is not None:\n85:         filtered_items = [item for item in filtered_items if item.in_stock == in_stock]\n86: \n87:     return filtered_items[skip:skip + limit]\n88: \n89: \n90: @router.get(\n91:     \"/{item_id}\",\n92:     response_model=Item,\n93:     summary=\"Get an item by ID\"\n94: )\n95: def getItem(item_id: UUID) -> Item:\n96:     \"\"\"\n97:     Retrieve a single item by its ID.\n98:     \"\"\"\n99:     for item in _items_db:\n100:         if item.id == item_id:\n101:             return item\n102:     raise HTTPException(\n103:         status_code=status.HTTP_404_NOT_FOUND,\n104:         detail=\"Item not found\"\n105:     )\n106: \n107: \n108: @router.post(\n109:     \"\",\n110:     response_model=Item,\n111:     status_code=status.HTTP_201_CREATED,\n112:     summary=\"Create a new item\"\n113: )\n114: def createItem(item: ItemCreate) -> Item:\n115:     \"\"\"\n116:     Create a new item and add it to the database.\n117:     \"\"\"\n118:     new_item = Item(**item.dict())\n119:     _items_db.append(new_item)\n120:     return new_item\n121: \n122: \n123: @router.put(\n124:     \"/{item_id}\",\n125:     response_model=Item,\n126:     summary=\"Update an existing item\"\n127: )\n128: def updateItem(item_id: UUID, item_update: ItemUpdate) -> Item:\n129:     \"\"\"\n130:     Update an existing item by its ID.\n131:     \"\"\"\n132:     for idx, item in enumerate(_items_db):\n133:         if item.id == item_id:\n134:             updated_data = item.dict()\n135:             update_fields = item_update.dict(exclude_unset=True)\n136:             updated_data.update(update_fields)\n137:             updated_item = Item(**updated_data)\n138:             _items_db[idx] = updated_item\n139:             return updated_item\n140:     raise HTTPException(\n141:         status_code=status.HTTP_404_NOT_FOUND,\n142:         detail=\"Item not found\"\n143:     )\n144: \n145: \n146: @router.delete(\n147:     \"/{item_id}\",\n148:     status_code=status.HTTP_204_NO_CONTENT,\n149:     summary=\"Delete an item\"\n150: )\n151: def deleteItem(item_id: UUID) -> None:\n152:     \"\"\"\n153:     Delete an item by its ID.\n154:     \"\"\"\n155:     for idx, item in enumerate(_items_db):\n156:         if item.id == item_id:\n157:             del _items_db[idx]\n158:             return\n159:     raise HTTPException(\n160:         status_code=status.HTTP_404_NOT_FOUND,\n161:         detail=\"Item not found\"\n162:     )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 57,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"Function name 'list_items' should be in snake_case, which it is. However, the function 'getItem', 'createItem', 'updateItem', and 'deleteItem' are not following PEP 8 naming conventions.\",\n  \"guideline_chunks_used\": [\"chunk_0423\", \"chunk_0362\", \"chunk_0361\", \"chunk_0046\"]\n}",
+  "parsed_response": {
+    "line_number": 57,
+    "violation_category": "naming_convention",
+    "review_comment": "Function name 'list_items' should be in snake_case, which it is. However, the function 'getItem', 'createItem', 'updateItem', and 'deleteItem' are not following PEP 8 naming conventions.",
+    "guideline_chunks_used": [
+      "chunk_0423",
+      "chunk_0362",
+      "chunk_0361",
+      "chunk_0046"
+    ]
+  },
+  "latency_ms": 24970.2,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nrouters/items.py\n\nThis module defines an APIRouter for item resources, providing CRUD endpoints\nwith support for pagination and filtering via query parameters.\n\nEndpoints:\n- GET /items: List items with pagination and filtering\n- GET /items/{item_id}: Retrieve an item by ID\n- POST /items: Create a new item\n- PUT /items/{item_id}: Update an existing item\n- DELETE /items/{item_id}: Delete an item\n\n\"\"\"\n\nfrom typing import List, Optional\nfrom uuid import UUID, uuid4\n\nfrom fastapi import APIRouter"
+}

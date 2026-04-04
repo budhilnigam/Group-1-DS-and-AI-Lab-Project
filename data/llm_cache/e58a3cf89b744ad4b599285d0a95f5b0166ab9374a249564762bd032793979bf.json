@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0371] (score=0.770)\nLooks like the import for sys isn't being used in this file—let's remove it to keep things tidy.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import os\n2: import sys\n3: import re\n4: import pytest\n5: from flask import Flask\n6: from flask.testing import FlaskClient\n7: \n8: from your_flask_app import create_app, db\n9: from your_flask_app.models import User\n10: \n11: \n12: @pytest.fixture\n13: def app() -> Flask:\n14:   \"\"\"Create a Flask app instance for testing.\"\"\"\n15:   app = create_app('testing')\n16: \n17:       with app.app_context():\n18:           db.create_all()\n19:           yield app\n20:           db.drop_all()\n21: \n22: \n23: @pytest.fixture\n24: def client(app: Flask) -> FlaskClient:\n25:     \"\"\"Create a test client for the Flask app.\"\"\"\n26:     return app.test_client()\n27: \n28: \n29: @pytest.fixture\n30: def create_user() -> User:\n31:       \"\"\"Create a user for testing purposes.\"\"\"\n32:       user = User(username='testuser', email='test@example.com')\n33:       user.set_password('password')\n34:       return user\n35: \n36: \n37: def test_register(client: FlaskClient, create_user: User) -> None:\n38:     \"\"\"Test user registration endpoint.\"\"\"\n39:     response = client.post('/register', json={\n40:         'username': create_user.username,\n41:         'email': create_user.email,\n42:         'password': 'password'\n43:     })\n44: \n45:     assert response.status_code == 201\n46:     assert response.json['message'] == 'User registered successfully'\n47: \n48: \n49: def test_login(client: FlaskClient, create_user: User) -> None:\n50:     \"\"\"Test user login endpoint.\"\"\"\n51:     client.post('/register', json={\n52:         'username': create_user.username,\n53:         'email': create_user.email,\n54:         'password': 'password'\n55:     })\n56: \n57:     response = client.post('/login', json={\n58:         'username': create_user.username,\n59:         'password': 'password'\n60:     })\n61: \n62:     assert response.status_code == 200\n63:     assert response.json['message'] == 'Login successful'\n64:     assert 'access_token' in response.json\n65: \n66: \n67: def test_invalid_login(client: FlaskClient) -> None:\n68:     \"\"\"Test login with invalid credentials.\"\"\"\n69:     response = client.post('/login', json={\n70:         'username': 'invaliduser',\n71:         'password': 'wrongpassword'\n72:     })\n73: \n74:     assert response.status_code == 401\n75:     assert response.json['message'] == 'Invalid credentials'\n76: \n77: \n78: def test_logout(client: FlaskClient, create_user: User) -> None:\n79:     \"\"\"Test user logout endpoint.\"\"\"\n80:     client.post('/register', json={\n81:         'username': create_user.username,\n82:         'email': create_user.email,\n83:         'password': 'password'\n84:     })\n85: \n86:     login_response = client.post('/login', json={\n87:         'username': create_user.username,\n88:         'password': 'password'\n89:     })\n90: \n91:     access_token = login_response.json['access_token']\n92:     response = client.post('/logout', headers={\n93:         'Authorization': f'Bearer {access_token}'\n94:     })\n95: \n96:     assert response.status_code == 200\n97:     assert response.json['message'] == 'Logout successful'\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 2,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0067\", \"chunk_0371\"]\n}",
+  "parsed_response": {
+    "line_number": 2,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sys' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0067",
+      "chunk_0371"
+    ]
+  },
+  "latency_ms": 15373.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0371": {
+      "score": 0.7696,
+      "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "import os\nimport sys\nimport re\nimport pytest\nfrom flask import Flask\nfrom flask.testing import FlaskClient\n\nfrom your_flask_app import create_app, db\nfrom your_flask_app.models import User\n\n\n@pytest.fixture\ndef app() -> Flask:\n  \"\"\"Create a Flask app instance for testing.\"\"\"\n  app = create_app('testing')\n\n      with app.app_context():\n          db.create_all()\n          yield app\n          db.drop_all()\n\n\n@pytest.fixture\ndef client(app: Flask) -> FlaskClient:\n    \"\"\"Create a test client for the "
+}

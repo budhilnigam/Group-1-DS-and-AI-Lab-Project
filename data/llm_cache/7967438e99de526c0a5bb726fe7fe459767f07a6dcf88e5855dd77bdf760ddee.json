@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Configuration classes for Flask application.\n2: \n3: This module contains configuration settings for different environments:\n4: Development, Production, and Testing. Each class defines the necessary\n5: settings such as SECRET_KEY and DATABASE_URI.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: import os\n13: from typing import Any\n14: \n15: \n16: class Config:\n17:     \"\"\"Base configuration class with common settings.\"\"\"\n18: \n19:     SECRET_KEY: str = os.environ.get('SECRET_KEY', 'default_secret_key')\n20:     DATABASE_URI: str = os.environ.get('DATABASE_URI', 'sqlite:///:memory:')\n21:     DEBUG: bool = False\n22:     TESTING: bool = False\n23: \n24:     @staticmethod\n25:     def init_app(app: Any) -> None:\n26:         \"\"\"Initialize the application with the given configuration.\"\"\"\n27:         pass\n28: \n29: \n30: class DevelopmentConfig(Config):\n31:     \"\"\"Configuration settings for development environment.\"\"\"\n32: \n33:     DEBUG: bool = True\n34:     DATABASE_URI: str = os.environ.get('DEV_DATABASE_URI', 'sqlite:///dev.db')\n35: \n36: \n37: class ProductionConfig(Config):\n38:     \"\"\"Configuration settings for production environment.\"\"\"\n39: \n40:     DATABASE_URI: str = os.environ.get('PROD_DATABASE_URI', 'mysql://user:password@localhost/prod')\n41: \n42: \n43: class TestingConfig(Config):\n44:     \"\"\"Configuration settings for testing environment.\"\"\"\n45: \n46:     TESTING: bool = True\n47:     DATABASE_URI: str = os.environ.get('TEST_DATABASE_URI', 'sqlite:///:memory:')\n48:     SECRET_KEY: str = os.environ.get('TEST_SECRET_KEY', 'test_secret_key')\n49: \n50: \n51: configurations = {\n52:     'development': DevelopmentConfig,\n53:     'production': ProductionConfig,\n54:     'testing': TestingConfig\n55: }\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported twice, and the second import is unnecessary.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0071\"]\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported twice, and the second import is unnecessary.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0071"
+    ]
+  },
+  "latency_ms": 12731.7,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Configuration classes for Flask application.\n\nThis module contains configuration settings for different environments:\nDevelopment, Production, and Testing. Each class defines the necessary\nsettings such as SECRET_KEY and DATABASE_URI.\n\"\"\"\n\nimport os\nimport sys\nimport re\n\nimport os\nfrom typing import Any\n\n\nclass Config:\n    \"\"\"Base configuration class with common settings.\"\"\"\n\n    SECRET_KEY: str = os.environ.get('SECRET_KEY', 'default_secret_key')\n    DATABASE_URI: str = os.environ.get('DATAB"
+}

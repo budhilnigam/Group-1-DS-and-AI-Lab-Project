@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0371] (score=0.770)\nLooks like the import for sys isn't being used in this file—let's remove it to keep things tidy.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Unit tests for Django forms.\"\"\"\n2: \n3: import os\n4: import sys\n5: import re\n6: \n7: from django.test import TestCase\n8: from myapp.forms import ExampleForm\n9: from myapp.models import ExampleModel\n10: \n11: \n12: class ExampleFormTestCase(TestCase):\n13:   \"\"\"TestCase for validating ExampleForm behavior.\"\"\"\n14: \n15:       def setUp(self) -> None:\n16:           \"\"\"Set up test data for form testing.\"\"\"\n17:           self.valid_data = {\n18:             \"title\": \"Unique Title\",\n19:             \"description\": \"This is a valid description.\",\n20:           }\n21:           self.existing_instance = ExampleModel.objects.create(\n22:               title=\"Existing Title\",\n23:               description=\"Existing description.\",\n24:           )\n25: \n26:     def test_valid_form(self) -> None:\n27:         \"\"\"Test that the form is valid with valid data.\"\"\"\n28:         form = ExampleForm(data=self.valid_data)\n29:         self.assertTrue(form.is_valid())\n30:         self.assertEqual(form.cleaned_data[\"title\"], self.valid_data[\"title\"])\n31:         self.assertEqual(form.cleaned_data[\"description\"], self.valid_data[\"description\"])\n32: \n33:     def test_empty_form(self) -> None:\n34:         \"\"\"Test that the form is invalid with empty data.\"\"\"\n35:         form = ExampleForm(data={})\n36:         self.assertFalse(form.is_valid())\n37:         self.assertIn(\"title\", form.errors)\n38:         self.assertIn(\"description\", form.errors)\n39: \n40:       def test_duplicate_title_validation(self) -> None:\n41:           \"\"\"Test that the form raises validation error for duplicate titles.\"\"\"\n42:           duplicate_data = {\n43:               \"title\": self.existing_instance.title,\n44:               \"description\": \"Another description.\",\n45:           }\n46:           form = ExampleForm(data=duplicate_data)\n47:           self.assertFalse(form.is_valid())\n48:           self.assertIn(\"title\", form.errors)\n49:           self.assertEqual(\n50:               form.errors[\"title\"][0],\n51:               \"An item with this title already exists.\"\n52:           )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 4,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0071\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 4,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sys' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0071",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 11443.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0371": {
+      "score": 0.7696,
+      "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Unit tests for Django forms.\"\"\"\n\nimport os\nimport sys\nimport re\n\nfrom django.test import TestCase\nfrom myapp.forms import ExampleForm\nfrom myapp.models import ExampleModel\n\n\nclass ExampleFormTestCase(TestCase):\n  \"\"\"TestCase for validating ExampleForm behavior.\"\"\"\n\n      def setUp(self) -> None:\n          \"\"\"Set up test data for form testing.\"\"\"\n          self.valid_data = {\n            \"title\": \"Unique Title\",\n            \"description\": \"This is a valid description.\",\n          }\n          s"
+}

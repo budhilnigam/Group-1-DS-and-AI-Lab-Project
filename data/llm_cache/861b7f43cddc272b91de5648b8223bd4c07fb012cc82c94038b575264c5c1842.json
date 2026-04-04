@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Custom validation utilities for Django models and forms.\n3: \n4: This module contains custom validators to be used across the Django project.\n5: The functions include validation for image file size, slug format, and profanity filtering.\n6: \"\"\"\n7: \n8: import re\n9: import os\n10: import sys\n11: from typing import Any, List\n12: \n13: from django.core.exceptions import ValidationError\n14: from django.utils.translation import gettext_lazy as _\n15: \n16: \n17: def validate_image_size(image: Any, max_size_mb: int = 5) -> None:\n18:     \"\"\"\n19:     Validates that the uploaded image does not exceed the specified size.\n20: \n21:     Args:\n22:         image (Any): The image file to validate.\n23:         max_size_mb (int): The maximum allowed size in megabytes. Defaults to 5MB.\n24: \n25:     Raises:\n26:         ValidationError: If the image size exceeds the maximum allowed limit.\n27:     \"\"\"\n28:     max_size_bytes = max_size_mb * 1024 * 1024\n29:     if image.size > max_size_bytes:\n30:         raise ValidationError(\n31:             _('Image size should not exceed %(max_size_mb)dMB.'),\n32:             params={'max_size_mb': max_size_mb},\n33:         )\n34: \n35: \n36: def validate_slug_format(slug: str, allowed_chars: List[str] = []) -> None:\n37:     \"\"\"\n38:     Validates that a string is a properly formatted slug.\n39: \n40:     Args:\n41:         slug (str): The string to validate.\n42:         allowed_chars (List[str]): Additional allowed characters for the slug. Defaults to empty list.\n43: \n44:     Raises:\n45:         ValidationError: If the string is not a valid slug.\n46:     \"\"\"\n47:     slug_regex = r'^[a-z0-9]+(?:-[a-z0-9]+)*$'\n48:     if not re.match(slug_regex, slug):\n49:         raise ValidationError(\n50:             _('Enter a valid slug consisting of lowercase letters, numbers, and hyphens.'),\n51:             code='invalid_slug',\n52:         )\n53: \n54: \n55: def validate_no_profanity(value: str, profane_words: set = {'badword1', 'badword2', 'badword3'}) -> None:\n56:     \"\"\"\n57:     Validates that a string does not contain any profane words.\n58: \n59:     Args:\n60:         value (str): The string to validate.\n61:         profane_words (set): A set of profane words to check against. Defaults to predefined set.\n62: \n63:     Raises:\n64:         ValidationError: If the string contains any profanity.\n65:     \"\"\"\n66:     words = value.lower().split()\n67:     for word in words:\n68:         if word in profane_words:\n69:             raise ValidationError(\n70:                 _('The text contains inappropriate language: \"%(word)s\".'),\n71:                 params={'word': word},\n72:                 code='profanity_detected',\n73:             )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 10076.9,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nCustom validation utilities for Django models and forms.\n\nThis module contains custom validators to be used across the Django project.\nThe functions include validation for image file size, slug format, and profanity filtering.\n\"\"\"\n\nimport re\nimport os\nimport sys\nfrom typing import Any, List\n\nfrom django.core.exceptions import ValidationError\nfrom django.utils.translation import gettext_lazy as _\n\n\ndef validate_image_size(image: Any, max_size_mb: int = 5) -> None:\n    \"\"\"\n    Validates that t"
+}

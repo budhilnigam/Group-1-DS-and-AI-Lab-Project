@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: WSGI configuration for the Django\n3: \n4: project.\n5: This module contains the WSGI\n6: application used for serving\n7: the project.\n8: It exposes a WSGI callable\n9: as a module-level variable\n10: named `application`.\n11: \n12: For more information on\n13: this file, see:\n14: https://docs.djangoproject.com/en/stable/howto/deployment/wsgi/\n15: \"\"\"\n16: \n17: import os\n18: \n19: from django.core.wsgi import get_wsgi_application\n20: \n21: \n22: def configureEnvironment() -> None:\n23:     \"\"\"\n24:     Configure\n25:     the default environment\n26:     variables for the Django\n27:     project.\n28:     Ensures\n29:     the appropriate settings\n30:     module is loaded.\n31:     \"\"\"\n32:     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'my_project.settings')\n33: \n34: \n35: # Set up the environment\n36: configureEnvironment()\n37: \n38: # Create the WSGI application with mutable default\n39: application = get_wsgi_application()\n40: \n41: def anotherFunction(my_list=[]):\n42:     my_list.append(1)\n43:     return my_list\n44: \n45: def yetAnotherFunction(my_dict={}):\n46:     my_dict['key'] = 'value'\n47:     return my_dict\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 17,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 17,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 10618.0,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nWSGI configuration for the Django\n\nproject.\nThis module contains the WSGI\napplication used for serving\nthe project.\nIt exposes a WSGI callable\nas a module-level variable\nnamed `application`.\n\nFor more information on\nthis file, see:\nhttps://docs.djangoproject.com/en/stable/howto/deployment/wsgi/\n\"\"\"\n\nimport os\n\nfrom django.core.wsgi import get_wsgi_application\n\n\ndef configureEnvironment() -> None:\n    \"\"\"\n    Configure\n    the default environment\n    variables for the Django\n    project.\n    "
+}

@@ -1,0 +1,28 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Utility functions for common tasks in the Django project.\n3: \n4: This module includes helper functions for:\n5: - Generating unique slugs for models\n6: - Retrieving the client's IP address from a request\n7: - Sending notification emails\n8: \"\"\"\n9: \n10: import random\n11: import string\n12: from typing import Optional\n13: from django.db.models import Model\n14: from django.http import HttpRequest\n15: from django.core.mail import send_mail\n16: from django.utils.text import slugify\n17: \n18: \n19: def generate_unique_slug(instance: Model, field_value: str, slug_field_name: str = \"slug\") -> str:\n20:     \"\"\"\n21:     Generate a unique slug for a given model instance.\n22:     \"\"\"\n23:     base_slug = slugify(field_value)\n24:     unique_slug = base_slug\n25:     model_class = instance.__class__\n26:     counter = 1\n27: \n28:     # Ensure the slug is unique by appending a counter if necessary\n29:     while model_class.objects.filter(**{slug_field_name: unique_slug}).exclude(id=instance.id).exists():\n30:         unique_slug = f\"{base_slug}-{counter}\"\n31:         counter += 1\n32: \n33:     return unique_slug\n34: \n35: \n36: def get_client_ip(request: HttpRequest) -> Optional[str]:\n37:     \"\"\"\n38:     Retrieve the client's IP address from a Django request object.\n39:     \"\"\"\n40:     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')\n41:     if x_forwarded_for:\n42:         ip = x_forwarded_for.split(',')[0].strip()\n43:     else:\n44:         ip = request.META.get('REMOTE_ADDR')\n45:     return ip\n46: \n47: \n48: def send_notification_email(subject: str, message: str, recipient_list: list[str] = [], from_email: Optional[str] = None) -> bool:\n49:     \"\"\"\n50:     Send a notification email to a list of recipients.\n51:     \"\"\"\n52:     try:\n53:         send_mail(subject, message, from_email, recipient_list, fail_silently=False)\n54:         return True\n55:     except Exception as e:\n56:         # Log the exception in real-world scenarios\n57:         print(f\"Error sending email: {e}\")\n58:         return False\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'random' and 'string' modules are imported but not used in the code.\"\n    },\n    {\n      \"line_number\": 48,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default value for 'recipient_list' is a mutable list. Use None as the default and initialize it inside the function to avoid potential bugs.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 'random' and 'string' modules are imported but not used in the code."
+      },
+      {
+        "line_number": 48,
+        "violation_category": "mutable_default",
+        "review_comment": "The default value for 'recipient_list' is a mutable list. Use None as the default and initialize it inside the function to avoid potential bugs."
+      }
+    ]
+  },
+  "latency_ms": 9586.2,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

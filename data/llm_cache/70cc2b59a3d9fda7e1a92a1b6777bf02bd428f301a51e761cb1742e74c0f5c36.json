@@ -1,0 +1,66 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0371] (score=0.770)\nLooks like the import for sys isn't being used in this file—let's remove it to keep things tidy.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Anomaly Detection Module\n2: \n3: This module provides functions for detecting outliers using various\n4: machine learning algorithms from scikit-learn, including Isolation Forest,\n5: Local Outlier Factor, and One-Class SVM.\n6: \"\"\"\n7: \n8: from typing import Any, Optional, Tuple\n9: import os\n10: import sys\n11: import re\n12: import numpy as np\n13: import pandas as pd\n14: from sklearn.ensemble import IsolationForest\n15: from sklearn.neighbors import LocalOutlierFactor\n16: from sklearn.svm import OneClassSVM\n17: from sklearn.preprocessing import StandardScaler\n18: \n19: \n20: def isolation_forest_detect(data: np.ndarray,\n21:                             contamination: float = 0.1,\n22:                             random_state: Optional[int] = None) -> Tuple[np.ndarray, np.ndarray]:\n23:     \"\"\"Detect outliers using Isolation Forest.\n24: \n25:     Args:\n26:         data (np.ndarray): Input data for anomaly detection.\n27:         contamination (float): Proportion of outliers in the dataset.\n28:         random_state (Optional[int]): Random state for reproducibility.\n29: \n30:     Returns:\n31:         Tuple[np.ndarray, np.ndarray]: Indices of outliers and inliers.\n32:     \"\"\"\n33:     model = IsolationForest(contamination=contamination,\n34:                             random_state=random_state)\n35:     model.fit(data)\n36: \n37:     outlier_labels = model.predict(data)\n38:     outliers = np.where(outlier_labels == -1)[0]\n39:     inliers = np.where(outlier_labels == 1)[0]\n40: \n41:     return outliers, inliers\n42: \n43: \n44: def local_outlier_factor_detect(data: np.ndarray,\n45:                                 n_neighbors: int = 20,\n46:                                 contamination: float = 0.1) -> Tuple[np.ndarray, np.ndarray]:\n47:     \"\"\"Detect outliers using Local Outlier Factor.\n48: \n49:     Args:\n50:         data (np.ndarray): Input data for anomaly detection.\n51:         n_neighbors (int): Number of neighbors to use for the model.\n52:         contamination (float): Proportion of outliers in the dataset.\n53: \n54:     Returns:\n55:         Tuple[np.ndarray, np.ndarray]: Indices of outliers and inliers.\n56:     \"\"\"\n57:     model = LocalOutlierFactor(n_neighbors=n_neighbors,\n58:                                 contamination=contamination)\n59:     outlier_labels = model.fit_predict(data)\n60: \n61:     outliers = np.where(outlier_labels == -1)[0]\n62:     inliers = np.where(outlier_labels == 1)[0]\n63: \n64:     return outliers, inliers\n65: \n66: \n67: def one_class_svm_detect(data: np.ndarray,\n68:                          nu: float = 0.1,\n69:                          random_state: Optional[int] = None) -> Tuple[np.ndarray, np.ndarray]:\n70:     \"\"\"Detect outliers using One-Class SVM.\n71: \n72:     Args:\n73:         data (np.ndarray): Input data for anomaly detection.\n74:         nu (float): An upper bound on the fraction of margin errors\n75:                     and a lower bound of the fraction of support vectors.\n76:         random_state (Optional[int]): Random state for reproducibility.\n77: \n78:     Returns:\n79:         Tuple[np.ndarray, np.ndarray]: Indices of outliers and inliers.\n80:     \"\"\"\n81:     model = OneClassSVM(nu=nu, random_state=random_state)\n82:     model.fit(data)\n83: \n84:     outlier_labels = model.predict(data)\n85:     outliers = np.where(outlier_labels == -1)[0]\n86:     inliers = np.where(outlier_labels == 1)[0]\n87: \n88:     return outliers, inliers\n89: \n90: \n91: def preprocess_data(data: pd.DataFrame) -> np.ndarray:\n92:     \"\"\"Standardize the input data.\n93: \n94:     Args:\n95:         data (pd.DataFrame): Input data for preprocessing.\n96: \n97:     Returns:\n98:         np.ndarray: Standardized data.\n99:     \"\"\"\n100:     scaler = StandardScaler()\n101:     standardized_data = scaler.fit_transform(data)\n102: \n103:     return standardized_data\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 10,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\", \"chunk_0371\"]\n}",
+  "parsed_response": {
+    "line_number": 10,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sys' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067",
+      "chunk_0371"
+    ]
+  },
+  "latency_ms": 17490.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0371": {
+      "score": 0.7696,
+      "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Anomaly Detection Module\n\nThis module provides functions for detecting outliers using various\nmachine learning algorithms from scikit-learn, including Isolation Forest,\nLocal Outlier Factor, and One-Class SVM.\n\"\"\"\n\nfrom typing import Any, Optional, Tuple\nimport os\nimport sys\nimport re\nimport numpy as np\nimport pandas as pd\nfrom sklearn.ensemble import IsolationForest\nfrom sklearn.neighbors import LocalOutlierFactor\nfrom sklearn.svm import OneClassSVM\nfrom sklearn.preprocessing import Standard"
+}

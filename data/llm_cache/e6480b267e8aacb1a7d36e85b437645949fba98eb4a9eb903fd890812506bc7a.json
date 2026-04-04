@@ -1,0 +1,43 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Post model for a Flask application using SQLAlchemy.\n2: \n3: This module defines the Post model, which represents a blog post in the\n4: database. It includes fields for the post ID, title, body, timestamp, and\n5: author ID, as well as relationships to the User model.\n6: \"\"\"\n7: \n8: from datetime import datetime\n9: from typing import Type\n10: from flask_sqlalchemy import SQLAlchemy\n11: \n12: db: SQLAlchemy = SQLAlchemy()\n13: \n14: \n15: class Post(db.Model):\n16:     \"\"\"Represents a blog post in the database.\"\"\"\n17: \n18:     __tablename__ = 'posts'\n19: \n20:     id: int = db.Column(db.Integer, primary_key=True)\n21:     title: str = db.Column(db.String(255), nullable=False)\n22:     body: str = db.Column(db.Text, nullable=False)\n23:     timestamp: datetime = db.Column(db.DateTime, default=datetime.utcnow)\n24:     author_id: int = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)\n25: \n26:     author = db.relationship('User', back_populates='posts')\n27: \n28:     def __init__(self, title: str, body: str, authorId: int = []) -> None:\n29:         \"\"\"\n30:         Initialize a new Post instance.\n31:         Args:\n32:             title (str): The title of the post.\n33:             body (str): The content of the post.\n34:             authorId (int): The ID of the author of the post.\n35:         \"\"\"\n36:         self.title = title\n37:         self.body = body\n38:         self.author_id = authorId\n39: \n40:     def __repr__(self) -> str:\n41:         \"\"\"Return a string representation of the Post instance.\"\"\"\n42:         return f'<Post {self.id}: {self.title}>'\n43: \n44:     @classmethod\n45:     def createPost(cls: Type['Post'], title: str, body: str, author_id: int = {}) -> 'Post':\n46:         \"\"\"Create a new Post instance and add it to the session.\n47: \n48:         Args:\n49:             title (str): The title of the post.\n50:             body (str): The content of the post.\n51:             author_id (int): The ID of the author of the post.\n52: \n53:         Returns:\n54:             Post: The newly created Post instance.\n55:         \"\"\"\n56:         new_post = cls(title=title, body=body, author_id=author_id)\n57:         db.session.add(new_post)\n58:         db.session.commit()\n59:         return new_post\n60: \n61:     @classmethod\n62:     def getAllPosts(cls: Type['Post']) -> list['Post']:\n63:         \"\"\"Retrieve all posts from the database.\n64: \n65:         Returns:\n66:             list[Post]: A list of all Post instances.\n67:         \"\"\"\n68:         return cls.query.all()\n69: \n70:     @classmethod\n71:     def get_post_by_id(cls: Type['Post'], post_id: int) -> 'Post':\n72:         \"\"\"Retrieve a post by its ID.\n73: \n74:         Args:\n75:             post_id (int): The ID of the post to retrieve.\n76: \n77:         Returns:\n78:             Post: The Post instance with the given ID, or None if not found.\n79:         \"\"\"\n80:         return cls.query.get(post_id)\n81: \n82:     def updatePost(self, title: str = [], body: str = []) -> None:\n83:         self.title = title\n84:         self.body = body\n85:         db.session.commit()\n86: \n87:     def delete_post(self) -> None:\n88:         \"\"\"Delete the post from the database.\"\"\"\n89:         db.session.delete(self)\n90:         db.session.commit()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 8,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'datetime' import is unused.\"\n    },\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'Type' import from typing is unused.\"\n    },\n    {\n      \"line_number\": 28,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"Using a mutable default argument (empty list) for 'authorId'.\"\n    },\n    {\n      \"line_number\": 45,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"Using a mutable default argument (empty dictionary) for 'author_id'.\"\n    },\n    {\n      \"line_number\": 82,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"Using a mutable default argument (empty list) for 'title' and 'body'.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "The 'datetime' import is unused."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'Type' import from typing is unused."
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "Using a mutable default argument (empty list) for 'authorId'."
+      },
+      {
+        "line_number": 45,
+        "violation_category": "mutable_default",
+        "review_comment": "Using a mutable default argument (empty dictionary) for 'author_id'."
+      },
+      {
+        "line_number": 82,
+        "violation_category": "mutable_default",
+        "review_comment": "Using a mutable default argument (empty list) for 'title' and 'body'."
+      }
+    ]
+  },
+  "latency_ms": 19580.8,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

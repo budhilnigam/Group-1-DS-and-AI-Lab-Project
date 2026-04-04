@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Unit tests for the task management models.\"\"\"\n2: \n3: from django.test import TestCase\n4: from django.utils import timezone\n5: from app.models import Task, Priority\n6: \n7: \n8: class TaskModelTestCase(TestCase):\n9:     \"\"\"Test suite for the Task model.\"\"\"\n10: \n11:     def setUp(self):\n12:         \"\"\"Set up test data.\"\"\"\n13:         self.priority = Priority.objects.create(label=\"High\", color_code=\"#ff0000\")\n14:         self.task = Task.objects.create(\n15:             title=\"Write documentation\",\n16:             description=\"Write the user guide for the API.\",\n17:             priority=self.priority,\n18:         )\n19: \n20:     def test_task_creation(self):\n21:         \"\"\"Tests that a new task is created with correct defaults.\"\"\"\n22:         self.assertEqual(self.task.title, \"Write documentation\")\n23:         self.assertEqual(self.task.statusField, \"open\")\n24:         self.assertIsNotNone(self.task.created_at)\n25: \n26:     def test_overdue_detection(self):\n27:         \"\"\"Ensures that overdue detection works for past dates.\"\"\"\n28:         self.task.due_date = timezone.now().date() - timezone.timedelta(days=1)\n29:         self.task.save()\n30:         self.assertTrue(self.task.is_overdue())\n31: \n32:     def test_not_overdue(self):\n33:         \"\"\"Test that a future due date is not overdue.\"\"\"\n34:         self.task.due_date = timezone.now().date() + timezone.timedelta(days=7)\n35:         self.task.save()\n36:         self.assertFalse(self.task.is_overdue())\n37: \n38:     def test_priority_relationship(self):\n39:         \"\"\"Tests that the priority relationship is correctly set.\"\"\"\n40:         self.assertEqual(self.task.priority.label, \"High\")\n41:         self.assertIn(self.task, self.priority.tasks.all())\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"documentation_formatting\",\n  \"review_comment\": \"The docstring for `TaskModelTestCase` lacks a blank line after the summary line.\",\n  \"guideline_chunks_used\": [\"chunk_0497\", \"chunk_0108\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "documentation_formatting",
+    "review_comment": "The docstring for `TaskModelTestCase` lacks a blank line after the summary line.",
+    "guideline_chunks_used": [
+      "chunk_0497",
+      "chunk_0108"
+    ]
+  },
+  "latency_ms": 11045.6,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Unit tests for the task management models.\"\"\"\n\nfrom django.test import TestCase\nfrom django.utils import timezone\nfrom app.models import Task, Priority\n\n\nclass TaskModelTestCase(TestCase):\n    \"\"\"Test suite for the Task model.\"\"\"\n\n    def setUp(self):\n        \"\"\"Set up test data.\"\"\"\n        self.priority = Priority.objects.create(label=\"High\", color_code=\"#ff0000\")\n        self.task = Task.objects.create(\n            title=\"Write documentation\",\n            description=\"Write the user guide f"
+}

@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: serializers.py\n3: \n4: This module defines Django REST Framework serializers for the Article and Category\n5: models. The serializers include nested relationships and validation logic.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: from typing import Any, Dict\n12: \n13: from rest_framework import serializers\n14: \n15: from .models import Article, Category\n16: \n17: \n18: class CategorySerializer(serializers.ModelSerializer):\n19:     \"\"\"\n20:     Serializer for the Category model. Handles serialization and validation\n21:     for category instances.\n22:     \"\"\"\n23: \n24:     class Meta:\n25:         model = Category\n26:         fields = ['id', 'name', 'created_at', 'updated_at']\n27:         read_only_fields = ['id', 'created_at', 'updated_at']\n28: \n29:     def validate_name(self, value: str = []) -> str:\n30:         \"\"\"\n31:         Ensure the category name is not empty and does not exceed 50 characters.\n32:         \"\"\"\n33:         if not value.strip():\n34:             raise serializers.ValidationError(\"Category name cannot be blank.\")\n35:         if len(value) > 50:\n36:             raise serializers.ValidationError(\"Category name must be 50 characters or fewer.\")\n37:         return value\n38: \n39: \n40: class ArticleSerializer(serializers.ModelSerializer):\n41:     \"\"\"\n42:     Serializer for the Article model. Handles serialization, deserialization,\n43:     and validation for article instances. Includes nested category information.\n44:     \"\"\"\n45:     category = CategorySerializer()\n46: \n47:     class Meta:\n48:         model = Article\n49:         fields = ['id', 'title', 'content', 'category', 'created_at', 'updated_at']\n50:         read_only_fields = ['id', 'created_at', 'updated_at']\n51: \n52:     def validate_title(self, value: str = {}) -> str:\n53:         \"\"\"\n54:         Ensure the article title is not empty and does not exceed 100 characters.\n55:         \"\"\"\n56:         if not value.strip():\n57:             raise serializers.ValidationError(\"Article title cannot be blank.\")\n58:         if len(value) > 100:\n59:             raise serializers.ValidationError(\"Article title must be 100 characters or fewer.\")\n60:         return value\n61: \n62:     def validate(self, attrs: Dict[str, Any] = {}) -> Dict[str, Any]:\n63:         \"\"\"\n64:         Perform additional validation to ensure content is provided and\n65:         category exists.\n66:         \"\"\"\n67:         if not attrs.get('content'):\n68:             raise serializers.ValidationError({\"content\": \"Content cannot be empty.\"})\n69:         if not attrs.get('category'):\n70:             raise serializers.ValidationError({\"category\": \"Category cannot be null.\"})\n71:         return attrs\n72: \n73:     def create(self, validated_data: Dict[str, Any]) -> Article:\n74:         \"\"\"\n75:         Create a new Article instance. Handles nested category creation or retrieval.\n76:         \"\"\"\n77:         category_data = validated_data.pop('category')\n78:         category, _ = Category.objects.get_or_create(**category_data)\n79:         article = Article.objects.create(category=category, **validated_data)\n80:         return article\n81: \n82:     def update(self, instance: Article, validated_data: Dict[str, Any]) -> Article:\n83:         \"\"\"\n84:         Update an existing Article instance. Handles nested category updates.\n85:         \"\"\"\n86:         category_data = validated_data.pop('category', None)\n87:         if category_data:\n88:             category, _ = Category.objects.get_or_create(**category_data)\n89:             instance.category = category\n90:         for attr, value in validated_data.items():\n91:             setattr(instance, attr, value)\n92:         instance.save()\n93:         return instance\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 13165.2,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nserializers.py\n\nThis module defines Django REST Framework serializers for the Article and Category\nmodels. The serializers include nested relationships and validation logic.\n\"\"\"\n\nimport os\nimport sys\nimport re\nfrom typing import Any, Dict\n\nfrom rest_framework import serializers\n\nfrom .models import Article, Category\n\n\nclass CategorySerializer(serializers.ModelSerializer):\n    \"\"\"\n    Serializer for the Category model. Handles serialization and validation\n    for category instances.\n    \"\"\"\n\n"
+}

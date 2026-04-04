@@ -1,0 +1,38 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: dependencies.py\n3: \n4: Dependency functions for FastAPI project:\n5: - get_current_user: Retrieves and validates the current user from the request.\n6: - get_db_session: Provides a database session per request.\n7: - pagination_params: Parses pagination parameters from query.\n8: - require_admin: Ensures user has admin privileges.\n9: \"\"\"\n10: \n11: from typing import Any, Generator, Optional\n12: from contextlib import contextmanager\n13: import os\n14: import sys\n15: import re\n16: \n17: from fastapi import Depends, HTTPException, Request, status\n18: from fastapi.security import OAuth2PasswordBearer\n19: from sqlalchemy.orm import Session\n20: \n21: from models import User\n22: from database import SessionLocal\n23: from core import auth\n24: \n25: \n26: oauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n27: \n28: \n29: @contextmanager\n30: def db_session_context() -> Generator[Session, None, None]:\n31:     \"\"\"\n32:     Context manager for SQLAlchemy session.\n33:     \"\"\"\n34:     session = SessionLocal()\n35:     try:\n36:         yield session\n37:     finally:\n38:         session.close()\n39: \n40: \n41: def get_db_session() -> Generator[Session, None, None]:\n42:     \"\"\"\n43:     Dependency that provides a database session for each request.\n44: \n45:     Yields:\n46:         Session: SQLAlchemy session.\n47:     \"\"\"\n48:     with db_session_context() as session:\n49:         yield session\n50: \n51: \n52: def get_current_user(\n53:     token: str = Depends(oauth2_scheme),\n54:     db: Session = Depends(get_db_session)\n55: ) -> User:\n56:     \"\"\"\n57:     Dependency that retrieves the current user using the provided token.\n58: \n59:     Args:\n60:         token (str): JWT token from request.\n61:         db (Session): Database session.\n62: \n63:     Returns:\n64:         User: Authenticated user object.\n65: \n66:     Raises:\n67:         HTTPException: If authentication fails.\n68:     \"\"\"\n69:     credentials_exception = HTTPException(\n70:         status_code=status.HTTP_401_UNAUTHORIZED,\n71:         detail=\"Could not validate credentials\",\n72:         headers={\"WWW-Authenticate\": \"Bearer\"},\n73:     )\n74:     payload = auth.decode_access_token(token)\n75:     if not payload or \"sub\" not in payload:\n76:         raise credentials_exception\n77:     user_id: int = payload[\"sub\"]\n78:     user = db.query(User).filter(User.id == user_id).first()\n79:     if not user:\n80:         raise credentials_exception\n81:     return user\n82: \n83: \n84: def pagination_params(\n85:     request: Request\n86: ) -> dict[str, Any]:\n87:     \"\"\"\n88:     Dependency that parses pagination parameters from query.\n89: \n90:     Args:\n91:         request (Request): FastAPI request object.\n92: \n93:     Returns:\n94:         dict[str, Any]: Pagination parameters: limit, offset.\n95:     \"\"\"\n96:     try:\n97:         limit = int(request.query_params.get(\"limit\", 20))\n98:         offset = int(request.query_params.get(\"offset\", 0))\n99:     except ValueError:\n100:         raise HTTPException(\n101:             status_code=status.HTTP_400_BAD_REQUEST,\n102:             detail=\"Invalid pagination parameters\"\n103:         )\n104:     if limit < 1 or offset < 0:\n105:         raise HTTPException(\n106:             status_code=status.HTTP_400_BAD_REQUEST,\n107:             detail=\"Pagination parameters out of range\"\n108:         )\n109:     return {\"limit\": limit, \"offset\": offset}\n110: \n111: \n112: def require_admin(\n113:     current_user: User = Depends(get_current_user)\n114: ) -> User:\n115:     \"\"\"\n116:     Dependency that ensures the user has admin privileges.\n117: \n118:     Args:\n119:         current_user (User): Authenticated user object.\n120: \n121:     Returns:\n122:         User: Admin user object.\n123: \n124:     Raises:\n125:         HTTPException: If user is not admin.\n126:     \"\"\"\n127:     if not getattr(current_user, \"is_admin\", False):\n128:         raise HTTPException(\n129:             status_code=status.HTTP_403_FORBIDDEN,\n130:             detail=\"Admin privileges required\"\n131:         )\n132:     return current_user\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 13,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'contextlib' module is imported but not used in the code.\"\n    },\n    {\n      \"line_number\": 15,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used in the code.\"\n    },\n    {\n      \"line_number\": 14,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used in the code.\"\n    },\n    {\n      \"line_number\": 16,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "The 'contextlib' module is imported but not used in the code."
+      },
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used in the code."
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used in the code."
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used in the code."
+      }
+    ]
+  },
+  "latency_ms": 16429.0,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

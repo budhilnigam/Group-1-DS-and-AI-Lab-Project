@@ -1,0 +1,33 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Pytest test suite for user endpoints in the FastAPI project.\n3: \n4: Covers:\n5:     - User creation\n6:     - User retrieval\n7:     - User update\n8:     - Listing users\n9: \n10: Assumes the FastAPI app is imported as 'app' and endpoints are at '/users'.\n11: \"\"\"\n12: \n13: from typing import Any, Dict\n14: \n15: import pytest\n16: from fastapi.testclient import TestClient\n17: \n18: from app.main import app\n19: \n20: import os\n21: import sys\n22: import re\n23: \n24: client = TestClient(app)\n25: \n26: \n27: @pytest.fixture\n28: def sample_user_payload() -> Dict[str, Any]:\n29:     \"\"\"Return a sample payload for creating a user.\"\"\"\n30:     return {\n31:         \"username\": \"john_doe\",\n32:         \"email\": \"john@example.com\",\n33:         \"password\": \"securepassword123\"\n34:     }\n35: \n36: \n37: @pytest.fixture\n38: def create_sample_user(sample_user_payload: Dict[str, Any]) -> Dict[str, Any]:\n39:     \"\"\"Create a sample user and return the response JSON.\"\"\"\n40:     response = client.post(\"/users/\", json=sample_user_payload)\n41:     assert response.status_code == 201\n42:     return response.json()\n43: \n44: \n45: def test_create_user(sample_user_payload: Dict[str, Any]) -> None:\n46:     \"\"\"Test user creation endpoint.\"\"\"\n47:     response = client.post(\"/users/\", json=sample_user_payload)\n48:     assert response.status_code == 201\n49:     data = response.json()\n50:     assert \"id\" in data\n51:     assert data[\"username\"] == sample_user_payload[\"username\"]\n52:     assert data[\"email\"] == sample_user_payload[\"email\"]\n53: \n54: \n55: def test_get_user(create_sample_user: Dict[str, Any]) -> None:\n56:     \"\"\"Test retrieving a user by ID.\"\"\"\n57:     user_id = create_sample_user[\"id\"]\n58:     response = client.get(f\"/users/{user_id}\")\n59:     assert response.status_code == 200\n60:     data = response.json()\n61:     assert data[\"id\"] == user_id\n62:     assert data[\"username\"] == create_sample_user[\"username\"]\n63:     assert data[\"email\"] == create_sample_user[\"email\"]\n64: \n65: \n66: def test_update_user(create_sample_user: Dict[str, Any]) -> None:\n67:     \"\"\"Test updating a user's information.\"\"\"\n68:     user_id = create_sample_user[\"id\"]\n69:     update_payload = {\n70:         \"username\": \"jane_doe\",\n71:         \"email\": \"jane@example.com\"\n72:     }\n73:     response = client.put(f\"/users/{user_id}\", json=update_payload)\n74:     assert response.status_code == 200\n75:     data = response.json()\n76:     assert data[\"id\"] == user_id\n77:     assert data[\"username\"] == update_payload[\"username\"]\n78:     assert data[\"email\"] == update_payload[\"email\"]\n79: \n80:     # Fetch again to verify update\n81:     get_response = client.get(f\"/users/{user_id}\")\n82:     assert get_response.status_code == 200\n83:     get_data = get_response.json()\n84:     assert get_data[\"username\"] == update_payload[\"username\"]\n85:     assert get_data[\"email\"] == update_payload[\"email\"]\n86: \n87: \n88: def test_list_users(create_sample_user: Dict[str, Any]) -> None:\n89:     \"\"\"Test listing all users.\"\"\"\n90:     response = client.get(\"/users/\")\n91:     assert response.status_code == 200\n92:     users = response.json()\n93:     assert isinstance(users, list)\n94:     assert any(user[\"id\"] == create_sample_user[\"id\"] for user in users)\n95: \n96: \n97: def test_get_user_not_found() -> None:\n98:     \"\"\"Test retrieval of a non-existent user returns 404.\"\"\"\n99:     response = client.get(\"/users/999999\")\n100:     assert response.status_code == 404\n101: \n102: \n103: def test_create_user_invalid_payload() -> None:\n104:     \"\"\"Test user creation with invalid payload returns 422.\"\"\"\n105:     invalid_payload = {\n106:         \"username\": \"\",\n107:         \"email\": \"not-an-email\",\n108:         # missing password\n109:     }\n110:     response = client.post(\"/users/\", json=invalid_payload)\n111:     assert response.status_code == 422\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 20,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 22,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 22,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 20,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 22,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 22,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 15621.6,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

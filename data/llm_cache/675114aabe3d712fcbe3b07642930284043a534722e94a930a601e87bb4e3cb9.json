@@ -1,0 +1,43 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: utils/helpers.py\n3: \n4: Helper functions for FastAPI projects:\n5: - generate_slug: Creates URL-friendly slugs from strings.\n6: - format_response: Standardizes API responses.\n7: - calculate_offset: Computes offset for pagination.\n8: - sanitize_input: Cleans input strings to prevent injection attacks.\n9: \"\"\"\n10: \n11: import re\n12: import html\n13: import unicodedata\n14: import os\n15: import sys\n16: import re as regex\n17: \n18: def generateSlug(text: str, separator: str = '-') -> str:\n19:     \"\"\"\n20:     Generate a URL-friendly slug from the given text.\n21: \n22:     Args:\n23:         text (str): Input string to convert.\n24:         separator (str): Separator for words, default '-'.\n25: \n26:     Returns:\n27:         str: Slugified string.\n28:     \"\"\"\n29:     # Normalize unicode characters\n30:     normalized = unicodedata.normalize('NFKD', text)\n31:     ascii_text = normalized.encode('ascii', 'ignore').decode('ascii')\n32:     # Lowercase and strip\n33:     ascii_text = ascii_text.lower().strip()\n34:     # Remove unwanted characters\n35:     ascii_text = re.sub(r'[^a-z0-9\\s_-]', '', ascii_text)\n36:     # Replace whitespace and underscores with separator\n37:     ascii_text = re.sub(r'[\\s_]+', separator, ascii_text)\n38:     # Remove leading/trailing separator\n39:     slug = ascii_text.strip(separator)\n40:     return slug\n41: \n42: \n43: def formatResponse(\n44:     data: Any,\n45:     message: Optional[str] = None,\n46:     status: str = 'success',\n47:     code: int = 200,\n48:     extra: Optional[Dict[str, Any]] = None\n49: ) -> Dict[str, Any]:\n50:     \"\"\"\n51:     Standardize API response format.\n52: \n53:     Args:\n54:         data (Any): Main response data.\n55:         message (Optional[str]): Optional message.\n56:         status (str): Response status ('success', 'error').\n57:         code (int): HTTP status code.\n58:         extra (Optional[Dict[str, Any]]): Extra fields.\n59: \n60:     Returns:\n61:         Dict[str, Any]: Formatted response.\n62:     \"\"\"\n63:     response = {\n64:         'status': status,\n65:         'code': code,\n66:         'data': data\n67:     }\n68:     if message is not None:\n69:         response['message'] = message\n70:     if extra:\n71:         response.update(extra)\n72:     return response\n73: \n74: \n75: def calculateOffset(page: int, limit: int) -> int:\n76:     \"\"\"\n77:     Calculate offset for pagination queries.\n78: \n79:     Args:\n80:         page (int): Current page number (1-based).\n81:         limit (int): Number of items per page.\n82: \n83:     Returns:\n84:         int: Offset value.\n85:     \"\"\"\n86:     if page < 1:\n87:         page = 1\n88:     if limit < 1:\n89:         limit = 10\n90:     offset = (page - 1) * limit\n91:     return offset\n92: \n93: \n94: def sanitize_input(input_str: str, max_length: Optional[int] = None) -> str:\n95:     \"\"\"\n96:     Clean input string to prevent injection attacks.\n97: \n98:     Args:\n99:         input_str (str): Input string to sanitize.\n100:         max_length (Optional[int]): Maximum length of string.\n101: \n102:     Returns:\n103:         str: Sanitized string.\n104:     \"\"\"\n105:     # Remove HTML tags\n106:     clean_str = re.sub(r'<.*?>', '', input_str)\n107:     # Escape HTML entities\n108:     clean_str = html.escape(clean_str)\n109:     # Remove SQL meta-characters\n110:     clean_str = re.sub(r'(--|;|\\'|\"|\\\\)', '', clean_str)\n111:     # Trim whitespace\n112:     clean_str = clean_str.strip()\n113:     # Truncate if necessary\n114:     if max_length is not None and max_length > 0:\n115:         clean_str = clean_str[:max_length]\n116:     return clean_str\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 16,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 're as regex' is unused and can be removed.\"\n    },\n    {\n      \"line_number\": 18,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'generateSlug' should follow snake_case convention: 'generate_slug'.\"\n    },\n    {\n      \"line_number\": 43,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'formatResponse' should follow snake_case convention: 'format_response'.\"\n    },\n    {\n      \"line_number\": 75,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'calculateOffset' should follow snake_case convention: 'calculate_offset'.\"\n    },\n    {\n      \"line_number\": 94,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'sanitize_input' is correctly using snake_case.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "The import 're as regex' is unused and can be removed."
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'generateSlug' should follow snake_case convention: 'generate_slug'."
+      },
+      {
+        "line_number": 43,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'formatResponse' should follow snake_case convention: 'format_response'."
+      },
+      {
+        "line_number": 75,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'calculateOffset' should follow snake_case convention: 'calculate_offset'."
+      },
+      {
+        "line_number": 94,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'sanitize_input' is correctly using snake_case."
+      }
+    ]
+  },
+  "latency_ms": 21120.7,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

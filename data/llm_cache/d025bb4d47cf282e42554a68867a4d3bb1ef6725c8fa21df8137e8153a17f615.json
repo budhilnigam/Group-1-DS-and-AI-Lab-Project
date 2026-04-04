@@ -1,0 +1,66 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0494] (score=0.773)\nThe indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Django models for managing Articles, Categories, and Tags in a blogging application.\n3: \"\"\"\n4: \n5: from django.db import models\n6: from django.urls import reverse\n7: \n8: \n9: class Category(models.Model):\n10:   \"\"\"\n11:     Model representing a category to which articles can belong.\n12:   \"\"\"\n13:   name = models.CharField(max_length=100, unique=True)\n14:   slug = models.SlugField(max_length=100, unique=True)\n15:   description = models.TextField(blank=True, null=True)\n16:   created_at = models.DateTimeField(auto_now_add=True)\n17:   updated_at = models.DateTimeField(auto_now=True)\n18: \n19:   class Meta:\n20:       verbose_name = \"Category\"\n21:       verbose_name_plural = \"Categories\"\n22:       ordering = ['name']\n23: \n24:   def __str__(self) -> str:\n25:       return self.name\n26: \n27:   def getAbsoluteUrl(self) -> str:\n28:       return reverse(\"category_detail\", kwargs={\"slug\": self.slug})\n29: \n30: \n31: class Tag(models.Model):\n32:     \"\"\"\n33:     Model representing a tag that can be assigned to articles.\n34:     \"\"\"\n35:     name = models.CharField(max_length=50, unique=True)\n36:     slug = models.SlugField(max_length=50, unique=True)\n37:     created_at = models.DateTimeField(auto_now_add=True)\n38:     updated_at = models.DateTimeField(auto_now=True)\n39: \n40:     class Meta:\n41:         verbose_name = \"Tag\"\n42:         verbose_name_plural = \"Tags\"\n43:         ordering = ['name']\n44: \n45:     def __str__(self) -> str:\n46:         return self.name\n47: \n48:     def get_absolute_url(self) -> str:\n49:         return reverse(\"tag_detail\", kwargs={\"slug\": self.slug})\n50: \n51: \n52: class Article(models.Model):\n53:       \"\"\"\n54:       Model representing an article in the blog.\n55:       \"\"\"\n56:       title = models.CharField(max_length=200)\n57:       slug = models.SlugField(max_length=200, unique=True)\n58:       content = models.TextField()\n59:       summary = models.TextField(blank=True, null=True)\n60:       published_at = models.DateTimeField(blank=True, null=True)\n61:       created_at = models.DateTimeField(auto_now_add=True)\n62:       updated_at = models.DateTimeField(auto_now=True)\n63:       category = models.ForeignKey(\n64:           Category,\n65:           on_delete=models.SET_NULL,\n66:           null=True,\n67:           related_name=\"articles\"\n68:       )\n69:       tags = models.ManyToManyField(Tag, related_name=\"articles\", blank=True)\n70: \n71:       class Meta:\n72:           verbose_name = \"Article\"\n73:           verbose_name_plural = \"Articles\"\n74:           ordering = ['-published_at', '-created_at']\n75: \n76:       def __str__(self) -> str:\n77:           return self.title\n78: \n79:       def getAbsoluteUrl(self) -> str:\n80:           return reverse(\"article_detail\", kwargs={\"slug\": self.slug})\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 27,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"Function name 'getAbsoluteUrl' should be in snake_case as 'get_absolute_url'.\",\n  \"guideline_chunks_used\": [\"chunk_0423\", \"chunk_0362\", \"chunk_0361\", \"chunk_0046\"]\n}",
+  "parsed_response": {
+    "line_number": 27,
+    "violation_category": "naming_convention",
+    "review_comment": "Function name 'getAbsoluteUrl' should be in snake_case as 'get_absolute_url'.",
+    "guideline_chunks_used": [
+      "chunk_0423",
+      "chunk_0362",
+      "chunk_0361",
+      "chunk_0046"
+    ]
+  },
+  "latency_ms": 13062.7,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0494": {
+      "score": 0.7726,
+      "text": "The indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nDjango models for managing Articles, Categories, and Tags in a blogging application.\n\"\"\"\n\nfrom django.db import models\nfrom django.urls import reverse\n\n\nclass Category(models.Model):\n  \"\"\"\n    Model representing a category to which articles can belong.\n  \"\"\"\n  name = models.CharField(max_length=100, unique=True)\n  slug = models.SlugField(max_length=100, unique=True)\n  description = models.TextField(blank=True, null=True)\n  created_at = models.DateTimeField(auto_now_add=True)\n  updated_at = m"
+}

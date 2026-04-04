@@ -1,0 +1,53 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import os\n2: import sys\n3: import re\n4: import pytest\n5: from flask import Flask\n6: from flask.testing import FlaskClient\n7: \n8: from your_flask_app import create_app, db\n9: from your_flask_app.models import User\n10: \n11: \n12: @pytest.fixture\n13: def app() -> Flask:\n14:   \"\"\"Create a Flask app instance for testing.\"\"\"\n15:   app = create_app('testing')\n16: \n17:       with app.app_context():\n18:           db.create_all()\n19:           yield app\n20:           db.drop_all()\n21: \n22: \n23: @pytest.fixture\n24: def client(app: Flask) -> FlaskClient:\n25:     \"\"\"Create a test client for the Flask app.\"\"\"\n26:     return app.test_client()\n27: \n28: \n29: @pytest.fixture\n30: def create_user() -> User:\n31:       \"\"\"Create a user for testing purposes.\"\"\"\n32:       user = User(username='testuser', email='test@example.com')\n33:       user.set_password('password')\n34:       return user\n35: \n36: \n37: def test_register(client: FlaskClient, create_user: User) -> None:\n38:     \"\"\"Test user registration endpoint.\"\"\"\n39:     response = client.post('/register', json={\n40:         'username': create_user.username,\n41:         'email': create_user.email,\n42:         'password': 'password'\n43:     })\n44: \n45:     assert response.status_code == 201\n46:     assert response.json['message'] == 'User registered successfully'\n47: \n48: \n49: def test_login(client: FlaskClient, create_user: User) -> None:\n50:     \"\"\"Test user login endpoint.\"\"\"\n51:     client.post('/register', json={\n52:         'username': create_user.username,\n53:         'email': create_user.email,\n54:         'password': 'password'\n55:     })\n56: \n57:     response = client.post('/login', json={\n58:         'username': create_user.username,\n59:         'password': 'password'\n60:     })\n61: \n62:     assert response.status_code == 200\n63:     assert response.json['message'] == 'Login successful'\n64:     assert 'access_token' in response.json\n65: \n66: \n67: def test_invalid_login(client: FlaskClient) -> None:\n68:     \"\"\"Test login with invalid credentials.\"\"\"\n69:     response = client.post('/login', json={\n70:         'username': 'invaliduser',\n71:         'password': 'wrongpassword'\n72:     })\n73: \n74:     assert response.status_code == 401\n75:     assert response.json['message'] == 'Invalid credentials'\n76: \n77: \n78: def test_logout(client: FlaskClient, create_user: User) -> None:\n79:     \"\"\"Test user logout endpoint.\"\"\"\n80:     client.post('/register', json={\n81:         'username': create_user.username,\n82:         'email': create_user.email,\n83:         'password': 'password'\n84:     })\n85: \n86:     login_response = client.post('/login', json={\n87:         'username': create_user.username,\n88:         'password': 'password'\n89:     })\n90: \n91:     access_token = login_response.json['access_token']\n92:     response = client.post('/logout', headers={\n93:         'Authorization': f'Bearer {access_token}'\n94:     })\n95: \n96:     assert response.status_code == 200\n97:     assert response.json['message'] == 'Logout successful'\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 3,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 17,\n      \"violation_category\": \"indentation\",\n      \"review_comment\": \"Indentation error: The line with 'with app.app_context():' should be indented to align with the previous line inside the function.\"\n    },\n    {\n      \"line_number\": 30,\n      \"violation_category\": \"indentation\",\n      \"review_comment\": \"Indentation error: The line with 'user = User(...)' should be indented to align with the previous line inside the function.\"\n    },\n    {\n      \"line_number\": 39,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring for the test_register function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description.\"\n    },\n    {\n      \"line_number\": 49,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring for the test_login function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description.\"\n    },\n    {\n      \"line_number\": 67,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring for the test_invalid_login function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description.\"\n    },\n    {\n      \"line_number\": 78,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring for the test_logout function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 17,
+        "violation_category": "indentation",
+        "review_comment": "Indentation error: The line with 'with app.app_context():' should be indented to align with the previous line inside the function."
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Indentation error: The line with 'user = User(...)' should be indented to align with the previous line inside the function."
+      },
+      {
+        "line_number": 39,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring for the test_register function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description."
+      },
+      {
+        "line_number": 49,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring for the test_login function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description."
+      },
+      {
+        "line_number": 67,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring for the test_invalid_login function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description."
+      },
+      {
+        "line_number": 78,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring for the test_logout function does not follow PEP 257 conventions. It should have a space after the triple quotes and before the first word of the description."
+      }
+    ]
+  },
+  "latency_ms": 32214.3,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

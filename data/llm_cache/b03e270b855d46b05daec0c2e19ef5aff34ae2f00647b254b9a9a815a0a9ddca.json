@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: database.py\n3: \n4: SQLAlchemy async setup for FastAPI project.\n5: Defines engine, sessionmaker, Base, and get_db dependency generator.\n6: \"\"\"\n7: \n8: import os\n9: from typing import AsyncGenerator\n10: \n11: from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker\n12: from sqlalchemy.orm import declarative_base\n13: \n14: from fastapi import Depends\n15: \n16: DATABASE_URL: str = os.getenv(\n17:     \"DATABASE_URL\",\n18:     \"postgresql+asyncpg://user:password@localhost:5432/mydatabase\"\n19: )\n20: \n21: engine = create_async_engine(\n22:     DATABASE_URL,\n23:     echo=False,\n24:     future=True,\n25:     pool_size=5,\n26:     max_overflow=10\n27: )\n28: \n29: async_session: async_sessionmaker[AsyncSession] = async_sessionmaker(\n30:     bind=engine,\n31:     expire_on_commit=False,\n32:     class_=AsyncSession\n33: )\n34: \n35: Base = declarative_base()\n36: \n37: \n38: async def getDb() -> AsyncGenerator[AsyncSession, None]:\n39:     \"\"\"\n40:     FastAPI dependency generator for providing an async SQLAlchemy session.\n41: \n42:     Yields:\n43:         AsyncSession: An SQLAlchemy async session.\n44:     \"\"\"\n45:     async with async_session() as session:\n46:         try:\n47:             yield session\n48:         finally:\n49:             await session.close()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 14,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'Depends' import from fastapi is not used in the module.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 14,
+    "violation_category": "unused_import",
+    "review_comment": "The 'Depends' import from fastapi is not used in the module.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 11290.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ndatabase.py\n\nSQLAlchemy async setup for FastAPI project.\nDefines engine, sessionmaker, Base, and get_db dependency generator.\n\"\"\"\n\nimport os\nfrom typing import AsyncGenerator\n\nfrom sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker\nfrom sqlalchemy.orm import declarative_base\n\nfrom fastapi import Depends\n\nDATABASE_URL: str = os.getenv(\n    \"DATABASE_URL\",\n    \"postgresql+asyncpg://user:password@localhost:5432/mydatabase\"\n)\n\nengine = create_async_engine(\n    DA"
+}

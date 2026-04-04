@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import pytest\n2: from flask import Flask\n3: from flask_sqlalchemy import SQLAlchemy\n4: from werkzeug.security import generate_password_hash, check_password_hash\n5: import os\n6: import sys\n7: import re\n8: \n9: # Assuming User and Post models are defined in the models module\n10: from models import User, Post\n11: \n12: app = Flask(__name__)\n13: app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'\n14: app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\n15: db = SQLAlchemy(app)\n16: \n17: \n18: @pytest.fixture\n19: def user() -> User:\n20:     \"\"\"\n21:     Creates a User instance for testing.\n22:     \"\"\"\n23:     user = User(username='testuser', email='test@example.com')\n24:     user.set_password('password123')\n25:     return user\n26: \n27: \n28: @pytest.fixture\n29: def post(user: User) -> Post:\n30:     \"\"\"Creates a Post instance for testing.\"\"\"\n31:     post = Post(title='Test Post', content='This is a test post.', author=user)\n32:     return post\n33: \n34: \n35: @pytest.fixture(autouse=True)\n36: def setup_database() -> None:\n37:     db.create_all()\n38:     yield\n39:     db.session.remove()\n40:     db.drop_all()\n41: \n42: \n43: def test_user_creation(user: User) -> None:\n44:     \"\"\"Test that a user can be created and stored in the database.\"\"\"\n45:     db.session.add(user)\n46:     db.session.commit()\n47: \n48:     assert user.id is not None\n49:     assert user.username == 'testuser'\n50:     assert user.email == 'test@example.com'\n51: \n52: \n53: def test_password_hashing(user: User) -> None:\n54:     \"\"\"\n55:     Test that the password hashing and verification works correctly.\n56:     \"\"\"\n57:     assert user.check_password('password123') is True\n58:     assert user.check_password('wrongpassword') is False\n59: \n60: \n61: def test_post_relationship(user: User, post: Post) -> None:\n62:     \"\"\"Test the relationship between User and Post models.\"\"\"\n63:     db.session.add(user)\n64:     db.session.add(post)\n65:     db.session.commit()\n66: \n67:     assert post.author == user\n68:     assert user.posts.count() == 1\n69:     assert user.posts.first().title == 'Test Post'\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 7,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 7,
+    "violation_category": "unused_import",
+    "review_comment": "The 're' module is imported but not used anywhere in the code."
+  },
+  "latency_ms": 7616.8,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

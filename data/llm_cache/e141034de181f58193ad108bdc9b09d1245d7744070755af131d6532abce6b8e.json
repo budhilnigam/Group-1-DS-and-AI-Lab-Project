@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: data_cleaner.py\n3: \n4: This module provides functions for cleaning data using pandas.\n5: Functions include removing duplicates, standardizing column names,\n6: fixing data types, and handling outliers using the IQR method.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: from typing import List, Dict, Any\n11: import os\n12: import sys\n13: import re\n14: \n15: def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:\n16:   \"\"\"\n17:   Remove duplicate rows from the DataFrame.\n18: \n19:   Args:\n20:       df (pd.DataFrame): The input DataFrame.\n21: \n22:   Returns:\n23:       pd.DataFrame: A DataFrame without duplicate rows.\n24:   \"\"\"\n25:   return df.drop_duplicates()\n26: \n27: \n28: def standardize_columns(df: pd.DataFrame) -> pd.DataFrame:\n29:   \"\"\"\n30:   Standardize column names to lowercase and replace spaces with underscores.\n31: \n32:   Args:\n33:       df (pd.DataFrame): The input DataFrame.\n34: \n35:   Returns:\n36:       pd.DataFrame: A DataFrame with standardized column names.\n37:   \"\"\"\n38:     df.columns = df.columns.str.lower().str.replace(' ', '_')\n39:     return df\n40: \n41: \n42: def fix_dtypes(df: pd.DataFrame, dtype_mapping: Dict[str, Any]) -> pd.DataFrame:\n43:   \"\"\"\n44:   Fix the data types of specified columns in the DataFrame.\n45: \n46:   Args:\n47:       df (pd.DataFrame): The input DataFrame.\n48:       dtype_mapping (Dict[str, Any]): A dictionary mapping column names to data types.\n49: \n50:   Returns:\n51:       pd.DataFrame: A DataFrame with corrected data types.\n52:   \"\"\"\n53:   for column, dtype in dtype_mapping.items():\n54:       if column in df.columns:\n55:           df[column] = df[column].astype(dtype)\n56:   return df\n57: \n58: \n59: def handle_outliers(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:\n60:   \"\"\"\n61:   Handle outliers in the specified columns using the IQR method.\n62: \n63:   Args:\n64:       df (pd.DataFrame): The input DataFrame.\n65:       columns (List[str]): A list of column names to check for outliers.\n66: \n67:   Returns:\n68:       pd.DataFrame: A DataFrame with outliers handled.\n69:   \"\"\"\n70:     for column in columns:\n71:         if column in df.columns:\n72:             q1 = df[column].quantile(0.25)\n73:             q3 = df[column].quantile(0.75)\n74:             iqr = q3 - q1\n75:             lower_bound = q1 - 1.5 * iqr\n76:             upper_bound = q3 + 1.5 * iqr\n77:             df[column] = df[column].clip(lower=lower_bound, upper=upper_bound)\n78:     return df\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 11,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 11,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code."
+  },
+  "latency_ms": 7966.7,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

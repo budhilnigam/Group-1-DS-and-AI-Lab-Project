@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Admin blueprint for user management, dashboard stats, and content moderation.\"\"\"\n2: \n3: from flask import Blueprint, render_template, request, redirect, url_for, flash\n4: from flask_login import login_required\n5: from typing import List, Dict, Any\n6: \n7: admin_bp = Blueprint('admin', __name__, url_prefix='/admin')\n8: \n9: # Mock data for demonstration purposes\n10: users: List[Dict[str, Any]] = [\n11:     {'id': 1, 'username': 'admin', 'email': 'admin@example.com', 'is_active': True},\n12:     {'id': 2, 'username': 'user1', 'email': 'user1@example.com', 'is_active': True},\n13:     {'id': 3, 'username': 'user2', 'email': 'user2@example.com', 'is_active': False},\n14: ]\n15: \n16: @admin_bp.route('/dashboard')\n17: @login_required\n18: def dashboard() -> str:\n19:     \"\"\"Render the admin dashboard.\"\"\"\n20:     activeUsers = [user for user in users if user['is_active']]\n21:     return render_template('admin/dashboard.html', active_users=activeUsers)\n22: \n23: @admin_bp.route('/users')\n24: @login_required\n25: def manageUsers() -> str:\n26:     \"\"\"Render the user management page.\"\"\"\n27:     return render_template('admin/manage_users.html', users=users)\n28: \n29: @admin_bp.route('/users/<int:user_id>/toggle', methods=['POST'])\n30: @login_required\n31: def toggleUserActivation(user_id: int) -> str:\n32:     \"\"\"Toggle the activation status of a user.\"\"\"\n33:     user = next((user for user in users if user['id'] == user_id), None)\n34:     if user:\n35:         user['is_active'] = not user['is_active']\n36:         flash(f\"User '{user['username']}' activation status updated.\", 'success')\n37:     else:\n38:         flash(\"User not found.\", 'error')\n39:     return redirect(url_for('admin.manageUsers'))\n40: \n41: @admin_bp.route('/content', methods=['GET', 'POST'])\n42: @login_required\n43: def moderate_content() -> str:\n44:     \"\"\"Render the content moderation page.\"\"\"\n45:     if request.method == 'POST':\n46:         # Logic for content moderation would go here\n47:         flash(\"Content moderation action performed.\", 'success')\n48:         return redirect(url_for('admin.moderate_content'))\n49:     return render_template('admin/moderate_content.html')\n50: \n51: @admin_bp.route('/stats')\n52: @login_required\n53: def viewStats() -> str:\n54:     \"\"\"Render the statistics page.\"\"\"\n55:     stats = {\n56:         'total_users': len(users),\n57:         'active_users': sum(user['is_active'] for user in users),\n58:     }\n59:     return render_template('admin/stats.html', stats=stats)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 3,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The import 'redirect' is unused in this code.\"\n}",
+  "parsed_response": {
+    "line_number": 3,
+    "violation_category": "unused_import",
+    "review_comment": "The import 'redirect' is unused in this code."
+  },
+  "latency_ms": 7128.0,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

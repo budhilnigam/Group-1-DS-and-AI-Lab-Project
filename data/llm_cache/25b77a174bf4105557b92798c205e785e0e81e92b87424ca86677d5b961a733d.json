@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"User model for SQLAlchemy in a Flask application.\n2: \n3: This module defines the User model, which includes fields for\n4: user identification and authentication. It also provides methods\n5: for password hashing and verification.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: from datetime import datetime\n13: from typing import Optional\n14: \n15: from flask_sqlalchemy import SQLAlchemy\n16: from werkzeug.security import generate_password_hash, check_password_hash\n17: \n18: db = SQLAlchemy()\n19: \n20: \n21: class User(db.Model):\n22:     \"\"\"User model for storing user information.\"\"\"\n23: \n24:     __tablename__ = 'users'\n25: \n26:     id: int = db.Column(db.Integer, primary_key=True)\n27:     username: str = db.Column(db.String(80), unique=True, nullable=False)\n28:     email: str = db.Column(db.String(120), unique=True, nullable=False)\n29:     password_hash: str = db.Column(db.String(128), nullable=False)\n30:     created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)\n31: \n32:     def __repr__(self) -> str:\n33:         \"\"\"Return a string representation of the User object.\"\"\"\n34:         return f'<User {self.username}>'\n35: \n36:     def set_password(self, password: str) -> None:\n37:         \"\"\"Hash the password and set the password_hash field.\n38: \n39:         Args:\n40:             password (str): The plaintext password to hash.\n41:         \"\"\"\n42:         self.password_hash = generate_password_hash(password)\n43: \n44:     def check_password(self, password: str) -> bool:\n45:         \"\"\"Check if the provided password matches the hashed password.\n46: \n47:         Args:\n48:             password (str): The plaintext password to check.\n49: \n50:         Returns:\n51:             bool: True if the password matches, False otherwise.\n52:         \"\"\"\n53:         return check_password_hash(self.password_hash, password)\n54: \n55:     @staticmethod\n56:     def get_by_username(username: str) -> Optional['User']:\n57:         \"\"\"Retrieve a user by username.\n58: \n59:         Args:\n60:             username (str): The username to search for.\n61: \n62:         Returns:\n63:             Optional[User]: The User object if found, None otherwise.\n64:         \"\"\"\n65:         return User.query.filter_by(username=username).first()\n66: \n67:     @staticmethod\n68:     def get_by_email(email: str) -> Optional['User']:\n69:         \"\"\"Retrieve a user by email.\n70: \n71:         Args:\n72:             email (str): The email to search for.\n73: \n74:         Returns:\n75:             Optional[User]: The User object if found, None otherwise.\n76:         \"\"\"\n77:         return User.query.filter_by(email=email).first()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 13940.6,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"User model for SQLAlchemy in a Flask application.\n\nThis module defines the User model, which includes fields for\nuser identification and authentication. It also provides methods\nfor password hashing and verification.\n\"\"\"\n\nimport os\nimport sys\nimport re\n\nfrom datetime import datetime\nfrom typing import Optional\n\nfrom flask_sqlalchemy import SQLAlchemy\nfrom werkzeug.security import generate_password_hash, check_password_hash\n\ndb = SQLAlchemy()\n\n\nclass User(db.Model):\n    \"\"\"User model for stori"
+}

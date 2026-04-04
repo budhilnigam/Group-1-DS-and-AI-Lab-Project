@@ -1,0 +1,66 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0371] (score=0.770)\nLooks like the import for sys isn't being used in this file—let's remove it to keep things tidy.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Authentication router module for FastAPI project.\n3: \n4: Defines endpoints for OAuth2 password flow, token refresh,\n5: and user information retrieval.\n6: \"\"\"\n7: \n8: from typing import Optional\n9: from datetime import timedelta\n10: import os\n11: import sys\n12: import re\n13: \n14: from fastapi import APIRouter, Depends, HTTPException, status, Request\n15: from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer\n16: from pydantic import BaseModel\n17: \n18: from jose import jwt, JWTError\n19: \n20: # Local imports (placeholder; replace with actual implementations)\n21: from core.config import settings\n22: from models.user import User\n23: from services.auth import (\n24:     authenticate_user,\n25:     get_user_by_id,\n26:     create_access_token,\n27:     create_refresh_token,\n28:     verify_refresh_token,\n29: )\n30: \n31: router = APIRouter(prefix=\"/auth\", tags=[\"auth\"])\n32: \n33: oauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"/auth/token\")\n34: \n35: \n36: class TokenResponse(BaseModel):\n37:     access_token: str\n38:     token_type: str\n39:     refresh_token: str\n40: \n41: \n42: class RefreshRequest(BaseModel):\n43:     refresh_token: str\n44: \n45: \n46: class UserResponse(BaseModel):\n47:     id: int\n48:     username: str\n49:     email: str\n50: \n51: \n52: def get_current_user(token: str = Depends(oauth2_scheme)) -> User:\n53:     \"\"\"\n54:     Dependency to get the current authenticated user.\n55:     \"\"\"\n56:     credentials_exception = HTTPException(\n57:         status_code=status.HTTP_401_UNAUTHORIZED,\n58:         detail=\"Could not validate credentials\",\n59:         headers={\"WWW-Authenticate\": \"Bearer\"},\n60:     )\n61:     try:\n62:         payload = jwt.decode(\n63:             token,\n64:             settings.SECRET_KEY,\n65:             algorithms=[settings.JWT_ALGORITHM],\n66:         )\n67:         user_id: Optional[int] = payload.get(\"sub\")\n68:         if user_id is None:\n69:             raise credentials_exception\n70:     except JWTError:\n71:         raise credentials_exception\n72:     user = get_user_by_id(user_id)\n73:     if user is None:\n74:         raise credentials_exception\n75:     return user\n76: \n77: \n78: @router.post(\"/token\", response_model=TokenResponse)\n79: async def login_for_access_token(\n80:     form_data: OAuth2PasswordRequestForm = Depends(),\n81: ) -> TokenResponse:\n82:     \"\"\"\n83:     Authenticate user and issue access and refresh tokens.\n84:     \"\"\"\n85:     user = authenticate_user(form_data.username, form_data.password)\n86:     if not user:\n87:         raise HTTPException(\n88:             status_code=status.HTTP_401_UNAUTHORIZED,\n89:             detail=\"Incorrect username or password\",\n90:             headers={\"WWW-Authenticate\": \"Bearer\"},\n91:         )\n92:     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)\n93:     access_token = create_access_token(\n94:         data={\"sub\": user.id}, expires_delta=access_token_expires\n95:     )\n96:     refresh_token_expires = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)\n97:     refresh_token = create_refresh_token(\n98:         data={\"sub\": user.id}, expires_delta=refresh_token_expires\n99:     )\n100:     return TokenResponse(\n101:         access_token=access_token,\n102:         token_type=\"bearer\",\n103:         refresh_token=refresh_token,\n104:     )\n105: \n106: \n107: @router.post(\"/refresh\", response_model=TokenResponse)\n108: async def refresh_access_token(\n109:     refresh_data: RefreshRequest,\n110: ) -> TokenResponse:\n111:     \"\"\"\n112:     Refresh access and refresh tokens using a valid refresh token.\n113:     \"\"\"\n114:     try:\n115:         payload = verify_refresh_token(refresh_data.refresh_token)\n116:         user_id = payload.get(\"sub\")\n117:         user = get_user_by_id(user_id)\n118:         if user is None:\n119:             raise HTTPException(\n120:                 status_code=status.HTTP_401_UNAUTHORIZED,\n121:                 detail=\"Invalid refresh token\",\n122:             )\n123:     except JWTError:\n124:         raise HTTPException(\n125:             status_code=status.HTTP_401_UNAUTHORIZED,\n126:             detail=\"Invalid refresh token\",\n127:         )\n128:     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)\n129:     access_token = create_access_token(\n130:         data={\"sub\": user.id}, expires_delta=access_token_expires\n131:     )\n132:     refresh_token_expires = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)\n133:     refresh_token = create_refresh_token(\n134:         data={\"sub\": user.id}, expires_delta=refresh_token_expires\n135:     )\n136:     return TokenResponse(\n137:         access_token=access_token,\n138:         token_type=\"bearer\",\n139:         refresh_token=refresh_token,\n140:     )\n141: \n142: \n143: @router.get(\"/me\", response_model=UserResponse)\n144: async def read_me(current_user: User = Depends(get_current_user)) -> UserResponse:\n145:     \"\"\"\n146:     Retrieve information about the current authenticated user.\n147:     \"\"\"\n148:     return UserResponse(\n149:         id=current_user.id,\n150:         username=current_user.username,\n151:         email=current_user.email,\n152:     )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 11,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\", \"chunk_0371\"]\n}",
+  "parsed_response": {
+    "line_number": 11,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sys' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067",
+      "chunk_0371"
+    ]
+  },
+  "latency_ms": 20896.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0371": {
+      "score": 0.7696,
+      "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nAuthentication router module for FastAPI project.\n\nDefines endpoints for OAuth2 password flow, token refresh,\nand user information retrieval.\n\"\"\"\n\nfrom typing import Optional\nfrom datetime import timedelta\nimport os\nimport sys\nimport re\n\nfrom fastapi import APIRouter, Depends, HTTPException, status, Request\nfrom fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\nfrom jose import jwt, JWTError\n\n# Local imports (placeholder; replace with act"
+}

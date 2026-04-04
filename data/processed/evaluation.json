@@ -1,0 +1,4522 @@
+[
+  {
+    "id": "synthetic-django_PR_21",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "admin.py",
+    "source_file": "evaluation_files/synthetic-django_PR_21_admin.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_22",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "forms.py",
+    "source_file": "evaluation_files/synthetic-django_PR_22_forms.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 43,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: cleanTitle"
+      },
+      {
+        "line_number": 76,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: cleanName"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_23",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "management/commands/seed_data.py",
+    "source_file": "evaluation_files/synthetic-django_PR_23_management_commands_seed_data.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 62,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_24",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "managers.py",
+    "source_file": "evaluation_files/synthetic-django_PR_24_managers.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 32,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: byAuthor"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: withinDateRange"
+      },
+      {
+        "line_number": 83,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: byAuthor"
+      },
+      {
+        "line_number": 93,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: withinDateRange"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'author_id'"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'start_date'"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'end_date'"
+      },
+      {
+        "line_number": 83,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'author_id'"
+      },
+      {
+        "line_number": 93,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'start_date'"
+      },
+      {
+        "line_number": 93,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'end_date'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_25",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "middleware.py",
+    "source_file": "evaluation_files/synthetic-django_PR_25_middleware.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_26",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "models.py",
+    "source_file": "evaluation_files/synthetic-django_PR_26_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 27,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getAbsoluteUrl"
+      },
+      {
+        "line_number": 79,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getAbsoluteUrl"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 55,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_28",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "serializers.py",
+    "source_file": "evaluation_files/synthetic-django_PR_28_serializers.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'value'"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'value'"
+      },
+      {
+        "line_number": 62,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'attrs'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_29",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "settings.py",
+    "source_file": "evaluation_files/synthetic-django_PR_29_settings.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: secretKey"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: allowedHosts"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: authPasswordValidators"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_30",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "signals.py",
+    "source_file": "evaluation_files/synthetic-django_PR_30_signals.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 24,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: generateArticleSlug"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: extraArgs"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: cleanupRelatedResources"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: handleArticleTagsChange"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'sender'"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'sender'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_31",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "templatetags/custom_tags.py",
+    "source_file": "evaluation_files/synthetic-django_PR_31_templatetags_custom_tags.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Optional"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_32",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "tests/conftest.py",
+    "source_file": "evaluation_files/synthetic-django_PR_32_tests_conftest.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createUser"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: _createUser"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createCategory"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: _createCategory"
+      },
+      {
+        "line_number": 51,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: createUser"
+      },
+      {
+        "line_number": 51,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: createCategory"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_33",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "tests/test_forms.py",
+    "source_file": "evaluation_files/synthetic-django_PR_33_tests_test_forms.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 4,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 5,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 26,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_34",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "tests/test_models.py",
+    "source_file": "evaluation_files/synthetic-django_PR_34_tests_test_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 19,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: testData"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: testArticleCreation"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: expectedSlugs"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: testCategoryRelationship"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: initialData"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'testData'"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'expectedSlugs'"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'initialData'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_35",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "tests/test_views.py",
+    "source_file": "evaluation_files/synthetic-django_PR_35_tests_test_views.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 4,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Module docstring placed after imports"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_36",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "urls.py",
+    "source_file": "evaluation_files/synthetic-django_PR_36_urls.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: urlPatterns"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_37",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "utils/helpers.py",
+    "source_file": "evaluation_files/synthetic-django_PR_37_utils_helpers.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: random"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: string"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'subject'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_38",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "utils/validators.py",
+    "source_file": "evaluation_files/synthetic-django_PR_38_utils_validators.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'slug'"
+      },
+      {
+        "line_number": 55,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {'badword1', 'badword2', 'badword3'} for param 'value'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_39",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "views.py",
+    "source_file": "evaluation_files/synthetic-django_PR_39_views.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: FormMixin"
+      },
+      {
+        "line_number": 68,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: formValid"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 25,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 71,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-django_PR_40",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "wsgi.py",
+    "source_file": "evaluation_files/synthetic-django_PR_40_wsgi.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 22,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: configureEnvironment"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: anotherFunction"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: yetAnotherFunction"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'my_list'"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'my_dict'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_21",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "config.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_21_config.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_22",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "crud/item.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_22_crud_item.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: NoResultFound"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getItem"
+      },
+      {
+        "line_number": 35,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getItems"
+      },
+      {
+        "line_number": 59,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createItem"
+      },
+      {
+        "line_number": 78,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: updateItem"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_23",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "crud/user.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_23_crud_user.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: NoResultFound"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 76,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 90,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 92,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 99,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 112,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 76,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 99,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_24",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "database.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_24_database.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Depends"
+      },
+      {
+        "line_number": 38,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getDb"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_25",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "dependencies.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_25_dependencies.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Optional"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_26",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "exceptions.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_26_exceptions.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 49,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: notFoundErrorHandler"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: forbiddenErrorHandler"
+      },
+      {
+        "line_number": 79,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: validationErrorHandler"
+      },
+      {
+        "line_number": 97,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: registerExceptionHandlers"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 44,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 80,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 90,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 98,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 68,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 80,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 83,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 98,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 100,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_28",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "middleware.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_28_middleware.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Receive"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Scope"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Send"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_29",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "models/item.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_29_models_item.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_30",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "models/user.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_30_models_user.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 71,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: checkUsername"
+      },
+      {
+        "line_number": 83,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: checkEmail"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_31",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "routers/auth.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_31_routers_auth.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Request"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_32",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "routers/items.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_32_routers_items.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 95,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getItem"
+      },
+      {
+        "line_number": 114,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createItem"
+      },
+      {
+        "line_number": 128,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: updateItem"
+      },
+      {
+        "line_number": 151,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: deleteItem"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_33",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "routers/users.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_33_routers_users.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 59,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 72,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 84,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 105,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 124,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 128,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 59,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 72,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 84,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 86,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 105,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 124,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_34",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "schemas/item.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_34_schemas_item.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: name_mustNotBeBlank"
+      },
+      {
+        "line_number": 59,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: price_mustHaveTwoDecimals"
+      },
+      {
+        "line_number": 101,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: nameNotBlank"
+      },
+      {
+        "line_number": 113,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: priceTwoDecimals"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_35",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "schemas/user.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_35_schemas_user.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_36",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "tests/conftest.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_36_tests_conftest.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: testDb"
+      },
+      {
+        "line_number": 66,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: overrideGetDb"
+      },
+      {
+        "line_number": 66,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: testDb"
+      },
+      {
+        "line_number": 74,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: asyncClient"
+      },
+      {
+        "line_number": 75,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: overrideGetDb"
+      },
+      {
+        "line_number": 87,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: sampleUser"
+      },
+      {
+        "line_number": 87,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: testDb"
+      },
+      {
+        "line_number": 108,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: authHeaders"
+      },
+      {
+        "line_number": 108,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: sampleUser"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 54,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 67,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 77,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 82,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 88,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 109,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 54,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 56,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 67,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 77,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 88,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 90,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 109,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 111,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_37",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "tests/test_items.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_37_tests_test_items.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 29,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'async_client'"
+      },
+      {
+        "line_number": 67,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'async_client'"
+      },
+      {
+        "line_number": 82,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'async_client'"
+      },
+      {
+        "line_number": 124,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'async_client'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_38",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "tests/test_users.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_38_tests_test_users.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 20,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_39",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "utils/helpers.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_39_utils_helpers.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re as regex"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: generateSlug"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: formatResponse"
+      },
+      {
+        "line_number": 75,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: calculateOffset"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-fastapi_PR_40",
+    "repo": "kannan-dedsec/synthetic-fastapi",
+    "source_path": "utils/security.py",
+    "source_file": "evaluation_files/synthetic-fastapi_PR_40_utils_security.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 23,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: hashPassword"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: verifyPassword"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createAccessToken"
+      },
+      {
+        "line_number": 71,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: decodeToken"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'expires_in'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_21",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "app.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_21_app.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: json"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: models"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_22",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "blueprints/admin.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_22_blueprints_admin.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 20,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: activeUsers"
+      },
+      {
+        "line_number": 25,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: manageUsers"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: toggleUserActivation"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: viewStats"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_23",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "blueprints/blog.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_23_blueprints_blog.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_24",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "cli.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_24_cli.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: initDB"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: seedData"
+      },
+      {
+        "line_number": 25,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: adminUser"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'data_list'"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'username'"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'test_args'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_25",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "config.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_25_config.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_26",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "extensions.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_26_extensions.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 35,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: setLoginView"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: setLoginMessage"
+      },
+      {
+        "line_number": 51,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: setMailServer"
+      },
+      {
+        "line_number": 35,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 44,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_27",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "forms/auth.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_27_forms_auth.py",
+    "ground_truth_reviews": []
+  },
+  {
+    "id": "synthetic-flask_PR_28",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "forms/post.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_28_forms_post.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Any"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_29",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "middleware.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_29_middleware.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: logRequest"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: set_corsHeaders"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_30",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "models/post.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_30_models_post.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: authorId"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createPost"
+      },
+      {
+        "line_number": 62,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getAllPosts"
+      },
+      {
+        "line_number": 82,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: updatePost"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'title'"
+      },
+      {
+        "line_number": 82,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'title'"
+      },
+      {
+        "line_number": 82,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'title'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_31",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "models/user.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_31_models_user.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_32",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "tests/conftest.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_32_tests_conftest.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 34,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: sampleUser"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: samplePost"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: sampleUser"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_33",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "tests/test_auth.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_33_tests_test_auth.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_34",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "tests/test_main.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_34_tests_test_main.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: testIndex"
+      },
+      {
+        "line_number": 23,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: testDashboardRequiresLogin"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: extraHeaders"
+      },
+      {
+        "line_number": 35,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: loginData"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: loginData"
+      },
+      {
+        "line_number": 70,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: testLogoutRedirectsToIndex"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'client'"
+      },
+      {
+        "line_number": 35,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'client'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_35",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "tests/test_models.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_35_tests_test_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 4,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: generate_password_hash"
+      },
+      {
+        "line_number": 4,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: check_password_hash"
+      },
+      {
+        "line_number": 5,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 6,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_36",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "utils/helpers.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_36_utils_helpers.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: request"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: formatDateTime"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: paginateQuery"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: totalItems"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: sendEmail"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_37",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "utils/validators.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_37_utils_validators.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 71,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Single-line docstring split across lines"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_38",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "views/api.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_38_views_api.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 4,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Module docstring placed after imports"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_39",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "views/auth.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_39_views_auth.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 4,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: request"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: logOut"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: anotherFunction"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-flask_PR_40",
+    "repo": "kannan-dedsec/synthetic-flask",
+    "source_path": "views/main.py",
+    "source_file": "evaluation_files/synthetic-flask_PR_40_views_main.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: redirect"
+      },
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: url_for"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: aboutUs"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'data'"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'baz'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_21",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "aggregations.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_21_aggregations.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_22",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "categorical_data.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_22_categorical_data.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Union"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: encodeCategories"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: orderedCategories"
+      },
+      {
+        "line_number": 51,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: memoryOptimizeCategories"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_23",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "data_cleaner.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_23_data_cleaner.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 38,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 70,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_24",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "data_loader.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_24_data_loader.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 12,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: loadCsv"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: filePath"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: loadExcel"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: filePath"
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: sheetName"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: loadJson"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: filePath"
+      },
+      {
+        "line_number": 85,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: loadSql"
+      },
+      {
+        "line_number": 85,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: connectionString"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_25",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "data_transformer.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_25_data_transformer.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_26",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "data_validator.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_26_data_validator.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: validateRanges"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: assertNoNulls"
+      },
+      {
+        "line_number": 78,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: checkUniqueColumns"
+      },
+      {
+        "line_number": 20,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 38,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 54,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 72,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 73,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 75,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 79,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 89,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 90,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 92,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_27",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "feature_engineering.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_27_feature_engineering.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: numpy as np"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 71,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      },
+      {
+        "line_number": 71,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_28",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "groupby_operations.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_28_groupby_operations.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Union"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'df'"
+      },
+      {
+        "line_number": 46,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      },
+      {
+        "line_number": 46,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'df'"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_29",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "io_operations.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_29_io_operations.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: toParquet"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: toSqlChunked"
+      },
+      {
+        "line_number": 70,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: readChunkedCsv"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 44,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (8 spaces)"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 71,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 84,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 85,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 71,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_30",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "merge_operations.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_30_merge_operations.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Any"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: innerMerge"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: leftJoin"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: concatFrames"
+      },
+      {
+        "line_number": 67,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: mergeAsof"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'df1'"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'df1'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_31",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "missing_data.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_31_missing_data.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: numpy as np"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: List"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_32",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "multi_index.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_32_multi_index.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 13,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createMultiIndex"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: crossSection"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: multiIndex"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_33",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "performance_utils.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_33_performance_utils.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: numpy as np"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 26,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (8 spaces)"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 84,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_34",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "pivot_operations.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_34_pivot_operations.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 13,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: createPivot"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: crossTabulation"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: rowVar"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: colVar"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: pivotAndFill"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: fillValue"
+      },
+      {
+        "line_number": 31,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'data'"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'data'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_35",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "statistical_analysis.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_35_statistical_analysis.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_36",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "string_operations.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_36_string_operations.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: List"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Optional"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: extractPatterns"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 35,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_37",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "tests/test_pipeline.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_37_tests_test_pipeline.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 18,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'sample_data'"
+      },
+      {
+        "line_number": 25,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'sample_data'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_38",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "time_series.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_38_time_series.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_39",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "visualization.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_39_visualization.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: plotDistribution"
+      },
+      {
+        "line_number": 38,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: plotCorrelationMatrix"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: plotTimeSeries"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-pandas_PR_40",
+    "repo": "kannan-dedsec/synthetic-pandas",
+    "source_path": "window_functions.py",
+    "source_file": "evaluation_files/synthetic-pandas_PR_40_window_functions.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Union"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: rollingStatistics"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: expandingMean"
+      },
+      {
+        "line_number": 44,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: ewmSmoothing"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: applyWindowFunctions"
+      },
+      {
+        "line_number": 62,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: rollingWindow"
+      },
+      {
+        "line_number": 63,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: ewmSpan"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'data'"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'data'"
+      },
+      {
+        "line_number": 44,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'data'"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'min_periods'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_21",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "anomaly_detection.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_21_anomaly_detection.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Any"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_22",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "clustering.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_22_clustering.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 13,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: kmeansCluster"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: dbscanCluster"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: silhouetteAnalysis"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: maxClusters"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: silhouetteScores"
+      },
+      {
+        "line_number": 68,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: elbowMethod"
+      },
+      {
+        "line_number": 68,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: maxClusters"
+      },
+      {
+        "line_number": 94,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: silhouetteScores"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_23",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "cross_validation.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_23_cross_validation.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 35,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 62,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_24",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "custom_transformer.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_24_custom_transformer.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase attribute: self.lowerBound"
+      },
+      {
+        "line_number": 25,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase attribute: self.upperBound"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase attribute: self.lowerBound"
+      },
+      {
+        "line_number": 42,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase attribute: self.upperBound"
+      },
+      {
+        "line_number": 59,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: filteredData"
+      },
+      {
+        "line_number": 63,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: fitTransform"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'X'"
+      },
+      {
+        "line_number": 63,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'X'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_25",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "data_splitter.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_25_data_splitter.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_26",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "dimensionality_reduction.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_26_dimensionality_reduction.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: applyPca"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: transformedData"
+      },
+      {
+        "line_number": 61,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: transformedData"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 51,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 67,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 67,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_28",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "feature_extraction.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_28_feature_extraction.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'documents'"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'images'"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'documents'"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'documents'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_29",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "feature_selection.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_29_feature_selection.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: train_test_split"
+      },
+      {
+        "line_number": 17,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: selectKBestFeatures"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: recursiveFeatureElimination"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 41,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_30",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "hyperparameter_tuning.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_30_hyperparameter_tuning.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 15,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: gridSearchTuning"
+      },
+      {
+        "line_number": 43,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: randomSearchTuning"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: bayesianOptimizationTuning"
+      },
+      {
+        "line_number": 91,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: getDefaultParamGrids"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'scoring'"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'scoring'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_31",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "metrics_utils.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_31_metrics_utils.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_32",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "model_evaluation.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_32_model_evaluation.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 15,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: evaluateClassifier"
+      },
+      {
+        "line_number": 34,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: evaluateRegressor"
+      },
+      {
+        "line_number": 51,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: evaluateModel"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_33",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "model_persistence.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_33_model_persistence.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Any"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 50,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_34",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "model_training.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_34_model_training.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 19,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: trainClassifier"
+      },
+      {
+        "line_number": 46,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: modelInfo"
+      },
+      {
+        "line_number": 58,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: trainRegressor"
+      },
+      {
+        "line_number": 85,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: modelInfo"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'random_state'"
+      },
+      {
+        "line_number": 63,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'random_state'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_35",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "pipeline.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_35_pipeline.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: Tuple"
+      },
+      {
+        "line_number": 4,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Module docstring placed after imports"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Single-line docstring split across lines"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_36",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "preprocessing.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_36_preprocessing.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 15,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: scaleFeatures"
+      },
+      {
+        "line_number": 33,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: encodeLabels"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase variable: encodedLabels"
+      },
+      {
+        "line_number": 70,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: preprocessData"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 25,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (4 spaces)"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 86,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_37",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "regression_models.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_37_regression_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'X'"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'X'"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'X'"
+      },
+      {
+        "line_number": 83,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'X'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_38",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "tests/test_models.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_38_tests_test_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'X'"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'iris_data'"
+      },
+      {
+        "line_number": 49,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'iris_data'"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_39",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "text_classification.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_39_text_classification.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: sys"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: re"
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: make_pipeline"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: vectorizeText"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: trainTextClassifier"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (2 spaces)"
+      },
+      {
+        "line_number": 38,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 54,
+        "violation_category": "indentation",
+        "review_comment": "Non-4-space indent (6 spaces)"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 38,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      },
+      {
+        "line_number": 54,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring indentation doesn't match block"
+      }
+    ]
+  },
+  {
+    "id": "synthetic-sklearn_PR_40",
+    "repo": "kannan-dedsec/synthetic-sklearn",
+    "source_path": "utils/helpers.py",
+    "source_file": "evaluation_files/synthetic-sklearn_PR_40_utils_helpers.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: setSeed"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: logExperiment"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: experimentName"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase parameter: logFile"
+      },
+      {
+        "line_number": 55,
+        "violation_category": "naming_convention",
+        "review_comment": "camelCase function name: formatResults"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default [] for param 'logFile'"
+      },
+      {
+        "line_number": 55,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default {} for param 'results'"
+      }
+    ]
+  },
+  {
+    "id": "manual_sklearn_estimator",
+    "repo": "manual/sklearn",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_sklearn_estimator.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 44,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.weights` is set during `fit()` but does not end with a trailing underscore. Per scikit-learn convention, attributes learned from data should be named `self.weights_`.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.interceptValue` should use a trailing underscore (e.g. `self.intercept_value_`) and follow snake_case naming per sklearn conventions.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.featureWeights` should end with a trailing underscore and use snake_case (e.g. `self.feature_weights_`).",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "Estimated attribute `self.trainingScore` is set in `fit()` but lacks a trailing underscore. Should be `self.training_score_`.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0205"
+      },
+      {
+        "line_number": 12,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Class docstring uses Google-style `Args:` format. scikit-learn requires the NumPy docstring standard with `Parameters\n----------` sections.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      },
+      {
+        "line_number": 24,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses `Args:` instead of numpy-style `Parameters\n----------`. All scikit-learn docstrings must follow the numpy docstring standard.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      },
+      {
+        "line_number": 57,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses `Args:` / `Returns:` in Google format. Per sklearn guidelines, use numpy-style `Parameters` and `Returns` sections with underline separators.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      },
+      {
+        "line_number": 69,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style formatting. scikit-learn requires the NumPy docstring standard.",
+        "guideline_source": "sklearn_guidelines",
+        "guideline_chunk_id": "chunk_0199"
+      }
+    ]
+  },
+  {
+    "id": "manual_django_models",
+    "repo": "manual/django",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_django_models.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "Django convention requires this method to be named `get_absolute_url` (snake_case). `getAbsoluteUrl` uses camelCase which violates Django coding style.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0155"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "The `__str__` method should appear before `get_absolute_url()` per Django's model method ordering convention: fields, Meta, __str__, save(), get_absolute_url(), custom methods.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0155"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "naming_convention",
+        "review_comment": "Field `statusField` uses camelCase. Django model field names should be all lowercase using underscores (e.g. `status_field` or simply `status`).",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0153"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "STATUS_CHOICES should be defined as a class attribute mapping with an all-uppercase name, but it uses a list of tuples instead of Django's recommended `models.TextChoices` or a mapping.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0156"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "naming_convention",
+        "review_comment": "The `__str__` method appears before `class Meta`. Per Django convention, the order should be: fields, Meta, __str__, save(), get_absolute_url(), custom methods.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0155"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "naming_convention",
+        "review_comment": "Method `getAbsoluteUrl` should be `get_absolute_url` per Django naming conventions. Use underscores, not camelCase, for method names.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0138"
+      },
+      {
+        "line_number": 64,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring starts with 'Tests that' which is a preamble discouraged in Django. State the expected behavior directly: e.g. 'Return True if the task is past its due date.'",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      }
+    ]
+  },
+  {
+    "id": "manual_django_tests",
+    "repo": "manual/django",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_django_tests.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 21,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Test docstring uses the preamble 'Tests that'. Django convention says to state the expected behavior directly without preambles like 'Tests that' or 'Ensures that'.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring starts with 'Ensures that' which is a discouraged preamble in Django test docstrings. State the expected behavior directly.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      },
+      {
+        "line_number": 39,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Test docstring uses 'Tests that' preamble. Per Django coding style, describe the expected behavior without the 'Tests that' prefix.",
+        "guideline_source": "django_guidelines",
+        "guideline_chunk_id": "chunk_0141"
+      }
+    ]
+  },
+  {
+    "id": "manual_pandas_cleaning",
+    "repo": "manual/pandas",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_pandas_cleaning.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style `Args:` format. pandas follows the NumPy docstring convention — use `Parameters\n----------` with `name : type` on each line.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0170"
+      },
+      {
+        "line_number": 8,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Parameter `method` accepts a fixed set of values but uses plain text `('iqr' or 'zscore')`. pandas convention requires curly brackets: `{'iqr', 'zscore'}`.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0179"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "naming_convention",
+        "review_comment": "Local variable `zScores` uses camelCase. pandas follows PEP 8: use snake_case for variables (e.g. `z_scores`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 37,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style `Args:` format. Use numpy-style `Parameters\n----------` per pandas contributing guidelines.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0170"
+      },
+      {
+        "line_number": 48,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `Df` uses CamelCase. Local variables should be lowercase with underscores per PEP 8 and pandas conventions.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 52,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `Col` uses CamelCase. Use snake_case for loop variables (e.g. `col`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Docstring uses Google-style `Args:` format. pandas requires the NumPy docstring standard.",
+        "guideline_source": "pandas_guidelines",
+        "guideline_chunk_id": "chunk_0170"
+      },
+      {
+        "line_number": 75,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `Result` uses CamelCase. Local variables should be snake_case (e.g. `result`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 78,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `minVal` uses camelCase. Use snake_case: `min_val`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 79,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `maxVal` uses camelCase. Use snake_case: `max_val`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      }
+    ]
+  },
+  {
+    "id": "manual_fastapi_users",
+    "repo": "manual/fastapi",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_fastapi_users.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 12,
+        "violation_category": "naming_convention",
+        "review_comment": "Module-level variable `Router` uses CamelCase. FastAPI follows PEP 8 — module-level variables should be snake_case (e.g. `router`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 18,
+        "violation_category": "naming_convention",
+        "review_comment": "Pydantic field `fullName` uses camelCase. Python convention is snake_case (e.g. `full_name`). Use `Field(alias='fullName')` if JSON compatibility is needed.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 26,
+        "violation_category": "naming_convention",
+        "review_comment": "Field `fullName` uses camelCase. Use snake_case per PEP 8.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "naming_convention",
+        "review_comment": "Field `isActive` uses camelCase. Use snake_case (e.g. `is_active`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 40,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `createUser` uses camelCase. FastAPI follows Ruff/PEP 8: function names should be lowercase snake_case (e.g. `create_user`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `getUser` uses camelCase. Use snake_case: `get_user`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 65,
+        "violation_category": "naming_convention",
+        "review_comment": "Parameter `userId` uses camelCase. Function arguments should be snake_case (e.g. `user_id`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0047"
+      },
+      {
+        "line_number": 76,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `updateUser` uses camelCase. Use snake_case: `update_user`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 91,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `deleteUser` and parameter `userId` use camelCase. Use snake_case: `delete_user`, `user_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 96,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `originalLen` uses camelCase. Local variables should be snake_case (e.g. `original_len`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      }
+    ]
+  },
+  {
+    "id": "manual_flask_blog",
+    "repo": "manual/flask",
+    "pr_number": null,
+    "source_file": "evaluation_files/manual_flask_blog.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `blogBp` uses camelCase. Flask blueprints should use snake_case naming (e.g. `blog_bp`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 11,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `listPosts` uses camelCase. Flask follows PEP 8: use snake_case for function names (e.g. `list_posts`).",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `viewPost` uses camelCase. Use snake_case: `view_post`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 21,
+        "violation_category": "naming_convention",
+        "review_comment": "Parameter `postId` uses camelCase. Use snake_case: `post_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0047"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `createPost` uses camelCase. Use snake_case: `create_post`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 32,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable `newPost` uses camelCase. Use snake_case: `new_post`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0031"
+      },
+      {
+        "line_number": 45,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `editPost` and parameter `postId` use camelCase. Use snake_case: `edit_post`, `post_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      },
+      {
+        "line_number": 60,
+        "violation_category": "naming_convention",
+        "review_comment": "Function `deletePost` and parameter `postId` use camelCase. Use snake_case: `delete_post`, `post_id`.",
+        "guideline_source": "pep8",
+        "guideline_chunk_id": "chunk_0030"
+      }
+    ]
+  }
+]

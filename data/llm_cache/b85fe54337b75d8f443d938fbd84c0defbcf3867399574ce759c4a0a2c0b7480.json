@@ -1,0 +1,33 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: cross_validation.py\n3: \n4: This module provides functions for performing cross-validation using\n5: different strategies: Stratified K-Fold, Leave-One-Out, and Time Series Split.\n6: Each function returns the scores for the provided model and data.\n7: \"\"\"\n8: \n9: import os\n10: import sys\n11: import re\n12: from typing import Any, List, Tuple\n13: from sklearn.model_selection import StratifiedKFold, LeaveOneOut, TimeSeriesSplit\n14: from sklearn.metrics import accuracy_score\n15: import numpy as np\n16: \n17: \n18: def stratified_kfold_cv(model: Any, X: np.ndarray, y: np.ndarray, n_splits: int = 5) -> List[float]:\n19:   \"\"\"\n20:   Perform Stratified K-Fold cross-validation.\n21: \n22:   Args:\n23:       model: A scikit-learn model instance.\n24:       X: Features dataset as a 2D NumPy array.\n25:       y: Labels dataset as a 1D NumPy array.\n26:       n_splits: Number of splits for cross-validation.\n27: \n28:   Returns:\n29:       A list of accuracy scores for each fold.\n30:   \"\"\"\n31:   skf = StratifiedKFold(n_splits=n_splits)\n32:   scores = []\n33: \n34:   for train_index, test_index in skf.split(X, y):\n35:     X_train, X_test = X[train_index], X[test_index]\n36:     y_train, y_test = y[train_index], y[test_index]\n37: \n38:     model.fit(X_train, y_train)\n39:     predictions = model.predict(X_test)\n40:     score = accuracy_score(y_test, predictions)\n41:     scores.append(score)\n42: \n43:   return scores\n44: \n45: \n46: def leave_one_out_cv(model: Any, X: np.ndarray, y: np.ndarray) -> List[float]:\n47:   \"\"\"\n48:   Perform Leave-One-Out cross-validation.\n49: \n50:   Args:\n51:       model: A scikit-learn model instance.\n52:       X: Features dataset as a 2D NumPy array.\n53:       y: Labels dataset as a 1D NumPy array.\n54: \n55:   Returns:\n56:       A list of accuracy scores for each fold.\n57:   \"\"\"\n58:   loo = LeaveOneOut()\n59:   scores = []\n60: \n61:   for train_index, test_index in loo.split(X):\n62:     X_train, X_test = X[train_index], X[test_index]\n63:     y_train, y_test = y[train_index], y[test_index]\n64: \n65:     model.fit(X_train, y_train)\n66:     predictions = model.predict(X_test)\n67:     score = accuracy_score(y_test, predictions)\n68:     scores.append(score)\n69: \n70:   return scores\n71: \n72: \n73: def time_series_split_cv(model: Any, X: np.ndarray, y: np.ndarray, n_splits: int = 5) -> List[float]:\n74:     \"\"\"\n75:     Perform Time Series Split cross-validation.\n76: \n77:     Args:\n78:         model: A scikit-learn model instance.\n79:         X: Features dataset as a 2D NumPy array.\n80:         y: Labels dataset as a 1D NumPy array.\n81:         n_splits: Number of splits for cross-validation.\n82: \n83:     Returns:\n84:         A list of accuracy scores for each fold.\n85:     \"\"\"\n86:     tscv = TimeSeriesSplit(n_splits=n_splits)\n87:     scores = []\n88: \n89:     for train_index, test_index in tscv.split(X):\n90:         X_train, X_test = X[train_index], X[test_index]\n91:         y_train, y_test = y[train_index], y[test_index]\n92: \n93:         model.fit(X_train, y_train)\n94:         predictions = model.predict(X_test)\n95:         score = accuracy_score(y_test, predictions)\n96:         scores.append(score)\n97: \n98:     return scores\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 11,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 15783.2,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

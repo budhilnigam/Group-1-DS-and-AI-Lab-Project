@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import pytest\n2: from flask import Flask\n3: from flask_sqlalchemy import SQLAlchemy\n4: from typing import Generator\n5: \n6: from myapp import create_app, db as _db\n7: from myapp.models import User, Post\n8: \n9: @pytest.fixture(scope='session')\n10: def app() -> Generator[Flask, None, None]:\n11:     \"\"\"Create a Flask application for the tests.\"\"\"\n12:     app = create_app('testing')\n13: \n14:     with app.app_context():\n15:         yield app\n16: \n17: \n18: @pytest.fixture(scope='session')\n19: def db(app: Flask) -> Generator[SQLAlchemy, None, None]:\n20:     \"\"\"Create a SQLAlchemy database connection for testing.\"\"\"\n21:     _db.app = app\n22:     _db.create_all()\n23:     yield _db\n24:     _db.drop_all()\n25: \n26: \n27: @pytest.fixture(scope='function')\n28: def client(app: Flask) -> Flask.test_client:\n29:     \"\"\"Create a test client for the Flask application.\"\"\"\n30:     return app.test_client()\n31: \n32: \n33: @pytest.fixture(scope='function')\n34: def sampleUser(db: SQLAlchemy) -> User:\n35:     \"\"\"Create a sample user for testing.\"\"\"\n36:     user = User(username='testuser', email='test@example.com')\n37:     db.session.add(user)\n38:     db.session.commit()\n39:     yield user\n40:     db.session.delete(user)\n41:     db.session.commit()\n42: \n43: \n44: @pytest.fixture(scope='function')\n45: def samplePost(db: SQLAlchemy, sampleUser: User) -> Post:\n46:     \"\"\"Create a sample post for testing.\"\"\"\n47:     post = Post(title='Test Post', content='This is a test post.', author=sampleUser)\n48:     db.session.add(post)\n49:     db.session.commit()\n50:     yield post\n51:     db.session.delete(post)\n52:     db.session.commit()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 4,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'Generator' type from typing is imported but not used in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 4,
+    "violation_category": "unused_import",
+    "review_comment": "The 'Generator' type from typing is imported but not used in the code."
+  },
+  "latency_ms": 6056.9,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

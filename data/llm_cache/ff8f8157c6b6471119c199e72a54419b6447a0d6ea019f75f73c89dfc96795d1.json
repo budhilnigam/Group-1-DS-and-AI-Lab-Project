@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Unit tests for the task management models.\"\"\"\n2: \n3: from django.test import TestCase\n4: from django.utils import timezone\n5: from app.models import Task, Priority\n6: \n7: \n8: class TaskModelTestCase(TestCase):\n9:     \"\"\"Test suite for the Task model.\"\"\"\n10: \n11:     def setUp(self):\n12:         \"\"\"Set up test data.\"\"\"\n13:         self.priority = Priority.objects.create(label=\"High\", color_code=\"#ff0000\")\n14:         self.task = Task.objects.create(\n15:             title=\"Write documentation\",\n16:             description=\"Write the user guide for the API.\",\n17:             priority=self.priority,\n18:         )\n19: \n20:     def test_task_creation(self):\n21:         \"\"\"Tests that a new task is created with correct defaults.\"\"\"\n22:         self.assertEqual(self.task.title, \"Write documentation\")\n23:         self.assertEqual(self.task.statusField, \"open\")\n24:         self.assertIsNotNone(self.task.created_at)\n25: \n26:     def test_overdue_detection(self):\n27:         \"\"\"Ensures that overdue detection works for past dates.\"\"\"\n28:         self.task.due_date = timezone.now().date() - timezone.timedelta(days=1)\n29:         self.task.save()\n30:         self.assertTrue(self.task.is_overdue())\n31: \n32:     def test_not_overdue(self):\n33:         \"\"\"Test that a future due date is not overdue.\"\"\"\n34:         self.task.due_date = timezone.now().date() + timezone.timedelta(days=7)\n35:         self.task.save()\n36:         self.assertFalse(self.task.is_overdue())\n37: \n38:     def test_priority_relationship(self):\n39:         \"\"\"Tests that the priority relationship is correctly set.\"\"\"\n40:         self.assertEqual(self.task.priority.label, \"High\")\n41:         self.assertIn(self.task, self.priority.tasks.all())\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 23,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"The attribute 'statusField' should follow snake_case naming convention as 'status_field'.\"\n}",
+  "parsed_response": {
+    "line_number": 23,
+    "violation_category": "naming_convention",
+    "review_comment": "The attribute 'statusField' should follow snake_case naming convention as 'status_field'."
+  },
+  "latency_ms": 6158.6,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

@@ -1,0 +1,28 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Custom middleware module for a Django project.\n3: \n4: This module includes two middleware classes:\n5: 1. TimingMiddleware: Measures the time taken to process each request.\n6: 2. RequestLoggingMiddleware: Logs details of incoming requests.\n7: \n8: Both middleware classes implement the `__init__` and `__call__` methods\n9: to integrate with Django's middleware processing.\n10: \"\"\"\n11: \n12: import time\n13: import logging\n14: from typing import Callable\n15: from django.http import HttpRequest, HttpResponse\n16: import os\n17: import sys\n18: import re\n19: \n20: logger = logging.getLogger(__name__)\n21: \n22: class TimingMiddleware:\n23:     \"\"\"\n24:     Middleware to measure the time taken to process each request.\n25:     \"\"\"\n26: \n27:     def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:\n28:         self.get_response = get_response\n29: \n30:     def __call__(self, request: HttpRequest) -> HttpResponse:\n31:         start_time = time.time()\n32:         response = self.get_response(request)\n33:         end_time = time.time()\n34:         duration = end_time - start_time\n35: \n36:         logger.info(\n37:             \"Request to %s took %.2f seconds\",\n38:             request.path,\n39:             duration\n40:         )\n41:         response[\"X-Process-Time\"] = f\"{duration:.2f}s\"\n42:         return response\n43: \n44: \n45: class RequestLoggingMiddleware:\n46:     \"\"\"\n47:     Middleware to log details of incoming requests.\n48:     \"\"\"\n49: \n50:     def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:\n51:         self.get_response = get_response\n52: \n53:     def __call__(self, request: HttpRequest) -> HttpResponse:\n54:         logger.info(\n55:             \"Incoming request: method=%s, path=%s, remote_addr=%s, user_agent=%s\",\n56:             request.method,\n57:             request.path,\n58:             self._get_client_ip(request),\n59:             request.META.get(\"HTTP_USER_AGENT\", \"unknown\")\n60:         )\n61:         return self.get_response(request)\n62: \n63:     def _get_client_ip(self, request: HttpRequest) -> str:\n64:         \"\"\"\n65:         Extracts the client's IP address from the request.\n66:         \"\"\"\n67:         x_forwarded_for = request.META.get(\"HTTP_X_FORWARDED_FOR\")\n68:         if x_forwarded_for:\n69:             return x_forwarded_for.split(\",\")[0].strip()\n70:         return request.META.get(\"REMOTE_ADDR\", \"unknown\")\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 17,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 18,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 17,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 18,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 8676.5,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

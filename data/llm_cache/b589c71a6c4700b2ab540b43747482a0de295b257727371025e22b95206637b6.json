@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Flask extensions initialization module.\n2: \n3: This module provides a way to initialize commonly used Flask extensions\n4: such as SQLAlchemy, Flask-Migrate, Flask-Login, and Flask-Mail without\n5: binding them to a specific application instance.\n6: \"\"\"\n7: \n8: from flask_sqlalchemy import SQLAlchemy\n9: from flask_migrate import Migrate\n10: from flask_login import LoginManager\n11: from flask_mail import Mail\n12: \n13: \n14: class Extensions:\n15:     \"\"\"Container for Flask extensions.\"\"\"\n16: \n17:     def __init__(self) -> None:\n18:         \"\"\"Initialize the extensions.\"\"\"\n19:         self.db = SQLAlchemy()\n20:         self.migrate = Migrate()\n21:         self.login_manager = LoginManager()\n22:         self.mail = Mail()\n23: \n24:     def init_app(self, app) -> None:\n25:         \"\"\"Initialize extensions with the given Flask application.\n26: \n27:         Args:\n28:             app: The Flask application instance.\n29:         \"\"\"\n30:         self.db.init_app(app)\n31:         self.migrate.init_app(app, self.db)\n32:         self.login_manager.init_app(app)\n33:         self.mail.init_app(app)\n34: \n35:   def setLoginView(self, view: str) -> None:\n36:     \"\"\"Set the default login view for Flask-Login.\n37: \n38:     Args:\n39:         view: The endpoint name for the login view.\n40:     \"\"\"\n41:     self.login_manager.login_view = view\n42: \n43:   def setLoginMessage(self, message: str) -> None:\n44:     \"\"\"Set the message to be displayed on the login page.\n45: \n46:     Args:\n47:         message: The message to display.\n48:     \"\"\"\n49:     self.login_manager.login_message = message\n50: \n51:     def setMailServer(self, server: str, port: int, username: str, password: str) -> None:\n52:         \"\"\"Configure the mail server settings.\n53: \n54:         Args:\n55:             server: The mail server address.\n56:             port: The mail server port.\n57:             username: The username for the mail server.\n58:             password: The password for the mail server.\n59:         \"\"\"\n60:         self.mail.server = server\n61:         self.mail.port = port\n62:         self.mail.username = username\n63:         self.mail.password = password\n64: \n65: extensions = Extensions()  # Create a global instance of the Extensions class.\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 51,\n  \"violation_category\": \"indentation\",\n  \"review_comment\": \"The method `setMailServer` is indented incorrectly. It should be aligned with other methods in the class.\"\n}",
+  "parsed_response": {
+    "line_number": 51,
+    "violation_category": "indentation",
+    "review_comment": "The method `setMailServer` is indented incorrectly. It should be aligned with other methods in the class."
+  },
+  "latency_ms": 7181.8,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

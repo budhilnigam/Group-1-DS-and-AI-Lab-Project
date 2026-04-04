@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Pytest fixtures for the Django project.\n2: \n3: This module provides reusable pytest fixtures for testing purposes,\n4: including user creation, article creation, category creation, and\n5: client setup.\n6: \"\"\"\n7: \n8: from typing import Optional\n9: \n10: import pytest\n11: from django.contrib.auth.models import User\n12: from django.test import Client\n13: from myapp.models import Article, Category\n14: \n15: \n16: @pytest.fixture\n17: def createUser():\n18:     \"\"\"Fixture to create a user instance.\"\"\"\n19:     def _createUser(\n20:         username: str = \"testuser\",\n21:         email: str = \"testuser@example.com\",\n22:         password: str = \"password123\",\n23:         is_staff: bool = False,\n24:         is_superuser: bool = False\n25:     ) -> User:\n26:         return User.objects.create_user(\n27:             username=username,\n28:             email=email,\n29:             password=password,\n30:             is_staff=is_staff,\n31:             is_superuser=is_superuser\n32:         )\n33:     return _createUser\n34: \n35: \n36: @pytest.fixture\n37: def createCategory():\n38:     \"\"\"Fixture to create a category instance.\"\"\"\n39:     def _createCategory(\n40:         name: str = \"Default Category\",\n41:         description: Optional[str] = None\n42:     ) -> Category:\n43:         return Category.objects.create(\n44:             name=name,\n45:             description=description\n46:         )\n47:     return _createCategory\n48: \n49: \n50: @pytest.fixture\n51: def create_article(createUser, createCategory):\n52:     \"\"\"Fixture to create an article instance.\"\"\"\n53:     def _create_article(\n54:         title: str = \"Sample Article\",\n55:         content: str = \"This is a sample article content.\",\n56:         author: Optional[User] = None,\n57:         category: Optional[Category] = None,\n58:         is_published: bool = True\n59:     ) -> Article:\n60:         if author is None:\n61:             author = createUser()\n62:         if category is None:\n63:             category = createCategory()\n64:         return Article.objects.create(\n65:             title=title,\n66:             content=content,\n67:             author=author,\n68:             category=category,\n69:             is_published=is_published\n70:         )\n71:     return _create_article\n72: \n73: \n74: @pytest.fixture\n75: def client():\n76:     \"\"\"Fixture to provide a Django test client.\"\"\"\n77:     return Client()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'Optional' import from typing is unused.\"\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'Optional' import from typing is unused."
+  },
+  "latency_ms": 5845.8,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

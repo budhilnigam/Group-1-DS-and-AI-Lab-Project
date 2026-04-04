@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Utility functions for common tasks in the Django project.\n3: \n4: This module includes helper functions for:\n5: - Generating unique slugs for models\n6: - Retrieving the client's IP address from a request\n7: - Sending notification emails\n8: \"\"\"\n9: \n10: import random\n11: import string\n12: from typing import Optional\n13: from django.db.models import Model\n14: from django.http import HttpRequest\n15: from django.core.mail import send_mail\n16: from django.utils.text import slugify\n17: \n18: \n19: def generate_unique_slug(instance: Model, field_value: str, slug_field_name: str = \"slug\") -> str:\n20:     \"\"\"\n21:     Generate a unique slug for a given model instance.\n22:     \"\"\"\n23:     base_slug = slugify(field_value)\n24:     unique_slug = base_slug\n25:     model_class = instance.__class__\n26:     counter = 1\n27: \n28:     # Ensure the slug is unique by appending a counter if necessary\n29:     while model_class.objects.filter(**{slug_field_name: unique_slug}).exclude(id=instance.id).exists():\n30:         unique_slug = f\"{base_slug}-{counter}\"\n31:         counter += 1\n32: \n33:     return unique_slug\n34: \n35: \n36: def get_client_ip(request: HttpRequest) -> Optional[str]:\n37:     \"\"\"\n38:     Retrieve the client's IP address from a Django request object.\n39:     \"\"\"\n40:     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')\n41:     if x_forwarded_for:\n42:         ip = x_forwarded_for.split(',')[0].strip()\n43:     else:\n44:         ip = request.META.get('REMOTE_ADDR')\n45:     return ip\n46: \n47: \n48: def send_notification_email(subject: str, message: str, recipient_list: list[str] = [], from_email: Optional[str] = None) -> bool:\n49:     \"\"\"\n50:     Send a notification email to a list of recipients.\n51:     \"\"\"\n52:     try:\n53:         send_mail(subject, message, from_email, recipient_list, fail_silently=False)\n54:         return True\n55:     except Exception as e:\n56:         # Log the exception in real-world scenarios\n57:         print(f\"Error sending email: {e}\")\n58:         return False\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 10,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'random' and 'string' modules are imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 10,
+    "violation_category": "unused_import",
+    "review_comment": "The 'random' and 'string' modules are imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 11694.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nUtility functions for common tasks in the Django project.\n\nThis module includes helper functions for:\n- Generating unique slugs for models\n- Retrieving the client's IP address from a request\n- Sending notification emails\n\"\"\"\n\nimport random\nimport string\nfrom typing import Optional\nfrom django.db.models import Model\nfrom django.http import HttpRequest\nfrom django.core.mail import send_mail\nfrom django.utils.text import slugify\n\n\ndef generate_unique_slug(instance: Model, field_value: str, slug"
+}

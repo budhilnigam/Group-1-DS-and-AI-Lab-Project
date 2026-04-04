@@ -1,0 +1,53 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Blueprint for blog post endpoints.\"\"\"\n2: \n3: from flask import Blueprint, render_template, request, redirect, url_for, flash\n4: from app.models import db, Post\n5: from app.forms import PostForm\n6: \n7: blogBp = Blueprint(\"blog\", __name__, url_prefix=\"/blog\")\n8: \n9: \n10: @blogBp.route(\"/\")\n11: def listPosts():\n12:     \"\"\"Return the blog index page with all published posts.\"\"\"\n13:     page = request.args.get(\"page\", 1, type=int)\n14:     posts = Post.query.filter_by(is_published=True).order_by(\n15:         Post.created_at.desc()\n16:     ).paginate(page=page, per_page=10)\n17:     return render_template(\"blog/index.html\", posts=posts)\n18: \n19: \n20: @blogBp.route(\"/<int:postId>\")\n21: def viewPost(postId):\n22:     \"\"\"Show a single blog post by its ID.\"\"\"\n23:     post = Post.query.get_or_404(postId)\n24:     return render_template(\"blog/detail.html\", post=post)\n25: \n26: \n27: @blogBp.route(\"/create\", methods=[\"GET\", \"POST\"])\n28: def createPost():\n29:     \"\"\"Handle creation of a new blog post.\"\"\"\n30:     form = PostForm()\n31:     if form.validate_on_submit():\n32:         newPost = Post(\n33:             title=form.title.data,\n34:             body=form.body.data,\n35:             is_published=form.publish.data,\n36:         )\n37:         db.session.add(newPost)\n38:         db.session.commit()\n39:         flash(\"Post created successfully.\", \"success\")\n40:         return redirect(url_for(\"blog.viewPost\", postId=newPost.id))\n41:     return render_template(\"blog/create.html\", form=form)\n42: \n43: \n44: @blogBp.route(\"/<int:postId>/edit\", methods=[\"GET\", \"POST\"])\n45: def editPost(postId):\n46:     \"\"\"Edit an existing blog post.\"\"\"\n47:     post = Post.query.get_or_404(postId)\n48:     form = PostForm(obj=post)\n49:     if form.validate_on_submit():\n50:         post.title = form.title.data\n51:         post.body = form.body.data\n52:         post.is_published = form.publish.data\n53:         db.session.commit()\n54:         flash(\"Post updated.\", \"info\")\n55:         return redirect(url_for(\"blog.viewPost\", postId=post.id))\n56:     return render_template(\"blog/edit.html\", form=form, post=post)\n57: \n58: \n59: @blogBp.route(\"/<int:postId>/delete\", methods=[\"POST\"])\n60: def deletePost(postId):\n61:     \"\"\"Delete a blog post.\"\"\"\n62:     post = Post.query.get_or_404(postId)\n63:     db.session.delete(post)\n64:     db.session.commit()\n65:     flash(\"Post deleted.\", \"warning\")\n66:     return redirect(url_for(\"blog.listPosts\"))\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 3,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'redirect' and 'url_for' imports are used, but 'flash' is not explicitly used in the code.\"\n    },\n    {\n      \"line_number\": 7,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Variable names should be lowercase with words separated by underscores as necessary to improve readability (snake_case). Use 'blog_bp' instead of 'blogBp'.\"\n    },\n    {\n      \"line_number\": 11,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring should start with a capital letter and end with a period.\"\n    },\n    {\n      \"line_number\": 20,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring should start with a capital letter and end with a period.\"\n    },\n    {\n      \"line_number\": 27,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring should start with a capital letter and end with a period.\"\n    },\n    {\n      \"line_number\": 44,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring should start with a capital letter and end with a period.\"\n    },\n    {\n      \"line_number\": 59,\n      \"violation_category\": \"documentation_formatting\",\n      \"review_comment\": \"The docstring should start with a capital letter and end with a period.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "The 'redirect' and 'url_for' imports are used, but 'flash' is not explicitly used in the code."
+      },
+      {
+        "line_number": 7,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable names should be lowercase with words separated by underscores as necessary to improve readability (snake_case). Use 'blog_bp' instead of 'blogBp'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring should start with a capital letter and end with a period."
+      },
+      {
+        "line_number": 20,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring should start with a capital letter and end with a period."
+      },
+      {
+        "line_number": 27,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring should start with a capital letter and end with a period."
+      },
+      {
+        "line_number": 44,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring should start with a capital letter and end with a period."
+      },
+      {
+        "line_number": 59,
+        "violation_category": "documentation_formatting",
+        "review_comment": "The docstring should start with a capital letter and end with a period."
+      }
+    ]
+  },
+  "latency_ms": 27328.5,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

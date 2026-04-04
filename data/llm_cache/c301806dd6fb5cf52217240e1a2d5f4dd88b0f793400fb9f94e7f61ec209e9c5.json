@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Security utilities for FastAPI projects.\n3: \n4: Provides functions to hash and verify passwords,\n5: create and decode JWT access tokens using 'python-jose'.\n6: \"\"\"\n7: \n8: import time\n9: from typing import Any, Optional, Dict\n10: \n11: from jose import jwt, JWTError\n12: from passlib.context import CryptContext\n13: \n14: # Password hashing settings\n15: pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\")\n16: \n17: # JWT settings\n18: SECRET_KEY = \"your-secret-key\"  # Replace with a secure, environment-based value\n19: ALGORITHM = \"HS256\"\n20: ACCESS_TOKEN_EXPIRE_SECONDS = 3600  # 1 hour\n21: \n22: \n23: def hashPassword(password: str) -> str:\n24:     \"\"\"\n25:     Hash a plaintext password using bcrypt.\n26: \n27:     Args:\n28:         password (str): The plaintext password.\n29: \n30:     Returns:\n31:         str: The hashed password.\n32:     \"\"\"\n33:     return pwd_context.hash(password)\n34: \n35: \n36: def verifyPassword(plain_password: str, hashed_password: str) -> bool:\n37:     \"\"\"\n38:     Verify a plaintext password against its hashed version.\n39: \n40:     Args:\n41:         plain_password (str): The plaintext password.\n42:         hashed_password (str): The hashed password.\n43: \n44:     Returns:\n45:         bool: True if passwords match, False otherwise.\n46:     \"\"\"\n47:     return pwd_context.verify(plain_password, hashed_password)\n48: \n49: \n50: def createAccessToken(\n51:     data: Dict[str, Any],\n52:     expires_in: list = []\n53: ) -> str:\n54:     \"\"\"\n55:     Create a JWT access token.\n56: \n57:     Args:\n58:         data (Dict[str, Any]): Data to encode in the token.\n59:         expires_in (list): Token expiry in seconds.\n60: \n61:     Returns:\n62:         str: Encoded JWT token.\n63:     \"\"\"\n64:     to_encode = data.copy()\n65:     expire = int(time.time()) + (expires_in or ACCESS_TOKEN_EXPIRE_SECONDS)\n66:     to_encode.update({\"exp\": expire})\n67:     token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)\n68:     return token\n69: \n70: \n71: def decodeToken(token: str) -> Optional[Dict[str, Any]]:\n72:     \"\"\"\n73:     Decode and validate a JWT token.\n74: \n75:     Args:\n76:         token (str): JWT token string.\n77: \n78:     Returns:\n79:         Optional[Dict[str, Any]]: Decoded token data if valid, None otherwise.\n80:     \"\"\"\n81:     try:\n82:         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])\n83:         return payload\n84:     except JWTError:\n85:         return None\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'time' module is imported but not used in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'time' module is imported but not used in the code."
+  },
+  "latency_ms": 7306.4,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

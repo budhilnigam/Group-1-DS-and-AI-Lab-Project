@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Configuration classes for Flask application.\n2: \n3: This module contains configuration settings for different environments:\n4: Development, Production, and Testing. Each class defines the necessary\n5: settings such as SECRET_KEY and DATABASE_URI.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: import os\n13: from typing import Any\n14: \n15: \n16: class Config:\n17:     \"\"\"Base configuration class with common settings.\"\"\"\n18: \n19:     SECRET_KEY: str = os.environ.get('SECRET_KEY', 'default_secret_key')\n20:     DATABASE_URI: str = os.environ.get('DATABASE_URI', 'sqlite:///:memory:')\n21:     DEBUG: bool = False\n22:     TESTING: bool = False\n23: \n24:     @staticmethod\n25:     def init_app(app: Any) -> None:\n26:         \"\"\"Initialize the application with the given configuration.\"\"\"\n27:         pass\n28: \n29: \n30: class DevelopmentConfig(Config):\n31:     \"\"\"Configuration settings for development environment.\"\"\"\n32: \n33:     DEBUG: bool = True\n34:     DATABASE_URI: str = os.environ.get('DEV_DATABASE_URI', 'sqlite:///dev.db')\n35: \n36: \n37: class ProductionConfig(Config):\n38:     \"\"\"Configuration settings for production environment.\"\"\"\n39: \n40:     DATABASE_URI: str = os.environ.get('PROD_DATABASE_URI', 'mysql://user:password@localhost/prod')\n41: \n42: \n43: class TestingConfig(Config):\n44:     \"\"\"Configuration settings for testing environment.\"\"\"\n45: \n46:     TESTING: bool = True\n47:     DATABASE_URI: str = os.environ.get('TEST_DATABASE_URI', 'sqlite:///:memory:')\n48:     SECRET_KEY: str = os.environ.get('TEST_SECRET_KEY', 'test_secret_key')\n49: \n50: \n51: configurations = {\n52:     'development': DevelopmentConfig,\n53:     'production': ProductionConfig,\n54:     'testing': TestingConfig\n55: }\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 12,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported twice.\"\n}",
+  "parsed_response": {
+    "line_number": 12,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported twice."
+  },
+  "latency_ms": 5914.5,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

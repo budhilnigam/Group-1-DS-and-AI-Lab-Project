@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0494] (score=0.773)\nThe indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: model_persistence.py\n3: \n4: This module provides functions to save and load machine learning models\n5: using joblib and pickle. It supports model versioning and exporting models\n6: to ONNX format.\n7: \"\"\"\n8: \n9: import os\n10: import sys\n11: import re\n12: import joblib\n13: import pickle\n14: from typing import Any, Optional\n15: import onnx\n16: import skl2onnx\n17: from sklearn.base import BaseEstimator\n18: \n19: \n20: def save_model(model: BaseEstimator, model_name: str, version: int) -> None:\n21:   \"\"\"\n22:   Save the model to a file using joblib with versioning.\n23: \n24:   Args:\n25:       model (BaseEstimator): The scikit-learn model to save.\n26:       model_name (str): The base name of the model.\n27:       version (int): The version number for the model file.\n28: \n29:   Raises:\n30:       ValueError: If version is less than 1.\n31:   \"\"\"\n32:   if version < 1:\n33:       raise ValueError(\"Version must be at least 1.\")\n34: \n35:   filename = f\"{model_name}_v{version}.joblib\"\n36:   joblib.dump(model, filename)\n37: \n38: \n39: def load_model(model_name: str, version: int) -> Optional[BaseEstimator]:\n40:     \"\"\"\n41:     Load a model from a file using joblib.\n42: \n43:     Args:\n44:         model_name (str): The base name of the model.\n45:         version (int): The version number of the model to load.\n46: \n47:     Returns:\n48:         Optional[BaseEstimator]: The loaded model or None if the model file does not exist.\n49:     \"\"\"\n50:       filename = f\"{model_name}_v{version}.joblib\"\n51:       if os.path.exists(filename):\n52:           return joblib.load(filename)\n53:       return None\n54: \n55: \n56: def export_onnx(model: BaseEstimator, model_name: str, version: int) -> None:\n57:       \"\"\"\n58:       Export the model to ONNX format.\n59: \n60:       Args:\n61:           model (BaseEstimator): The scikit-learn model to export.\n62:           model_name (str): The base name for the ONNX model file.\n63:           version (int): The version number for the ONNX model file.\n64: \n65:       Raises:\n66:           ValueError: If version is less than 1.\n67:       \"\"\"\n68:       if version < 1:\n69:           raise ValueError(\"Version must be at least 1.\")\n70: \n71:       onnx_filename = f\"{model_name}_v{version}.onnx\"\n72: \n73:       # Convert the model to ONNX format\n74:       initial_type = [('float_input', 'float32', (None, model.n_features_in_))]\n75:       onnx_model = skl2onnx.convert_sklearn(model, initial_types=initial_type)\n76: \n77:       # Save the ONNX model to file\n78:       with open(onnx_filename, \"wb\") as f:\n79:           f.write(onnx_model.SerializeToString())\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 11,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 11,
+    "violation_category": "unused_import",
+    "review_comment": "The 're' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 15644.9,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0494": {
+      "score": 0.7726,
+      "text": "The indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nmodel_persistence.py\n\nThis module provides functions to save and load machine learning models\nusing joblib and pickle. It supports model versioning and exporting models\nto ONNX format.\n\"\"\"\n\nimport os\nimport sys\nimport re\nimport joblib\nimport pickle\nfrom typing import Any, Optional\nimport onnx\nimport skl2onnx\nfrom sklearn.base import BaseEstimator\n\n\ndef save_model(model: BaseEstimator, model_name: str, version: int) -> None:\n  \"\"\"\n  Save the model to a file using joblib with versioning.\n\n  Ar"
+}

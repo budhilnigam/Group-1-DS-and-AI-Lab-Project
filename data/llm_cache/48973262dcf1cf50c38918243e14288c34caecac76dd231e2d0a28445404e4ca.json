@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: aggregations.py\n3: \n4: This module provides various aggregation functions for pandas DataFrames.\n5: Functions include summary statistics, grouped aggregations, and custom\n6: aggregations using named aggregation syntax.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: import os\n11: import sys\n12: import re\n13: from typing import Dict, Any, Optional, List\n14: \n15: \n16: def summary_stats(df: pd.DataFrame, numeric_cols: Optional[List[str]] = None) -> pd.DataFrame:\n17:     \"\"\"\n18:     Calculate summary statistics for the specified numeric columns in a DataFrame.\n19: \n20:     Args:\n21:         df (pd.DataFrame): The input DataFrame.\n22:         numeric_cols (Optional[List[str]]): List of numeric column names to summarize.\n23:             If None, all numeric columns will be used.\n24: \n25:     Returns:\n26:         pd.DataFrame: A DataFrame containing summary statistics.\n27:     \"\"\"\n28:     if numeric_cols is None:\n29:         numeric_cols = df.select_dtypes(include='number').columns.tolist()\n30: \n31:     return df[numeric_cols].describe()\n32: \n33: \n34: def grouped_agg(df: pd.DataFrame, group_by: List[str], agg_funcs: Dict[str, Any]) -> pd.DataFrame:\n35:     \"\"\"\n36:     Perform grouped aggregation on a DataFrame.\n37: \n38:     Args:\n39:         df (pd.DataFrame): The input DataFrame.\n40:         group_by (List[str]): List of column names to group by.\n41:         agg_funcs (Dict[str, Any]): Dictionary specifying aggregation functions.\n42: \n43:     Returns:\n44:         pd.DataFrame: A DataFrame containing the aggregated results.\n45:     \"\"\"\n46:     return df.groupby(group_by).agg(agg_funcs).reset_index()\n47: \n48: \n49: def custom_agg(df: pd.DataFrame, group_by: List[str], **agg_kwargs: Dict[str, Any]) -> pd.DataFrame:\n50:     \"\"\"\n51:     Perform custom aggregation on a DataFrame using named aggregation syntax.\n52: \n53:     Args:\n54:         df (pd.DataFrame): The input DataFrame.\n55:         group_by (List[str]): List of column names to group by.\n56:         **agg_kwargs (Dict[str, Any]): Named aggregation functions.\n57: \n58:     Returns:\n59:         pd.DataFrame: A DataFrame containing the aggregated results.\n60:     \"\"\"\n61:     return df.groupby(group_by).agg(**agg_kwargs).reset_index()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 10,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 10,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code."
+  },
+  "latency_ms": 6851.5,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

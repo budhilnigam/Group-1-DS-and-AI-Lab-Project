@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Blueprint for blog post endpoints.\"\"\"\n2: \n3: from flask import Blueprint, render_template, request, redirect, url_for, flash\n4: from app.models import db, Post\n5: from app.forms import PostForm\n6: \n7: blogBp = Blueprint(\"blog\", __name__, url_prefix=\"/blog\")\n8: \n9: \n10: @blogBp.route(\"/\")\n11: def listPosts():\n12:     \"\"\"Return the blog index page with all published posts.\"\"\"\n13:     page = request.args.get(\"page\", 1, type=int)\n14:     posts = Post.query.filter_by(is_published=True).order_by(\n15:         Post.created_at.desc()\n16:     ).paginate(page=page, per_page=10)\n17:     return render_template(\"blog/index.html\", posts=posts)\n18: \n19: \n20: @blogBp.route(\"/<int:postId>\")\n21: def viewPost(postId):\n22:     \"\"\"Show a single blog post by its ID.\"\"\"\n23:     post = Post.query.get_or_404(postId)\n24:     return render_template(\"blog/detail.html\", post=post)\n25: \n26: \n27: @blogBp.route(\"/create\", methods=[\"GET\", \"POST\"])\n28: def createPost():\n29:     \"\"\"Handle creation of a new blog post.\"\"\"\n30:     form = PostForm()\n31:     if form.validate_on_submit():\n32:         newPost = Post(\n33:             title=form.title.data,\n34:             body=form.body.data,\n35:             is_published=form.publish.data,\n36:         )\n37:         db.session.add(newPost)\n38:         db.session.commit()\n39:         flash(\"Post created successfully.\", \"success\")\n40:         return redirect(url_for(\"blog.viewPost\", postId=newPost.id))\n41:     return render_template(\"blog/create.html\", form=form)\n42: \n43: \n44: @blogBp.route(\"/<int:postId>/edit\", methods=[\"GET\", \"POST\"])\n45: def editPost(postId):\n46:     \"\"\"Edit an existing blog post.\"\"\"\n47:     post = Post.query.get_or_404(postId)\n48:     form = PostForm(obj=post)\n49:     if form.validate_on_submit():\n50:         post.title = form.title.data\n51:         post.body = form.body.data\n52:         post.is_published = form.publish.data\n53:         db.session.commit()\n54:         flash(\"Post updated.\", \"info\")\n55:         return redirect(url_for(\"blog.viewPost\", postId=post.id))\n56:     return render_template(\"blog/edit.html\", form=form, post=post)\n57: \n58: \n59: @blogBp.route(\"/<int:postId>/delete\", methods=[\"POST\"])\n60: def deletePost(postId):\n61:     \"\"\"Delete a blog post.\"\"\"\n62:     post = Post.query.get_or_404(postId)\n63:     db.session.delete(post)\n64:     db.session.commit()\n65:     flash(\"Post deleted.\", \"warning\")\n66:     return redirect(url_for(\"blog.listPosts\"))\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 3,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'url_for' function is imported but not used in the module.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 3,
+    "violation_category": "unused_import",
+    "review_comment": "The 'url_for' function is imported but not used in the module.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 12124.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Blueprint for blog post endpoints.\"\"\"\n\nfrom flask import Blueprint, render_template, request, redirect, url_for, flash\nfrom app.models import db, Post\nfrom app.forms import PostForm\n\nblogBp = Blueprint(\"blog\", __name__, url_prefix=\"/blog\")\n\n\n@blogBp.route(\"/\")\ndef listPosts():\n    \"\"\"Return the blog index page with all published posts.\"\"\"\n    page = request.args.get(\"page\", 1, type=int)\n    posts = Post.query.filter_by(is_published=True).order_by(\n        Post.created_at.desc()\n    ).paginate"
+}

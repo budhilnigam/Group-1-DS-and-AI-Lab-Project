@@ -1,0 +1,28 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: exceptions.py\n3: \n4: Custom exception classes and handlers for FastAPI projects.\n5: Provides: NotFoundError, ForbiddenError, ValidationError, and their handler registration.\n6: \"\"\"\n7: \n8: from typing import Any\n9: from fastapi import Request, FastAPI\n10: from fastapi.responses import JSONResponse\n11: from starlette.status import (\n12:     HTTP_404_NOT_FOUND,\n13:     HTTP_403_FORBIDDEN,\n14:     HTTP_422_UNPROCESSABLE_ENTITY,\n15: )\n16: \n17: \n18: class NotFoundError(Exception):\n19:   \"\"\"\n20:   Exception raised when a requested resource is not found.\n21:   \"\"\"\n22: \n23:   def __init__(self, detail: str = \"Resource not found\") -> None:\n24:     self.detail = detail\n25:     super().__init__(self.detail)\n26: \n27: \n28: class ForbiddenError(Exception):\n29:   \"\"\"\n30:   Exception raised when access is forbidden.\n31:   \"\"\"\n32: \n33:   def __init__(self, detail: str = \"Access forbidden\") -> None:\n34:     self.detail = detail\n35:     super().__init__(self.detail)\n36: \n37: \n38: class ValidationError(Exception):\n39:   \"\"\"\n40:   Exception raised when input validation fails.\n41:   \"\"\"\n42: \n43:   def __init__(self, detail: str = \"Validation failed\", errors: Any = None) -> None:\n44:     self.detail = detail\n45:     self.errors = errors\n46:     super().__init__(self.detail)\n47: \n48: \n49: async def notFoundErrorHandler(request: Request, exc: NotFoundError) -> JSONResponse:\n50:   \"\"\"\n51:   Handler for NotFoundError exceptions.\n52:   Returns 404 response with error detail.\n53:   \"\"\"\n54:   return JSONResponse(\n55:     status_code=HTTP_404_NOT_FOUND,\n56:     content={\n57:       \"error\": \"not_found\",\n58:       \"detail\": exc.detail,\n59:       \"path\": str(request.url),\n60:     },\n61:   )\n62: \n63: \n64: async def forbiddenErrorHandler(request: Request, exc: ForbiddenError) -> JSONResponse:\n65:   \"\"\"\n66:   Handler for ForbiddenError exceptions.\n67:   Returns 403 response with error detail.\n68:   \"\"\"\n69:   return JSONResponse(\n70:     status_code=HTTP_403_FORBIDDEN,\n71:     content={\n72:       \"error\": \"forbidden\",\n73:       \"detail\": exc.detail,\n74:       \"path\": str(request.url),\n75:     },\n76:   )\n77: \n78: \n79: async def validationErrorHandler(request: Request, exc: ValidationError) -> JSONResponse:\n80:   \"\"\"\n81:   Handler for ValidationError exceptions.\n82:   Returns 422 response with error detail and optional errors.\n83:   \"\"\"\n84:   content = {\n85:     \"error\": \"validation_error\",\n86:     \"detail\": exc.detail,\n87:     \"path\": str(request.url),\n88:   }\n89:   if exc.errors is not None:\n90:     content[\"errors\"] = exc.errors\n91:   return JSONResponse(\n92:     status_code=HTTP_422_UNPROCESSABLE_ENTITY,\n93:     content=content,\n94:   )\n95: \n96: \n97: def registerExceptionHandlers(app: FastAPI) -> None:\n98:   \"\"\"\n99:   Register custom exception handlers to the FastAPI app.\n100:   \"\"\"\n101:   app.add_exception_handler(NotFoundError, notFoundErrorHandler)\n102:   app.add_exception_handler(ForbiddenError, forbiddenErrorHandler)\n103:   app.add_exception_handler(ValidationError, validationErrorHandler)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 8,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'Any' from typing is unused in this code.\"\n    },\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'FastAPI' from fastapi is unused in this code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'Any' from typing is unused in this code."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'FastAPI' from fastapi is unused in this code."
+      }
+    ]
+  },
+  "latency_ms": 11040.9,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

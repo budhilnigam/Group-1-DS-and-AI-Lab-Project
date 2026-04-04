@@ -1,0 +1,63 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: utils/helpers.py\n3: \n4: This module provides utility functions for managing experiments in a\n5: scikit-learn project. It includes functions for setting random seeds,\n6: logging experiment results, formatting results for output, and a timer\n7: decorator for measuring execution time of functions.\n8: \"\"\"\n9: \n10: import os\n11: import time\n12: import logging\n13: import numpy as np\n14: import random\n15: from typing import Callable, Any, Dict, Optional\n16: \n17: \n18: def setSeed(seed: int) -> None:\n19:     \"\"\"Set the random seed for reproducibility.\n20: \n21:     Args:\n22:         seed (int): The seed value to set for random number generators.\n23:     \"\"\"\n24:     np.random.seed(seed)\n25:     random.seed(seed)\n26: \n27: \n28: def logExperiment(\n29:     experimentName: str,\n30:     parameters: Dict[str, Any],\n31:     results: Dict[str, Any],\n32:     logFile: [] = []\n33: ):\n34:     # Log experiment details to a file or the console.\n35:     # Args:\n36:     #     experiment_name (str): The name of the experiment.\n37:     #     parameters (Dict[str, Any]): The parameters used in the experiment.\n38:     #     results (Dict[str, Any]): The results obtained from the experiment.\n39:     #     log_file (Optional[str]): The file to log to. If None, logs to console.\n40:     log_message = f\"Experiment: {experimentName}\\n\"\n41:     log_message += \"Parameters:\\n\" + \"\\n\".join(\n42:         f\"{key}: {value}\" for key, value in parameters.items()\n43:     ) + \"\\n\"\n44:     log_message += \"Results:\\n\" + \"\\n\".join(\n45:         f\"{key}: {value}\" for key, value in results.items()\n46:     )\n47: \n48:     if logFile:\n49:         logging.basicConfig(filename=logFile, level=logging.INFO)\n50:         logging.info(log_message)\n51:     else:\n52:         print(log_message)\n53: \n54: \n55: def formatResults(results: Dict[str, Any] = {}):\n56:     \"\"\"Format the results for display.\n57:     Args:\n58:         results (Dict[str, Any]): The results to format.\n59:     Returns:\n60:         str: A formatted string representation of the results.\n61:     \"\"\"\n62:     formatted_results = \"\\n\".join(\n63:         f\"{key}: {value}\" for key, value in results.items()\n64:     )\n65:     return formatted_results\n66: \n67: \n68: def timer_decorator(func: Callable) -> Callable:\n69:     \"\"\"Decorator to time the execution of a function.\n70: \n71:     Args:\n72:         func (Callable): The function to decorate.\n73: \n74:     Returns:\n75:         Callable: The wrapped function with timing functionality.\n76:     \"\"\"\n77:     def wrapper(*args, **kwargs) -> Any:\n78:         start_time = time.time()\n79:         result = func(*args, **kwargs)\n80:         end_time = time.time()\n81:         execution_time = end_time - start_time\n82:         print(f\"Execution time for {func.__name__}: {execution_time:.4f} seconds\")\n83:         return result\n84: \n85:     return wrapper\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 33,\n  \"violation_category\": \"mutable_default\",\n  \"review_comment\": \"Using a mutable default argument (list) can lead to unexpected behavior since the same list instance is shared across calls.\",\n  \"guideline_chunks_used\": [\"chunk_0075\"]\n}",
+  "parsed_response": {
+    "line_number": 33,
+    "violation_category": "mutable_default",
+    "review_comment": "Using a mutable default argument (list) can lead to unexpected behavior since the same list instance is shared across calls.",
+    "guideline_chunks_used": [
+      "chunk_0075"
+    ]
+  },
+  "latency_ms": 13811.2,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nutils/helpers.py\n\nThis module provides utility functions for managing experiments in a\nscikit-learn project. It includes functions for setting random seeds,\nlogging experiment results, formatting results for output, and a timer\ndecorator for measuring execution time of functions.\n\"\"\"\n\nimport os\nimport time\nimport logging\nimport numpy as np\nimport random\nfrom typing import Callable, Any, Dict, Optional\n\n\ndef setSeed(seed: int) -> None:\n    \"\"\"Set the random seed for reproducibility.\n\n    Args"
+}

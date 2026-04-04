@@ -1,0 +1,33 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: CRUD operations for User entity in FastAPI project.\n3: \n4: This module provides asynchronous data access methods for the User model,\n5: including retrieval, creation, update, and deletion using an async session.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: from typing import List, Optional\n13: \n14: from sqlalchemy.ext.asyncio import AsyncSession\n15: from sqlalchemy import select, update, delete\n16: from sqlalchemy.exc import NoResultFound\n17: \n18: from models.user import User\n19: from schemas.user import UserCreate, UserUpdate\n20: \n21: \n22: async def get_user(session: AsyncSession, user_id: int) -> Optional[User]:\n23:   \"\"\"\n24:   Retrieve a user by their ID.\n25: \n26:   Args:\n27:       session (AsyncSession): Database session.\n28:       user_id (int): The ID of the user.\n29: \n30:   Returns:\n31:       Optional[User]: The user instance, or None if not found.\n32:   \"\"\"\n33:   result = await session.execute(select(User).where(User.id == user_id))\n34:   user = result.scalar_one_or_none()\n35:   return user\n36: \n37: \n38: async def get_users(session: AsyncSession, skip: int = 0, limit: int = 100) -> List[User]:\n39:   \"\"\"\n40:   Retrieve multiple users with optional pagination.\n41: \n42:   Args:\n43:       session (AsyncSession): Database session.\n44:       skip (int): Number of records to skip.\n45:       limit (int): Maximum number of records to return.\n46: \n47:   Returns:\n48:       List[User]: List of User instances.\n49:   \"\"\"\n50:   result = await session.execute(\n51:     select(User).offset(skip).limit(limit)\n52:   )\n53:   users = result.scalars().all()\n54:   return users\n55: \n56: \n57: async def create_user(session: AsyncSession, user_in: UserCreate) -> User:\n58:   \"\"\"\n59:   Create a new user.\n60: \n61:   Args:\n62:       session (AsyncSession): Database session.\n63:       user_in (UserCreate): Data for the new user.\n64: \n65:   Returns:\n66:       User: The created user instance.\n67:   \"\"\"\n68:   user = User(**user_in.dict())\n69:   session.add(user)\n70:   await session.commit()\n71:   await session.refresh(user)\n72:   return user\n73: \n74: \n75: async def update_user(session: AsyncSession, user_id: int, user_in: UserUpdate) -> Optional[User]:\n76:   \"\"\"\n77:   Update an existing user.\n78: \n79:   Args:\n80:       session (AsyncSession): Database session.\n81:       user_id (int): The ID of the user to update.\n82:       user_in (UserUpdate): Data to update.\n83: \n84:   Returns:\n85:       Optional[User]: The updated user instance, or None if not found.\n86:   \"\"\"\n87:   result = await session.execute(select(User).where(User.id == user_id))\n88:   user = result.scalar_one_or_none()\n89:   if not user:\n90:     return None\n91:   for key, value in user_in.dict(exclude_unset=True).items():\n92:     setattr(user, key, value)\n93:   await session.commit()\n94:   await session.refresh(user)\n95:   return user\n96: \n97: \n98: async def delete_user(session: AsyncSession, user_id: int) -> bool:\n99:   \"\"\"\n100:   Delete a user by ID.\n101: \n102:   Args:\n103:       session (AsyncSession): Database session.\n104:       user_id (int): The ID of the user to delete.\n105: \n106:   Returns:\n107:       bool: True if deleted, False if not found.\n108:   \"\"\"\n109:   result = await session.execute(select(User).where(User.id == user_id))\n110:   user = result.scalar_one_or_none()\n111:   if not user:\n112:     return False\n113:   await session.delete(user)\n114:   await session.commit()\n115:   return True\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 8,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 13273.1,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

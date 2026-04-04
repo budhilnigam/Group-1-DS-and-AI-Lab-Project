@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Configuration module for FastAPI project.\n3: \n4: Defines application settings using Pydantic BaseSettings.\n5: Settings are loaded from environment variables and optional .env file.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: from typing import Any, Dict\n12: \n13: from pydantic import BaseSettings, Field, validator\n14: \n15: \n16: class AppSettings(BaseSettings):\n17:     \"\"\"\n18:     Application settings loaded from environment variables or .env file.\n19: \n20:     Attributes:\n21:         database_url (str): Database connection URL.\n22:         secret_key (str): Secret key for cryptographic operations.\n23:         debug (bool): Enable or disable debug mode.\n24:     \"\"\"\n25:     database_url: str = Field(..., env=\"DATABASE_URL\")\n26:     secret_key: str = Field(..., env=\"SECRET_KEY\")\n27:     debug: bool = Field(False, env=\"DEBUG\")\n28: \n29:     class Config:\n30:         env_file = \".env\"\n31:         env_file_encoding = \"utf-8\"\n32:         case_sensitive = True\n33: \n34:     @validator(\"database_url\")\n35:     def validate_database_url(cls, v: str) -> str:\n36:         if not v.startswith((\"postgresql://\", \"mysql://\", \"sqlite://\")):\n37:             raise ValueError(\"Unsupported database URL scheme\")\n38:         return v\n39: \n40:     @validator(\"secret_key\")\n41:     def validate_secret_key(cls, v: str) -> str:\n42:         if len(v) < 16:\n43:             raise ValueError(\"SECRET_KEY must be at least 16 characters\")\n44:         return v\n45: \n46:     @validator(\"debug\", pre=True)\n47:     def cast_debug(cls, v: Any) -> bool:\n48:         if isinstance(v, bool):\n49:             return v\n50:         if isinstance(v, str):\n51:             return v.lower() in (\"1\", \"true\", \"yes\", \"on\")\n52:         return bool(v)\n53: \n54:     def dict(self) -> Dict[str, Any]:\n55:         \"\"\"\n56:         Return settings as a dictionary.\n57:         \"\"\"\n58:         return {\n59:             \"database_url\": self.database_url,\n60:             \"secret_key\": self.secret_key,\n61:             \"debug\": self.debug,\n62:         }\n63: \n64: \n65: settings = AppSettings()\n66: \n67: \n68: def get_settings() -> AppSettings:\n69:     \"\"\"\n70:     Returns the current application settings instance.\n71: \n72:     Returns:\n73:         AppSettings: The current settings.\n74:     \"\"\"\n75:     return settings\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sys' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 12902.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nConfiguration module for FastAPI project.\n\nDefines application settings using Pydantic BaseSettings.\nSettings are loaded from environment variables and optional .env file.\n\"\"\"\n\nimport os\nimport sys\nimport re\nfrom typing import Any, Dict\n\nfrom pydantic import BaseSettings, Field, validator\n\n\nclass AppSettings(BaseSettings):\n    \"\"\"\n    Application settings loaded from environment variables or .env file.\n\n    Attributes:\n        database_url (str): Database connection URL.\n        secret_key ("
+}

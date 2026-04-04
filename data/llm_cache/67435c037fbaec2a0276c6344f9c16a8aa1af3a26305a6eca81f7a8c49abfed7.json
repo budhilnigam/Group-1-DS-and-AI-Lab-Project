@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Unit tests for Django forms.\"\"\"\n2: \n3: import os\n4: import sys\n5: import re\n6: \n7: from django.test import TestCase\n8: from myapp.forms import ExampleForm\n9: from myapp.models import ExampleModel\n10: \n11: \n12: class ExampleFormTestCase(TestCase):\n13:   \"\"\"TestCase for validating ExampleForm behavior.\"\"\"\n14: \n15:       def setUp(self) -> None:\n16:           \"\"\"Set up test data for form testing.\"\"\"\n17:           self.valid_data = {\n18:             \"title\": \"Unique Title\",\n19:             \"description\": \"This is a valid description.\",\n20:           }\n21:           self.existing_instance = ExampleModel.objects.create(\n22:               title=\"Existing Title\",\n23:               description=\"Existing description.\",\n24:           )\n25: \n26:     def test_valid_form(self) -> None:\n27:         \"\"\"Test that the form is valid with valid data.\"\"\"\n28:         form = ExampleForm(data=self.valid_data)\n29:         self.assertTrue(form.is_valid())\n30:         self.assertEqual(form.cleaned_data[\"title\"], self.valid_data[\"title\"])\n31:         self.assertEqual(form.cleaned_data[\"description\"], self.valid_data[\"description\"])\n32: \n33:     def test_empty_form(self) -> None:\n34:         \"\"\"Test that the form is invalid with empty data.\"\"\"\n35:         form = ExampleForm(data={})\n36:         self.assertFalse(form.is_valid())\n37:         self.assertIn(\"title\", form.errors)\n38:         self.assertIn(\"description\", form.errors)\n39: \n40:       def test_duplicate_title_validation(self) -> None:\n41:           \"\"\"Test that the form raises validation error for duplicate titles.\"\"\"\n42:           duplicate_data = {\n43:               \"title\": self.existing_instance.title,\n44:               \"description\": \"Another description.\",\n45:           }\n46:           form = ExampleForm(data=duplicate_data)\n47:           self.assertFalse(form.is_valid())\n48:           self.assertIn(\"title\", form.errors)\n49:           self.assertEqual(\n50:               form.errors[\"title\"][0],\n51:               \"An item with this title already exists.\"\n52:           )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 3,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 3,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used in the code."
+  },
+  "latency_ms": 5500.1,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

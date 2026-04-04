@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: data_loader.py\n3: \n4: This module provides functions to load data from various sources using pandas.\n5: Supported formats include CSV, Excel, JSON, and SQL. Each function includes\n6: dtype specifications and basic error handling to ensure smooth data loading.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: from typing import Optional, Dict, Union\n11: \n12: def loadCsv(filePath: str, dtype: Optional[Dict[str, Union[str, type]]] = None, **kwargs) -> pd.DataFrame:\n13:     \"\"\"\n14:     Load data from a CSV file.\n15: \n16:     Args:\n17:         file_path (str): Path to the CSV file.\n18:         dtype (Optional[Dict[str, Union[str, type]]]): Data types for columns.\n19:         **kwargs: Additional arguments to pass to pd.read_csv.\n20: \n21:     Returns:\n22:         pd.DataFrame: Loaded DataFrame.\n23: \n24:     Raises:\n25:         FileNotFoundError: If the file does not exist.\n26:         pd.errors.ParserError: If there are issues parsing the CSV file.\n27:     \"\"\"\n28:     try:\n29:         return pd.read_csv(filePath, dtype=dtype, **kwargs)\n30:     except FileNotFoundError as e:\n31:         raise FileNotFoundError(f\"CSV file not found: {filePath}\") from e\n32:     except pd.errors.ParserError as e:\n33:         raise pd.errors.ParserError(f\"Error parsing CSV file: {filePath}\") from e\n34: \n35: \n36: def loadExcel(filePath: str, sheetName: Optional[Union[str, int]] = 0, dtype: Optional[Dict[str, Union[str, type]]] = None, **kwargs) -> pd.DataFrame:\n37:     \"\"\"\n38:     Load data from an Excel file.\n39: \n40:     Args:\n41:         file_path (str): Path to the Excel file.\n42:         sheet_name (Optional[Union[str, int]]): Sheet name or index to load.\n43:         dtype (Optional[Dict[str, Union[str, type]]]): Data types for columns.\n44:         **kwargs: Additional arguments to pass to pd.read_excel.\n45: \n46:     Returns:\n47:         pd.DataFrame: Loaded DataFrame.\n48: \n49:     Raises:\n50:         FileNotFoundError: If the file does not exist.\n51:         ValueError: If the specified sheet is not found.\n52:     \"\"\"\n53:     try:\n54:         return pd.read_excel(filePath, sheet_name=sheetName, dtype=dtype, **kwargs)\n55:     except FileNotFoundError as e:\n56:         raise FileNotFoundError(f\"Excel file not found: {filePath}\") from e\n57:     except ValueError as e:\n58:         raise ValueError(f\"Sheet not found in Excel file: {sheetName}\") from e\n59: \n60: \n61: def loadJson(filePath: str, dtype: Optional[Dict[str, Union[str, type]]] = None, **kwargs) -> pd.DataFrame:\n62:     \"\"\"\n63:     Load data from a JSON file.\n64: \n65:     Args:\n66:         file_path (str): Path to the JSON file.\n67:         dtype (Optional[Dict[str, Union[str, type]]]): Data types for columns.\n68:         **kwargs: Additional arguments to pass to pd.read_json.\n69: \n70:     Returns:\n71:         pd.DataFrame: Loaded DataFrame.\n72: \n73:     Raises:\n74:         FileNotFoundError: If the file does not exist.\n75:         ValueError: If there are issues parsing the JSON file.\n76:     \"\"\"\n77:     try:\n78:         return pd.read_json(filePath, dtype=dtype, **kwargs)\n79:     except FileNotFoundError as e:\n80:         raise FileNotFoundError(f\"JSON file not found: {filePath}\") from e\n81:     except ValueError as e:\n82:         raise ValueError(f\"Error parsing JSON file: {filePath}\") from e\n83: \n84: \n85: def loadSql(query: str, connectionString: str, **kwargs) -> pd.DataFrame:\n86:     \"\"\"\n87:     Load data from a SQL database.\n88: \n89:     Args:\n90:         query (str): SQL query to execute.\n91:         connection_string (str): Database connection string.\n92:         **kwargs: Additional arguments to pass to pd.read_sql.\n93: \n94:     Returns:\n95:         pd.DataFrame: Loaded DataFrame.\n96: \n97:     Raises:\n98:         ValueError: If there is an error with the SQL query or connection.\n99:     \"\"\"\n100:     try:\n101:         with pd.io.sql.connect(connectionString) as conn:\n102:             return pd.read_sql(query, conn, **kwargs)\n103:     except ValueError as e:\n104:         raise ValueError(f\"Error executing SQL query: {query}\") from e\n105:     except Exception as e:\n106:         raise Exception(f\"An error occurred with the database connection: {connectionString}\") from e\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 12,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"Function name 'loadCsv' should be in snake_case as 'load_csv'.\",\n  \"guideline_chunks_used\": [\"chunk_0423\", \"chunk_0046\"]\n}",
+  "parsed_response": {
+    "line_number": 12,
+    "violation_category": "naming_convention",
+    "review_comment": "Function name 'loadCsv' should be in snake_case as 'load_csv'.",
+    "guideline_chunks_used": [
+      "chunk_0423",
+      "chunk_0046"
+    ]
+  },
+  "latency_ms": 17787.5,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ndata_loader.py\n\nThis module provides functions to load data from various sources using pandas.\nSupported formats include CSV, Excel, JSON, and SQL. Each function includes\ndtype specifications and basic error handling to ensure smooth data loading.\n\"\"\"\n\nimport pandas as pd\nfrom typing import Optional, Dict, Union\n\ndef loadCsv(filePath: str, dtype: Optional[Dict[str, Union[str, type]]] = None, **kwargs) -> pd.DataFrame:\n    \"\"\"\n    Load data from a CSV file.\n\n    Args:\n        file_path (str):"
+}

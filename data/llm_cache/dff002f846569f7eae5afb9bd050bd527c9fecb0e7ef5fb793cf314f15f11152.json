@@ -1,0 +1,33 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Admin configuration for the blog application.\n3: \n4: This module defines the ModelAdmin classes for managing models in the Django\n5: admin interface. It includes configuration for displaying, searching, filtering,\n6: and managing fields in the admin interface.\n7: \"\"\"\n8: \n9: import os\n10: import sys\n11: import re\n12: \n13: from typing import Any, Optional\n14: \n15: from django.contrib import admin\n16: from django.db.models import QuerySet\n17: \n18: from .models import Article\n19: \n20: \n21: class ArticleAdmin(admin.ModelAdmin):\n22:     \"\"\"\n23:     Admin configuration for the Article model.\n24:     \"\"\"\n25: \n26:     list_display = ('title', 'author', 'publication_date', 'is_published')\n27:     search_fields = ('title', 'content', 'author__username')\n28:     list_filter = ('is_published', 'publication_date', 'author')\n29:     prepopulated_fields = {'slug': ('title',)}\n30: \n31:     def get_queryset(self, request: Any) -> QuerySet:\n32:         \"\"\"\n33:         Customize the queryset to include additional annotations or filters.\n34: \n35:         Args:\n36:             request (Any): The current HttpRequest object.\n37: \n38:         Returns:\n39:             QuerySet: The queryset for the admin interface.\n40:         \"\"\"\n41:         qs = super().get_queryset(request)\n42:         return qs\n43: \n44:     def save_model(\n45:         self, request: Any, obj: Article, form: Any, change: bool\n46:     ) -> None:\n47:         \"\"\"\n48:         Override the save_model method to perform additional actions during save.\n49: \n50:         Args:\n51:             request (Any): The current HttpRequest object.\n52:             obj (Article): The Article instance being saved.\n53:             form (Any): The form used to edit the instance.\n54:             change (bool): True if the object is being changed, False if being created.\n55:         \"\"\"\n56:         if not obj.author:\n57:             obj.author = request.user\n58:         super().save_model(request, obj, form, change)\n59: \n60:     def delete_model(self, request: Any, obj: Article) -> None:\n61:         \"\"\"\n62:         Override the delete_model method to handle custom delete logic.\n63: \n64:         Args:\n65:             request (Any): The current HttpRequest object.\n66:             obj (Article): The Article instance being deleted.\n67:         \"\"\"\n68:         # Custom delete logic can be added here if needed\n69:         super().delete_model(request, obj)\n70: \n71:     def has_change_permission(\n72:         self, request: Any, obj: Optional[Article] = None\n73:     ) -> bool:\n74:         \"\"\"\n75:         Restrict change permissions based on custom logic.\n76: \n77:         Args:\n78:             request (Any): The current HttpRequest object.\n79:             obj (Optional[Article]): The Article instance being checked.\n80: \n81:         Returns:\n82:             bool: Whether the user has change permission.\n83:         \"\"\"\n84:         if obj and obj.is_published:\n85:             return False\n86:         return super().has_change_permission(request, obj)\n87: \n88: \n89: admin.site.register(Article, ArticleAdmin)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 11,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 17712.0,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

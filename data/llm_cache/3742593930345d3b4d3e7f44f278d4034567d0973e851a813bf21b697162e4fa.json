@@ -1,0 +1,66 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Forms for user authentication using WTForms.\n2: \n3: This module includes the LoginForm and RegistrationForm classes,\n4: which define the fields and validators required for user login\n5: and registration processes.\n6: \"\"\"\n7: \n8: from flask_wtf import FlaskForm\n9: from wtforms import StringField, PasswordField, SubmitField\n10: from wtforms.validators import DataRequired, Email, EqualTo\n11: \n12: \n13: class LoginForm(FlaskForm):\n14:     \"\"\"Form for user login.\"\"\"\n15: \n16:     email = StringField('Email', validators=[DataRequired(), Email()])\n17:     password = PasswordField('Password', validators=[DataRequired()])\n18:     submit = SubmitField('Login')\n19: \n20: \n21: class RegistrationForm(FlaskForm):\n22:     \"\"\"Form for user registration.\"\"\"\n23: \n24:     username = StringField('Username', validators=[DataRequired()])\n25:     email = StringField('Email', validators=[DataRequired(), Email()])\n26:     password = PasswordField('Password', validators=[DataRequired()])\n27:     confirm_password = PasswordField(\n28:         'Confirm Password',\n29:         validators=[DataRequired(), EqualTo('password')]\n30:     )\n31:     submit = SubmitField('Register')\n32: \n33:     def __init__(self, *args, **kwargs):\n34:         \"\"\"Initialize RegistrationForm with optional defaults.\"\"\"\n35:         super().__init__(*args, **kwargs)\n36:         self.default_data = kwargs.get('default_data', {})\n37: \n38:     def validate_username(self, field):\n39:         \"\"\"Validate the username field.\"\"\"\n40:         if not field.data:\n41:             raise ValueError('Username is required.')\n42:         # Assume some validation logic here\n43: \n44:     def validate_email(self, field):\n45:         \"\"\"Validate the email field.\"\"\"\n46:         if not field.data:\n47:             raise ValueError('Email is required.')\n48:         # Assume some validation logic here\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 1,\n  \"violation_category\": \"documentation_formatting\",\n  \"review_comment\": \"The docstring lacks a blank line after the summary line, which is required for multi-line docstrings according to PEP 257.\",\n  \"guideline_chunks_used\": [\"chunk_0497\", \"chunk_0108\", \"chunk_0304\", \"chunk_0085\"]\n}",
+  "parsed_response": {
+    "line_number": 1,
+    "violation_category": "documentation_formatting",
+    "review_comment": "The docstring lacks a blank line after the summary line, which is required for multi-line docstrings according to PEP 257.",
+    "guideline_chunks_used": [
+      "chunk_0497",
+      "chunk_0108",
+      "chunk_0304",
+      "chunk_0085"
+    ]
+  },
+  "latency_ms": 14643.2,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Forms for user authentication using WTForms.\n\nThis module includes the LoginForm and RegistrationForm classes,\nwhich define the fields and validators required for user login\nand registration processes.\n\"\"\"\n\nfrom flask_wtf import FlaskForm\nfrom wtforms import StringField, PasswordField, SubmitField\nfrom wtforms.validators import DataRequired, Email, EqualTo\n\n\nclass LoginForm(FlaskForm):\n    \"\"\"Form for user login.\"\"\"\n\n    email = StringField('Email', validators=[DataRequired(), Email()])\n    p"
+}

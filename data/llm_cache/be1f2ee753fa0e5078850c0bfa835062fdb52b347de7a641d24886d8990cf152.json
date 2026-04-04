@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Utilities for cleaning and transforming DataFrames.\"\"\"\n2: \n3: import numpy as np\n4: import pandas as pd\n5: \n6: \n7: def remove_outliers(df, column, method=\"iqr\", threshold=1.5):\n8:     \"\"\"\n9:     Remove outlier rows from a DataFrame based on a numeric column.\n10: \n11:     Args:\n12:         df (pd.DataFrame): The input data.\n13:         column (str): Name of the column to check for outliers.\n14:         method (str): Outlier detection method ('iqr' or 'zscore').\n15:         threshold (float): Sensitivity threshold.\n16: \n17:     Returns:\n18:         pd.DataFrame: Filtered DataFrame.\n19:     \"\"\"\n20:     if method == \"iqr\":\n21:         q1 = df[column].quantile(0.25)\n22:         q3 = df[column].quantile(0.75)\n23:         iqr = q3 - q1\n24:         lower = q1 - threshold * iqr\n25:         upper = q3 + threshold * iqr\n26:         return df[(df[column] >= lower) & (df[column] <= upper)]\n27:     elif method == \"zscore\":\n28:         mean = df[column].mean()\n29:         std = df[column].std()\n30:         zScores = (df[column] - mean) / std\n31:         return df[zScores.abs() <= threshold]\n32:     else:\n33:         raise ValueError(f\"Unknown method: {method}\")\n34: \n35: \n36: def fill_missing(df, strategy=\"mean\", columns=None):\n37:     \"\"\"\n38:     Fill missing values in specified columns.\n39: \n40:     Args:\n41:         df (pd.DataFrame): Input DataFrame.\n42:         strategy (str): Fill strategy ('mean', 'median', 'mode', 'zero').\n43:         columns: List of columns to fill. If None, fills all numeric columns.\n44: \n45:     Returns:\n46:         pd.DataFrame: DataFrame with missing values filled.\n47:     \"\"\"\n48:     Df = df.copy()\n49:     if columns is None:\n50:         columns = Df.select_dtypes(include=[np.number]).columns.tolist()\n51: \n52:     for Col in columns:\n53:         if strategy == \"mean\":\n54:             Df[Col] = Df[Col].fillna(Df[Col].mean())\n55:         elif strategy == \"median\":\n56:             Df[Col] = Df[Col].fillna(Df[Col].median())\n57:         elif strategy == \"mode\":\n58:             Df[Col] = Df[Col].fillna(Df[Col].mode()[0])\n59:         elif strategy == \"zero\":\n60:             Df[Col] = Df[Col].fillna(0)\n61:     return Df\n62: \n63: \n64: def normalize_columns(df, columns, method=\"minmax\"):\n65:     \"\"\"Normalize columns of a DataFrame.\n66: \n67:     Args:\n68:         df: The input DataFrame.\n69:         columns: Columns to normalize.\n70:         method: Normalization method ('minmax' or 'standard').\n71: \n72:     Returns:\n73:         pd.DataFrame: Normalized DataFrame.\n74:     \"\"\"\n75:     Result = df.copy()\n76:     for col in columns:\n77:         if method == \"minmax\":\n78:             minVal = Result[col].min()\n79:             maxVal = Result[col].max()\n80:             Result[col] = (Result[col] - minVal) / (maxVal - minVal)\n81:         elif method == \"standard\":\n82:             Result[col] = (Result[col] - Result[col].mean()) / Result[col].std()\n83:     return Result\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 3,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'numpy' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 3,
+    "violation_category": "unused_import",
+    "review_comment": "The 'numpy' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 13958.6,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Utilities for cleaning and transforming DataFrames.\"\"\"\n\nimport numpy as np\nimport pandas as pd\n\n\ndef remove_outliers(df, column, method=\"iqr\", threshold=1.5):\n    \"\"\"\n    Remove outlier rows from a DataFrame based on a numeric column.\n\n    Args:\n        df (pd.DataFrame): The input data.\n        column (str): Name of the column to check for outliers.\n        method (str): Outlier detection method ('iqr' or 'zscore').\n        threshold (float): Sensitivity threshold.\n\n    Returns:\n        pd.D"
+}

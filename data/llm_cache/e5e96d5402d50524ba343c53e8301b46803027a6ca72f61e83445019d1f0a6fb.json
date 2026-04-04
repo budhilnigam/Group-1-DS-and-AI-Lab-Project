@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: utils/helpers.py\n3: \n4: Helper functions for FastAPI projects:\n5: - generate_slug: Creates URL-friendly slugs from strings.\n6: - format_response: Standardizes API responses.\n7: - calculate_offset: Computes offset for pagination.\n8: - sanitize_input: Cleans input strings to prevent injection attacks.\n9: \"\"\"\n10: \n11: import re\n12: import html\n13: import unicodedata\n14: import os\n15: import sys\n16: import re as regex\n17: \n18: def generateSlug(text: str, separator: str = '-') -> str:\n19:     \"\"\"\n20:     Generate a URL-friendly slug from the given text.\n21: \n22:     Args:\n23:         text (str): Input string to convert.\n24:         separator (str): Separator for words, default '-'.\n25: \n26:     Returns:\n27:         str: Slugified string.\n28:     \"\"\"\n29:     # Normalize unicode characters\n30:     normalized = unicodedata.normalize('NFKD', text)\n31:     ascii_text = normalized.encode('ascii', 'ignore').decode('ascii')\n32:     # Lowercase and strip\n33:     ascii_text = ascii_text.lower().strip()\n34:     # Remove unwanted characters\n35:     ascii_text = re.sub(r'[^a-z0-9\\s_-]', '', ascii_text)\n36:     # Replace whitespace and underscores with separator\n37:     ascii_text = re.sub(r'[\\s_]+', separator, ascii_text)\n38:     # Remove leading/trailing separator\n39:     slug = ascii_text.strip(separator)\n40:     return slug\n41: \n42: \n43: def formatResponse(\n44:     data: Any,\n45:     message: Optional[str] = None,\n46:     status: str = 'success',\n47:     code: int = 200,\n48:     extra: Optional[Dict[str, Any]] = None\n49: ) -> Dict[str, Any]:\n50:     \"\"\"\n51:     Standardize API response format.\n52: \n53:     Args:\n54:         data (Any): Main response data.\n55:         message (Optional[str]): Optional message.\n56:         status (str): Response status ('success', 'error').\n57:         code (int): HTTP status code.\n58:         extra (Optional[Dict[str, Any]]): Extra fields.\n59: \n60:     Returns:\n61:         Dict[str, Any]: Formatted response.\n62:     \"\"\"\n63:     response = {\n64:         'status': status,\n65:         'code': code,\n66:         'data': data\n67:     }\n68:     if message is not None:\n69:         response['message'] = message\n70:     if extra:\n71:         response.update(extra)\n72:     return response\n73: \n74: \n75: def calculateOffset(page: int, limit: int) -> int:\n76:     \"\"\"\n77:     Calculate offset for pagination queries.\n78: \n79:     Args:\n80:         page (int): Current page number (1-based).\n81:         limit (int): Number of items per page.\n82: \n83:     Returns:\n84:         int: Offset value.\n85:     \"\"\"\n86:     if page < 1:\n87:         page = 1\n88:     if limit < 1:\n89:         limit = 10\n90:     offset = (page - 1) * limit\n91:     return offset\n92: \n93: \n94: def sanitize_input(input_str: str, max_length: Optional[int] = None) -> str:\n95:     \"\"\"\n96:     Clean input string to prevent injection attacks.\n97: \n98:     Args:\n99:         input_str (str): Input string to sanitize.\n100:         max_length (Optional[int]): Maximum length of string.\n101: \n102:     Returns:\n103:         str: Sanitized string.\n104:     \"\"\"\n105:     # Remove HTML tags\n106:     clean_str = re.sub(r'<.*?>', '', input_str)\n107:     # Escape HTML entities\n108:     clean_str = html.escape(clean_str)\n109:     # Remove SQL meta-characters\n110:     clean_str = re.sub(r'(--|;|\\'|\"|\\\\)', '', clean_str)\n111:     # Trim whitespace\n112:     clean_str = clean_str.strip()\n113:     # Truncate if necessary\n114:     if max_length is not None and max_length > 0:\n115:         clean_str = clean_str[:max_length]\n116:     return clean_str\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 16,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The module 're' is imported twice, once as 're' and again as 'regex'. The second import is redundant.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0071\"]\n}",
+  "parsed_response": {
+    "line_number": 16,
+    "violation_category": "unused_import",
+    "review_comment": "The module 're' is imported twice, once as 're' and again as 'regex'. The second import is redundant.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0071"
+    ]
+  },
+  "latency_ms": 17791.6,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nutils/helpers.py\n\nHelper functions for FastAPI projects:\n- generate_slug: Creates URL-friendly slugs from strings.\n- format_response: Standardizes API responses.\n- calculate_offset: Computes offset for pagination.\n- sanitize_input: Cleans input strings to prevent injection attacks.\n\"\"\"\n\nimport re\nimport html\nimport unicodedata\nimport os\nimport sys\nimport re as regex\n\ndef generateSlug(text: str, separator: str = '-') -> str:\n    \"\"\"\n    Generate a URL-friendly slug from the given text.\n\n    A"
+}

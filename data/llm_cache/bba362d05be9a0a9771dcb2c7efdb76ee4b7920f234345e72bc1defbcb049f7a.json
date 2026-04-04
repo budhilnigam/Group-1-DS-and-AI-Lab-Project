@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: categorical_data.py\n3: \n4: This module provides functions for handling categorical data in pandas.\n5: It includes operations for encoding categories, defining ordered categories,\n6: and optimizing memory usage of categorical types.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: from typing import List, Union\n11: \n12: \n13: def encodeCategories(data_frame: pd.DataFrame, column: str, categories: List[str]) -> pd.DataFrame:\n14:     \"\"\"\n15:     Encodes a specified column in the DataFrame to a categorical type with given categories.\n16: \n17:     Parameters:\n18:         data_frame (pd.DataFrame): The DataFrame containing the data.\n19:         column (str): The name of the column to be encoded.\n20:         categories (List[str]): The list of categories to encode.\n21: \n22:     Returns:\n23:         pd.DataFrame: A DataFrame with the specified column encoded as a categorical type.\n24:     \"\"\"\n25:     if column not in data_frame.columns:\n26:         raise ValueError(f\"Column '{column}' does not exist in the DataFrame.\")\n27: \n28:     data_frame[column] = pd.Categorical(data_frame[column], categories=categories)\n29:     return data_frame\n30: \n31: \n32: def orderedCategories(data_frame: pd.DataFrame, column: str, categories: List[str]) -> pd.DataFrame:\n33:     \"\"\"\n34:     Converts a specified column in the DataFrame to an ordered categorical type.\n35: \n36:     Parameters:\n37:         data_frame (pd.DataFrame): The DataFrame containing the data.\n38:         column (str): The name of the column to be converted.\n39:         categories (List[str]): The list of categories to define the order.\n40: \n41:     Returns:\n42:         pd.DataFrame: A DataFrame with the specified column converted to an ordered categorical type.\n43:     \"\"\"\n44:     if column not in data_frame.columns:\n45:         raise ValueError(f\"Column '{column}' does not exist in the DataFrame.\")\n46: \n47:     data_frame[column] = pd.Categorical(data_frame[column], categories=categories, ordered=True)\n48:     return data_frame\n49: \n50: \n51: def memoryOptimizeCategories(data_frame: pd.DataFrame) -> pd.DataFrame:\n52:     \"\"\"\n53:     Optimizes the memory usage of all categorical columns in the DataFrame.\n54: \n55:     Parameters:\n56:         data_frame (pd.DataFrame): The DataFrame containing the data.\n57: \n58:     Returns:\n59:         pd.DataFrame: A DataFrame with optimized memory usage for categorical columns.\n60:     \"\"\"\n61:     for column in data_frame.select_dtypes(include=['object']).columns:\n62:         unique_values = data_frame[column].unique()\n63:         data_frame[column] = pd.Categorical(data_frame[column], categories=unique_values)\n64: \n65:     return data_frame\n66: \n67: \n68: def main() -> None:\n69:     \"\"\"\n70:     Example usage of the functions in the categorical_data module.\n71:     \"\"\"\n72:     # Example DataFrame\n73:     df = pd.DataFrame({\n74:         'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],\n75:         'gender': ['female', 'male', 'male', 'male', 'female'],\n76:         'status': ['single', 'married', 'single', 'married', 'single']\n77:     })\n78: \n79:     # Encoding categories\n80:     encoded_df = encodeCategories(df, 'gender', ['female', 'male'])\n81:     print(encoded_df)\n82: \n83:     # Ordered categories\n84:     ordered_df = orderedCategories(df, 'status', ['single', 'married'])\n85:     print(ordered_df)\n86: \n87:     # Memory optimization\n88:     optimized_df = memoryOptimizeCategories(df)\n89:     print(optimized_df.info())\n90: \n91: \n92: if __name__ == \"__main__\":\n93:     main()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'typing' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'typing' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 15784.9,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ncategorical_data.py\n\nThis module provides functions for handling categorical data in pandas.\nIt includes operations for encoding categories, defining ordered categories,\nand optimizing memory usage of categorical types.\n\"\"\"\n\nimport pandas as pd\nfrom typing import List, Union\n\n\ndef encodeCategories(data_frame: pd.DataFrame, column: str, categories: List[str]) -> pd.DataFrame:\n    \"\"\"\n    Encodes a specified column in the DataFrame to a categorical type with given categories.\n\n    Parameters:\n"
+}

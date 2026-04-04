@@ -1,0 +1,53 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Utility functions for a Flask project.\n2: \n3: This module provides various helper functions including:\n4: - Formatting datetime objects.\n5: - Slugifying strings for URL-friendly usage.\n6: - Paginating query results.\n7: - Sending emails using Flask-Mail.\n8: \"\"\"\n9: \n10: from datetime import datetime\n11: from typing import List, Any, Dict\n12: from urllib.parse import quote_plus\n13: from flask import request\n14: from flask_mail import Mail, Message\n15: \n16: \n17: def formatDateTime(dt: datetime, format_string: str = '%Y-%m-%d %H:%M:%S') -> str:\n18:   \"\"\"Format a datetime object into a string.\n19: \n20:   Args:\n21:       dt (datetime): The datetime object to format.\n22:       format_string (str): The format string.\n23: \n24:   Returns:\n25:       str: The formatted datetime string.\n26:   \"\"\"\n27:   return dt.strftime(format_string)\n28: \n29: \n30: def slugify(text: str) -> str:\n31:     \"\"\"Convert a string to a URL-friendly slug.\n32: \n33:     Args:\n34:         text (str): The input string to slugify.\n35: \n36:     Returns:\n37:         str: The slugified string.\n38:     \"\"\"\n39:     return quote_plus(text.lower().replace(' ', '-').replace('_', '-'))\n40: \n41: \n42: def paginateQuery(query: Any, page: int, per_page: int) -> Dict[str, Any]:\n43:       \"\"\"Paginate a database query result.\n44: \n45:       Args:\n46:           query (Any): The SQLAlchemy query object to paginate.\n47:           page (int): The page number to retrieve.\n48:           per_page (int): The number of items per page.\n49: \n50:       Returns:\n51:           Dict[str, Any]: A dictionary containing the paginated results and metadata.\n52:       \"\"\"\n53:       totalItems = query.count()\n54:       items = query.offset((page - 1) * per_page).limit(per_page).all()\n55:       return {\n56:           'items': items,\n57:           'total': totalItems,\n58:           'page': page,\n59:           'per_page': per_page,\n60:           'pages': (totalItems + per_page - 1) // per_page\n61:       }\n62: \n63: \n64: def sendEmail(subject: str, recipients: List[str], body: str) -> None:\n65:     \"\"\"Send an email using Flask-Mail.\n66: \n67:     Args:\n68:         subject (str): The subject of the email.\n69:         recipients (List[str]): The list of recipient email addresses.\n70:         body (str): The body of the email.\n71: \n72:     Raises:\n73:         Exception: If the email fails to send.\n74:     \"\"\"\n75:     mail = Mail()\n76:     msg = Message(subject, recipients=recipients)\n77:     msg.body = body\n78:     try:\n79:         mail.send(msg)\n80:     except Exception as e:\n81:         raise Exception(f\"Failed to send email: {e}\") from e\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 13,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'quote_plus' from 'urllib.parse' is used in the code.\"\n    },\n    {\n      \"line_number\": 14,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The imports 'Mail' and 'Message' from 'flask_mail' are used in the code.\"\n    },\n    {\n      \"line_number\": 15,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'request' from 'flask' is not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 17,\n      \"violation_category\": \"indentation\",\n      \"review_comment\": \"Function definitions should be indented with four spaces, but line 17 is indented inconsistently.\"\n    },\n    {\n      \"line_number\": 30,\n      \"violation_category\": \"indentation\",\n      \"review_comment\": \"Function definitions should be indented with four spaces, but line 30 is indented inconsistently.\"\n    },\n    {\n      \"line_number\": 42,\n      \"violation_category\": \"indentation\",\n      \"review_comment\": \"Function definitions should be indented with four spaces, but line 42 is indented inconsistently.\"\n    },\n    {\n      \"line_number\": 64,\n      \"violation_category\": \"indentation\",\n      \"review_comment\": \"Function definitions should be indented with four spaces, but line 64 is indented inconsistently.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'quote_plus' from 'urllib.parse' is used in the code."
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "The imports 'Mail' and 'Message' from 'flask_mail' are used in the code."
+      },
+      {
+        "line_number": 15,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'request' from 'flask' is not used anywhere in the code."
+      },
+      {
+        "line_number": 17,
+        "violation_category": "indentation",
+        "review_comment": "Function definitions should be indented with four spaces, but line 17 is indented inconsistently."
+      },
+      {
+        "line_number": 30,
+        "violation_category": "indentation",
+        "review_comment": "Function definitions should be indented with four spaces, but line 30 is indented inconsistently."
+      },
+      {
+        "line_number": 42,
+        "violation_category": "indentation",
+        "review_comment": "Function definitions should be indented with four spaces, but line 42 is indented inconsistently."
+      },
+      {
+        "line_number": 64,
+        "violation_category": "indentation",
+        "review_comment": "Function definitions should be indented with four spaces, but line 64 is indented inconsistently."
+      }
+    ]
+  },
+  "latency_ms": 27230.2,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

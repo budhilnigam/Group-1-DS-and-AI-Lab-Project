@@ -1,0 +1,53 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import os\n2: import sys\n3: import re\n4: from flask import Blueprint, request, jsonify, abort\n5: from typing import List, Dict, Any\n6: \n7: blog_bp = Blueprint('blog', __name__)\n8: \n9: # In-memory storage for blog posts (for demonstration purposes)\n10: posts: List[Dict[str, Any]] = []\n11: post_id_counter = 1\n12: \n13: \n14: @blog_bp.route('/posts', methods=['GET'])\n15: def list_posts() -> jsonify:\n16:   \"\"\"Retrieve a list of all blog posts.\"\"\"\n17:   return jsonify(posts), 200\n18: \n19: \n20: @blog_bp.route('/posts/<int:post_id>', methods=['GET'])\n21: def get_post(post_id: int) -> jsonify:\n22:       \"\"\"Retrieve a single blog post by its ID.\"\"\"\n23:       post = next((post for post in posts if post['id'] == post_id), None)\n24:       if post is None:\n25:           abort(404, description=\"Post not found\")\n26:       return jsonify(post), 200\n27: \n28: \n29: @blog_bp.route('/posts', methods=['POST'])\n30: def create_post() -> jsonify:\n31:       \"\"\"Create a new blog post.\"\"\"\n32:       global post_id_counter\n33:       data = request.get_json()\n34:       if not data or 'title' not in data or 'content' not in data:\n35:           abort(400, description=\"Invalid data\")\n36: \n37:       new_post = {\n38:           'id': post_id_counter,\n39:           'title': data['title'],\n40:           'content': data['content']\n41:       }\n42:       posts.append(new_post)\n43:       post_id_counter += 1\n44:       return jsonify(new_post), 201\n45: \n46: \n47: @blog_bp.route('/posts/<int:post_id>', methods=['PUT'])\n48: def update_post(post_id: int) -> jsonify:\n49:       \"\"\"Update an existing blog post by its ID.\"\"\"\n50:       data = request.get_json()\n51:       post = next((post for post in posts if post['id'] == post_id), None)\n52:       if post is None:\n53:           abort(404, description=\"Post not found\")\n54: \n55:       if 'title' in data:\n56:           post['title'] = data['title']\n57:       if 'content' in data:\n58:           post['content'] = data['content']\n59: \n60:       return jsonify(post), 200\n61: \n62: \n63: @blog_bp.route('/posts/<int:post_id>', methods=['DELETE'])\n64: def delete_post(post_id: int) -> jsonify:\n65:       \"\"\"Delete a blog post by its ID.\"\"\"\n66:       global posts\n67:       posts = [post for post in posts if post['id'] != post_id]\n68:       return jsonify({\"message\": \"Post deleted\"}), 204\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 1,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 3,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 15,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case).\"\n    },\n    {\n      \"line_number\": 20,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case).\"\n    },\n    {\n      \"line_number\": 29,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case).\"\n    },\n    {\n      \"line_number\": 47,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case).\"\n    },\n    {\n      \"line_number\": 63,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case).\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 15,
+        "violation_category": "naming_convention",
+        "review_comment": "Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case)."
+      },
+      {
+        "line_number": 20,
+        "violation_category": "naming_convention",
+        "review_comment": "Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case)."
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case)."
+      },
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case)."
+      },
+      {
+        "line_number": 63,
+        "violation_category": "naming_convention",
+        "review_comment": "Function names should be lowercase with words separated by underscores as necessary to improve readability (snake_case)."
+      }
+    ]
+  },
+  "latency_ms": 25934.4,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

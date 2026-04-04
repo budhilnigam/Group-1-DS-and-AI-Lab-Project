@@ -1,0 +1,66 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: forms.py\n3: \n4: This module contains Django ModelForms for the application. It includes:\n5: - ArticleForm: For creating and updating Article instances.\n6: - CategoryForm: For creating and updating Category instances.\n7: \n8: Both forms include custom field validation and widget configurations.\n9: \"\"\"\n10: \n11: from django import forms\n12: from django.core.exceptions import ValidationError\n13: from .models import Article, Category\n14: \n15: \n16: class ArticleForm(forms.ModelForm):\n17:     \"\"\"\n18:     Form for creating and updating Article instances.\n19:     Includes custom validation for the title field.\n20:     \"\"\"\n21:     class Meta:\n22:         model = Article\n23:         fields = ['title', 'content', 'category', 'published_at']\n24:         widgets = {\n25:             'title': forms.TextInput(attrs={\n26:                 'class': 'form-control',\n27:                 'placeholder': 'Enter article title'\n28:             }),\n29:             'content': forms.Textarea(attrs={\n30:                 'class': 'form-control',\n31:                 'placeholder': 'Enter article content',\n32:                 'rows': 10\n33:             }),\n34:             'category': forms.Select(attrs={\n35:                 'class': 'form-control'\n36:             }),\n37:             'published_at': forms.DateTimeInput(attrs={\n38:                 'class': 'form-control',\n39:                 'type': 'datetime-local'\n40:             })\n41:         }\n42: \n43:     def cleanTitle(self) -> str:\n44:         \"\"\"\n45:         Custom validation for the title field.\n46:         Ensures the title is unique and at least 10 characters long.\n47:         \"\"\"\n48:         title = self.cleaned_data.get('title', '').strip()\n49:         if len(title) < 10:\n50:             raise ValidationError(\"The title must be at least 10 characters long.\")\n51:         if Article.objects.filter(title=title).exists():\n52:             raise ValidationError(\"An article with this title already exists.\")\n53:         return title\n54: \n55: \n56: class CategoryForm(forms.ModelForm):\n57:     \"\"\"\n58:     Form for creating and updating Category instances.\n59:     Includes custom validation for the name field.\n60:     \"\"\"\n61:     class Meta:\n62:         model = Category\n63:         fields = ['name', 'description']\n64:         widgets = {\n65:             'name': forms.TextInput(attrs={\n66:                 'class': 'form-control',\n67:                 'placeholder': 'Enter category name'\n68:             }),\n69:             'description': forms.Textarea(attrs={\n70:                 'class': 'form-control',\n71:                 'placeholder': 'Enter category description',\n72:                 'rows': 5\n73:             })\n74:         }\n75: \n76:     def cleanName(self) -> str:\n77:         \"\"\"\n78:         Custom validation for the name field.\n79:         Ensures the name is unique and not too short.\n80:         \"\"\"\n81:         name = self.cleaned_data.get('name', '').strip()\n82:         if len(name) < 3:\n83:             raise ValidationError(\"The category name must be at least 3 characters long.\")\n84:         if Category.objects.filter(name=name).exists():\n85:             raise ValidationError(\"A category with this name already exists.\")\n86:         return name\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 43,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"The method name 'cleanTitle' should be in snake_case as 'clean_title'.\",\n  \"guideline_chunks_used\": [\"chunk_0423\", \"chunk_0362\", \"chunk_0361\", \"chunk_0046\"]\n}",
+  "parsed_response": {
+    "line_number": 43,
+    "violation_category": "naming_convention",
+    "review_comment": "The method name 'cleanTitle' should be in snake_case as 'clean_title'.",
+    "guideline_chunks_used": [
+      "chunk_0423",
+      "chunk_0362",
+      "chunk_0361",
+      "chunk_0046"
+    ]
+  },
+  "latency_ms": 13643.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nforms.py\n\nThis module contains Django ModelForms for the application. It includes:\n- ArticleForm: For creating and updating Article instances.\n- CategoryForm: For creating and updating Category instances.\n\nBoth forms include custom field validation and widget configurations.\n\"\"\"\n\nfrom django import forms\nfrom django.core.exceptions import ValidationError\nfrom .models import Article, Category\n\n\nclass ArticleForm(forms.ModelForm):\n    \"\"\"\n    Form for creating and updating Article instances.\n "
+}

@@ -1,0 +1,58 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"User model for SQLAlchemy in a Flask application.\n2: \n3: This module defines the User model, which includes fields for\n4: user identification and authentication. It also provides methods\n5: for password hashing and verification.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: from datetime import datetime\n13: from typing import Optional\n14: \n15: from flask_sqlalchemy import SQLAlchemy\n16: from werkzeug.security import generate_password_hash, check_password_hash\n17: \n18: db = SQLAlchemy()\n19: \n20: \n21: class User(db.Model):\n22:     \"\"\"User model for storing user information.\"\"\"\n23: \n24:     __tablename__ = 'users'\n25: \n26:     id: int = db.Column(db.Integer, primary_key=True)\n27:     username: str = db.Column(db.String(80), unique=True, nullable=False)\n28:     email: str = db.Column(db.String(120), unique=True, nullable=False)\n29:     password_hash: str = db.Column(db.String(128), nullable=False)\n30:     created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)\n31: \n32:     def __repr__(self) -> str:\n33:         \"\"\"Return a string representation of the User object.\"\"\"\n34:         return f'<User {self.username}>'\n35: \n36:     def set_password(self, password: str) -> None:\n37:         \"\"\"Hash the password and set the password_hash field.\n38: \n39:         Args:\n40:             password (str): The plaintext password to hash.\n41:         \"\"\"\n42:         self.password_hash = generate_password_hash(password)\n43: \n44:     def check_password(self, password: str) -> bool:\n45:         \"\"\"Check if the provided password matches the hashed password.\n46: \n47:         Args:\n48:             password (str): The plaintext password to check.\n49: \n50:         Returns:\n51:             bool: True if the password matches, False otherwise.\n52:         \"\"\"\n53:         return check_password_hash(self.password_hash, password)\n54: \n55:     @staticmethod\n56:     def get_by_username(username: str) -> Optional['User']:\n57:         \"\"\"Retrieve a user by username.\n58: \n59:         Args:\n60:             username (str): The username to search for.\n61: \n62:         Returns:\n63:             Optional[User]: The User object if found, None otherwise.\n64:         \"\"\"\n65:         return User.query.filter_by(username=username).first()\n66: \n67:     @staticmethod\n68:     def get_by_email(email: str) -> Optional['User']:\n69:         \"\"\"Retrieve a user by email.\n70: \n71:         Args:\n72:             email (str): The email to search for.\n73: \n74:         Returns:\n75:             Optional[User]: The User object if found, None otherwise.\n76:         \"\"\"\n77:         return User.query.filter_by(email=email).first()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 8,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 26,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Type annotations should be placed after the colon, not before it. Correct to: id: int = db.Column(db.Integer, primary_key=True)\"\n    },\n    {\n      \"line_number\": 27,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Type annotations should be placed after the colon, not before it. Correct to: username: str = db.Column(db.String(80), unique=True, nullable=False)\"\n    },\n    {\n      \"line_number\": 28,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Type annotations should be placed after the colon, not before it. Correct to: email: str = db.Column(db.String(120), unique=True, nullable=False)\"\n    },\n    {\n      \"line_number\": 29,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Type annotations should be placed after the colon, not before it. Correct to: password_hash: str = db.Column(db.String(128), nullable=False)\"\n    },\n    {\n      \"line_number\": 30,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Type annotations should be placed after the colon, not before it. Correct to: created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 26,
+        "violation_category": "naming_convention",
+        "review_comment": "Type annotations should be placed after the colon, not before it. Correct to: id: int = db.Column(db.Integer, primary_key=True)"
+      },
+      {
+        "line_number": 27,
+        "violation_category": "naming_convention",
+        "review_comment": "Type annotations should be placed after the colon, not before it. Correct to: username: str = db.Column(db.String(80), unique=True, nullable=False)"
+      },
+      {
+        "line_number": 28,
+        "violation_category": "naming_convention",
+        "review_comment": "Type annotations should be placed after the colon, not before it. Correct to: email: str = db.Column(db.String(120), unique=True, nullable=False)"
+      },
+      {
+        "line_number": 29,
+        "violation_category": "naming_convention",
+        "review_comment": "Type annotations should be placed after the colon, not before it. Correct to: password_hash: str = db.Column(db.String(128), nullable=False)"
+      },
+      {
+        "line_number": 30,
+        "violation_category": "naming_convention",
+        "review_comment": "Type annotations should be placed after the colon, not before it. Correct to: created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)"
+      }
+    ]
+  },
+  "latency_ms": 32055.7,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

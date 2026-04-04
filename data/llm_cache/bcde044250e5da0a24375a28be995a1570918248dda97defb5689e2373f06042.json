@@ -1,0 +1,53 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Feature extraction module for text and image data using sklearn.\n2: \n3: This module provides functions to extract features from text and image datasets\n4: using Scikit-learn extractors. The text features are extracted using the TfidfVectorizer,\n5: and image features are extracted using the Reshape function from sklearn's image module.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: from typing import List, Any\n12: import numpy as np\n13: from sklearn.feature_extraction.text import TfidfVectorizer\n14: from sklearn.preprocessing import FunctionTransformer\n15: from sklearn.utils import check_array\n16: \n17: \n18: def extract_text_features(documents: List[str] = []) -> np.ndarray:\n19:     \"\"\"Extract features from a list of text documents using TfidfVectorizer.\n20: \n21:     Args:\n22:         documents (List[str]): A list of text documents.\n23: \n24:     Returns:\n25:         np.ndarray: A 2D array of shape (n_samples, n_features) representing the\n26:                     TF-IDF features of the input documents.\n27:     \"\"\"\n28:     vectorizer = TfidfVectorizer()\n29:     features = vectorizer.fit_transform(documents)\n30:     return features.toarray()\n31: \n32: \n33: def reshape_image(image: np.ndarray = np.array([])) -> np.ndarray:\n34:     \"\"\"Reshape image data to a flat array.\n35: \n36:     Args:\n37:         image (np.ndarray): The input image in the shape of (height, width, channels).\n38: \n39:     Returns:\n40:         np.ndarray: A flat array representing the reshaped image.\n41:     \"\"\"\n42:     return image.flatten()\n43: \n44: \n45: def extract_image_features(images: List[np.ndarray] = []) -> np.ndarray:\n46:     \"\"\"Extract features from a list of images by flattening them.\n47: \n48:     Args:\n49:         images (List[np.ndarray]): A list of images in the shape of (height, width, channels).\n50: \n51:     Returns:\n52:         np.ndarray: A 2D array of shape (n_samples, n_features) representing the\n53:                     flattened features of the input images.\n54:     \"\"\"\n55:     transformer = FunctionTransformer(func=reshape_image, validate=False)\n56:     flattened_images = [transformer.transform(image.reshape(1, -1)) for image in images]\n57:     return np.vstack(flattened_images)\n58: \n59: \n60: def validate_inputs(documents: List[Any] = [], images: List[Any] = []) -> None:\n61:     \"\"\"Validate the input documents and images.\n62: \n63:     Args:\n64:         documents (List[Any]): The list of text documents to validate.\n65:         images (List[Any]): The list of images to validate.\n66: \n67:     Raises:\n68:         ValueError: If the input documents or images are not valid.\n69:     \"\"\"\n70:     if not documents or not isinstance(documents, list):\n71:         raise ValueError(\"Documents must be a non-empty list.\")\n72: \n73:     if not images or not isinstance(images, list):\n74:         raise ValueError(\"Images must be a non-empty list.\")\n75: \n76:     for img in images:\n77:         if not isinstance(img, np.ndarray):\n78:             raise ValueError(\"Each image must be a numpy ndarray.\")\n79: \n80:     check_array(documents, ensure_2d=False)  # Ensure documents are in a proper format\n81:     check_array(images)  # Ensure images are in a proper format\n82: \n83: \n84: def main(documents: List[str], images: List[np.ndarray]) -> None:\n85:     \"\"\"Main function to extract features from text and image data.\n86: \n87:     Args:\n88:         documents (List[str]): A list of text documents.\n89:         images (List[np.ndarray]): A list of images.\n90: \n91:     Returns:\n92:         None\n93:     \"\"\"\n94:     validate_inputs(documents, images)\n95:     text_features = extract_text_features(documents)\n96:     image_features = extract_image_features(images)\n97: \n98:     print(\"Text Features Shape:\", text_features.shape)\n99:     print(\"Image Features Shape:\", image_features.shape)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 8,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 18,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default argument for 'documents' is a mutable list, which can lead to unexpected behavior if modified.\"\n    },\n    {\n      \"line_number\": 33,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default argument for 'image' is a mutable numpy array, which can lead to unexpected behavior if modified.\"\n    },\n    {\n      \"line_number\": 45,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default argument for 'images' is a mutable list, which can lead to unexpected behavior if modified.\"\n    },\n    {\n      \"line_number\": 60,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default arguments for 'documents' and 'images' are mutable lists, which can lead to unexpected behavior if modified.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 18,
+        "violation_category": "mutable_default",
+        "review_comment": "The default argument for 'documents' is a mutable list, which can lead to unexpected behavior if modified."
+      },
+      {
+        "line_number": 33,
+        "violation_category": "mutable_default",
+        "review_comment": "The default argument for 'image' is a mutable numpy array, which can lead to unexpected behavior if modified."
+      },
+      {
+        "line_number": 45,
+        "violation_category": "mutable_default",
+        "review_comment": "The default argument for 'images' is a mutable list, which can lead to unexpected behavior if modified."
+      },
+      {
+        "line_number": 60,
+        "violation_category": "mutable_default",
+        "review_comment": "The default arguments for 'documents' and 'images' are mutable lists, which can lead to unexpected behavior if modified."
+      }
+    ]
+  },
+  "latency_ms": 28502.4,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

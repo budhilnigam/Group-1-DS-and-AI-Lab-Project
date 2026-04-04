@@ -1,0 +1,63 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"hyperparameter_tuning.py\n2: \n3: This module provides functions for hyperparameter tuning using Grid Search,\n4: Random Search, and Bayesian Optimization with Scikit-learn. It includes\n5: parameter grid definitions for various models.\n6: \n7: \"\"\"\n8: \n9: from typing import Any, Dict, List, Optional, Tuple\n10: from sklearn.base import BaseEstimator\n11: from sklearn.model_selection import GridSearchCV, RandomizedSearchCV\n12: from skopt import BayesSearchCV\n13: \n14: \n15: def gridSearchTuning(\n16:     model: BaseEstimator,\n17:     param_grid: Dict[str, List[Any]],\n18:     X: Any,\n19:     y: Any,\n20:     cv: int = 5,\n21:     scoring: Optional[str] = [],\n22:     n_jobs: int = -1\n23: ) -> GridSearchCV:\n24:     \"\"\"\n25:     Performs hyperparameter tuning using Grid Search.\n26:     Args:\n27:         model (BaseEstimator): The model to be tuned.\n28:         param_grid (Dict[str, List[Any]]): The parameter grid to search.\n29:         X (Any): Feature data.\n30:         y (Any): Target data.\n31:         cv (int, optional): Number of cross-validation folds. Defaults to 5.\n32:         scoring (Optional[str], optional): Scoring metric. Defaults to None.\n33:         n_jobs (int, optional): Number of jobs to run in parallel. Defaults to -1.\n34:     Returns:\n35:         GridSearchCV: The fitted GridSearchCV object.\n36:     \"\"\"\n37:     grid_search = GridSearchCV(estimator=model, param_grid=param_grid,\n38:                                cv=cv, scoring=scoring, n_jobs=n_jobs)\n39:     grid_search.fit(X, y)\n40:     return grid_search\n41: \n42: \n43: def randomSearchTuning(\n44:     model: BaseEstimator,\n45:     param_distributions: Dict[str, List[Any]],\n46:     X: Any,\n47:     y: Any,\n48:     n_iter: int = 100,\n49:     cv: int = 5,\n50:     scoring: Optional[str] = [],\n51:     n_jobs: int = -1\n52: ) -> RandomizedSearchCV:\n53:     \"\"\"Performs hyperparameter tuning using Randomized Search.\"\"\"\n54:     random_search = RandomizedSearchCV(estimator=model, param_distributions=param_distributions,\n55:                                        n_iter=n_iter, cv=cv, scoring=scoring, n_jobs=n_jobs)\n56:     random_search.fit(X, y)\n57:     return random_search\n58: \n59: \n60: def bayesianOptimizationTuning(\n61:     model: BaseEstimator,\n62:     search_spaces: Dict[str, Tuple[Any, Any]],\n63:     X: Any,\n64:     y: Any,\n65:     n_iter: int = 50,\n66:     cv: int = 5,\n67:     scoring: Optional[str] = None,\n68:     n_jobs: int = -1\n69: ) -> BayesSearchCV:\n70:     \"\"\"Performs hyperparameter tuning using Bayesian Optimization.\n71: \n72:     Args:\n73:         model (BaseEstimator): The model to be tuned.\n74:         search_spaces (Dict[str, Tuple[Any, Any]]): The search spaces for the parameters.\n75:         X (Any): Feature data.\n76:         y (Any): Target data.\n77:         n_iter (int, optional): Number of iterations. Defaults to 50.\n78:         cv (int, optional): Number of cross-validation folds. Defaults to 5.\n79:         scoring (Optional[str], optional): Scoring metric. Defaults to None.\n80:         n_jobs (int, optional): Number of jobs to run in parallel. Defaults to -1.\n81: \n82:     Returns:\n83:         BayesSearchCV: The fitted BayesSearchCV object.\n84:     \"\"\"\n85:     bayes_search = BayesSearchCV(estimator=model, search_spaces=search_spaces,\n86:                                   n_iter=n_iter, cv=cv, scoring=scoring, n_jobs=n_jobs)\n87:     bayes_search.fit(X, y)\n88:     return bayes_search\n89: \n90: \n91: def getDefaultParamGrids() -> Dict[str, Dict[str, List[Any]]]:\n92:     return {\n93:         'RandomForestClassifier': {\n94:             'n_estimators': [50, 100, 200],\n95:             'max_depth': [None, 10, 20, 30],\n96:             'min_samples_split': [2, 5, 10]\n97:         },\n98:         'SVC': {\n99:             'C': [0.1, 1, 10, 100],\n100:             'gamma': ['scale', 'auto'],\n101:             'kernel': ['linear', 'rbf', 'poly']\n102:         },\n103:         'LogisticRegression': {\n104:             'C': [0.01, 0.1, 1, 10],\n105:             'solver': ['newton-cg', 'lbfgs', 'liblinear']\n106:         }\n107:     }\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sklearn.base' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sklearn.base' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071"
+    ]
+  },
+  "latency_ms": 19279.1,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"hyperparameter_tuning.py\n\nThis module provides functions for hyperparameter tuning using Grid Search,\nRandom Search, and Bayesian Optimization with Scikit-learn. It includes\nparameter grid definitions for various models.\n\n\"\"\"\n\nfrom typing import Any, Dict, List, Optional, Tuple\nfrom sklearn.base import BaseEstimator\nfrom sklearn.model_selection import GridSearchCV, RandomizedSearchCV\nfrom skopt import BayesSearchCV\n\n\ndef gridSearchTuning(\n    model: BaseEstimator,\n    param_grid: Dict[str, Li"
+}

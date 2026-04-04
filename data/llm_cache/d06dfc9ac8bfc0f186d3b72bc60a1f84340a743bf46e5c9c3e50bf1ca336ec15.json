@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: model_training.py\n3: \n4: This module provides functions to train classifiers and regressors\n5: using scikit-learn, along with logging of model parameters and\n6: performance metrics.\n7: \"\"\"\n8: \n9: import logging\n10: from typing import Any, Dict, Tuple\n11: \n12: from sklearn.base import ClassifierMixin, RegressorMixin\n13: from sklearn.metrics import accuracy_score, mean_squared_error\n14: from sklearn.model_selection import train_test_split\n15: \n16: logging.basicConfig(level=logging.INFO)\n17: \n18: \n19: def trainClassifier(\n20:     model: ClassifierMixin,\n21:     X: Any,\n22:     y: Any,\n23:     test_size: float = 0.2,\n24:     random_state: int = []\n25: ) -> Dict[str, Any]:\n26:     \"\"\"\n27:     Trains a classifier model and logs parameters and performance.\n28: \n29:     Args:\n30:         model (ClassifierMixin): The classifier model to train.\n31:         X (Any): Features dataset.\n32:         y (Any): Target labels.\n33:         test_size (float): Proportion of the dataset to include in the test split.\n34:         random_state (int, optional): Random seed for reproducibility.\n35: \n36:     Returns:\n37:         Dict[str, Any]: A dictionary containing model parameters and performance metrics.\n38:     \"\"\"\n39:     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)\n40: \n41:     model.fit(X_train, y_train)\n42:     predictions = model.predict(X_test)\n43: \n44:     accuracy = accuracy_score(y_test, predictions)\n45: \n46:     modelInfo = {\n47:         'model_type': type(model).__name__,\n48:         'parameters': model.get_params(),\n49:         'accuracy': accuracy\n50:     }\n51: \n52:     logging.info(f\"Trained {modelInfo['model_type']} with parameters: {modelInfo['parameters']}\")\n53:     logging.info(f\"Accuracy on test set: {modelInfo['accuracy']:.4f}\")\n54: \n55:     return modelInfo\n56: \n57: \n58: def trainRegressor(\n59:     model: RegressorMixin,\n60:     X: Any,\n61:     y: Any,\n62:     test_size: float = 0.2,\n63:     random_state: int = {}\n64: ) -> Dict[str, Any]:\n65:     \"\"\"\n66:     Trains a regressor model and logs parameters and performance.\n67: \n68:     Args:\n69:         model (RegressorMixin): The regressor model to train.\n70:         X (Any): Features dataset.\n71:         y (Any): Target values.\n72:         test_size (float): Proportion of the dataset to include in the test split.\n73:         random_state (int, optional): Random seed for reproducibility.\n74: \n75:     Returns:\n76:         Dict[str, Any]: A dictionary containing model parameters and performance metrics.\n77:     \"\"\"\n78:     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)\n79: \n80:     model.fit(X_train, y_train)\n81:     predictions = model.predict(X_test)\n82: \n83:     mse = mean_squared_error(y_test, predictions)\n84: \n85:     modelInfo = {\n86:         'model_type': type(model).__name__,\n87:         'parameters': model.get_params(),\n88:         'mean_squared_error': mse\n89:     }\n90: \n91:     logging.info(f\"Trained {modelInfo['model_type']} with parameters: {modelInfo['parameters']}\")\n92:     logging.info(f\"Mean Squared Error on test set: {modelInfo['mean_squared_error']:.4f}\")\n93: \n94:     return modelInfo\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 24,\n  \"violation_category\": \"mutable_default\",\n  \"review_comment\": \"The default argument 'random_state' is set to an empty list, which is mutable. This can lead to unexpected behavior as the same list instance will be shared across function calls.\",\n  \"guideline_chunks_used\": [\"chunk_0075\", \"chunk_0431\"]\n}",
+  "parsed_response": {
+    "line_number": 24,
+    "violation_category": "mutable_default",
+    "review_comment": "The default argument 'random_state' is set to an empty list, which is mutable. This can lead to unexpected behavior as the same list instance will be shared across function calls.",
+    "guideline_chunks_used": [
+      "chunk_0075",
+      "chunk_0431"
+    ]
+  },
+  "latency_ms": 17049.6,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nmodel_training.py\n\nThis module provides functions to train classifiers and regressors\nusing scikit-learn, along with logging of model parameters and\nperformance metrics.\n\"\"\"\n\nimport logging\nfrom typing import Any, Dict, Tuple\n\nfrom sklearn.base import ClassifierMixin, RegressorMixin\nfrom sklearn.metrics import accuracy_score, mean_squared_error\nfrom sklearn.model_selection import train_test_split\n\nlogging.basicConfig(level=logging.INFO)\n\n\ndef trainClassifier(\n    model: ClassifierMixin,\n    "
+}

@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: time_series.py\n3: \n4: Module for performing various time series operations using pandas.\n5: Includes functionalities for resampling, calculating rolling means,\n6: shifting data, and computing percentage changes with DatetimeIndex handling.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: from pandas import DataFrame, Series\n11: import os\n12: import sys\n13: import re\n14: \n15: def resample_time_series(data: DataFrame, freq: str, aggregation: str = 'mean') -> DataFrame:\n16:     \"\"\"\n17:     Resample the time series data to a specified frequency.\n18: \n19:     Args:\n20:         data (DataFrame): Input time series data with a DatetimeIndex.\n21:         freq (str): The frequency to resample the data (e.g., 'D', 'M', 'Y').\n22:         aggregation (str): The aggregation function to apply (default is 'mean').\n23: \n24:     Returns:\n25:         DataFrame: Resampled time series data.\n26:     \"\"\"\n27:     if aggregation not in ['mean', 'sum', 'min', 'max']:\n28:         raise ValueError(\"Aggregation must be one of 'mean', 'sum', 'min', 'max'.\")\n29: \n30:     return data.resample(freq).agg(aggregation)\n31: \n32: def rolling_mean(data: Series, window: int, min_periods: Optional[int] = None) -> Series:\n33:     \"\"\"\n34:     Calculate the rolling mean of a time series.\n35: \n36:     Args:\n37:         data (Series): Input time series data.\n38:         window (int): The number of observations used for the moving average.\n39:         min_periods (Optional[int]): Minimum number of observations in the window required to have a value.\n40: \n41:     Returns:\n42:         Series: Rolling mean of the time series.\n43:     \"\"\"\n44:     return data.rolling(window=window, min_periods=min_periods).mean()\n45: \n46: def shift_time_series(data: Series, periods: int) -> Series:\n47:     \"\"\"\n48:     Shift the time series data by a specified number of periods.\n49: \n50:     Args:\n51:         data (Series): Input time series data.\n52:         periods (int): Number of periods to shift (positive for future, negative for past).\n53: \n54:     Returns:\n55:         Series: Shifted time series data.\n56:     \"\"\"\n57:     return data.shift(periods)\n58: \n59: def pct_change_time_series(data: Series, periods: int = 1) -> Series:\n60:     \"\"\"\n61:     Calculate the percentage change between the current and a prior element.\n62: \n63:     Args:\n64:         data (Series): Input time series data.\n65:         periods (int): Number of periods to shift for calculating percentage change.\n66: \n67:     Returns:\n68:         Series: Percentage change of the time series.\n69:     \"\"\"\n70:     return data.pct_change(periods)\n71: \n72: def main():\n73:     # Example usage\n74:     dates = pd.date_range(start='2023-01-01', periods=10, freq='D')\n75:     values = pd.Series(range(10), index=dates)\n76: \n77:     print(\"Original Data:\")\n78:     print(values)\n79: \n80:     resampled_data = resample_time_series(values.to_frame(), '2D', 'sum')\n81:     print(\"\\nResampled Data (Sum every 2 days):\")\n82:     print(resampled_data)\n83: \n84:     rolling_avg = rolling_mean(values, window=3)\n85:     print(\"\\nRolling Mean (Window = 3):\")\n86:     print(rolling_avg)\n87: \n88:     shifted_data = shift_time_series(values, 2)\n89:     print(\"\\nShifted Data (2 periods forward):\")\n90:     print(shifted_data)\n91: \n92:     pct_change_data = pct_change_time_series(values)\n93:     print(\"\\nPercentage Change:\")\n94:     print(pct_change_data)\n95: \n96: if __name__ == \"__main__\":\n97:     main()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 16901.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ntime_series.py\n\nModule for performing various time series operations using pandas.\nIncludes functionalities for resampling, calculating rolling means,\nshifting data, and computing percentage changes with DatetimeIndex handling.\n\"\"\"\n\nimport pandas as pd\nfrom pandas import DataFrame, Series\nimport os\nimport sys\nimport re\n\ndef resample_time_series(data: DataFrame, freq: str, aggregation: str = 'mean') -> DataFrame:\n    \"\"\"\n    Resample the time series data to a specified frequency.\n\n    Args:\n "
+}

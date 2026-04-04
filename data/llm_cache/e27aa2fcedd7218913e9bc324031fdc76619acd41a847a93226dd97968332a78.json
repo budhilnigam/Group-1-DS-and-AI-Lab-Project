@@ -1,0 +1,38 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: crud/item.py\n3: \n4: CRUD operations for Item model in a FastAPI project.\n5: Provides functions to retrieve, create, and update Item instances,\n6: with support for owner-based filtering.\n7: \"\"\"\n8: \n9: from typing import Optional, List\n10: from sqlalchemy.orm import Session\n11: from sqlalchemy.exc import NoResultFound\n12: \n13: from models.item import Item\n14: from schemas.item import ItemCreate, ItemUpdate\n15: \n16: \n17: def getItem(db: Session, item_id: int, owner_id: Optional[int] = None) -> Optional[Item]:\n18:     \"\"\"\n19:     Retrieve a single Item by its ID, optionally filtering by owner_id.\n20: \n21:     Args:\n22:         db (Session): SQLAlchemy database session.\n23:         item_id (int): ID of the item to retrieve.\n24:         owner_id (Optional[int]): Optional owner ID to filter.\n25: \n26:     Returns:\n27:         Optional[Item]: The Item instance or None if not found.\n28:     \"\"\"\n29:     query = db.query(Item).filter(Item.id == item_id)\n30:     if owner_id is not None:\n31:         query = query.filter(Item.owner_id == owner_id)\n32:     return query.first()\n33: \n34: \n35: def getItems(\n36:     db: Session,\n37:     owner_id: Optional[int] = None,\n38:     skip: int = 0,\n39:     limit: int = 100\n40: ) -> List[Item]:\n41:     \"\"\"\n42:     Retrieve a list of Items, optionally filtered by owner_id.\n43: \n44:     Args:\n45:         db (Session): SQLAlchemy database session.\n46:         owner_id (Optional[int]): Optional owner ID to filter.\n47:         skip (int): Number of records to skip.\n48:         limit (int): Maximum number of records to return.\n49: \n50:     Returns:\n51:         List[Item]: List of Item instances.\n52:     \"\"\"\n53:     query = db.query(Item)\n54:     if owner_id is not None:\n55:         query = query.filter(Item.owner_id == owner_id)\n56:     return query.offset(skip).limit(limit).all()\n57: \n58: \n59: def createItem(db: Session, item_data: ItemCreate, owner_id: int) -> Item:\n60:     \"\"\"\n61:     Create a new Item instance for a specific owner.\n62: \n63:     Args:\n64:         db (Session): SQLAlchemy database session.\n65:         item_data (ItemCreate): Data for the new Item.\n66:         owner_id (int): ID of the owner for the Item.\n67: \n68:     Returns:\n69:         Item: The created Item instance.\n70:     \"\"\"\n71:     item = Item(**item_data.dict(), owner_id=owner_id)\n72:     db.add(item)\n73:     db.commit()\n74:     db.refresh(item)\n75:     return item\n76: \n77: \n78: def updateItem(\n79:     db: Session,\n80:     item_id: int,\n81:     item_data: ItemUpdate,\n82:     owner_id: Optional[int] = None\n83: ) -> Optional[Item]:\n84:     \"\"\"\n85:     Update an existing Item instance, optionally filtering by owner_id.\n86: \n87:     Args:\n88:         db (Session): SQLAlchemy database session.\n89:         item_id (int): ID of the Item to update.\n90:         item_data (ItemUpdate): Data to update the Item.\n91:         owner_id (Optional[int]): Optional owner ID to filter.\n92: \n93:     Returns:\n94:         Optional[Item]: The updated Item instance or None if not found.\n95:     \"\"\"\n96:     query = db.query(Item).filter(Item.id == item_id)\n97:     if owner_id is not None:\n98:         query = query.filter(Item.owner_id == owner_id)\n99:     item = query.first()\n100:     if item is None:\n101:         return None\n102: \n103:     update_fields = item_data.dict(exclude_unset=True)\n104:     for key, value in update_fields.items():\n105:         setattr(item, key, value)\n106:     db.commit()\n107:     db.refresh(item)\n108:     return item\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 11,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'NoResultFound' from sqlalchemy.exc is not used in the code.\"\n    },\n    {\n      \"line_number\": 17,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'getItem' should be in snake_case as 'get_item'.\"\n    },\n    {\n      \"line_number\": 59,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'createItem' should be in snake_case as 'create_item'.\"\n    },\n    {\n      \"line_number\": 78,\n      \"violation_category\": \"naming_convention\",\n      \"review_comment\": \"Function name 'updateItem' should be in snake_case as 'update_item'.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'NoResultFound' from sqlalchemy.exc is not used in the code."
+      },
+      {
+        "line_number": 17,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'getItem' should be in snake_case as 'get_item'."
+      },
+      {
+        "line_number": 59,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'createItem' should be in snake_case as 'create_item'."
+      },
+      {
+        "line_number": 78,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'updateItem' should be in snake_case as 'update_item'."
+      }
+    ]
+  },
+  "latency_ms": 15875.8,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

@@ -1,0 +1,15 @@
+faiss-cpu
+groq
+numpy
+pandas
+matplotlib
+scikit-learn
+python-dotenv
+requests
+sentence-transformers
+tqdm
+flake8
+flake8-bugbear
+flake8-docstrings
+pep8-naming
+pylint

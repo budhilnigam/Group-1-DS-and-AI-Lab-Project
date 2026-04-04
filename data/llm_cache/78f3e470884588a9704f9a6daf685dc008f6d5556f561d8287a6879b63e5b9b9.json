@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0371] (score=0.770)\nLooks like the import for sys isn't being used in this file—let's remove it to keep things tidy.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import os\n2: import sys\n3: import re\n4: \"\"\"pipeline.py\n5: \n6: Module to construct sklearn pipelines for preprocessing and modeling.\n7: This module provides functions to build preprocessing pipelines and full\n8: pipelines that include both preprocessing and model training steps.\n9: \"\"\"\n10: \n11: from typing import List, Tuple, Any\n12: import pandas as pd\n13: from sklearn.pipeline import Pipeline\n14: from sklearn.compose import ColumnTransformer\n15: from sklearn.preprocessing import StandardScaler, OneHotEncoder\n16: from sklearn.impute import SimpleImputer\n17: from sklearn.base import BaseEstimator, TransformerMixin\n18: \n19: \n20: class CustomTransformer(BaseEstimator, TransformerMixin):\n21:     \"\"\"Custom transformer example for demonstration purposes.\n22:     \"\"\"\n23: \n24:     def fit(self, X: Any, y: Any = None) -> 'CustomTransformer':\n25:         return self\n26: \n27:     def transform(self, X: Any) -> Any:\n28:         return X  # Replace with actual transformation logic\n29: \n30: \n31: def build_preprocessing_pipeline(numeric_features: List[str],\n32:                                  categorical_features: List[str]) -> Pipeline:\n33:     \"\"\"Build a preprocessing pipeline with numeric and categorical processing.\n34: \n35:     Args:\n36:         numeric_features (List[str]): List of numeric feature names.\n37:         categorical_features (List[str]): List of categorical feature names.\n38: \n39:     Returns:\n40:         Pipeline: A scikit-learn pipeline for preprocessing.\n41:     \"\"\"\n42:     numeric_transformer = Pipeline(steps=[\n43:         ('imputer', SimpleImputer(strategy='mean')),\n44:         ('scaler', StandardScaler())\n45:     ])\n46: \n47:     categorical_transformer = Pipeline(steps=[\n48:         ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),\n49:         ('onehot', OneHotEncoder(handle_unknown='ignore'))\n50:     ])\n51: \n52:     preprocessor = ColumnTransformer(\n53:         transformers=[\n54:             ('num', numeric_transformer, numeric_features),\n55:             ('cat', categorical_transformer, categorical_features)\n56:         ]\n57:     )\n58: \n59:     return preprocessor\n60: \n61: \n62: def build_full_pipeline(numeric_features: List[str],\n63:                         categorical_features: List[str],\n64:                         model: Any) -> Pipeline:\n65:     \"\"\"Build a full pipeline including preprocessing and model.\n66: \n67:     Args:\n68:         numeric_features (List[str]): List of numeric feature names.\n69:         categorical_features (List[str]): List of categorical feature names.\n70:         model (Any): A scikit-learn estimator (model) to include in the pipeline.\n71: \n72:     Returns:\n73:         Pipeline: A scikit-learn pipeline for preprocessing and model training.\n74:     \"\"\"\n75:     preprocessor = build_preprocessing_pipeline(numeric_features, categorical_features)\n76: \n77:     full_pipeline = Pipeline(steps=[\n78:         ('preprocessor', preprocessor),\n79:         ('model', model)\n80:     ])\n81: \n82:     return full_pipeline\n83: \n84: \n85: def fit_pipeline(pipeline: Pipeline, X: pd.DataFrame, y: pd.Series) -> Pipeline:\n86:     \"\"\"Fit the pipeline to the training data.\n87: \n88:     Args:\n89:         pipeline (Pipeline): The pipeline to fit.\n90:         X (pd.DataFrame): Training data.\n91:         y (pd.Series): Target labels.\n92: \n93:     Returns:\n94:         Pipeline: The fitted pipeline.\n95:     \"\"\"\n96:     pipeline.fit(X, y)\n97:     return pipeline\n98: \n99: \n100: def predict_with_pipeline(pipeline: Pipeline, X: pd.DataFrame) -> Any:\n101:     \"\"\"Make predictions using the fitted pipeline.\n102: \n103:     Args:\n104:         pipeline (Pipeline): The fitted pipeline.\n105:         X (pd.DataFrame): New data for predictions.\n106: \n107:     Returns:\n108:         Any: Predicted values.\n109:     \"\"\"\n110:     return pipeline.predict(X)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 1,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 1,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 14098.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0371": {
+      "score": 0.7696,
+      "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "import os\nimport sys\nimport re\n\"\"\"pipeline.py\n\nModule to construct sklearn pipelines for preprocessing and modeling.\nThis module provides functions to build preprocessing pipelines and full\npipelines that include both preprocessing and model training steps.\n\"\"\"\n\nfrom typing import List, Tuple, Any\nimport pandas as pd\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nfrom sklearn.impute import Simple"
+}

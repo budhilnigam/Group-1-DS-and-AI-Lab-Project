@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Forms module for handling post and comment submissions using WTForms.\n2: \n3: This module defines the PostForm and CommentForm classes, which are used\n4: to validate user input for creating posts and comments in a Flask application.\n5: \"\"\"\n6: \n7: import os\n8: import sys\n9: import re\n10: \n11: from typing import Any\n12: from flask_wtf import FlaskForm\n13: from wtforms import TextAreaField, StringField\n14: from wtforms.validators import DataRequired, Length\n15: \n16: \n17: class PostForm(FlaskForm):\n18:     \"\"\"Form for creating a new post.\"\"\"\n19: \n20:     title: StringField = StringField(\n21:         'Title',\n22:         validators=[\n23:             DataRequired(message='Title is required.'),\n24:             Length(min=5, max=100, message='Title must be between 5 and 100 characters.')\n25:         ]\n26:     )\n27: \n28:     content: TextAreaField = TextAreaField(\n29:         'Content',\n30:         validators=[\n31:             DataRequired(message='Content is required.'),\n32:             Length(min=40, max=1500, message='Content must be between 40 and 1500 characters.')\n33:         ]\n34:     )\n35: \n36:     def validate(self, extra_data=None) -> bool:\n37:         \"\"\"Override the default validate method to add custom validation if needed.\"\"\"\n38:         return super().validate()\n39: \n40: \n41: class CommentForm(FlaskForm):\n42:     \"\"\"Form for adding a comment to a post.\"\"\"\n43: \n44:     content: TextAreaField = TextAreaField(\n45:         'Comment',\n46:         validators=[\n47:             DataRequired(message='Comment is required.'),\n48:             Length(min=1, max=500, message='Comment must be between 1 and 500 characters.')\n49:         ]\n50:     )\n51: \n52:     def validate(self, extra_data=None) -> bool:\n53:         \"\"\"Override the default validate method to add custom validation if needed.\"\"\"\n54:         return super().validate()\n55: \n56: \n57: def example_function(param1=None, param2=None):\n58:     \"\"\"Example function to demonstrate mutable default arguments.\"\"\"\n59:     if param1 is None:\n60:         param1 = []\n61:     if param2 is None:\n62:         param2 = {}\n63:     # Function logic here\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 7,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 7,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 13149.1,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Forms module for handling post and comment submissions using WTForms.\n\nThis module defines the PostForm and CommentForm classes, which are used\nto validate user input for creating posts and comments in a Flask application.\n\"\"\"\n\nimport os\nimport sys\nimport re\n\nfrom typing import Any\nfrom flask_wtf import FlaskForm\nfrom wtforms import TextAreaField, StringField\nfrom wtforms.validators import DataRequired, Length\n\n\nclass PostForm(FlaskForm):\n    \"\"\"Form for creating a new post.\"\"\"\n\n    title: St"
+}

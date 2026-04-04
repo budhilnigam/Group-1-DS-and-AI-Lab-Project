@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: APIRouter for user-related operations.\n3: \n4: Provides endpoints for:\n5: - Listing users\n6: - Retrieving a user by ID\n7: - Creating a user\n8: - Updating a user\n9: - Deleting a user\n10: \"\"\"\n11: \n12: import os\n13: import sys\n14: import re\n15: \n16: from typing import List, Optional\n17: \n18: from fastapi import APIRouter, HTTPException, status, Depends, Path\n19: from pydantic import BaseModel, EmailStr, Field\n20: \n21: router = APIRouter(\n22:     prefix=\"/users\",\n23:     tags=[\"users\"],\n24: )\n25: \n26: # Mock database\n27: users_db = {}\n28: \n29: class UserBase(BaseModel):\n30:   name: str = Field(..., min_length=2, max_length=50)\n31:   email: EmailStr\n32: \n33: class UserCreate(UserBase):\n34:   password: str = Field(..., min_length=6)\n35: \n36: class UserUpdate(BaseModel):\n37:   name: Optional[str] = Field(None, min_length=2, max_length=50)\n38:   email: Optional[EmailStr]\n39:   password: Optional[str] = Field(None, min_length=6)\n40: \n41: class User(UserBase):\n42:   id: int\n43: \n44: def get_user_or_404(user_id: int) -> User:\n45:   user = users_db.get(user_id)\n46:   if not user:\n47:     raise HTTPException(\n48:       status_code=status.HTTP_404_NOT_FOUND,\n49:       detail=\"User not found\"\n50:     )\n51:   return user\n52: \n53: @router.get(\n54:   \"\",\n55:   response_model=List[User],\n56:   summary=\"List all users\",\n57: )\n58: def list_users() -> List[User]:\n59:   \"\"\"\n60:   Retrieve all users.\n61:   \"\"\"\n62:   return list(users_db.values())\n63: \n64: @router.get(\n65:   \"/{user_id}\",\n66:   response_model=User,\n67:   summary=\"Get user by ID\",\n68: )\n69: def get_user(\n70:   user_id: int = Path(..., gt=0, description=\"User ID\")\n71: ) -> User:\n72:   \"\"\"\n73:   Retrieve a user by ID.\n74:   \"\"\"\n75:   return get_user_or_404(user_id)\n76: \n77: @router.post(\n78:   \"\",\n79:   response_model=User,\n80:   status_code=status.HTTP_201_CREATED,\n81:   summary=\"Create a new user\",\n82: )\n83: def create_user(user: UserCreate) -> User:\n84:   \"\"\"\n85:   Create a new user.\n86:   \"\"\"\n87:   new_id = max(users_db.keys(), default=0) + 1\n88:   user_data = User(\n89:     id=new_id,\n90:     name=user.name,\n91:     email=user.email\n92:   )\n93:   users_db[new_id] = user_data\n94:   return user_data\n95: \n96: @router.put(\n97:   \"/{user_id}\",\n98:   response_model=User,\n99:   summary=\"Update a user\",\n100: )\n101: def update_user(\n102:   user_id: int = Path(..., gt=0, description=\"User ID\"),\n103:   user_update: UserUpdate = Depends()\n104: ) -> User:\n105:   \"\"\"\n106:   Update an existing user.\n107:   \"\"\"\n108:   existing_user = get_user_or_404(user_id)\n109:   updated_fields = user_update.dict(exclude_unset=True)\n110:   updated_user_data = existing_user.dict()\n111:   updated_user_data.update(updated_fields)\n112:   updated_user = User(**updated_user_data)\n113:   users_db[user_id] = updated_user\n114:   return updated_user\n115: \n116: @router.delete(\n117:   \"/{user_id}\",\n118:   status_code=status.HTTP_204_NO_CONTENT,\n119:   summary=\"Delete a user\",\n120: )\n121: def delete_user(\n122:   user_id: int = Path(..., gt=0, description=\"User ID\")\n123: ) -> None:\n124:   \"\"\"\n125:   Delete a user by ID.\n126:   \"\"\"\n127:   if user_id not in users_db:\n128:     raise HTTPException(\n129:       status_code=status.HTTP_404_NOT_FOUND,\n130:       detail=\"User not found\"\n131:     )\n132:   del users_db[user_id]\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 12,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 12,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 17854.5,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nAPIRouter for user-related operations.\n\nProvides endpoints for:\n- Listing users\n- Retrieving a user by ID\n- Creating a user\n- Updating a user\n- Deleting a user\n\"\"\"\n\nimport os\nimport sys\nimport re\n\nfrom typing import List, Optional\n\nfrom fastapi import APIRouter, HTTPException, status, Depends, Path\nfrom pydantic import BaseModel, EmailStr, Field\n\nrouter = APIRouter(\n    prefix=\"/users\",\n    tags=[\"users\"],\n)\n\n# Mock database\nusers_db = {}\n\nclass UserBase(BaseModel):\n  name: str = Field(..., "
+}

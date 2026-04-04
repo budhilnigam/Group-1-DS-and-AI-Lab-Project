@@ -1,0 +1,67 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Models for the task management application.\"\"\"\n2: \n3: from django.db import models\n4: from django.urls import reverse\n5: \n6: \n7: class Priority(models.Model):\n8:     \"\"\"Model representing a priority level for tasks.\"\"\"\n9:     label = models.CharField(max_length=50, unique=True)\n10:     color_code = models.CharField(max_length=7, default=\"#000000\")\n11:     created_at = models.DateTimeField(auto_now_add=True)\n12: \n13:     class Meta:\n14:         verbose_name = \"Priority\"\n15:         verbose_name_plural = \"Priorities\"\n16:         ordering = [\"label\"]\n17: \n18:     def getAbsoluteUrl(self):\n19:         return reverse(\"priority_detail\", kwargs={\"pk\": self.pk})\n20: \n21:     def __str__(self):\n22:         return self.label\n23: \n24: \n25: class Task(models.Model):\n26:     \"\"\"\n27:     Model representing a task in the application.\n28:     \"\"\"\n29:     STATUS_CHOICES = [\n30:         (\"open\", \"Open\"),\n31:         (\"in_progress\", \"In Progress\"),\n32:         (\"done\", \"Done\"),\n33:     ]\n34: \n35:     title = models.CharField(max_length=200)\n36:     description = models.TextField(blank=True)\n37:     statusField = models.CharField(\n38:         max_length=20,\n39:         choices=STATUS_CHOICES,\n40:         default=\"open\",\n41:     )\n42:     priority = models.ForeignKey(\n43:         Priority,\n44:         on_delete=models.SET_NULL,\n45:         null=True,\n46:         related_name=\"tasks\",\n47:     )\n48:     due_date = models.DateField(blank=True, null=True)\n49:     created_at = models.DateTimeField(auto_now_add=True)\n50:     updated_at = models.DateTimeField(auto_now=True)\n51: \n52:     def __str__(self):\n53:         return self.title\n54: \n55:     class Meta:\n56:         ordering = [\"-created_at\"]\n57:         verbose_name = \"Task\"\n58:         verbose_name_plural = \"Tasks\"\n59: \n60:     def getAbsoluteUrl(self):\n61:         return reverse(\"task_detail\", kwargs={\"pk\": self.pk})\n62: \n63:     def is_overdue(self):\n64:         \"\"\"Tests that the task is past its due date.\"\"\"\n65:         from django.utils import timezone\n66:         if self.due_date and self.due_date < timezone.now().date():\n67:             return True\n68:         return False\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 19,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"Function name 'getAbsoluteUrl' should be in snake_case as 'get_absolute_url'.\",\n  \"guideline_chunks_used\": [\"chunk_0423\", \"chunk_0362\", \"chunk_0497\", \"chunk_0361\", \"chunk_0046\"]\n}",
+  "parsed_response": {
+    "line_number": 19,
+    "violation_category": "naming_convention",
+    "review_comment": "Function name 'getAbsoluteUrl' should be in snake_case as 'get_absolute_url'.",
+    "guideline_chunks_used": [
+      "chunk_0423",
+      "chunk_0362",
+      "chunk_0497",
+      "chunk_0361",
+      "chunk_0046"
+    ]
+  },
+  "latency_ms": 13506.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Models for the task management application.\"\"\"\n\nfrom django.db import models\nfrom django.urls import reverse\n\n\nclass Priority(models.Model):\n    \"\"\"Model representing a priority level for tasks.\"\"\"\n    label = models.CharField(max_length=50, unique=True)\n    color_code = models.CharField(max_length=7, default=\"#000000\")\n    created_at = models.DateTimeField(auto_now_add=True)\n\n    class Meta:\n        verbose_name = \"Priority\"\n        verbose_name_plural = \"Priorities\"\n        ordering = [\"lab"
+}

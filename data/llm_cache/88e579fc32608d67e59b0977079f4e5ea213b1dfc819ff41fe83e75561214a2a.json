@@ -1,0 +1,43 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"regression_models.py\n2: \n3: This module provides functions to train various regression models using\n4: scikit-learn, including linear regression, ridge regression, lasso regression,\n5: and elastic net regression. Each function accepts an alpha parameter that\n6: controls the regularization strength for the respective models.\n7: \"\"\"\n8: \n9: from typing import Tuple\n10: import numpy as np\n11: from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet\n12: from sklearn.model_selection import train_test_split\n13: from sklearn.metrics import mean_squared_error\n14: \n15: \n16: def train_linear(X: np.ndarray, y: np.ndarray, options=[]) -> LinearRegression:\n17:     # Train a linear regression model.\n18:     # Args:\n19:     #     X (np.ndarray): Feature matrix.\n20:     #     y (np.ndarray): Target vector.\n21:     # Returns:\n22:     #     LinearRegression: Trained linear regression model.\n23:     model = LinearRegression()\n24:     model.fit(X, y)\n25:     return model\n26: \n27: \n28: def train_ridge(X: np.ndarray, y: np.ndarray, alpha: float = {}, options=[]) -> Ridge:\n29:     \"\"\"Train a ridge regression model.\n30: \n31:     Args:\n32:         X (np.ndarray): Feature matrix.\n33:         y (np.ndarray): Target vector.\n34:         alpha (float): Regularization strength.\n35: \n36:     Returns:\n37:         Ridge: Trained ridge regression model.\n38:     \"\"\"\n39:     model = Ridge(alpha=alpha)\n40:     model.fit(X, y)\n41:     return model\n42: \n43: \n44: def train_lasso(X: np.ndarray, y: np.ndarray, alpha: float) -> Lasso:\n45:     \"\"\"Train a lasso regression model.\n46: \n47:     Args:\n48:         X (np.ndarray): Feature matrix.\n49:         y (np.ndarray): Target vector.\n50:         alpha (float): Regularization strength.\n51: \n52:     Returns:\n53:         Lasso: Trained lasso regression model.\n54:     \"\"\"\n55:     model = Lasso(alpha=alpha)\n56:     model.fit(X, y)\n57:     return model\n58: \n59: \n60: def train_elastic_net(X: np.ndarray, y: np.ndarray, alpha: float, l1_ratio: float) -> ElasticNet:\n61:     model = ElasticNet(alpha=alpha, l1_ratio=l1_ratio)\n62:     model.fit(X, y)\n63:     return model\n64: \n65: \n66: def evaluate_model(model, X: np.ndarray, y: np.ndarray) -> Tuple[float, float]:\n67:     \"\"\"Evaluate a regression model using Mean Squared Error.\n68: \n69:     Args:\n70:         model: Trained regression model.\n71:         X (np.ndarray): Feature matrix.\n72:         y (np.ndarray): Target vector.\n73: \n74:     Returns:\n75:         Tuple[float, float]: Mean squared error and model's score.\n76:     \"\"\"\n77:     predictions = model.predict(X)\n78:     mse = mean_squared_error(y, predictions)\n79:     score = model.score(X, y)\n80:     return mse, score\n81: \n82: \n83: def split_data(X: np.ndarray, y: np.ndarray, test_size: float = 0.2, random_state: int = 42, extras=[]) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:\n84:     \"\"\"Split the dataset into training and testing sets.\n85: \n86:     Args:\n87:         X (np.ndarray): Feature matrix.\n88:         y (np.ndarray): Target vector.\n89:         test_size (float): Proportion of the dataset to include in the test split.\n90:         random_state (int): Random seed for reproducibility.\n91: \n92:     Returns:\n93:         Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]: Training and testing sets for features and target.\n94:     \"\"\"\n95:     return train_test_split(X, y, test_size=test_size, random_state=random_state)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'Tuple' from typing is unused.\"\n    },\n    {\n      \"line_number\": 13,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The import 'mean_squared_error' from sklearn.metrics is unused.\"\n    },\n    {\n      \"line_number\": 16,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default value for the parameter 'options' in function 'train_linear' should not be a mutable type like list. Use None and set it to [] inside the function if needed.\"\n    },\n    {\n      \"line_number\": 28,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default value for the parameter 'alpha' in function 'train_ridge' is incorrectly set as an empty dictionary '{}'. It should be a float, such as None or a specific float value.\"\n    },\n    {\n      \"line_number\": 83,\n      \"violation_category\": \"mutable_default\",\n      \"review_comment\": \"The default value for the parameter 'extras' in function 'split_data' should not be a mutable type like list. Use None and set it to [] inside the function if needed.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'Tuple' from typing is unused."
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "The import 'mean_squared_error' from sklearn.metrics is unused."
+      },
+      {
+        "line_number": 16,
+        "violation_category": "mutable_default",
+        "review_comment": "The default value for the parameter 'options' in function 'train_linear' should not be a mutable type like list. Use None and set it to [] inside the function if needed."
+      },
+      {
+        "line_number": 28,
+        "violation_category": "mutable_default",
+        "review_comment": "The default value for the parameter 'alpha' in function 'train_ridge' is incorrectly set as an empty dictionary '{}'. It should be a float, such as None or a specific float value."
+      },
+      {
+        "line_number": 83,
+        "violation_category": "mutable_default",
+        "review_comment": "The default value for the parameter 'extras' in function 'split_data' should not be a mutable type like list. Use None and set it to [] inside the function if needed."
+      }
+    ]
+  },
+  "latency_ms": 25306.4,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

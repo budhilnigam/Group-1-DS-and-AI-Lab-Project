@@ -1,0 +1,28 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Custom template tags and filters for a Django project.\n3: \n4: This module includes:\n5: - markdown_to_html: Converts Markdown text to HTML.\n6: - time_since: Formats a datetime object as a human-readable \"time since\".\n7: - truncate_words: Truncates a string to a specified number of words.\n8: - active_link: Adds an 'active' class to navigation links based on the current URL.\n9: \n10: Usage:\n11:     {% load custom_tags %}\n12: \"\"\"\n13: \n14: import os\n15: import sys\n16: import re\n17: from datetime import datetime\n18: from typing import Optional\n19: import markdown\n20: from django import template\n21: from django.utils.safestring import mark_safe\n22: from django.utils.timesince import timesince\n23: from django.utils.text import Truncator\n24: from django.template.defaultfilters import stringfilter\n25: \n26: register = template.Library()\n27: \n28: \n29: @register.filter(name='markdown_to_html')\n30: @stringfilter\n31: def markdown_to_html(value: str) -> str:\n32:     \"\"\"\n33:     Converts a Markdown string to HTML.\n34: \n35:     Args:\n36:         value (str): The Markdown text to convert.\n37: \n38:     Returns:\n39:         str: The resulting HTML, marked safe for rendering.\n40:     \"\"\"\n41:     html = markdown.markdown(value, extensions=['extra', 'codehilite', 'toc'])\n42:     return mark_safe(html)\n43: \n44: \n45: @register.filter(name='time_since')\n46: def time_since(value: datetime, default: str = \"just now\") -> str:\n47:     \"\"\"\n48:     Returns a human-readable \"time since\" string for a datetime.\n49: \n50:     Args:\n51:         value (datetime): The datetime to calculate time since.\n52:         default (str): The default value if the time difference is less than a second.\n53: \n54:     Returns:\n55:         str: The formatted \"time since\" string.\n56:     \"\"\"\n57:     if not isinstance(value, datetime):\n58:         return default\n59:     return timesince(value) + \" ago\"\n60: \n61: \n62: @register.filter(name='truncate_words')\n63: @stringfilter\n64: def truncate_words(value: str, num_words: int) -> str:\n65:     \"\"\"\n66:     Truncates a string to a specified number of words.\n67: \n68:     Args:\n69:         value (str): The string to truncate.\n70:         num_words (int): The number of words to truncate to.\n71: \n72:     Returns:\n73:         str: The truncated string.\n74:     \"\"\"\n75:     return Truncator(value).words(num_words, truncate='...')\n76: \n77: \n78: @register.simple_tag(takes_context=True)\n79: def active_link(context: dict, url_name: str, class_name: str = \"active\") -> str:\n80:     \"\"\"\n81:     Adds a CSS class to a navigation link if it matches the current URL.\n82: \n83:     Args:\n84:         context (dict): The template context, which must include a `request` object.\n85:         url_name (str): The URL name to check.\n86:         class_name (str): The CSS class to add if the link is active.\n87: \n88:     Returns:\n89:         str: The class name if the link is active, otherwise an empty string.\n90:     \"\"\"\n91:     request = context.get(\"request\")\n92:     if not request:\n93:         return \"\"\n94:     if request.resolver_match and request.resolver_match.url_name == url_name:\n95:         return class_name\n96:     return \"\"\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 14,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 16,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 16,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 10314.5,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

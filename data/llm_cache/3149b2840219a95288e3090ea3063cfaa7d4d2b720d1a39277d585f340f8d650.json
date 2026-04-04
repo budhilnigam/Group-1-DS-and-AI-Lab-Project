@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: groupby_operations.py\n3: \n4: This module provides various GroupBy operations for pandas DataFrames, including\n5: transforming groups, filtering groups, applying custom functions, and ranking\n6: within groups.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: from typing import Callable, Any, Union\n11: import os\n12: import sys\n13: import re\n14: \n15: \n16: def group_and_transform(df: pd.DataFrame, group_by_cols: list = [], transform_func: Callable[[pd.Series], Any] = []) -> pd.Series:\n17:     \"\"\"\n18:     Apply a transformation function to each group in the DataFrame.\n19: \n20:     Parameters:\n21:     df (pd.DataFrame): The DataFrame to operate on.\n22:     group_by_cols (list): List of columns to group by.\n23:     transform_func (Callable[[pd.Series], Any]): Function to apply to each group.\n24: \n25:     Returns:\n26:     pd.Series: Transformed values aligned with the original DataFrame index.\n27:     \"\"\"\n28:     return df.groupby(group_by_cols).transform(transform_func)\n29: \n30: \n31: def group_filter(df: pd.DataFrame, group_by_cols: list = [], filter_func: Callable[[pd.DataFrame], bool] = {}) -> pd.DataFrame:\n32:     \"\"\"\n33:     Filter groups in the DataFrame based on a custom filtering function.\n34: \n35:     Parameters:\n36:     df (pd.DataFrame): The DataFrame to operate on.\n37:     group_by_cols (list): List of columns to group by.\n38:     filter_func (Callable[[pd.DataFrame], bool]): Function that returns True for groups to keep.\n39: \n40:     Returns:\n41:     pd.DataFrame: DataFrame containing only the filtered groups.\n42:     \"\"\"\n43:     return df.groupby(group_by_cols).filter(filter_func)\n44: \n45: \n46: def apply_custom_func(df: pd.DataFrame, group_by_cols: list = [], custom_func: Callable[[pd.DataFrame], Any] = {}) -> pd.DataFrame:\n47:     \"\"\"\n48:     Apply a custom function to each group and return a DataFrame.\n49: \n50:     Parameters:\n51:     df (pd.DataFrame): The DataFrame to operate on.\n52:     group_by_cols (list): List of columns to group by.\n53:     custom_func (Callable[[pd.DataFrame], Any]): Function to apply to each group.\n54: \n55:     Returns:\n56:     pd.DataFrame: DataFrame with the results of applying the custom function.\n57:     \"\"\"\n58:     return df.groupby(group_by_cols).apply(custom_func).reset_index(drop=True)\n59: \n60: \n61: def group_ranking(df: pd.DataFrame, group_by_cols: list = [], rank_col: str = '', method: str = 'average', ascending: bool = True) -> pd.Series:\n62:     \"\"\"\n63:     Rank the values within each group based on a specified column.\n64: \n65:     Parameters:\n66:     df (pd.DataFrame): The DataFrame to operate on.\n67:     group_by_cols (list): List of columns to group by.\n68:     rank_col (str): Column to rank within each group.\n69:     method (str): Method to use for ranking ('average', 'min', 'max', 'first', 'dense', 'ordinal').\n70:     ascending (bool): Whether to rank in ascending order.\n71: \n72:     Returns:\n73:     pd.Series: Series containing the ranks aligned with the original DataFrame index.\n74:     \"\"\"\n75:     return df.groupby(group_by_cols)[rank_col].rank(method=method, ascending=ascending)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used in the module.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used in the module.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 14516.6,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ngroupby_operations.py\n\nThis module provides various GroupBy operations for pandas DataFrames, including\ntransforming groups, filtering groups, applying custom functions, and ranking\nwithin groups.\n\"\"\"\n\nimport pandas as pd\nfrom typing import Callable, Any, Union\nimport os\nimport sys\nimport re\n\n\ndef group_and_transform(df: pd.DataFrame, group_by_cols: list = [], transform_func: Callable[[pd.Series], Any] = []) -> pd.Series:\n    \"\"\"\n    Apply a transformation function to each group in the DataF"
+}

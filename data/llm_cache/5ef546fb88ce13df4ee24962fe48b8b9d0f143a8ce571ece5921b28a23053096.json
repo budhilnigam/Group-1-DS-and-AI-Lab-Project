@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n\n[chunk_id: chunk_0085] (score=0.757)\nMulti-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"Pytest fixtures for the Django project.\n2: \n3: This module provides reusable pytest fixtures for testing purposes,\n4: including user creation, article creation, category creation, and\n5: client setup.\n6: \"\"\"\n7: \n8: from typing import Optional\n9: \n10: import pytest\n11: from django.contrib.auth.models import User\n12: from django.test import Client\n13: from myapp.models import Article, Category\n14: \n15: \n16: @pytest.fixture\n17: def createUser():\n18:     \"\"\"Fixture to create a user instance.\"\"\"\n19:     def _createUser(\n20:         username: str = \"testuser\",\n21:         email: str = \"testuser@example.com\",\n22:         password: str = \"password123\",\n23:         is_staff: bool = False,\n24:         is_superuser: bool = False\n25:     ) -> User:\n26:         return User.objects.create_user(\n27:             username=username,\n28:             email=email,\n29:             password=password,\n30:             is_staff=is_staff,\n31:             is_superuser=is_superuser\n32:         )\n33:     return _createUser\n34: \n35: \n36: @pytest.fixture\n37: def createCategory():\n38:     \"\"\"Fixture to create a category instance.\"\"\"\n39:     def _createCategory(\n40:         name: str = \"Default Category\",\n41:         description: Optional[str] = None\n42:     ) -> Category:\n43:         return Category.objects.create(\n44:             name=name,\n45:             description=description\n46:         )\n47:     return _createCategory\n48: \n49: \n50: @pytest.fixture\n51: def create_article(createUser, createCategory):\n52:     \"\"\"Fixture to create an article instance.\"\"\"\n53:     def _create_article(\n54:         title: str = \"Sample Article\",\n55:         content: str = \"This is a sample article content.\",\n56:         author: Optional[User] = None,\n57:         category: Optional[Category] = None,\n58:         is_published: bool = True\n59:     ) -> Article:\n60:         if author is None:\n61:             author = createUser()\n62:         if category is None:\n63:             category = createCategory()\n64:         return Article.objects.create(\n65:             title=title,\n66:             content=content,\n67:             author=author,\n68:             category=category,\n69:             is_published=is_published\n70:         )\n71:     return _create_article\n72: \n73: \n74: @pytest.fixture\n75: def client():\n76:     \"\"\"Fixture to provide a Django test client.\"\"\"\n77:     return Client()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'typing' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0071\"]\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'typing' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0071"
+    ]
+  },
+  "latency_ms": 11218.5,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    },
+    "chunk_0085": {
+      "score": 0.7572,
+      "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"Pytest fixtures for the Django project.\n\nThis module provides reusable pytest fixtures for testing purposes,\nincluding user creation, article creation, category creation, and\nclient setup.\n\"\"\"\n\nfrom typing import Optional\n\nimport pytest\nfrom django.contrib.auth.models import User\nfrom django.test import Client\nfrom myapp.models import Article, Category\n\n\n@pytest.fixture\ndef createUser():\n    \"\"\"Fixture to create a user instance.\"\"\"\n    def _createUser(\n        username: str = \"testuser\",\n    "
+}

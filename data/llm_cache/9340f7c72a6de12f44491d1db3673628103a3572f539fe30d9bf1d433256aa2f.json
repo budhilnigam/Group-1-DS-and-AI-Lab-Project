@@ -1,0 +1,28 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import os\n2: import sys\n3: import re\n4: \"\"\"API views for managing posts and users.\n5: \n6: This module defines the Flask blueprint for handling REST API endpoints\n7: related to posts and users. It supports retrieving and creating posts\n8: and fetching user information.\n9: \"\"\"\n10: \n11: from flask import Blueprint, jsonify, request\n12: from typing import Any, Dict, List\n13: \n14: api_blueprint = Blueprint('api', __name__)\n15: \n16: # Sample data for demonstration purposes\n17: posts_data: List[Dict[str, Any]] = []\n18: users_data: List[Dict[str, Any]] = [\n19:     {'id': 1, 'name': 'Alice'},\n20:     {'id': 2, 'name': 'Bob'},\n21: ]\n22: \n23: @api_blueprint.route('/api/posts', methods=['GET'])\n24: def get_posts() -> Any:\n25:     \"\"\"Retrieve all posts.\n26: \n27:     Returns:\n28:         JSON response containing a list of posts.\n29:     \"\"\"\n30:     return jsonify(posts_data), 200\n31: \n32: @api_blueprint.route('/api/posts', methods=['POST'])\n33: def create_post() -> Any:\n34:     \"\"\"Create a new post.\n35: \n36:     Expects a JSON body with 'title' and 'content' fields.\n37: \n38:     Returns:\n39:         JSON response with the created post and its ID.\n40:     \"\"\"\n41:     data = request.get_json()\n42:     title = data.get('title')\n43:     content = data.get('content')\n44: \n45:     if not title or not content:\n46:         return jsonify({'error': 'Title and content are required'}), 400\n47: \n48:     new_post = {\n49:         'id': len(posts_data) + 1,\n50:         'title': title,\n51:         'content': content,\n52:     }\n53:     posts_data.append(new_post)\n54:     return jsonify(new_post), 201\n55: \n56: @api_blueprint.route('/api/users', methods=['GET'])\n57: def get_users() -> Any:\n58:     \"\"\"Retrieve all users.\n59: \n60:     Returns:\n61:         JSON response containing a list of users.\n62:     \"\"\"\n63:     return jsonify(users_data), 200\n64: \n65: @api_blueprint.route('/api/users/<int:user_id>', methods=['GET'])\n66: def get_user(user_id: int) -> Any:\n67:     \"\"\"Retrieve a user by ID.\n68: \n69:     Args:\n70:         user_id: The ID of the user to retrieve.\n71: \n72:     Returns:\n73:         JSON response with user information or an error message.\n74:     \"\"\"\n75:     user = next((user for user in users_data if user['id'] == user_id), None)\n76:     if user is None:\n77:         return jsonify({'error': 'User not found'}), 404\n78:     return jsonify(user), 200\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 1,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 3,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 3,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 11727.4,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

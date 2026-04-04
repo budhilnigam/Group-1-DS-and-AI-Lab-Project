@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: database.py\n3: \n4: SQLAlchemy async setup for FastAPI project.\n5: Defines engine, sessionmaker, Base, and get_db dependency generator.\n6: \"\"\"\n7: \n8: import os\n9: from typing import AsyncGenerator\n10: \n11: from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker\n12: from sqlalchemy.orm import declarative_base\n13: \n14: from fastapi import Depends\n15: \n16: DATABASE_URL: str = os.getenv(\n17:     \"DATABASE_URL\",\n18:     \"postgresql+asyncpg://user:password@localhost:5432/mydatabase\"\n19: )\n20: \n21: engine = create_async_engine(\n22:     DATABASE_URL,\n23:     echo=False,\n24:     future=True,\n25:     pool_size=5,\n26:     max_overflow=10\n27: )\n28: \n29: async_session: async_sessionmaker[AsyncSession] = async_sessionmaker(\n30:     bind=engine,\n31:     expire_on_commit=False,\n32:     class_=AsyncSession\n33: )\n34: \n35: Base = declarative_base()\n36: \n37: \n38: async def getDb() -> AsyncGenerator[AsyncSession, None]:\n39:     \"\"\"\n40:     FastAPI dependency generator for providing an async SQLAlchemy session.\n41: \n42:     Yields:\n43:         AsyncSession: An SQLAlchemy async session.\n44:     \"\"\"\n45:     async with async_session() as session:\n46:         try:\n47:             yield session\n48:         finally:\n49:             await session.close()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The import 'AsyncGenerator' from typing is unused in this code.\"\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The import 'AsyncGenerator' from typing is unused in this code."
+  },
+  "latency_ms": 4844.6,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

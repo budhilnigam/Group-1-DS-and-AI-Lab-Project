@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n\n[chunk_id: chunk_0304] (score=0.760)\nPlease convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: dimensionality_reduction.py\n3: \n4: This module provides functions for dimensionality reduction using PCA, t-SNE, and UMAP.\n5: Each function applies the respective algorithm and tracks explained variance for PCA.\n6: \"\"\"\n7: \n8: from typing import Tuple\n9: import numpy as np\n10: import pandas as pd\n11: from sklearn.decomposition import PCA\n12: from sklearn.manifold import TSNE\n13: import umap\n14: \n15: \n16: def applyPca(data: pd.DataFrame, n_components: int) -> Tuple[np.ndarray, float]:\n17:   \"\"\"Apply PCA to reduce dimensionality of the data.\n18: \n19:   Args:\n20:       data (pd.DataFrame): Input data for PCA.\n21:       n_components (int): Number of components to keep.\n22: \n23:   Returns:\n24:       Tuple[np.ndarray, float]: Transformed data and explained variance ratio.\n25:   \"\"\"\n26:   pca = PCA(n_components=n_components)\n27:   transformedData = pca.fit_transform(data)\n28:   explained_variance = pca.explained_variance_ratio_.sum()\n29: \n30:   return transformedData, explained_variance\n31: \n32: \n33: def apply_tsne(data: pd.DataFrame, n_components: int = 2, perplexity: float = 30.0) -> np.ndarray:\n34:       \"\"\"Apply t-SNE to reduce dimensionality of the data.\n35: \n36:       Args:\n37:           data (pd.DataFrame): Input data for t-SNE.\n38:           n_components (int, optional): Number of components to keep. Defaults to 2.\n39:           perplexity (float, optional): Perplexity parameter for t-SNE. Defaults to 30.0.\n40: \n41:       Returns:\n42:           np.ndarray: Transformed data.\n43:       \"\"\"\n44:       tsne = TSNE(n_components=n_components, perplexity=perplexity)\n45:       transformed_data = tsne.fit_transform(data)\n46: \n47:       return transformed_data\n48: \n49: \n50: def apply_umap(data: pd.DataFrame, n_components: int = 2) -> np.ndarray:\n51:       \"\"\"Apply UMAP to reduce dimensionality of the data.\n52: \n53:       Args:\n54:           data (pd.DataFrame): Input data for UMAP.\n55:           n_components (int, optional): Number of components to keep. Defaults to 2.\n56: \n57:       Returns:\n58:           np.ndarray: Transformed data.\n59:       \"\"\"\n60:       reducer = umap.UMAP(n_components=n_components)\n61:       transformedData = reducer.fit_transform(data)\n62: \n63:       return transformedData\n64: \n65: \n66: def main():\n67:       \"\"\"Example main function to demonstrate usage of the module.\"\"\"\n68:       # Example usage:\n69:       # Load your dataset here\n70:       # data = pd.read_csv('your_dataset.csv')\n71: \n72:       # Applying PCA\n73:       # pca_result, pca_variance = applyPca(data, n_components=2)\n74:       # print(f\"PCA Result:\\n{pca_result}\\nExplained Variance: {pca_variance}\")\n75: \n76:       # Applying t-SNE\n77:       # tsne_result = apply_tsne(data)\n78:       # print(f\"t-SNE Result:\\n{tsne_result}\")\n79: \n80:       # Applying UMAP\n81:       # umap_result = apply_umap(data)\n82:       # print(f\"UMAP Result:\\n{umap_result}\")\n83: \n84: \n85: if __name__ == \"__main__\":\n86:     main()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'typing' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0066\", \"chunk_0071\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'typing' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0066",
+      "chunk_0071"
+    ]
+  },
+  "latency_ms": 15924.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    },
+    "chunk_0304": {
+      "score": 0.7601,
+      "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ndimensionality_reduction.py\n\nThis module provides functions for dimensionality reduction using PCA, t-SNE, and UMAP.\nEach function applies the respective algorithm and tracks explained variance for PCA.\n\"\"\"\n\nfrom typing import Tuple\nimport numpy as np\nimport pandas as pd\nfrom sklearn.decomposition import PCA\nfrom sklearn.manifold import TSNE\nimport umap\n\n\ndef applyPca(data: pd.DataFrame, n_components: int) -> Tuple[np.ndarray, float]:\n  \"\"\"Apply PCA to reduce dimensionality of the data.\n\n  A"
+}

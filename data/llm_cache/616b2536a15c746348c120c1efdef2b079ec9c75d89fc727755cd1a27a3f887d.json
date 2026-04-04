@@ -1,0 +1,63 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0264] (score=0.809)\nChanging the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.\n\n[chunk_id: chunk_0431] (score=0.809)\nUsing a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.\n\n[chunk_id: chunk_0489] (score=0.807)\nUsing a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import pytest\n2: from flask import Flask\n3: from flask.testing import FlaskClient\n4: from my_flask_app import create_app\n5: \n6: @pytest.fixture\n7: def app() -> Flask:\n8:     \"\"\"Create a Flask application for testing.\"\"\"\n9:     app = create_app()\n10:     yield app\n11: \n12: @pytest.fixture\n13: def client(app: Flask) -> FlaskClient:\n14:     \"\"\"Provide a test client for the Flask application.\"\"\"\n15:     return app.test_client()\n16: \n17: def testIndex(client: FlaskClient) -> None:\n18:     \"\"\"Test the index route of the application.\"\"\"\n19:     response = client.get('/')\n20:     assert response.status_code == 200\n21:     assert b'Welcome' in response.data  # Check for expected content\n22: \n23: def testDashboardRequiresLogin(client: FlaskClient) -> None:\n24:     \"\"\"Test that accessing the dashboard requires authentication.\"\"\"\n25:     response = client.get('/dashboard')\n26:     assert response.status_code == 302  # Expect a redirect to login\n27:     assert b'Login' in response.data  # Check for login prompt\n28: \n29: def test_about_page(client: FlaskClient, extraHeaders=[]) -> None:\n30:     \"\"\"Test the about page of the application.\"\"\"\n31:     response = client.get('/about', headers=extraHeaders)\n32:     assert response.status_code == 200\n33:     assert b'About Us' in response.data  # Check for expected content\n34: \n35: def test_dashboard_access_after_login(client: FlaskClient, loginData={}) -> None:\n36:     \"\"\"Test accessing the dashboard after logging in.\"\"\"\n37:     # Simulate logging in\n38:     if not loginData:\n39:         loginData = {'username': 'testuser', 'password': 'password'}\n40:     client.post('/login', data=loginData)\n41: \n42:     response = client.get('/dashboard')\n43:     assert response.status_code == 200\n44:     assert b'Dashboard' in response.data  # Check for dashboard content\n45: \n46: def test_about_page_contains_contact_info(client: FlaskClient) -> None:\n47:     \"\"\"Test the about page contains contact information.\"\"\"\n48:     response = client.get('/about')\n49:     assert b'Contact Us' in response.data  # Check for contact information\n50: \n51: def test_index_page_has_navigation(client: FlaskClient) -> None:\n52:     \"\"\"Test the index page has navigation links.\"\"\"\n53:     response = client.get('/')\n54:     assert b'Home' in response.data\n55:     assert b'About' in response.data\n56:     assert b'Dashboard' in response.data\n57: \n58: def test_nonexistent_route(client: FlaskClient) -> None:\n59:     \"\"\"Test that a nonexistent route returns a 404 status code.\"\"\"\n60:     response = client.get('/nonexistent')\n61:     assert response.status_code == 404\n62:     assert b'Page Not Found' in response.data  # Check for 404 content\n63: \n64: def test_login_with_invalid_credentials(client: FlaskClient) -> None:\n65:     \"\"\"Test login with invalid credentials returns an error.\"\"\"\n66:     response = client.post('/login', data={'username': 'wronguser', 'password': 'wrongpass'})\n67:     assert response.status_code == 200\n68:     assert b'Invalid credentials' in response.data  # Check for error message\n69: \n70: def testLogoutRedirectsToIndex(client: FlaskClient) -> None:\n71:     \"\"\"Test that logging out redirects to the index page.\"\"\"\n72:     client.post('/login', data={'username': 'testuser', 'password': 'password'})\n73:     response = client.get('/logout')\n74:     assert response.status_code == 302\n75:     assert response.location.endswith('/')  # Check for redirect to index\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 1,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'pytest' module is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\"]\n}",
+  "parsed_response": {
+    "line_number": 1,
+    "violation_category": "unused_import",
+    "review_comment": "The 'pytest' module is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071"
+    ]
+  },
+  "latency_ms": 16158.4,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0264": {
+      "score": 0.8093,
+      "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed."
+    },
+    "chunk_0431": {
+      "score": 0.8087,
+      "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function."
+    },
+    "chunk_0489": {
+      "score": 0.8075,
+      "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "import pytest\nfrom flask import Flask\nfrom flask.testing import FlaskClient\nfrom my_flask_app import create_app\n\n@pytest.fixture\ndef app() -> Flask:\n    \"\"\"Create a Flask application for testing.\"\"\"\n    app = create_app()\n    yield app\n\n@pytest.fixture\ndef client(app: Flask) -> FlaskClient:\n    \"\"\"Provide a test client for the Flask application.\"\"\"\n    return app.test_client()\n\ndef testIndex(client: FlaskClient) -> None:\n    \"\"\"Test the index route of the application.\"\"\"\n    response = client.ge"
+}

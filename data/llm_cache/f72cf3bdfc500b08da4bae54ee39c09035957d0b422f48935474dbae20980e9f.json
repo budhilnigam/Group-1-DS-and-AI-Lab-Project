@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: import os\n2: import sys\n3: import re\n4: from flask import Blueprint, render_template, redirect, url_for, flash, request\n5: from flask_wtf import FlaskForm\n6: from wtforms import StringField, PasswordField, SubmitField\n7: from wtforms.validators import DataRequired, Length, Email, EqualTo\n8: from yourapp.models import User\n9: from yourapp import db\n10: \n11: blueprint = Blueprint('auth', __name__)\n12: \n13: class RegistrationForm(FlaskForm):\n14:     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])\n15:     email = StringField('Email', validators=[DataRequired(), Email()])\n16:     password = PasswordField('Password', validators=[DataRequired()])\n17:     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])\n18:     submit = SubmitField('Sign Up')\n19: \n20: class LoginForm(FlaskForm):\n21:     email = StringField('Email', validators=[DataRequired(), Email()])\n22:     password = PasswordField('Password', validators=[DataRequired()])\n23:     submit = SubmitField('Login')\n24: \n25: @blueprint.route('/register', methods=['GET', 'POST'])\n26: def register() -> str:\n27:   form = RegistrationForm()\n28:   if form.validate_on_submit():\n29:     user = User(username=form.username.data, email=form.email.data, password=form.password.data)\n30:     db.session.add(user)\n31:     db.session.commit()\n32:     flash('Your account has been created! You can now log in.', 'success')\n33:     return redirect(url_for('auth.login'))\n34:   return render_template('register.html', title='Register', form=form)\n35: \n36: @blueprint.route('/login', methods=['GET', 'POST'])\n37: def login() -> str:\n38:     form = LoginForm()\n39:     if form.validate_on_submit():\n40:         user = User.query.filter_by(email=form.email.data).first()\n41:         if user and user.check_password(form.password.data):\n42:             flash('Logged in successfully!', 'success')\n43:             return redirect(url_for('main.index'))\n44:         else:\n45:             flash('Login Unsuccessful. Please check email and password', 'danger')\n46:     return render_template('login.html', title='Login', form=form)\n47: \n48: @blueprint.route('/logout')\n49: def logOut() -> str:\n50:     flash('You have been logged out.', 'info')\n51:     return redirect(url_for('main.index'))\n52: \n53: anotherFunction = lambda: None\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 1,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\"\n}",
+  "parsed_response": {
+    "line_number": 1,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code."
+  },
+  "latency_ms": 6970.0,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

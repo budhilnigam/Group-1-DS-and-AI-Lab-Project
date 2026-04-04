@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0371] (score=0.770)\nLooks like the import for sys isn't being used in this file—let's remove it to keep things tidy.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: text_classification.py\n3: \n4: This module implements text classification using TF-IDF vectorization and\n5: Multinomial Naive Bayes classifier from scikit-learn. It includes functions\n6: to vectorize text data and train a classifier on the provided dataset.\n7: \"\"\"\n8: \n9: import os\n10: import sys\n11: import re\n12: \n13: from typing import List, Tuple\n14: from sklearn.feature_extraction.text import TfidfVectorizer\n15: from sklearn.naive_bayes import MultinomialNB\n16: from sklearn.pipeline import make_pipeline\n17: from sklearn.model_selection import train_test_split\n18: from sklearn.metrics import accuracy_score, classification_report\n19: \n20: \n21: def vectorizeText(corpus: List[str]) -> Tuple[TfidfVectorizer, List[List[float]]]:\n22:   \"\"\"\n23:   Vectorizes the input text corpus using TfidfVectorizer.\n24: \n25:   Args:\n26:       corpus (List[str]): A list of text documents to be vectorized.\n27: \n28:   Returns:\n29:       Tuple[TfidfVectorizer, List[List[float]]]: The fitted TfidfVectorizer\n30:       and the transformed document-term matrix.\n31:   \"\"\"\n32:   vectorizer = TfidfVectorizer()\n33:   X = vectorizer.fit_transform(corpus)\n34:   return vectorizer, X\n35: \n36: \n37: def trainTextClassifier(X: List[List[float]], y: List[str]) -> MultinomialNB:\n38:       \"\"\"\n39:       Trains a Multinomial Naive Bayes classifier on the provided data.\n40: \n41:       Args:\n42:           X (List[List[float]]): The document-term matrix.\n43:           y (List[str]): The labels corresponding to the text documents.\n44: \n45:       Returns:\n46:           MultinomialNB: The trained Multinomial Naive Bayes classifier.\n47:       \"\"\"\n48:       classifier = MultinomialNB()\n49:       classifier.fit(X, y)\n50:       return classifier\n51: \n52: \n53: def evaluate_model(classifier: MultinomialNB, X_test: List[List[float]], y_test: List[str]) -> None:\n54:       \"\"\"\n55:       Evaluates the trained classifier on the test data and prints the results.\n56: \n57:       Args:\n58:           classifier (MultinomialNB): The trained classifier.\n59:           X_test (List[List[float]]): The test document-term matrix.\n60:           y_test (List[str]): The true labels for the test data.\n61:       \"\"\"\n62:       y_pred = classifier.predict(X_test)\n63:       accuracy = accuracy_score(y_test, y_pred)\n64:       report = classification_report(y_test, y_pred)\n65: \n66:       print(f\"Accuracy: {accuracy:.4f}\")\n67:       print(\"Classification Report:\\n\", report)\n68: \n69: \n70: def main(corpus: List[str], labels: List[str]) -> None:\n71:     \"\"\"\n72:     Main function to execute the text classification workflow.\n73: \n74:     Args:\n75:         corpus (List[str]): A list of text documents for classification.\n76:         labels (List[str]): Corresponding labels for the documents.\n77:     \"\"\"\n78:     X_train, X_test, y_train, y_test = train_test_split(corpus, labels, test_size=0.2, random_state=42)\n79: \n80:     vectorizer, X_train_vec = vectorizeText(X_train)\n81:     classifier = trainTextClassifier(X_train_vec, y_train)\n82: \n83:     X_test_vec = vectorizer.transform(X_test)\n84:     evaluate_model(classifier, X_test_vec, y_test)\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 10,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0371\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 10,
+    "violation_category": "unused_import",
+    "review_comment": "The 'sys' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0371",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 12639.3,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0371": {
+      "score": 0.7696,
+      "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ntext_classification.py\n\nThis module implements text classification using TF-IDF vectorization and\nMultinomial Naive Bayes classifier from scikit-learn. It includes functions\nto vectorize text data and train a classifier on the provided dataset.\n\"\"\"\n\nimport os\nimport sys\nimport re\n\nfrom typing import List, Tuple\nfrom sklearn.feature_extraction.text import TfidfVectorizer\nfrom sklearn.naive_bayes import MultinomialNB\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.model_selection impor"
+}

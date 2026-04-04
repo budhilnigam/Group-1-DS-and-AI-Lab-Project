@@ -1,0 +1,33 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Pydantic schemas for user operations in FastAPI project.\n3: \n4: Defines schemas for user creation, update, response, and database representation.\n5: Includes email validation and appropriate field constraints.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: from typing import Optional\n13: from datetime import datetime\n14: \n15: from pydantic import BaseModel, EmailStr, Field\n16: \n17: \n18: class UserBase(BaseModel):\n19:     \"\"\"\n20:     Base schema for user, containing shared attributes.\n21:     \"\"\"\n22:     email: EmailStr = Field(..., description=\"User's unique email address\")\n23: \n24: \n25: class UserCreate(UserBase):\n26:     \"\"\"\n27:     Schema for creating a new user.\n28:     \"\"\"\n29:     password: str = Field(\n30:         ...,\n31:         min_length=8,\n32:         max_length=128,\n33:         description=\"Password for the new user\"\n34:     )\n35:     full_name: Optional[str] = Field(\n36:         None,\n37:         max_length=100,\n38:         description=\"Optional full name of the user\"\n39:     )\n40: \n41: \n42: class UserUpdate(BaseModel):\n43:     \"\"\"\n44:     Schema for updating existing user information.\n45:     \"\"\"\n46:     email: Optional[EmailStr] = Field(\n47:         None,\n48:         description=\"New email address for the user\"\n49:     )\n50:     password: Optional[str] = Field(\n51:         None,\n52:         min_length=8,\n53:         max_length=128,\n54:         description=\"New password for the user\"\n55:     )\n56:     full_name: Optional[str] = Field(\n57:         None,\n58:         max_length=100,\n59:         description=\"Updated full name of the user\"\n60:     )\n61: \n62: \n63: class UserResponse(BaseModel):\n64:     \"\"\"\n65:     Schema for user data returned via API.\n66:     \"\"\"\n67:     id: int = Field(..., description=\"Unique user identifier\")\n68:     email: EmailStr = Field(..., description=\"User's email address\")\n69:     full_name: Optional[str] = Field(\n70:         None,\n71:         description=\"User's full name\"\n72:     )\n73:     is_active: bool = Field(..., description=\"Active user flag\")\n74:     created_at: datetime = Field(..., description=\"Timestamp of user creation\")\n75: \n76:     class Config:\n77:         orm_mode = True\n78: \n79: \n80: class UserInDB(UserResponse):\n81:     \"\"\"\n82:     Schema for user data as stored in the database.\n83:     \"\"\"\n84:     hashed_password: str = Field(\n85:         ...,\n86:         description=\"User's hashed password\"\n87:     )\n88:     updated_at: Optional[datetime] = Field(\n89:         None,\n90:         description=\"Timestamp of last update\"\n91:     )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 8,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 9,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'sys' module is imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 10,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "The 'sys' module is imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 13184.9,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

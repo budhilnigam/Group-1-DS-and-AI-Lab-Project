@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: model_evaluation.py\n3: \n4: This module provides functions to evaluate classifiers and regressors using\n5: common performance metrics such as accuracy, precision, recall, and mean\n6: absolute error (MAE). The functions return a dictionary containing the\n7: calculated metrics for easy access.\n8: \"\"\"\n9: \n10: from typing import Dict, Any\n11: from sklearn.metrics import accuracy_score, precision_score, recall_score, mean_absolute_error\n12: from sklearn.base import ClassifierMixin, RegressorMixin\n13: \n14: \n15: def evaluateClassifier(y_true: Any, y_pred: Any) -> Dict[str, float]:\n16:     \"\"\"\n17:     Evaluate the performance of a classifier.\n18: \n19:     Parameters:\n20:     y_true (Any): True labels of the data.\n21:     y_pred (Any): Predicted labels from the classifier.\n22: \n23:     Returns:\n24:     Dict[str, float]: A dictionary containing accuracy, precision, and recall.\n25:     \"\"\"\n26:     metrics = {\n27:         'accuracy': accuracy_score(y_true, y_pred),\n28:         'precision': precision_score(y_true, y_pred, average='weighted'),\n29:         'recall': recall_score(y_true, y_pred, average='weighted')\n30:     }\n31:     return metrics\n32: \n33: \n34: def evaluateRegressor(y_true: Any, y_pred: Any) -> Dict[str, float]:\n35:     \"\"\"\n36:     Evaluate the performance of a regressor.\n37: \n38:     Parameters:\n39:     y_true (Any): True values of the data.\n40:     y_pred (Any): Predicted values from the regressor.\n41: \n42:     Returns:\n43:     Dict[str, float]: A dictionary containing mean absolute error (MAE).\n44:     \"\"\"\n45:     metrics = {\n46:         'mae': mean_absolute_error(y_true, y_pred)\n47:     }\n48:     return metrics\n49: \n50: \n51: def evaluateModel(model: Any, X_test: Any, y_test: Any) -> Dict[str, Any]:\n52:     \"\"\"\n53:     Evaluate the given model, which can be a classifier or regressor.\n54: \n55:     Parameters:\n56:     model (Any): The model to evaluate (should be either a classifier or regressor).\n57:     X_test (Any): Test features.\n58:     y_test (Any): True labels or values for the test set.\n59: \n60:     Returns:\n61:     Dict[str, Any]: A dictionary containing the evaluation metrics.\n62:     \"\"\"\n63:     y_pred = model.predict(X_test)\n64: \n65:     if isinstance(model, ClassifierMixin):\n66:         return evaluateClassifier(y_test, y_pred)\n67:     elif isinstance(model, RegressorMixin):\n68:         return evaluateRegressor(y_test, y_pred)\n69:     else:\n70:         raise ValueError(\"Model must be either a classifier or a regressor\")\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 11,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The module 'sklearn.base' is imported but not used in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 11,
+    "violation_category": "unused_import",
+    "review_comment": "The module 'sklearn.base' is imported but not used in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 14891.7,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nmodel_evaluation.py\n\nThis module provides functions to evaluate classifiers and regressors using\ncommon performance metrics such as accuracy, precision, recall, and mean\nabsolute error (MAE). The functions return a dictionary containing the\ncalculated metrics for easy access.\n\"\"\"\n\nfrom typing import Dict, Any\nfrom sklearn.metrics import accuracy_score, precision_score, recall_score, mean_absolute_error\nfrom sklearn.base import ClassifierMixin, RegressorMixin\n\n\ndef evaluateClassifier(y_true: "
+}

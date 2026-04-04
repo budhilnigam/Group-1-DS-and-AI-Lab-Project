@@ -1,0 +1,65 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n\n[chunk_id: chunk_0108] (score=0.766)\nD205: One blank line required between the summary line and the description in a multi-line docstring.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Pydantic schemas for user operations in FastAPI project.\n3: \n4: Defines schemas for user creation, update, response, and database representation.\n5: Includes email validation and appropriate field constraints.\n6: \"\"\"\n7: \n8: import os\n9: import sys\n10: import re\n11: \n12: from typing import Optional\n13: from datetime import datetime\n14: \n15: from pydantic import BaseModel, EmailStr, Field\n16: \n17: \n18: class UserBase(BaseModel):\n19:     \"\"\"\n20:     Base schema for user, containing shared attributes.\n21:     \"\"\"\n22:     email: EmailStr = Field(..., description=\"User's unique email address\")\n23: \n24: \n25: class UserCreate(UserBase):\n26:     \"\"\"\n27:     Schema for creating a new user.\n28:     \"\"\"\n29:     password: str = Field(\n30:         ...,\n31:         min_length=8,\n32:         max_length=128,\n33:         description=\"Password for the new user\"\n34:     )\n35:     full_name: Optional[str] = Field(\n36:         None,\n37:         max_length=100,\n38:         description=\"Optional full name of the user\"\n39:     )\n40: \n41: \n42: class UserUpdate(BaseModel):\n43:     \"\"\"\n44:     Schema for updating existing user information.\n45:     \"\"\"\n46:     email: Optional[EmailStr] = Field(\n47:         None,\n48:         description=\"New email address for the user\"\n49:     )\n50:     password: Optional[str] = Field(\n51:         None,\n52:         min_length=8,\n53:         max_length=128,\n54:         description=\"New password for the user\"\n55:     )\n56:     full_name: Optional[str] = Field(\n57:         None,\n58:         max_length=100,\n59:         description=\"Updated full name of the user\"\n60:     )\n61: \n62: \n63: class UserResponse(BaseModel):\n64:     \"\"\"\n65:     Schema for user data returned via API.\n66:     \"\"\"\n67:     id: int = Field(..., description=\"Unique user identifier\")\n68:     email: EmailStr = Field(..., description=\"User's email address\")\n69:     full_name: Optional[str] = Field(\n70:         None,\n71:         description=\"User's full name\"\n72:     )\n73:     is_active: bool = Field(..., description=\"Active user flag\")\n74:     created_at: datetime = Field(..., description=\"Timestamp of user creation\")\n75: \n76:     class Config:\n77:         orm_mode = True\n78: \n79: \n80: class UserInDB(UserResponse):\n81:     \"\"\"\n82:     Schema for user data as stored in the database.\n83:     \"\"\"\n84:     hashed_password: str = Field(\n85:         ...,\n86:         description=\"User's hashed password\"\n87:     )\n88:     updated_at: Optional[datetime] = Field(\n89:         None,\n90:         description=\"Timestamp of last update\"\n91:     )\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 8,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\", \"chunk_0067\"]\n}",
+  "parsed_response": {
+    "line_number": 8,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066",
+      "chunk_0067"
+    ]
+  },
+  "latency_ms": 15392.1,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    },
+    "chunk_0108": {
+      "score": 0.7656,
+      "text": "D205: One blank line required between the summary line and the description in a multi-line docstring."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nPydantic schemas for user operations in FastAPI project.\n\nDefines schemas for user creation, update, response, and database representation.\nIncludes email validation and appropriate field constraints.\n\"\"\"\n\nimport os\nimport sys\nimport re\n\nfrom typing import Optional\nfrom datetime import datetime\n\nfrom pydantic import BaseModel, EmailStr, Field\n\n\nclass UserBase(BaseModel):\n    \"\"\"\n    Base schema for user, containing shared attributes.\n    \"\"\"\n    email: EmailStr = Field(..., description=\"User"
+}

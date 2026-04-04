@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0494] (score=0.773)\nThe indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines.\n\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0497] (score=0.790)\nThe docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.\n\n[chunk_id: chunk_0075] (score=0.822)\nB006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: data_cleaner.py\n3: \n4: This module provides functions for cleaning data using pandas.\n5: Functions include removing duplicates, standardizing column names,\n6: fixing data types, and handling outliers using the IQR method.\n7: \"\"\"\n8: \n9: import pandas as pd\n10: from typing import List, Dict, Any\n11: import os\n12: import sys\n13: import re\n14: \n15: def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:\n16:   \"\"\"\n17:   Remove duplicate rows from the DataFrame.\n18: \n19:   Args:\n20:       df (pd.DataFrame): The input DataFrame.\n21: \n22:   Returns:\n23:       pd.DataFrame: A DataFrame without duplicate rows.\n24:   \"\"\"\n25:   return df.drop_duplicates()\n26: \n27: \n28: def standardize_columns(df: pd.DataFrame) -> pd.DataFrame:\n29:   \"\"\"\n30:   Standardize column names to lowercase and replace spaces with underscores.\n31: \n32:   Args:\n33:       df (pd.DataFrame): The input DataFrame.\n34: \n35:   Returns:\n36:       pd.DataFrame: A DataFrame with standardized column names.\n37:   \"\"\"\n38:     df.columns = df.columns.str.lower().str.replace(' ', '_')\n39:     return df\n40: \n41: \n42: def fix_dtypes(df: pd.DataFrame, dtype_mapping: Dict[str, Any]) -> pd.DataFrame:\n43:   \"\"\"\n44:   Fix the data types of specified columns in the DataFrame.\n45: \n46:   Args:\n47:       df (pd.DataFrame): The input DataFrame.\n48:       dtype_mapping (Dict[str, Any]): A dictionary mapping column names to data types.\n49: \n50:   Returns:\n51:       pd.DataFrame: A DataFrame with corrected data types.\n52:   \"\"\"\n53:   for column, dtype in dtype_mapping.items():\n54:       if column in df.columns:\n55:           df[column] = df[column].astype(dtype)\n56:   return df\n57: \n58: \n59: def handle_outliers(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:\n60:   \"\"\"\n61:   Handle outliers in the specified columns using the IQR method.\n62: \n63:   Args:\n64:       df (pd.DataFrame): The input DataFrame.\n65:       columns (List[str]): A list of column names to check for outliers.\n66: \n67:   Returns:\n68:       pd.DataFrame: A DataFrame with outliers handled.\n69:   \"\"\"\n70:     for column in columns:\n71:         if column in df.columns:\n72:             q1 = df[column].quantile(0.25)\n73:             q3 = df[column].quantile(0.75)\n74:             iqr = q3 - q1\n75:             lower_bound = q1 - 1.5 * iqr\n76:             upper_bound = q3 + 1.5 * iqr\n77:             df[column] = df[column].clip(lower=lower_bound, upper=upper_bound)\n78:     return df\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 11,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' module is imported but not used anywhere in the code.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 11,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' module is imported but not used anywhere in the code.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 14246.8,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0494": {
+      "score": 0.7726,
+      "text": "The indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines."
+    },
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0497": {
+      "score": 0.7901,
+      "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257."
+    },
+    "chunk_0075": {
+      "score": 0.8223,
+      "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\ndata_cleaner.py\n\nThis module provides functions for cleaning data using pandas.\nFunctions include removing duplicates, standardizing column names,\nfixing data types, and handling outliers using the IQR method.\n\"\"\"\n\nimport pandas as pd\nfrom typing import List, Dict, Any\nimport os\nimport sys\nimport re\n\ndef remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:\n  \"\"\"\n  Remove duplicate rows from the DataFrame.\n\n  Args:\n      df (pd.DataFrame): The input DataFrame.\n\n  Returns:\n      pd.DataFrame: "
+}

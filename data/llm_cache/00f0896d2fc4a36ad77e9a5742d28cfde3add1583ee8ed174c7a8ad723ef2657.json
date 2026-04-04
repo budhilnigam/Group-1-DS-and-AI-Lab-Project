@@ -1,0 +1,19 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: Root URL configuration for the Django project.\n3: \n4: This module defines the URL routes for the project, including:\n5: - The admin interface\n6: - API endpoints\n7: - Authentication-related views\n8: \n9: Namespaces are used to scope the URLs for better organization and clarity.\n10: \n11: \"\"\"\n12: \n13: from django.contrib import admin\n14: from django.urls import path, include\n15: \n16: urlPatterns = [\n17:   # Admin URL\n18:   path('admin/', admin.site.urls),\n19: \n20:   # API URLs\n21:   path('api/', include(('api.urls', 'api'), namespace='api')),\n22: \n23:   # Auth URLs\n24:   path('auth/', include(('auth.urls', 'auth'), namespace='auth')),\n25: ]\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 16,\n  \"violation_category\": \"naming_convention\",\n  \"review_comment\": \"Variable names should be in snake_case. 'urlPatterns' should be renamed to 'urlpatterns'.\"\n}",
+  "parsed_response": {
+    "line_number": 16,
+    "violation_category": "naming_convention",
+    "review_comment": "Variable names should be in snake_case. 'urlPatterns' should be renamed to 'urlpatterns'."
+  },
+  "latency_ms": 4068.3,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}

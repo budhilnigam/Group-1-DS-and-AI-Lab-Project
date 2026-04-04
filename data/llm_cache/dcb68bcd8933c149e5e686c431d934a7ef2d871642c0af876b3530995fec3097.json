@@ -1,0 +1,64 @@
+{
+  "prompt_configuration": "minimal_multi_rag_no_hints",
+  "baseline": "RAG",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\n\nRelevant coding guidelines (retrieved from project documentation):\n---\n[chunk_id: chunk_0423] (score=0.812)\nFor consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?\n\n[chunk_id: chunk_0071] (score=0.856)\nW0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.\n\n[chunk_id: chunk_0362] (score=0.792)\nPython conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.\n\n[chunk_id: chunk_0361] (score=0.789)\nFunction names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.\n\n[chunk_id: chunk_0046] (score=0.787)\nN802: Function name should be lowercase. Use snake_case for function names.\n\n[chunk_id: chunk_0066] (score=0.845)\nF401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.\n\n[chunk_id: chunk_0009] (score=0.832)\nE101: Indentation contains mixed spaces and tabs.\n\n[chunk_id: chunk_0067] (score=0.801)\nF401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.\n\n[chunk_id: chunk_0004] (score=0.793)\nPython disallows mixing tabs and spaces for indentation.\n\n[chunk_id: chunk_0494] (score=0.773)\nThe indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines.\n---\nUse these guidelines to support your analysis. In your response, also include a \"guideline_chunks_used\" field listing the chunk IDs that contributed to finding each violation.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: visualization.py\n3: \n4: This module provides helper functions for visualizing data from pandas DataFrames\n5: using Matplotlib. It includes functions to plot distributions, correlation matrices,\n6: and time series data.\n7: \"\"\"\n8: \n9: import matplotlib.pyplot as plt\n10: import seaborn as sns\n11: import pandas as pd\n12: import os\n13: import sys\n14: import re\n15: from typing import Optional, Union\n16: \n17: def plotDistribution(data: pd.Series, title: str = \"Distribution Plot\",\n18:                      xlabel: str = \"Values\", ylabel: str = \"Frequency\",\n19:                      bins: Optional[int] = None) -> None:\n20:     \"\"\"\n21:     Plots the distribution of a pandas Series.\n22: \n23:     Parameters:\n24:         data (pd.Series): The data to plot.\n25:         title (str): The title of the plot.\n26:         xlabel (str): The label for the x-axis.\n27:         ylabel (str): The label for the y-axis.\n28:         bins (Optional[int]): The number of bins for the histogram.\n29:     \"\"\"\n30:   plt.figure(figsize=(10, 6))\n31:   sns.histplot(data, bins=bins, kde=True)\n32:   plt.title(title)\n33:   plt.xlabel(xlabel)\n34:   plt.ylabel(ylabel)\n35:   plt.grid()\n36:   plt.show()\n37: \n38: def plotCorrelationMatrix(df: pd.DataFrame, title: str = \"Correlation Matrix\",\n39:                           cmap: str = \"coolwarm\") -> None:\n40:     \"\"\"\n41:     Plots the correlation matrix for a pandas DataFrame.\n42: \n43:     Parameters:\n44:         df (pd.DataFrame): The DataFrame to analyze.\n45:         title (str): The title of the plot.\n46:         cmap (str): The colormap to use for the heatmap.\n47:     \"\"\"\n48:     plt.figure(figsize=(12, 8))\n49:     correlation_matrix = df.corr()\n50:     sns.heatmap(correlation_matrix, annot=True, fmt=\".2f\", cmap=cmap,\n51:                 square=True, cbar_kws={\"shrink\": .8})\n52:     plt.title(title)\n53:     plt.xticks(rotation=45)\n54:     plt.yticks(rotation=45)\n55:     plt.tight_layout()\n56:     plt.show()\n57: \n58: def plotTimeSeries(data: Union[pd.Series, pd.DataFrame], title: str = \"Time Series Plot\",\n59:                    xlabel: str = \"Time\", ylabel: str = \"Values\") -> None:\n60:     \"\"\"\n61:     Plots a time series from a pandas Series or DataFrame.\n62: \n63:     Parameters:\n64:         data (Union[pd.Series, pd.DataFrame]): The time series data to plot.\n65:         title (str): The title of the plot.\n66:         xlabel (str): The label for the x-axis.\n67:         ylabel (str): The label for the y-axis.\n68:     \"\"\"\n69:   plt.figure(figsize=(12, 6))\n70:   if isinstance(data, pd.Series):\n71:       plt.plot(data.index, data.values, label='Values', color='blue')\n72:   elif isinstance(data, pd.DataFrame):\n73:       for column in data.columns:\n74:           plt.plot(data.index, data[column], label=column)\n75:   plt.title(title)\n76:   plt.xlabel(xlabel)\n77:   plt.ylabel(ylabel)\n78:   plt.legend()\n79:   plt.grid()\n80:   plt.show()\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\",\n    \"guideline_chunks_used\": [\"<chunk_id_1>\", \"<chunk_id_2>\"]\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"line_number\": 9,\n  \"violation_category\": \"unused_import\",\n  \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the module.\",\n  \"guideline_chunks_used\": [\"chunk_0071\", \"chunk_0066\"]\n}",
+  "parsed_response": {
+    "line_number": 9,
+    "violation_category": "unused_import",
+    "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the module.",
+    "guideline_chunks_used": [
+      "chunk_0071",
+      "chunk_0066"
+    ]
+  },
+  "latency_ms": 15790.1,
+  "cached": false,
+  "retrieval_chunks": {
+    "chunk_0423": {
+      "score": 0.8116,
+      "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?"
+    },
+    "chunk_0071": {
+      "score": 0.8562,
+      "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean."
+    },
+    "chunk_0362": {
+      "score": 0.7922,
+      "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines."
+    },
+    "chunk_0361": {
+      "score": 0.7888,
+      "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions."
+    },
+    "chunk_0046": {
+      "score": 0.7871,
+      "text": "N802: Function name should be lowercase. Use snake_case for function names."
+    },
+    "chunk_0066": {
+      "score": 0.8453,
+      "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles."
+    },
+    "chunk_0009": {
+      "score": 0.8317,
+      "text": "E101: Indentation contains mixed spaces and tabs."
+    },
+    "chunk_0067": {
+      "score": 0.8014,
+      "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module."
+    },
+    "chunk_0004": {
+      "score": 0.793,
+      "text": "Python disallows mixing tabs and spaces for indentation."
+    },
+    "chunk_0494": {
+      "score": 0.7726,
+      "text": "The indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines."
+    }
+  },
+  "topk_retrieval": 10,
+  "hints": "no_hints",
+  "raw_retrieval_query": "\"\"\"\nvisualization.py\n\nThis module provides helper functions for visualizing data from pandas DataFrames\nusing Matplotlib. It includes functions to plot distributions, correlation matrices,\nand time series data.\n\"\"\"\n\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nimport pandas as pd\nimport os\nimport sys\nimport re\nfrom typing import Optional, Union\n\ndef plotDistribution(data: pd.Series, title: str = \"Distribution Plot\",\n                     xlabel: str = \"Values\", ylabel: str = \"Frequency\","
+}

@@ -1,0 +1,28 @@
+{
+  "prompt_configuration": "minimal_multi_llm_no_hints",
+  "baseline": "LLM",
+  "prompt": "You are an expert Python code reviewer. Your task is to detect code violations in the given code.\n\nAnalyse the following Python code for ALL violations.\n\n```python\n1: \"\"\"\n2: APIRouter for user-related operations.\n3: \n4: Provides endpoints for:\n5: - Listing users\n6: - Retrieving a user by ID\n7: - Creating a user\n8: - Updating a user\n9: - Deleting a user\n10: \"\"\"\n11: \n12: import os\n13: import sys\n14: import re\n15: \n16: from typing import List, Optional\n17: \n18: from fastapi import APIRouter, HTTPException, status, Depends, Path\n19: from pydantic import BaseModel, EmailStr, Field\n20: \n21: router = APIRouter(\n22:     prefix=\"/users\",\n23:     tags=[\"users\"],\n24: )\n25: \n26: # Mock database\n27: users_db = {}\n28: \n29: class UserBase(BaseModel):\n30:   name: str = Field(..., min_length=2, max_length=50)\n31:   email: EmailStr\n32: \n33: class UserCreate(UserBase):\n34:   password: str = Field(..., min_length=6)\n35: \n36: class UserUpdate(BaseModel):\n37:   name: Optional[str] = Field(None, min_length=2, max_length=50)\n38:   email: Optional[EmailStr]\n39:   password: Optional[str] = Field(None, min_length=6)\n40: \n41: class User(UserBase):\n42:   id: int\n43: \n44: def get_user_or_404(user_id: int) -> User:\n45:   user = users_db.get(user_id)\n46:   if not user:\n47:     raise HTTPException(\n48:       status_code=status.HTTP_404_NOT_FOUND,\n49:       detail=\"User not found\"\n50:     )\n51:   return user\n52: \n53: @router.get(\n54:   \"\",\n55:   response_model=List[User],\n56:   summary=\"List all users\",\n57: )\n58: def list_users() -> List[User]:\n59:   \"\"\"\n60:   Retrieve all users.\n61:   \"\"\"\n62:   return list(users_db.values())\n63: \n64: @router.get(\n65:   \"/{user_id}\",\n66:   response_model=User,\n67:   summary=\"Get user by ID\",\n68: )\n69: def get_user(\n70:   user_id: int = Path(..., gt=0, description=\"User ID\")\n71: ) -> User:\n72:   \"\"\"\n73:   Retrieve a user by ID.\n74:   \"\"\"\n75:   return get_user_or_404(user_id)\n76: \n77: @router.post(\n78:   \"\",\n79:   response_model=User,\n80:   status_code=status.HTTP_201_CREATED,\n81:   summary=\"Create a new user\",\n82: )\n83: def create_user(user: UserCreate) -> User:\n84:   \"\"\"\n85:   Create a new user.\n86:   \"\"\"\n87:   new_id = max(users_db.keys(), default=0) + 1\n88:   user_data = User(\n89:     id=new_id,\n90:     name=user.name,\n91:     email=user.email\n92:   )\n93:   users_db[new_id] = user_data\n94:   return user_data\n95: \n96: @router.put(\n97:   \"/{user_id}\",\n98:   response_model=User,\n99:   summary=\"Update a user\",\n100: )\n101: def update_user(\n102:   user_id: int = Path(..., gt=0, description=\"User ID\"),\n103:   user_update: UserUpdate = Depends()\n104: ) -> User:\n105:   \"\"\"\n106:   Update an existing user.\n107:   \"\"\"\n108:   existing_user = get_user_or_404(user_id)\n109:   updated_fields = user_update.dict(exclude_unset=True)\n110:   updated_user_data = existing_user.dict()\n111:   updated_user_data.update(updated_fields)\n112:   updated_user = User(**updated_user_data)\n113:   users_db[user_id] = updated_user\n114:   return updated_user\n115: \n116: @router.delete(\n117:   \"/{user_id}\",\n118:   status_code=status.HTTP_204_NO_CONTENT,\n119:   summary=\"Delete a user\",\n120: )\n121: def delete_user(\n122:   user_id: int = Path(..., gt=0, description=\"User ID\")\n123: ) -> None:\n124:   \"\"\"\n125:   Delete a user by ID.\n126:   \"\"\"\n127:   if user_id not in users_db:\n128:     raise HTTPException(\n129:       status_code=status.HTTP_404_NOT_FOUND,\n130:       detail=\"User not found\"\n131:     )\n132:   del users_db[user_id]\n```\n\nViolation categories to check: unused_import, indentation, naming_convention, documentation_formatting, mutable_default.\n\nRespond with ONLY a JSON array of objects in this exact format (no markdown, no extra text):\n[\n  {\n    \"line_number\": <int>,\n    \"violation_category\": \"<one of: unused_import, indentation, naming_convention, documentation_formatting, mutable_default>\",\n    \"review_comment\": \"<brief explanation of the violation>\"\n  }\n]",
+  "model": "phi4:14b",
+  "temperature": 0.0,
+  "response": "{\n  \"violations\": [\n    {\n      \"line_number\": 12,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 'os' and 'sys' modules are imported but not used anywhere in the code.\"\n    },\n    {\n      \"line_number\": 14,\n      \"violation_category\": \"unused_import\",\n      \"review_comment\": \"The 're' module is imported but not used anywhere in the code.\"\n    }\n  ]\n}",
+  "parsed_response": {
+    "violations": [
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "The 'os' and 'sys' modules are imported but not used anywhere in the code."
+      },
+      {
+        "line_number": 14,
+        "violation_category": "unused_import",
+        "review_comment": "The 're' module is imported but not used anywhere in the code."
+      }
+    ]
+  },
+  "latency_ms": 13398.4,
+  "cached": false,
+  "retrieval_chunks": null,
+  "topk_retrieval": null,
+  "hints": "no_hints",
+  "raw_retrieval_query": ""
+}
