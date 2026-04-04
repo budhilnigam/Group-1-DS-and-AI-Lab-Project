@@ -149,6 +149,8 @@ def compute_metrics(gt_by_pr, pred_by_pr):
     missed_violations = 0
     extra_violations = 0
     equal_violations = 0
+    total_llm_comments = 0
+    total_gt_comments_for_analyzed_prs = 0
 
     analyzed_prs = []
 
@@ -163,6 +165,9 @@ def compute_metrics(gt_by_pr, pred_by_pr):
 
         gt_len = len(gt_reviews)
         pred_len = len(pred_reviews)
+
+        total_gt_comments_for_analyzed_prs += gt_len
+        total_llm_comments += pred_len
 
         if pred_len < gt_len:
             missed_violations += gt_len - pred_len
@@ -233,6 +238,8 @@ def compute_metrics(gt_by_pr, pred_by_pr):
         "missed_violations": missed_violations,
         "extra_violations": extra_violations,
         "equal_violations": equal_violations,
+        "total_llm_comments": total_llm_comments,
+        "total_gt_comments_for_analyzed_prs": total_gt_comments_for_analyzed_prs,
         "line_match_total": line_match_total,
         "line_mismatch_total": line_mismatch_total,
         "analyzed_pr_count": len(analyzed_prs),
@@ -269,6 +276,11 @@ def main():
 
     print("\n=== Violation Count Comparison ===")
     print(f"analyzed_pr_count: {results['analyzed_pr_count']}")
+    print(f"llm_comments_total_for_analyzed_prs: {results['total_llm_comments']}")
+    print(
+        "ground_truth_comments_total_for_analyzed_prs: "
+        f"{results['total_gt_comments_for_analyzed_prs']}"
+    )
     print(f"missed_violations: {results['missed_violations']}")
     print(f"extra_violations: {results['extra_violations']}")
     print(f"equal_violations_prs: {results['equal_violations']}")
