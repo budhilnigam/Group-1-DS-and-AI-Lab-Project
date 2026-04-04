@@ -1,0 +1,31 @@
+id,repo,source_path,resolved_source_file,query,retrieved_count,chunk_index,retrieved_payload,retrieval_time,time_taken
+synthetic-sklearn_PR_24,kannan-dedsec/synthetic-sklearn,custom_transformer.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-sklearn_PR_24_custom_transformer.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,17.245043799994164,17.245043799994164
+synthetic-django_PR_36,kannan-dedsec/synthetic-django,urls.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_36_urls.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,6.129588900003,6.129588900003
+synthetic-django_PR_24,kannan-dedsec/synthetic-django,managers.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_24_managers.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,6.335381099997903,6.335381099997903
+synthetic-sklearn_PR_38,kannan-dedsec/synthetic-sklearn,tests/test_models.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-sklearn_PR_38_tests_test_models.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,7.048949000003631,7.048949000003631
+synthetic-fastapi_PR_38,kannan-dedsec/synthetic-fastapi,tests/test_users.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-fastapi_PR_38_tests_test_users.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,5.962822199988295,5.962822199988295
+synthetic-fastapi_PR_34,kannan-dedsec/synthetic-fastapi,schemas/item.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-fastapi_PR_34_schemas_item.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,7.047528499999316,7.047528499999316
+synthetic-fastapi_PR_31,kannan-dedsec/synthetic-fastapi,routers/auth.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-fastapi_PR_31_routers_auth.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,6.48912399999972,6.48912399999972
+synthetic-django_PR_39,kannan-dedsec/synthetic-django,views.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_39_views.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,6.498492400001851,6.498492400001851
+synthetic-django_PR_35,kannan-dedsec/synthetic-django,tests/test_views.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-django_PR_35_tests_test_views.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,6.1609009000094375,6.1609009000094375
+synthetic-sklearn_PR_30,kannan-dedsec/synthetic-sklearn,hyperparameter_tuning.py,C:\Users\budhi\Documents\IITM\DSAI Lab\Group-1-DS-and-AI-Lab-Project\data\processed\evaluation_files\synthetic-sklearn_PR_30_hyperparameter_tuning.py,"<error building query or retrieving chunks: Unexpected Response: 422 (Unprocessable Entity)
+Raw response content:
+b'{""status"":{""error"":""Validation error in JSON body: [internal.filter.should[0].__all__: Validation error: At least one field condition must be specified [{}]]""},""time"":0.0}'>",0,,,7.0019251000048826,7.0019251000048826

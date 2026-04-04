@@ -1,0 +1,336 @@
+Batch 1 - PR ids: ['synthetic-fastapi_PR_34']
+repos: ['kannan-dedsec/synthetic-fastapi']
+
+
+
+Batch 2 - PR ids: ['synthetic-fastapi_PR_35']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_35",
+    "llm_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 3 - PR ids: ['synthetic-fastapi_PR_36']
+repos: ['kannan-dedsec/synthetic-fastapi']
+
+
+
+Batch 4 - PR ids: ['synthetic-fastapi_PR_37']
+repos: ['kannan-dedsec/synthetic-fastapi']
+
+
+
+Batch 5 - PR ids: ['synthetic-fastapi_PR_38']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_38",
+    "llm_reviews": [
+      {
+        "line_number": 19,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os' on line 19."
+      },
+      {
+        "line_number": 20,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys' on line 20."
+      },
+      {
+        "line_number": 21,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're' on line 21."
+      }
+    ]
+  }
+]
+
+
+Batch 6 - PR ids: ['synthetic-fastapi_PR_39']
+repos: ['kannan-dedsec/synthetic-fastapi']
+
+
+
+Batch 7 - PR ids: ['synthetic-fastapi_PR_40']
+repos: ['kannan-dedsec/synthetic-fastapi']
+[
+  {
+    "PR_ID": "synthetic-fastapi_PR_40",
+    "llm_reviews": [
+      {
+        "line_number": 22,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to hash_password to follow snake_case."
+      },
+      {
+        "line_number": 34,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to verify_password to follow snake_case."
+      },
+      {
+        "line_number": 47,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to create_access_token to follow snake_case."
+      },
+      {
+        "line_number": 67,
+        "violation_category": "naming_convention",
+        "review_comment": "Rename function to decode_token to follow snake_case."
+      },
+      {
+        "line_number": 49,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable
+
+
+Batch 8 - PR ids: ['synthetic-flask_PR_21']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_21",
+    "llm_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'json'."
+      }
+    ]
+  }
+]
+
+
+Batch 9 - PR ids: ['synthetic-flask_PR_22']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_22",
+    "llm_reviews": [
+      {
+        "line_number": 25,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'manageUsers' should be snake_case. Rename to 'manage_users'."
+      },
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'toggleUserActivation' should be snake_case. Rename to 'toggle_user_activation'."
+      },
+      {
+        "line_number": 53,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'viewStats' should be snake_case. Rename to 'view_stats'."
+      },
+      {
+        "line_number": 20,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable name 'activeUsers' should be snake_case. Rename to 'active_users'."
+      }
+    ]
+  }
+]
+
+
+Batch 10 - PR ids: ['synthetic-flask_PR_23']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+
+Batch 11 - PR ids: ['synthetic-flask_PR_24']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+
+Batch 12 - PR ids: ['synthetic-flask_PR_25']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_25",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 13 - PR ids: ['synthetic-flask_PR_26']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+
+Batch 14 - PR ids: ['synthetic-flask_PR_27']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_27",
+    "llm_reviews": []
+  }
+]
+
+
+Batch 15 - PR ids: ['synthetic-flask_PR_28']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_28",
+    "llm_reviews": [
+      {
+        "line_number": 7,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'Any'."
+      }
+    ]
+  }
+]
+
+
+Batch 16 - PR ids: ['synthetic-flask_PR_29']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_29",
+    "llm_reviews": [
+      {
+        "line_number": 19,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'logRequest' should be snake_case."
+      },
+      {
+        "line_number": 23,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'set_corsHeaders' should be snake_case."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Module 'os' is imported but never used."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Module 'sys' is imported but never used."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Module 're' is imported but never used."
+      }
+    ]
+  }
+]
+
+
+Batch 17 - PR ids: ['synthetic-flask_PR_30']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+
+Batch 18 - PR ids: ['synthetic-flask_PR_31']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_31",
+    "llm_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 19 - PR ids: ['synthetic-flask_PR_32']
+repos: ['kannan-dedsec/synthetic-flask']
+[
+  {
+    "PR_ID": "synthetic-flask_PR_32",
+    "llm_reviews": [
+      {
+        "line_number": 31,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'sampleUser' should be snake_case. Rename to 'sample_user'."
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name 'samplePost' should be snake_case. Rename to 'sample_post'."
+      },
+      {
+        "line_number": 41,
+        "violation_category": "naming_convention",
+        "review_comment": "Parameter name 'sampleUser' should be snake_case. Rename to 'sample_user'."
+      }
+    ]
+  }
+]
+
+
+Batch 20 - PR ids: ['synthetic-flask_PR_33']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+

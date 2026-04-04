@@ -33,3 +33,7 @@ search_result = client.query_points(
 ).points
 
 print(search_result)
+
+"""
+docker run -d --rm --name qdrant-db -p 6333:6333 -p 6334:6334 -v qdrant-storage:/qdrant/storage qdrant/qdrant:latest
+"""

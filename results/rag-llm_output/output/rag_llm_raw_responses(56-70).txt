@@ -1,0 +1,215 @@
+Batch 1 - PR ids: ['synthetic-flask_PR_39']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+
+Batch 2 - PR ids: ['synthetic-flask_PR_40']
+repos: ['kannan-dedsec/synthetic-flask']
+
+
+
+Batch 3 - PR ids: ['synthetic-pandas_PR_21']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_21",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 4 - PR ids: ['synthetic-pandas_PR_22']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 5 - PR ids: ['synthetic-pandas_PR_23']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 6 - PR ids: ['synthetic-pandas_PR_24']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_24",
+    "llm_reviews": [
+      {
+        "line_number": 12,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name should be snake_case. Rename 'loadCsv' to 'load_csv'."
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name should be snake_case. Rename 'loadExcel' to 'load_excel'."
+      },
+      {
+        "line_number": 61,
+        "vi
+
+
+Batch 7 - PR ids: ['synthetic-pandas_PR_25']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_25",
+    "llm_reviews": [
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 8 - PR ids: ['synthetic-pandas_PR_26']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 9 - PR ids: ['synthetic-pandas_PR_27']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_27",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'numpy as np'."
+      },
+      {
+        "line_number": 71,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable defaults for '
+
+
+Batch 10 - PR ids: ['synthetic-pandas_PR_28']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_28",
+    "llm_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 13,
+        "violation_category
+
+
+Batch 11 - PR ids: ['synthetic-pandas_PR_29']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 12 - PR ids: ['synthetic-pandas_PR_30']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_30",
+    "llm_reviews": [
+      {
+        "line_number": 13,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name should be snake_case. Rename to inner_merge."
+      },
+      {
+        "line_number": 36,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name should be snake_case. Rename to left_join."
+      },
+      {
+        "line_number": 51,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name should be snake_case. Rename to concat_frames."
+      },
+      {
+        "line_number": 66,
+        "violation_category": "naming_convention",
+        "review_comment": "Function name should be snake_case. Rename to merge_asof."
+      },
+      {
+        "line_number": 13,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default argument 'on' should not be a list. Use None or a tuple."
+      }
+    ]
+  }
+]
+
+
+Batch 13 - PR ids: ['synthetic-pandas_PR_31']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_31",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 14 - PR ids: ['synthetic-pandas_PR_32']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas
+
+
+Batch 15 - PR ids: ['synthetic-pandas_PR_33']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+

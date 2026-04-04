@@ -1,0 +1,23 @@
+=== Parsed Input Summary ===
+Ground-truth PRs: 97
+Predicted PRs with static findings: 97
+PRs ignored due to empty/static-no-match response: 10
+
+=== Violation Count Comparison ===
+analyzed_pr_count: 87
+missed_violations: 88
+extra_violations: 136
+equal_violations_prs: 12
+
+=== Line Match Tracking (using static line number) ===
+line_match_total: 332
+line_mismatch_total: 305
+
+=== Category-wise Metrics ===
+category                      precision     recall         f1     tp     fp     fn  line_ok  line_bad
+-----------------------------------------------------------------------------------------------------
+documentation_formatting         0.2239     0.1948     0.2083     15     52     62        0        67
+indentation                      0.6174     0.8762     0.7244     92     57     13       64        85
+mutable_default                  1.0000     0.8889     0.9412     64      0      8       56         8
+naming_convention                0.5540     0.9408     0.6974    159    128     10      145       142
+unused_import                    0.9714     0.4096     0.5763     68      2     98       67         3

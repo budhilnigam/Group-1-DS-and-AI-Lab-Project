@@ -1,0 +1,215 @@
+Batch 1 - PR ids: ['synthetic-pandas_PR_34']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 2 - PR ids: ['synthetic-pandas_PR_35']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_35",
+    "llm_reviews": [
+      {
+        "line_number": 8,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 3 - PR ids: ['synthetic-pandas_PR_36']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 4 - PR ids: ['synthetic-pandas_PR_37']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_37",
+    "llm_reviews": [
+      {
+        "line_number": 16,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default argument 'sample_data' should not be []"
+      },
+      {
+        "line_number": 22,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default argument 'sample_data' should not be {}"
+      }
+    ]
+  }
+]
+
+
+Batch 5 - PR ids: ['synthetic-pandas_PR_38']
+repos: ['kannan-dedsec/synthetic-pandas']
+[
+  {
+    "PR_ID": "synthetic-pandas_PR_38",
+    "llm_reviews": [
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 12,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 13,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      }
+    ]
+  }
+]
+
+
+Batch 6 - PR ids: ['synthetic-pandas_PR_39']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 7 - PR ids: ['synthetic-pandas_PR_40']
+repos: ['kannan-dedsec/synthetic-pandas']
+
+
+
+Batch 8 - PR ids: ['synthetic-sklearn_PR_21']
+repos: ['kannan-dedsec/synthetic-sklearn']
+[
+  {
+    "PR_ID": "synthetic-sklearn_PR_21",
+    "llm_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 10,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 11,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 're'."
+      },
+      {
+        "line_number": 97,
+        "violation_category": "documentation_formatting",
+        "review_comment": "Add a 'Returns:' header before the return type description."
+      }
+    ]
+  }
+]
+
+
+Batch 9 - PR ids: ['synthetic-sklearn_PR_22']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 10 - PR ids: ['synthetic-sklearn_PR_23']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 11 - PR ids: ['synthetic-sklearn_PR_24']
+repos: ['kannan-dedsec/synthetic-sklearn']
+[
+  {
+    "PR_ID": "synthetic-sklearn_PR_24",
+    "llm_reviews": [
+      {
+        "line_number": 27,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default argument 'y' should be None to avoid shared state."
+      },
+      {
+        "line_number": 63,
+        "violation_category": "mutable_default",
+        "review_comment": "Mutable default argument 'y' should be None."
+      },
+      {
+        "line_number": 63,
+        "violation_category": "naming_convention",
+        "review_comment": "Method name 'fitTransform' should be snake_case."
+      },
+      {
+        "line_number": 59,
+        "violation_category": "naming_convention",
+        "review_comment": "Variable 'filteredData' should be snake_case."
+      },
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import 'Tuple'; remove it."
+      }
+    ]
+  }
+]
+
+
+Batch 12 - PR ids: ['synthetic-sklearn_PR_25']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 13 - PR ids: ['synthetic-sklearn_PR_26']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 14 - PR ids: ['synthetic-sklearn_PR_28']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 15 - PR ids: ['synthetic-sklearn_PR_29']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 16 - PR ids: ['synthetic-sklearn_PR_30']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 17 - PR ids: ['synthetic-sklearn_PR_31']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 18 - PR ids: ['synthetic-sklearn_PR_32']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 19 - PR ids: ['synthetic-sklearn_PR_33']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 20 - PR ids: ['synthetic-sklearn_PR_34']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+

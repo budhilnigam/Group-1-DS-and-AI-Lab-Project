@@ -1,0 +1,61 @@
+Batch 1 - PR ids: ['synthetic-sklearn_PR_35']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 2 - PR ids: ['synthetic-sklearn_PR_36']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 3 - PR ids: ['synthetic-sklearn_PR_37']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 4 - PR ids: ['synthetic-sklearn_PR_38']
+repos: ['kannan-dedsec/synthetic-sklearn']
+[
+  {
+    "PR_ID": "synthetic-sklearn_PR_38",
+    "llm_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'os'."
+      },
+      {
+        "line_number": 2,
+        "violation_category": "unused_import",
+        "review_comment": "Remove unused import 'sys'."
+      },
+      {
+        "line_number": 17,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default [] with None and create list inside function."
+      },
+      {
+        "line_number": 36,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default [] with None and create list inside function."
+      },
+      {
+        "line_number": 44,
+        "violation_category": "mutable_default",
+        "review_comment": "Replace mutable default {} with None and create dict inside function."
+      }
+    ]
+  }
+]
+
+
+Batch 5 - PR ids: ['synthetic-sklearn_PR_39']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+
+Batch 6 - PR ids: ['synthetic-sklearn_PR_40']
+repos: ['kannan-dedsec/synthetic-sklearn']
+
+
+

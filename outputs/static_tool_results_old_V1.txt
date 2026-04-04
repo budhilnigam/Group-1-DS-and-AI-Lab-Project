@@ -1,0 +1,41 @@
+=== Parsed Input Summary ===
+Ground-truth PRs: 97
+Predicted PRs with static findings: 97
+PRs ignored due to empty/static-no-match response: 97
+Parse failures: 97
+
+=== Violation Count Comparison ===
+analyzed_pr_count: 0
+missed_violations: 0
+extra_violations: 0
+equal_violations_prs: 0
+
+=== Line Match Tracking (using static line number) ===
+line_match_total: 0
+line_mismatch_total: 0
+
+=== Category-wise Metrics ===
+category                      precision     recall         f1     tp     fp     fn  line_ok  line_bad
+-----------------------------------------------------------------------------------------------------
+
+=== Parse/Tool Failures (first 20) ===
+('synthetic-django_PR_21', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_22', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_23', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_24', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_25', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_26', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_28', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_29', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_30', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_31', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_32', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_33', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_34', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_35', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_36', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_37', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_38', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_39', 'pylint_not_installed; flake8_not_installed')
+('synthetic-django_PR_40', 'pylint_not_installed; flake8_not_installed')
+('synthetic-fastapi_PR_21', 'pylint_not_installed; flake8_not_installed')
