@@ -10,6 +10,10 @@ This consolidated report compiles all Milestone 5 documentation into a single ev
 2. [Retrieval Strategy Analysis](#part-2--retrieval-strategy-analysis)
 3. [Static Analysis Tool Evaluation](#part-3--static-analysis-tool-evaluation)
 4. [Prompt Engineering & Model Evaluation](#part-4--prompt-engineering--model-evaluation)
+5. [Additional Retrieval Strategy Evaluation](#part-5--additional-retrieval-strategy-evaluation)
+6. [Additional Static Analysis Tool Evaluation](#part-6--additional-static-analysis-tool-evaluation)
+7. [Additional Prompt and LLM Evaluation](#part-7--additional-prompt-and-llm-evaluation)
+8. [Integrated Local Model Analysis](#part-8--integrated-local-model-analysis)
 
 ---
 
@@ -1762,3 +1766,1708 @@ python scripts/evaluate_prompts.py --max-entries 10
 ```
 
 Results are cached in `data/llm_cache/` - re-runs are instant.
+
+---
+
+# Part 5 - Additional Retrieval Strategy Evaluation
+
+# Milestone 5 - Query Strategy Evaluation Summary (Variant 2 vs Variant 1)
+
+This report compares two query-strategy runs saved from the Strategy-2 retrieval notebook and explains how query construction changes affected coverage, precision, and recall behavior.
+
+Important naming clarification used in this report:
+- Folder `notebooks/v2/` corresponds to **Query Strategy Variant 2** (helper/signal-based).
+- Folder `notebooks/v3/` corresponds to **Query Strategy Variant 1** (regex/string-based).  
+    The previous label "v3" referred to run folder naming, not a third query strategy.
+
+## Artifacts
+- Query strategy implementation: `src/rag_model/query_strategy.py`
+- Strategy comparison notebook: `notebooks/retrieval_query_strategy_2_helper_func.ipynb`
+- Variant 2 run metrics: `notebooks/v2/stats_df.csv`, `notebooks/v2/coverage_df.csv`
+- Variant 1 run metrics (saved under v3 folder): `notebooks/v3/stats_df.csv`, `notebooks/v3/coverage_df.csv`
+
+## Retrieval Preprocessing / Pipeline Overview
+Before ranking metrics are computed, the project applies the following preprocessing and retrieval controls:
+
+1. Entry and source preparation
+- Evaluation entries are sampled from `evaluation.json`.
+- Each entry resolves to a source file path and source text.
+
+2. Query text generation (variant-dependent)
+- Variant 1 (regex/string-based): query text is built from fast regex heuristics over source text.
+- Variant 2 (helper/signal-based): query text is built from static-analysis helper signals.
+
+3. Repo-aware retrieval filtering
+- Query vectors are searched in Qdrant.
+- Retrieval filter includes common source types (`pep8`, `flake8`, `pylint`, `ruff`, `pep257`) and repo-family-aware source types (e.g., `<family>_guidelines`, `<family>_review_comment`).
+- This reduces cross-repo noise and keeps retrieval context domain-aware.
+
+4. Category extraction and metric computation
+- Retrieved payloads are normalized into target categories.
+- PR-level and category-level metrics are computed at K = 1, 3, 5, 7.
+
+## Evaluation Objective
+Evaluate query-generation behavior for retrieval by measuring:
+- PR coverage at multiple K values
+- Per-category recall/precision and TP/FP trends
+- Trade-offs between early precision and high-K coverage
+
+## Exact Conceptual Difference: Variant 1 vs Variant 2 Query Strategy
+1. Variant 1 (regex/string-based; folder `v3`)
+- Uses direct regex/statistical hints from file text (imports, camelCase, mutable defaults, indentation counts, docstring counts).
+- Faster and broader retrieval behavior.
+- Tends to increase high-K recall but can increase FP due to coarse signal granularity.
+
+2. Variant 2 (helper/signal-based; folder `v2`)
+- Uses helper/static-signal functions (`naming`, `indent`, `mutable_default`, `documentation`, `unused_import`).
+- More targeted signal composition.
+- Tends to preserve cleaner early precision and lower FP, but may miss broader matches.
+
+3. Precision-vs-recall behavior
+- Variant 2 is precision-oriented and tighter at small K.
+- Variant 1 is recall-oriented at larger K with broader retrieval spread.
+
+4. Category imbalance risk
+- Variant 1 strongly boosts some categories (`unused_import`, `indentation`, `documentation_formatting`) at high K, but can under-represent `mutable_default` depending on lexical cues.
+
+## High-level Metrics
+
+### PR Coverage by K
+
+| k | Variant 2 coverage | Variant 1 coverage |
+|---|---:|---:|
+| 1 | 0.6667 | 0.4545 |
+| 3 | 0.7273 | 0.8182 |
+| 5 | 0.7879 | 0.8788 |
+| 7 | 0.8485 | 0.8788 |
+
+### Macro (category-averaged) Snapshot
+
+| k | Variant 2 recall | Variant 2 precision | Variant 1 recall | Variant 1 precision |
+|---|---:|---:|---:|---:|
+| 1 | 0.4015 | 0.7087 | 0.1935 | 0.4458 |
+| 3 | 0.4628 | 0.6543 | 0.3948 | 0.3459 |
+| 5 | 0.5028 | 0.6286 | 0.5952 | 0.3762 |
+| 7 | 0.5514 | 0.6289 | 0.7247 | 0.3942 |
+
+## Per-category Snapshot at K=7
+
+### Variant 2 (helper/signal-based, folder `v2`)
+
+| category | precision | recall | TP | FP |
+|---|---:|---:|---:|---:|
+| naming_convention | 0.7000 | 0.8235 | 14 | 6 |
+| unused_import | 0.8750 | 0.3333 | 7 | 1 |
+| indentation | 0.4444 | 0.8000 | 4 | 5 |
+| mutable_default | 1.0000 | 0.6000 | 6 | 0 |
+| documentation_formatting | 0.1250 | 0.2000 | 1 | 7 |
+
+### Variant 1 (regex/string-based, folder `v3`)
+
+| category | precision | recall | TP | FP |
+|---|---:|---:|---:|---:|
+| naming_convention | 0.5000 | 0.8235 | 14 | 14 |
+| unused_import | 0.6774 | 1.0000 | 21 | 10 |
+| indentation | 0.2174 | 1.0000 | 5 | 18 |
+| mutable_default | 0.0000 | 0.0000 | 0 | 0 |
+| documentation_formatting | 0.1818 | 0.8000 | 4 | 18 |
+
+## Observations
+1. Variant 1 improved retrieval breadth at larger K values.
+This is visible in higher coverage at K=3/5/7 and higher macro recall at K=5/7.
+
+2. Variant 2 is stronger for early precision and cleaner retrieval.
+At K=1 and K=3, Variant 2 has clearly better macro precision and lower FP pressure.
+
+3. Variant 1 over-retrieves in some categories.
+`indentation` and `documentation_formatting` show large FP growth at K=7.
+
+4. `mutable_default` is a critical weakness for Variant 1 in this run.
+Recall fell from 0.6000 (Variant 2) to 0.0000 (Variant 1), indicating weak lexical/query signal coverage for this category.
+
+5. `unused_import` shifts strongly toward recall under Variant 1.
+Recall improved from 0.3333 to 1.0000, but with more false positives.
+
+## Limitations Noticed
+1. Query strategy alone cannot guarantee balanced category coverage.
+The regex-focused Variant 1 can boost broad retrieval while missing category-specific cases like `mutable_default`.
+
+2. Category sensitivity is coupled to query tokenization style.
+Categories that require semantic context (not explicit lexical clues) are harder for regex-oriented query generation.
+
+3. Current retrieval depends on available candidate chunks after repo-aware filtering.
+If filtered candidate pools under-represent a category, query strategy changes alone may not recover it.
+
+4. Query-stage metrics are from sampled notebook runs.
+These are project-valid directional results, but final operational conclusions require multi-seed/full-corpus confirmation.
+
+## Conclusion
+Variant 2 (helper/signal-based) is the cleaner precision-oriented query baseline, while Variant 1 (regex/string-based, folder `v3`) improves high-K coverage and recall. From the project perspective, the main gap is category robustness: Variant 1 struggles on `mutable_default` because its query evidence is too lexical/coarse for that violation type in current candidate pools. The practical path is to keep repo-aware filtering and pair Variant 1 breadth with reranking/calibration and category-aware boosting for `mutable_default`.
+
+---
+
+# Milestone 5 - Re-ranking Evaluation Summary (Baseline vs Re-ranked)
+
+This report compares baseline retrieval ordering against the reranking stage. It now includes two saved reranking runs (with different tuning/code states) so all values map to existing artifacts on disk.
+
+## Artifacts
+- Query strategy implementation: `src/rag_model/query_strategy.py`
+- Re-ranking notebook: `notebooks/reranking_simple_comparison.ipynb`
+- Run A outputs (earlier tuning):
+    - `notebooks/rerank_simple_outputs_20260404_144238/overall_metrics.csv`
+    - `notebooks/rerank_simple_outputs_20260404_144238/category_metrics.csv`
+    - `notebooks/rerank_simple_outputs_20260404_144238/pr_rows.csv`
+- Run B outputs (later tuning):
+    - `notebooks/rerank_simple_outputs_20260404_150553/overall_metrics.csv`
+    - `notebooks/rerank_simple_outputs_20260404_150553/category_metrics.csv`
+    - `notebooks/rerank_simple_outputs_20260404_150553/pr_rows.csv`
+
+## Evaluation Objective
+Evaluate whether reranking improves ranking quality after candidate retrieval, using:
+- PR-level Recall@K, Precision@K, Modified MRR@K
+- Category-level TP/FP changes
+- High-K gains without unacceptable category-level regressions
+
+## Exact Conceptual Changes From Baseline to Re-ranked
+1. Two-stage ranking
+Baseline uses retrieval order directly. Re-ranked mode rescored candidates before final top-K selection.
+
+2. Composite rerank score
+Re-ranked mode combines semantic score, lexical overlap, category bonus, and a rank penalty.
+
+3. Duplicate-category control (later tuning)
+Later tuning introduced a per-category cap to reduce repeated same-category predictions in final top-K.
+
+4. Same candidate pool
+Within each run, baseline and reranked use the same retrieved candidate pool. Differences are due to ordering logic.
+
+## Hyperparameter Tuning Used in Notebook
+
+The reranking logic in `notebooks/reranking_simple_comparison.ipynb` uses the following explicit hyperparameters:
+
+- `RANDOM_SEED = 42`
+- `SAMPLE_SIZE = 50`
+- `TOP_N_CANDIDATES = 25`
+- `TOP_K_FINAL = 7`
+- `LEXICAL_WEIGHT = 0.35`
+- `CATEGORY_BONUS = 0.15`
+- `RANK_PENALTY = 0.01`
+- `MAX_PER_CATEGORY = 2`
+
+Rerank score formulation used in the notebook:
+
+$$
+rerank\_score = semantic\_score + 0.35 \cdot lexical\_overlap + category\_bonus - 0.01 \cdot rank\_idx
+$$
+
+Where:
+- `semantic_score` is the Qdrant similarity score.
+- `lexical_overlap` is token overlap between query text and candidate chunk text.
+- `category_bonus` is `+0.15` only when the candidate category string appears in the query text.
+- `rank_idx` is the original retrieval index (0-based), so later candidates get penalized.
+
+Final selection policy:
+- Candidates are sorted by `rerank_score` descending.
+- At most `MAX_PER_CATEGORY=2` items per category are allowed in final top-K.
+- Selection stops at `TOP_K_FINAL=7`.
+
+### What This Tuning Implies for Observed Metrics
+
+1. Stronger early-rank quality is expected.
+The lexical and category terms (`0.35`, `0.15`) boost candidates that are textually/category aligned with the query, which typically improves Recall@K and MRR at moderate/high K.
+
+2. Reduced duplicate-category dominance is expected.
+`MAX_PER_CATEGORY=2` prevents one dominant category from occupying most top-7 slots, which can improve overall PR-level coverage but may hurt a category if relevant items are sparse.
+
+3. Retrieval-depth trade-off remains.
+`TOP_N_CANDIDATES=25` bounds the reranker search space. If a true positive is absent from those 25, reranking cannot recover it.
+
+4. Sample-level sensitivity remains.
+`SAMPLE_SIZE=50` and single-seed (`42`) means results are sensitive to sample composition. Category swings between Run A and Run B can occur even with nearby tuning states.
+
+### Run A vs Run B Interpretation With Tuning Context
+
+- The two runs were produced under different notebook/code states, but the reranking family is the same: weighted composite scoring with category-cap selection.
+- The observed differences (especially `mutable_default` behavior) are consistent with calibration sensitivity around the same tuning framework: small shifts in score calibration, retrieval mix, or category representation can cause large per-category changes while still improving aggregate metrics at higher K.
+- Because the report artifacts do not persist a full run-time config snapshot (weights, cap, and query-builder variant per run), the safest project-level claim is that both runs are valid outcomes of the same rerank design under different tuning/calibration states.
+
+## High-level Metrics (Run A: `rerank_simple_outputs_20260404_144238`)
+
+| mode | k | recall_at_k | precision_at_k | mrr_at_k |
+|---|---:|---:|---:|---:|
+| baseline | 1 | 0.1439 | 0.3030 | 0.1439 |
+| baseline | 3 | 0.5556 | 0.3939 | 0.3237 |
+| baseline | 5 | 0.5960 | 0.3758 | 0.3338 |
+| baseline | 7 | 0.9167 | 0.3896 | 0.3826 |
+| reranked | 1 | 0.2803 | 0.4242 | 0.2803 |
+| reranked | 3 | 0.6086 | 0.4343 | 0.4146 |
+| reranked | 5 | 0.8485 | 0.4121 | 0.4651 |
+| reranked | 7 | 0.9596 | 0.3983 | 0.4830 |
+
+### Delta (Run A, reranked - baseline)
+
+| k | delta_recall | delta_precision | delta_mrr |
+|---|---:|---:|---:|
+| 1 | +0.1364 | +0.1212 | +0.1364 |
+| 3 | +0.0530 | +0.0404 | +0.0909 |
+| 5 | +0.2525 | +0.0364 | +0.1313 |
+| 7 | +0.0429 | +0.0087 | +0.1003 |
+
+**Fig R1 - Run A PR-level baseline vs reranked metrics across K**
+
+![Fig R1 - Run A PR-level baseline vs reranked metrics across K](../../notebooks/rerank_simple_outputs_20260404_144238/baseline%20vs%20reranked%20PR%20level%20metrics.png)
+
+## High-level Metrics (Run B: `rerank_simple_outputs_20260404_150553`)
+
+| mode | k | recall_at_k | precision_at_k | mrr_at_k |
+|---|---:|---:|---:|---:|
+| baseline | 1 | 0.2146 | 0.3636 | 0.2146 |
+| baseline | 3 | 0.3763 | 0.3131 | 0.2866 |
+| baseline | 5 | 0.5404 | 0.2970 | 0.3229 |
+| baseline | 7 | 0.5606 | 0.2597 | 0.3257 |
+| reranked | 1 | 0.2146 | 0.3636 | 0.2146 |
+| reranked | 3 | 0.3586 | 0.3131 | 0.2652 |
+| reranked | 5 | 0.6768 | 0.3030 | 0.3357 |
+| reranked | 7 | 0.8485 | 0.3463 | 0.3603 |
+
+### Delta (Run B, reranked - baseline)
+
+| k | delta_recall | delta_precision | delta_mrr |
+|---|---:|---:|---:|
+| 1 | +0.0000 | +0.0000 | +0.0000 |
+| 3 | -0.0177 | +0.0000 | -0.0215 |
+| 5 | +0.1364 | +0.0061 | +0.0129 |
+| 7 | +0.2879 | +0.0866 | +0.0345 |
+
+**Fig R3 - Run B PR-level baseline vs reranked metrics across K**
+
+![Fig R3 - Run B PR-level baseline vs reranked metrics across K](../../notebooks/rerank_simple_outputs_20260404_150553/baseline%20vs%20reranked%20PR%20level%20metrics.png)
+
+## Per-category Snapshot at K=7
+
+### Run A (earlier tuning)
+
+| category | baseline_recall | reranked_recall | baseline_precision | reranked_precision |
+|---|---:|---:|---:|---:|
+| naming_convention | 0.7647 | 1.0000 | 0.4815 | 0.5152 |
+| unused_import | 1.0000 | 1.0000 | 0.6364 | 0.6364 |
+| indentation | 0.6000 | 1.0000 | 0.3000 | 0.2941 |
+| mutable_default | 1.0000 | 0.7000 | 0.3030 | 0.2593 |
+| documentation_formatting | 1.0000 | 1.0000 | 0.1923 | 0.1923 |
+
+**Fig R2 - Run A category recall and false positives (baseline vs reranked)**
+
+![Fig R2 - Run A category recall and false positives (baseline vs reranked)](../../notebooks/rerank_simple_outputs_20260404_144238/recall%20and%20fp%20baseline%20and%20reranked.png)
+
+### Run B (later tuning)
+
+| category | baseline_recall | reranked_recall | baseline_precision | reranked_precision |
+|---|---:|---:|---:|---:|
+| naming_convention | 1.0000 | 1.0000 | 0.5152 | 0.5152 |
+| unused_import | 0.3333 | 1.0000 | 0.6364 | 0.6364 |
+| indentation | 1.0000 | 1.0000 | 0.1515 | 0.1515 |
+| mutable_default | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
+| documentation_formatting | 1.0000 | 1.0000 | 0.1515 | 0.1515 |
+
+**Fig R4 - Run B category recall and false positives (baseline vs reranked)**
+
+![Fig R4 - Run B category recall and false positives (baseline vs reranked)](../../notebooks/rerank_simple_outputs_20260404_150553/recall%20and%20fp%20baseline%20and%20reranked.png)
+
+## Why Category-wise Can Be Worse Than Baseline
+1. Objective mismatch between global ranking and per-category balance
+The reranker is optimized for overall PR-level ranking quality, not explicitly for equal performance across all categories.
+
+2. Category cap and score weights can suppress low-frequency categories
+When score weights or cap settings favor dominant categories, a category like `mutable_default` can be pushed out of top-K.
+
+3. Retrieval bottleneck cannot be fixed by reranking
+If relevant `mutable_default` candidates are missing/rare in the candidate pool, reranking cannot recover them.
+
+4. Trade-off behavior is expected
+Improving early rank and overall MRR can still reduce one category’s recall if calibration is not category-aware.
+
+## Observations
+1. Run A shows strong reranking gains across all K values.
+Reranked exceeds baseline in recall, precision, and MRR at K=1/3/5/7.
+
+2. Run B shows mixed behavior at low K but clear gains at high K.
+At K=3, reranked is slightly lower in recall/MRR; at K=7, reranked is much better.
+
+3. The two folders represent different tuning/code states.
+This is why conclusions differ if only one folder is reported.
+
+4. `mutable_default` is the key limitation in later tuning.
+In Run B it remains 0 recall for both baseline and reranked, indicating a retrieval/query coverage issue, not only rerank ordering.
+
+## Limitations Noticed
+1. Hyperparameter snapshots are stored implicitly by run output folder and notebook state.
+Exact numeric settings should be logged explicitly per run for strict reproducibility.
+
+2. Single-seed runs are sensitive.
+Both folders are valid, but a multi-seed mean/std report is needed for final claims.
+
+3. Category-level metrics are highly distribution-dependent.
+Small category counts can cause large swings in recall/precision across runs.
+
+## Conclusion
+Yes, both result folders should be reported. Run A and Run B both exist and contain valid but different outcomes due to different tuning/code states. The corrected interpretation is:
+- reranking is beneficial overall, especially at larger K;
+- category-wise regressions can occur when scoring/capping is not category-aware;
+- next step is explicit per-run hyperparameter logging plus category-aware calibration (especially for `mutable_default`).
+
+---
+
+# Part 6 - Additional Static Analysis Tool Evaluation
+
+# Milestone 5 - Static-tool Evaluation Summary (v1 vs v2)
+
+This report compares two static-tool evaluation runs against the same evaluation corpus and focuses on how conceptual changes in v2 affected precision, recall, and F1.
+
+## Artifacts
+- Original evaluator backup: `src/evaluation/static_tool_eval_v1.py`
+- Current evaluator (v2 logic): `src/evaluation/static_tool_eval_v2.py`
+- v1 results file: `outputs/static_tool_results_v1.txt`
+- v2 results file: `outputs/static_tool_results_v2.txt`
+
+## Evaluation Objective
+Use static analyzers (pylint + flake8), map their findings to the 5 target violation categories, and evaluate predictions against ground truth using the same TP/FP/FN and precision/recall/F1 formulas as the LLM evaluator.
+
+## Exact Conceptual Changes From v1 to v2
+1. Tool invocation reliability
+v1 relied on tool launchers from PATH. v2 invokes analyzers through the active interpreter to avoid environment/launcher mismatches.
+
+2. Violation mapping strictness
+v1 used broader mappings from linter signals to categories, which captured more potential matches but also many irrelevant findings. v2 narrowed mappings to higher-confidence linter signals to reduce noisy category assignments.
+
+3. Duplicate and near-duplicate handling
+v1 effectively counted many repeated/nearby findings separately. v2 added explicit deduplication and merging of neighboring findings (within a small line window), reducing repeated FP inflation.
+
+4. Line alignment tolerance
+v1 used stricter line matching behavior. v2 introduced relaxed matching/neighbor-aware handling so semantically same findings reported one line apart are less likely to be penalized.
+
+5. Overall scoring behavior trade-off
+v1 behavior favored recall (especially for several categories), while v2 prioritized precision and cleaner signal quality.
+
+## High-level Metrics
+
+### v1
+- analyzed_pr_count: 87
+- missed_violations: 0
+- extra_violations: 901
+- equal_violations_prs: 1
+- line_match_total: 759
+- line_mismatch_total: 731
+
+### v2
+- analyzed_pr_count: 87
+- missed_violations: 23
+- extra_violations: 212
+- equal_violations_prs: 24
+- line_match_total: 389
+- line_mismatch_total: 389
+
+## Per-category Snapshot (v1)
+
+| category | precision | recall | f1 | TP | FP | FN |
+|---|---:|---:|---:|---:|---:|---:|
+| documentation_formatting | 0.2239 | 0.1948 | 0.2083 | 15 | 52 | 62 |
+| indentation | 0.1535 | 1.0000 | 0.2662 | 105 | 579 | 0 |
+| mutable_default | 1.0000 | 0.9583 | 0.9787 | 69 | 0 | 3 |
+| naming_convention | 0.5106 | 1.0000 | 0.6760 | 169 | 162 | 0 |
+| unused_import | 0.4897 | 1.0000 | 0.6574 | 166 | 173 | 0 |
+
+## Per-category Snapshot (v2)
+
+| category | precision | recall | f1 | TP | FP | FN |
+|---|---:|---:|---:|---:|---:|
+| documentation_formatting | 0.2239 | 0.1948 | 0.2083 | 15 | 52 | 62 |
+| indentation | 0.4234 | 1.0000 | 0.5949 | 105 | 143 | 0 |
+| mutable_default | 1.0000 | 0.8889 | 0.9412 | 64 | 0 | 8 |
+| naming_convention | 0.5556 | 0.9467 | 0.7002 | 160 | 128 | 9 |
+| unused_import | 0.9820 | 0.6566 | 0.7870 | 109 | 2 | 57 |
+
+## Observations
+1. v1 had very high false positives across multiple categories.
+This is most visible in `indentation` (FP 579), `unused_import` (FP 173), and `naming_convention` (FP 162), which made many v1 predictions noisy even though recall was high.
+
+2. v1 clearly had higher recall than v2 for most non-documentation categories.
+For example, `unused_import` and `naming_convention` moved from recall 1.0000 in v1 to 0.6566 and 0.9467 in v2. This is expected from stricter filtering.
+
+3. v2 is much cleaner in precision-sensitive categories.
+The strongest example is `unused_import`, where precision increased from 0.4897 to 0.9820 after reducing noisy mappings.
+
+4. `mutable_default` is very accurately identified by static tools.
+It remains the most reliable category across both runs with precision 1.0000 in v1 and v2 and consistently high recall (0.9583 in v1, 0.8889 in v2).
+
+5. `indentation` improved substantially in v2.
+Precision rose from 0.1535 to 0.4234 while maintaining recall 1.0000, resulting in a large F1 increase (0.2662 to 0.5949).
+
+6. `documentation_formatting` remained unchanged and weak.
+Both runs show the same low precision/recall profile, indicating that current static mappings do not capture this category effectively.
+
+## Conclusion
+v1 is recall-heavy but too noisy for practical use due to very high FP counts. v2 introduces conceptually cleaner filtering and consolidation, significantly reducing FP while improving F1 in key categories (`indentation`, `unused_import`, and `naming_convention`), with a controlled recall trade-off. For this project objective, v2 is the better operational baseline.
+
+---
+
+# Part 7 - Additional Prompt and LLM Evaluation
+
+# Milestone 5 - Naive LLM Evaluation Summary (v1 vs v2 vs v3)
+
+This report compares three prompt variants for Groq `gpt-oss-20b` LLM evaluation across 97 PRs in the evaluation dataset. Each variant employs different prompting strategies to optimize for token efficiency, response quality, and model behavior under the Groq 8K TPM rate limit.
+
+## Artifacts
+- Prompt v1: `src/rag_model/prompts/v1.txt` (max 5 violations per PR constraint)
+- Prompt v2: `src/rag_model/prompts/v2.txt` (uncap max findings constraint)
+- Prompt v3: `src/rag_model/prompts/v3.txt` (shortened prompt efficiency)
+- v1 results file: `outputs/llm_raw_responses_v1.txt`
+- v2 results file: `outputs/llm_raw_responses_v2.txt`
+- v3 results file: `outputs/llm_raw_responses_v3.txt`
+- Evaluation script: `src/evaluation/evaluate_llm_raw_txt.py`
+
+## Evaluation Objective
+Test three distinct prompting strategies for detecting PEP 8 violations in Python code using Groq LLM, evaluate predictions against ground truth using TP/FP/FN metrics (precision/recall/F1), and analyze how token-efficiency trade-offs affect model behavior and output quality.
+
+## Prompting Strategy Overview
+
+### v1: Conservative with Explicit Constraint
+**Core Strategy:** Rate-limiting model reasoning by capping findings per PR.
+
+**Rationale:** With Groq's 8K TPM limit and complex code PRs consuming substantial tokens, models risk generating no output tokens if reasoning becomes too deep/lengthy. By explicitly constraining "Max 5 findings per PR," the prompt signals to the model to stop early and prioritize output delivery over exhaustive analysis.
+
+**Key Instruction:**
+```
+CONSTRAINTS:
+- Max 5 findings per PR
+- Detect ONLY clear, high-confidence violations
+```
+
+**Operational Trade-off:** Sacrifices recall for guaranteed output delivery. Lower per-PR analysis depth reduces token expenditure, allowing more PRs to complete successfully.
+
+### v2: Unconstrained for Higher Recall
+**Core Strategy:** Remove artificial per-PR cap; encourage full analysis.
+
+**Rationale:** The v1 constraint was empirically chosen, not theoretically justified. v2 tests whether removing the cap allows models to provide more thorough findings without hitting token exhaustion on simpler PRs.
+
+**Key Instruction Change:**
+```
+CONSTRAINTS:
+- Detect ONLY clear, high-confidence violations
+- Do NOT guess or infer
+- Be precise: exact line_number
+```
+
+**Operational Trade-off:** Encourages exhaustive finding detection. Risk: more complex PRs may still fail to generate output if the model's reasoning depth + findings list exceeds context limits.
+
+### v3: Prompt Efficiency via Compression
+**Core Strategy:** Radically shorten the prompt to reduce token waste on instruction overhead.
+
+**Rationale:** Both v1 and v2 spent significant tokens on verbose processing rules and repetitive explanations. v3 collapses the prompt to ~150 tokens (vs. ~450 for v1/v2) by:
+- Merging processing rules into single compact lines
+- Removing verbose violation type descriptions
+- Eliminating redundant output format explanations
+- Keeping only essential constraints
+
+**Key Changes:**
+```
+- Single-line violation definitions instead of multi-line with examples
+- Removed "PROCESSING RULES" section entirely
+- Compact "Rules:" section combining multiple directives
+- Output format shown inline rather than elaborate block
+```
+
+**Operational Advantage:** Saves ~300 tokens per batch on prompt overhead, freeing budget for complex PR code analysis. Formula:
+$$\text{TokenBudget}_{\text{available}} = \text{8K context} - \text{PromptTokens} - \text{CodeTokens}$$
+
+For complex PRs, v3's shorter prompt allows larger code sections or deeper model reasoning before token exhaustion.
+
+## High-Level Metrics Comparison
+
+| Metric | v1 | v2 | v3 |
+|---|---|---|---|
+| **Ground-truth PRs** | 97 | 97 | 97 |
+| **Predicted PRs (parsed JSON)** | 49 | 26 | 31 |
+| **Empty responses** | 48 | 71 | 66 |
+| **Empty response rate** | 49.5% | 73.2% | 68.0% |
+| **Analyzed PRs** | 47 | 24 | 29 |
+| **Total LLM comments** | 186 | 86 | 104 |
+| **Total GT comments (analyzed)** | 272 | 91 | 108 |
+| **Missed violations** | 92 | 11 | 6 |
+| **Extra violations** | 6 | 6 | 2 |
+| **Equal violations (PRs)** | 23 | 16 | 24 |
+| **Line match success rate** | 46.8% | 51.2% | **56.7%** |
+
+## Failure Analysis
+
+### Empty Response Rate Progression
+- **v1: 49.5% failure** — Conservative cap allowed more PRs to output, but still high failure rate on complex PRs
+- **v2: 73.2% failure** — Uncapped strategy triggered MORE failures; model likely entered deep reasoning loops on large PRs, exhausting tokens before generating output
+- **v3: 68.0% failure** — Modest improvement over v2 but still higher than v1; prompt efficiency helped but insufficient to offset cumulative factors
+
+### Root Causes (Groq 8K TPM + Model Behavior)
+1. **Complex code PRs burn tokens before output:** Longer source files + deeper reasoning = token exhaustion mid-analysis
+2. **v2 exacerbated this:** Removing the cap signaled "find everything," causing the model to attempt exhaustive analysis on large PRs, consuming tokens before generating any output tokens
+3. **v3 partially mitigated:** Freed ~300 tokens per batch, reducing failures for moderately complex PRs
+4. **Token budget formula:**
+    - Input tokens (prompt + code): typically 2–4K for complex PRs
+    - Model reasoning overhead: ~500–800 tokens for v1/v2 unconstrained analysis
+    - Output tokens needed: ~200–400 to encode robust JSON array
+    - **v3 saves 300 tokens, reclaiming output space for borderline PRs**
+
+### Observed Pattern
+- PRs with simple code (<500 LOC, <1.5K tokens): v1, v2, v3 all succeed
+- Medium complexity (500–2K LOC): v1 and v3 succeed; v2 often fails
+- High complexity (>2K LOC): all variants struggle; v3 slightly better due to prompt savings
+
+## Per-Category Detailed Metrics
+
+### v1: Conservative Strategy Results
+
+| Category | Precision | Recall | F1 | TP | FP | FN | Line Match | Line Mismatch |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| **documentation_formatting** | 0.7500 | 0.1034 | 0.1818 | 3 | 1 | 26 | 0 | 4 |
+| **indentation** | 0.6471 | 0.2292 | 0.3385 | 11 | 6 | 37 | 4 | 13 |
+| **mutable_default** | 1.0000 | 0.5862 | 0.7391 | 17 | 0 | 12 | 5 | 12 |
+| **naming_convention** | 0.9643 | 0.9474 | **0.9558** | 54 | 2 | 3 | 16 | 40 |
+| **unused_import** | 1.0000 | 0.8440 | **0.9154** | 92 | 0 | 17 | 62 | 30 |
+
+**v1 Observations:**
+- **Strong on naming_convention & unused_import:** Both categories exceed F1=0.91, indicating the model reliably detects these straightforward violations
+- **Perfect precision on unused_import (1.0000):** Zero false positives; when the model identifies an unused import, it is almost always correct
+- **Weak on documentation_formatting (F1=0.1818):** Lowest F1; model struggles to identify docstring issues despite high precision (0.75 on 4 detections), suggesting this category is under-represented in training or requires deeper semantic understanding
+- **Indentation underperformance (F1=0.3385):** Recall only 0.23 indicates the model misses many indentation issues, possibly due to token constraints limiting thorough line-by-line analysis
+- **Mutable_default plateau at R=0.5862:** Model catches strong cases but misses subtle mutable defaults (e.g., `dict()` vs `{}`, or mutable objects in nested contexts)
+- **Line matching coherence (46.8%):** Of 186 LLM findings, 87 (46.8%) match expected line numbers; 99 are either off-line or false positives
+- **Reasonably balanced:** 23 PRs had exact violation counts matching ground truth, suggesting the Max 5 cap was not overly limiting for many simple PRs
+
+### v2: Unconstrained Strategy Results
+
+| Category | Precision | Recall | F1 | TP | FP | FN | Line Match | Line Mismatch |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| **documentation_formatting** | 0.0000 | 0.0000 | **0.0000** | 0 | 0 | 1 | 0 | 0 |
+| **indentation** | 0.0000 | 0.0000 | **0.0000** | 0 | 7 | 0 | 0 | 7 |
+| **mutable_default** | 1.0000 | 0.8333 | 0.9091 | 10 | 0 | 2 | 1 | 9 |
+| **naming_convention** | 1.0000 | 1.0000 | **1.0000** | 15 | 0 | 0 | 4 | 11 |
+| **unused_import** | 1.0000 | 0.8571 | 0.9231 | 54 | 0 | 9 | 39 | 15 |
+
+**v2 Observations:**
+- **Complete failure on indentation (F1=0.0000):** 7 false positives, 0 true positives, 0 ground-truth matches. Model generated incorrect indentation findings in analyzed PRs
+- **Perfect naming_convention (F1=1.0000):** Uncapped analysis allowed model to systematically verify naming rules; 15/15 correct with perfect precision/recall
+- **Halved dataset (24 analyzed PRs vs. 47 v1):** 71 PRs had no response; model's unconstrained reasoning triggered token exhaustion on 24 additional PRs
+- **Lower precision on mutable_default (R=0.8333 vs. 0.5862 in v1):** Counterintuitive — uncapped version found more but missed 2 vs. 12 in v1. Suggests uncap actually deepens analysis on simpler PRs, helping precision
+- **Concentration in 2 categories:** Only 86 total findings vs. 186 in v1; model may have been more selective or reached token limits during output phase
+- **Line matching still 51.2%:** Slightly better than v1, but on much smaller dataset (44 matches out of 86)
+- **Critical flaw:** Indentation regression suggests uncapped analysis created model confusion; too many findings attempted led to incorrect categorization
+
+### v3: Efficient Prompt Strategy Results
+
+| Category | Precision | Recall | F1 | TP | FP | FN | Line Match | Line Mismatch |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| **documentation_formatting** | 1.0000 | 0.5000 | **0.6667** | 1 | 0 | 1 | 0 | 1 |
+| **mutable_default** | 1.0000 | 1.0000 | **1.0000** | 15 | 0 | 0 | 3 | 12 |
+| **naming_convention** | 0.9048 | 0.8261 | 0.8636 | 19 | 2 | 4 | 10 | 11 |
+| **unused_import** | 1.0000 | 0.9853 | **0.9926** | 67 | 0 | 1 | 46 | 21 |
+
+**v3 Observations:**
+- **Missing indentation category:** Model did not generate any indentation findings; prompt reframing may have inadvertently de-emphasized this category
+- **Best unused_import F1 (0.9926):** Highest score across all variants; only 1 FN vs. 17 in v1 and 9 in v2
+- **Perfect mutable_default (F1=1.0000):** Tied with v3's perfection; small dataset (15 TPs) but 100% accuracy
+- **Improved documentation_formatting (F1=0.6667):** Better than v1 (0.1818) and v2 (0.0000); prompt efficiency allowed deeper analysis on simpler PRs
+- **Higher line matching (56.7%):** 59/104 findings matched expected lines; best ratio across all variants
+- **29 analyzed PRs (30% of dataset):** Better than v2 (25%) but worse than v1 (48%). Prompt savings helped some PRs but not enough to reclaim v1's volume
+
+---
+
+## Root Cause Analysis: Why Variants Diverged
+
+### v1 vs. v2 Regression (49.5% → 73.2% failure)
+**Why did removing the cap make things worse?**
+
+1. **Token Accounting:**
+    - v1 prompt: ~450 tokens (verbose rules, examples)
+    - v2 prompt: ~450 tokens (identical)
+    - v1 max-5 constraint signals: "Stop after 5, output now"
+    - v2 no constraint signals: "Find all violations; be thorough"
+
+2. **Model Behavior Change:**
+    - v1: Model interprets max-5 as a hard stop; outputs after ~5 findings or fewer
+    - v2: Model attempts exhaustive analysis; for complex PRs with 20–50+ latent violations, model enters deep reasoning loop consuming tokens without generating output
+
+3. **Failure Cascade:**
+    - v1 @ 1.5K code + 400 reasoning = 1.9K, leaves 6.1K for output ✓ (succeeds)
+    - v2 @ 1.5K code + 1200 reasoning (unconstrained) = 2.7K, leaves 5.3K for output ✓ (still works)
+    - v2 complex @ 3K code + 3000 reasoning = 6K, leaves 2K for output but model mid-analysis = ✗ (fails before output)
+
+### v3 Improvement Mechanism
+**Why did compression help v2's failure rate?**
+
+1. **Prompt Efficiency Savings:**
+    - v1/v2: 450 tokens → v3: 150 tokens (67% reduction)
+    - Reclaimed budget: 300 tokens per PR, allows ~5–10% larger code sections on borderline PRs
+
+2. **But Why Still 68% Failure?**
+    - v1 used constraint signaling; v3 lost that signal by making prompt shorter but still unconstrained
+    - v3 inherited v2's unconstrained behavior without v2's token savings (v2 also used same 450-token prompt)
+    - **Conclusion:** Prompt length was secondary factor; constraint semantics were primary
+
+3. **Where v3 Succeeded (56.7% line match):**
+    - Better line-number accuracy suggests model attended more carefully to code without verbose rules
+    - Freed attention budget went to precise line identification rather than parsing long constraints
+    - Small dataset (104 findings) means precision gains on analyzed PRs
+
+---
+
+## Token Budget Deep Dive
+
+### Estimated Token Consumption (Groq gpt-oss-20b)
+
+| Component | v1 | v2 | v3 | Notes |
+|---|---|---|---|---|
+| **Prompt tokens** | 450 | 450 | 150 | v3 reframing saved 300 tokens |
+| **Code tokens (typical)** | 1500 | 1500 | 1500 | Same code for fairness |
+| **Model reasoning (constrained)** | 300–500 | 800–1500 | 300–500 | v2 searches exhaustively; v1/v3 bound |
+| **Output JSON tokens** | 200–400 | 200–400 | 200–400 | Proportional to findings |
+| **Total observed budget** | 2450–2900 | 2950–3850 | 2150–2550 | v3 tightest; v2 loosest |
+| **Failure threshold** | ~6500–7500 | ~6500–7500 | ~6500–7500 | Context limit; cross-variant |
+
+**Key Insight:** With 8K context limit and ~4–5K reserved for safety/parsing, actual usable budget is ~3–4K. v2's unconstrained reasoning can push complex PRs to 4–5K+ before output generation, triggering silent failures where model stops reasoning mid-analysis.
+
+---
+
+## Aggregate Analysis Across All Variants
+
+### Findings Summary (All PRs with Responses)
+- **v1: 47 analyzed PRs, 186 findings** → 3.96 avg findings per PR (below 5-cap due to easier code)
+- **v2: 24 analyzed PRs, 86 findings** → 3.58 avg findings per PR (concentrated on simpler PRs that survived)
+- **v3: 29 analyzed PRs, 104 findings** → 3.59 avg findings per PR (similar to v2 but on different dataset)
+
+**Interpretation:** Max-5 cap in v1 was not binding for most PRs. Average findings (3.6–3.96) suggest typical PRs have 3–5 clear violations. v2/v3 datasets are subsets of v1 due to failures, so direct comparison is limited.
+
+### Ground Truth vs. LLM Output (Analyzed PRs Only)
+- **v1:** 272 GT comments vs. 186 LLM comments (68.4% coverage)
+- **v2:** 91 GT comments vs. 86 LLM comments (94.5% coverage)
+- **v3:** 108 GT comments vs. 104 LLM comments (96.3% coverage)
+
+**Key Finding:** v3 achieved best coverage (96.3%) and fewest missed violations (6) among analyzed PRs. v2 also high (94.5%). This indicates **that PRs which generated output had good fidelity for v2/v3, suggesting their failures are outright non-responses, not degraded responses.**
+
+### Precision-Recall Trade-off by Strategy
+- **v1:** Broader recall (especially indentation 0.2292, documentation 0.1034) but lower precision on some categories
+- **v2:** Extreme precision but on narrow dataset; strong on naming_convention (1.0) and unused_import (0.8571) for 24 PRs
+- **v3:** Balanced; best F1 on unused_import (0.9926), perfect on mutable_default (1.0000)
+
+---
+
+## Failure Rate Root Causes (Detailed)
+
+### Why ~70% Silent Failures for v2/v3?
+
+1. **Groq 8K TPM Limit Interaction:**
+    - TPM = tokens per minute; 8K TPM with batch_size=1 means ~133 tokens/sec sustained
+    - Complex PR analysis at 1500–3000 tokens per request can hit rate limits mid-batch
+    - Retry mechanisms in `naive_llm.ipynb` may not be capturing timeout failures as "empty responses"
+
+2. **Model Context Window Saturation:**
+    - gpt-oss-20b has nominal 8K context
+    - Input tokens + model reasoning can exceed buffer, causing truncation/failure before output
+    - v1's max-5 constraint acts as a circuit-breaker; model knows to output early
+
+3. **Batch-Level Token Budgeting:**
+    - With `batch_size=1`, each PR request needs full allocation
+    - No opportunity to parallelize or amortize prompt overhead across multiple PRs
+    - Switching to `batch_size=5` might help, but current design is sequential
+
+4. **Code Complexity Distribution:**
+    - Top tier (simple): 15–20 PRs succeed in all variants
+    - Mid tier (moderate): 15–30 PRs; v1 catches most, v2/v3 catch ~50%
+    - Bottom tier (complex): 40–50 PRs; all variants fail, primarily v2/v3
+
+---
+
+## Category-Specific Insights
+
+### naming_convention
+- **v1:** P=0.9643, R=0.9474, F1=0.9558 (strong)
+- **v2:** P=1.0000, R=1.0000, F1=1.0000 (perfect but on 24 PRs)
+- **v3:** P=0.9048, R=0.8261, F1=0.8636 (good but dip in recall)
+- **Interpretation:** Most reliable category across variants. Naming rules are clear and verifiable without deep context. v2's perfection is consistent with theory — when model analyzes, it identifies rule violations accurately.
+
+### unused_import
+- **v1:** P=1.0000, R=0.8440, F1=0.9154 (excellent precision, decent recall)
+- **v2:** P=1.0000, R=0.8571, F1=0.9231 (nearly tied with v1)
+- **v3:** P=1.0000, R=0.9853, F1=0.9926 (best overall)
+- **Interpretation:** v3's superiority suggests prompt efficiency matters for this category. Shorter prompt allowed model to scan imports more thoroughly. Perfect precision across all variants confirms unused imports are unambiguous.
+
+### mutable_default
+- **v1:** P=1.0000, R=0.5862, F1=0.7391 (perfect precision, weak recall)
+- **v2:** P=1.0000, R=0.8333, F1=0.9091 (strong)
+- **v3:** P=1.0000, R=1.0000, F1=1.0000 (perfect)
+- **Interpretation:** v3's perfection (15/15 TP) on small dataset suggests uncapped analysis + prompt efficiency helped model systematically scan function definitions. v1's weak recall (12 FN) indicates max-5 cap sometimes stops before reaching all function definitions.
+
+### indentation
+- **v1:** P=0.6471, R=0.2292, F1=0.3385 (poor)
+- **v2:** P=0.0000, R=0.0000, F1=0.0000 (catastrophic)
+- **v3:** Not detected (0 findings)
+- **Interpretation:** Indentation is the hardest category for LLMs. Requires careful whitespace parsing and context awareness. v2's 7 false positives suggest unconstrained reasoning led to hallucinated indentation violations. v3 entirely skipped this category, possibly due to prompt reframing making it less salient.
+
+### documentation_formatting
+- **v1:** P=0.7500, R=0.1034, F1=0.1818 (weak)
+- **v2:** P=0.0000, R=0.0000, F1=0.0000 (no findings)
+- **v3:** P=1.0000, R=0.5000, F1=0.6667 (improved)
+- **Interpretation:** Hardest category overall. v1's high precision but low recall suggests model rarely detects it. v3's 1 TP but 1 FN indicates improved sensitivity but still unreliable. This category likely requires docstring semantic understanding beyond strict formatting rules.
+
+---
+
+## Recommendations & Trade-off Analysis
+
+### For Detection Accuracy (F1 Maximization):
+**Winner: v3 (0.9926 on unused_import + 1.0000 on mutable_default)**
+- Use v3 for projects where you can tolerate ~68% non-response rate
+- Focus on categories like `unused_import` and `mutable_default` where v3 excels
+- Avoid expecting indentation or documentation findings
+
+### For Coverage (Maximum PRs Analyzed):
+**Winner: v1 (47/97 = 48.5% success rate)**
+- Max-5 constraint prevents token explosion on complex PRs
+- Trade-off: Lower per-PR accuracy on indentation/documentation but more consistent output
+- Best for large-scale batch evaluation where some findings per PR is preferable to silence
+
+### For Optimal Balance (Accuracy + Coverage):
+**Recommendation: Hybrid v1 + v3**
+- Use v1 strategy (constrained analysis) for reliability
+- Use v3 prompt compression for token efficiency
+- Target: ~50–55% coverage with F1 similar to v3
+- Implementation: Add `max_findings=5` constraint back to v3 prompt
+
+### For Future Iterations:
+1. **Increase batch_size:** Current batch_size=1 wastes prompt overhead; batch_size=5 might reduce per-PR token cost
+2. **Implement retry logic:** Some "empty responses" may be transient rate-limit failures; add exponential backoff
+3. **Category-specific constraints:** Only constrain indentation/documentation; trust model on unused_import/naming/mutable_default
+4. **Use smaller model or retrieval:** gpt-oss-20b is capable but token-hungry; consider embedding-based retrieval augmentation for code context instead of full source inclusion
+
+---
+
+## Summary Table: Variant Comparison
+
+| Metric | v1 | v2 | v3 | Winner |
+|---|---|---|---|---|
+| Success rate | 48.5% | 25.8% | 29.9% | **v1** |
+| Total findings | 186 | 86 | 104 | v1 |
+| Average per PR | 3.96 | 3.58 | 3.59 | Similar |
+| Unused_import F1 | 0.9154 | 0.9231 | **0.9926** | v3 |
+| Naming_convention F1 | 0.9558 | 1.0000 | 0.8636 | v2* |
+| Mutable_default F1 | 0.7391 | 0.9091 | **1.0000** | v3 |
+| Line match rate | 46.8% | 51.2% | **56.7%** | v3 |
+| Coverage gt comments | 68.4% | 94.5% | **96.3%** | v3 |
+| Avg precision (all cats) | 0.82 | 0.80 | **0.96** | v3 |
+
+**v2 \*:** Only on 24 PRs; smaller dataset inflates scores.
+
+---
+
+## Conclusion
+
+**v1** prioritizes reliability and breadth via explicit constraint signaling, achieving 48.5% coverage with solid F1 scores (0.91+) on key categories. The max-5 cap prevents token exhaustion on complex PRs, yielding consistent—if incomplete—results.
+
+**v2** removes constraints hoping for deeper analysis but triggers token exhaustion on 73.2% of PRs. Among the small subset that output, precision is high (naming_convention 1.0000), but the dataset is too small and skewed to be operationally useful. This variant demonstrates the risk of signal-free prompting with tight token budgets.
+
+**v3** trades coverage for precision, achieving 96.3% coverage on analyzed PRs and best-in-class F1 on unused_import (0.9926) and perfect mutable_default (1.0000). Prompt compression freed tokens for refined analysis but did not solve the fundamental Groq TPM bottleneck. Line matching improved to 56.7%, indicating better code-to-finding alignment.
+
+**Recommendation:** For production use, adopt **v1's constraint semantics with v3's prompt efficiency** — a hybrid approach retaining backward compatibility while reclaiming 300 tokens for complex code analysis. For research on high-precision subset, accept v3's lower coverage in exchange for F1 gains on easily-detectable violations.
+
+Both v2 and v3 reveal that **unconstrained LLM analysis in token-limited environments (Groq 8K TPM) rapidly degrades; explicit constraints signal safe termination points, enabling higher overall coverage.**
+
+---
+
+# Milestone 5 - RAG + LLM Evaluation Summary (Single Strategy)
+
+This report evaluates the RAG-augmented LLM pipeline using a single prompting/retrieval strategy and the combined raw output file.
+
+## Artifacts
+- RAG notebook: `notebooks/rag_llm.ipynb`
+- Raw combined responses: `outputs/rag_llm_raw_responses_combined.txt`
+- Evaluator: `src/evaluation/evaluate_llm_raw_txt.py`
+- Ground truth: `data/processed/evaluation.json`
+
+## Evaluation Objective
+Measure how well the RAG + LLM pipeline detects the 5 target violation categories against ground truth, using the same metric framework as other project reports:
+- PR-level coverage and failure rate
+- Violation count comparison
+- Category-wise precision/recall/F1
+- Line-number match behavior
+
+## Pipeline Configuration (from notebook)
+The notebook uses one RAG strategy (no prompt/query variants):
+- Model: `openai/gpt-oss-20b`
+- Retrieval method: `query_strategy(...)` from `src/rag_model/query_strategy.py`
+- Retrieval top-k: `RETRIEVAL_TOP_K = 5`
+- Batch size: `BATCH_SIZE = 1`
+- File truncation limit: `MAX_CHARS_PER_FILE = 8000`
+- Context guardrails: `MODEL_CONTEXT_LIMIT = 8192`, `MAX_OUTPUT_TOKENS = 800`
+- Prompt rule: max 5 findings per PR, with retrieved chunks included as supporting context
+
+Note: the combined raw file appears to include multiple execution segments/restarts (batch numbering restarts and duplicated ranges), so this report reflects the consolidated output exactly as stored.
+
+## High-level Metrics
+
+| Metric | Value |
+|---|---:|
+| Ground-truth PRs | 97 |
+| Predicted PRs with parsed JSON | 36 |
+| PRs ignored due to empty/non-JSON response | 72 |
+| Ignored-response rate (vs 97 PRs) | 74.2% |
+| Analyzed PRs (non-empty parsed predictions) | 34 |
+| LLM comments (analyzed PRs) | 125 |
+| Ground-truth comments (analyzed PRs) | 161 |
+| Missed violations | 42 |
+| Extra violations | 6 |
+| PRs with equal counts | 18 |
+| Line matches (using llm_line + 1) | 60 |
+| Line mismatches | 65 |
+| Line match rate | 48.0% |
+
+## Category-wise Results
+
+| Category | Precision | Recall | F1 | TP | FP | FN | Line Match | Line Mismatch |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| documentation_formatting | 0.0000 | 0.0000 | 0.0000 | 0 | 3 | 15 | 0 | 3 |
+| indentation | 0.2000 | 0.1111 | 0.1429 | 1 | 4 | 8 | 0 | 5 |
+| mutable_default | 1.0000 | 0.9231 | 0.9600 | 12 | 0 | 1 | 2 | 10 |
+| naming_convention | 0.9677 | 0.8108 | 0.8824 | 30 | 1 | 7 | 8 | 23 |
+| unused_import | 1.0000 | 0.8506 | 0.9193 | 74 | 0 | 13 | 50 | 24 |
+
+## Observations
+1. Overall response reliability is the main bottleneck.
+A large share of PRs (72/97) were ignored because responses were empty or non-JSON, which dominates end-to-end effectiveness more than category quality on successful PRs.
+
+2. On successful PRs, precision is strong for 3 categories.
+`unused_import` and `mutable_default` both achieved precision 1.0, and `naming_convention` reached 0.9677 precision.
+
+3. `documentation_formatting` and `indentation` remain weak.
+`documentation_formatting` produced no true positives, and `indentation` had very low recall (0.1111), indicating these categories are still difficult even with retrieved context.
+
+4. Line localization is moderate, not robust.
+Line match rate is 48.0% (60/125), so about half of predicted comments are category-correct but line-offset or incorrect in location.
+
+5. Retrieval did not eliminate output fragility.
+Even with guideline chunks added to prompts, the combined run still shows many empty/non-JSON responses. This suggests runtime robustness and output formatting compliance are still key failure modes.
+
+## RAG-specific Failure Patterns Noticed in Raw File
+- Multiple clearly truncated JSON outputs (responses cut mid-object/string).
+- Long stretches of blank responses between valid batches.
+- Repeated batch numbering resets indicate multiple sessions were concatenated.
+
+These patterns are consistent with API/runtime interruptions, context/token pressure, or partial generation termination before valid JSON closure.
+
+## Limitations
+1. Combined file is not a single clean run.
+Because `rag_llm_raw_responses_combined.txt` aggregates multiple sessions, run-level reproducibility is lower than a single timestamped output artifact.
+
+2. Notebook constants may differ from final combined execution.
+The currently visible notebook values may not exactly match every appended segment in the combined file.
+
+3. Evaluator parses only valid JSON sections.
+Malformed/truncated sections are treated as ignored, which is correct for scoring but reduces analyzable coverage.
+
+## Conclusion
+The single-strategy RAG + LLM pipeline shows good category precision when it returns valid JSON, especially for `unused_import`, `mutable_default`, and `naming_convention`. However, the dominant issue is response reliability: 74.2% of PRs were ignored due to empty/non-JSON outputs in the combined artifact. For this setup, improving output robustness (JSON validity, retry/recovery, and run segmentation hygiene) is the highest-impact next step, ahead of additional category tuning.
+
+---
+
+# Part 8 - Integrated Local Model Analysis
+
+# Local Model Analysis — RAG-based Code Review with phi4:14b
+
+**Author:** Kannan S (21f3000990)  
+**Date:** April 2026  
+**Branch:** `kannan-local-models-analysis`
+
+---
+
+## TL;DR
+
+We evaluated three baselines for automated Python code review: a **Static analysis** baseline (flake8 + pylint), a **LLM-only** baseline (phi4:14b with no retrieval), and a **RAG** baseline (phi4:14b + retrieved coding guidelines). The evaluation was done on 103 files with 721 ground-truth violations across 5 categories. Static analysis dominated with macro F1 = 0.578, while LLM achieved 0.206 and RAG 0.108. The retrieval system itself performed well (Recall@10 = 0.97, MRR = 0.96), but the LLM struggled to translate retrieved context into accurate line-level predictions. Static tools had the highest hallucination rate (52.2%) due to over-detection, while LLM (37.0%) and RAG (39.5%) were more precise but missed most violations.
+
+---
+
+## Table of Contents
+
+1. [Problem Statement](#1-problem-statement)
+2. [Evaluation Dataset](#2-evaluation-dataset)
+3. [Tools and Infrastructure](#3-tools-and-infrastructure)
+4. [Retrieval Corpus](#4-retrieval-corpus)
+5. [Prompt Engineering](#5-prompt-engineering)
+6. [Production Prompt Configuration](#6-production-prompt-configuration)
+7. [Three Baselines](#7-three-baselines)
+8. [Classification Metrics](#8-classification-metrics)
+9. [Per-Category F1 Scores](#9-per-category-f1-scores)
+10. [Retrieval Quality](#10-retrieval-quality)
+11. [Hallucination Analysis](#11-hallucination-analysis)
+12. [Grounding Analysis](#12-grounding-analysis)
+13. [Latency Comparison](#13-latency-comparison)
+14. [Limitations and How We Addressed Them](#14-limitations-and-how-we-addressed-them)
+15. [Scripts Reference](#15-scripts-reference)
+16. [How to Reproduce](#16-how-to-reproduce)
+17. [Notebooks](#17-notebooks)
+18. [Visualizations](#18-visualizations)
+
+---
+
+## 1. Problem Statement
+
+The goal is to investigate whether **retrieved project-specific knowledge improves LLM code review comments** compared to general-purpose LLMs and static analysis tools.
+
+We focus on **single-file Python PR diffs** (≤200 modified lines), detecting **guideline violations only** — no functional correctness, security, or architecture issues. The system generates localized, line-level style comments with explicit guideline references.
+
+**Five violation categories:**
+
+| Category | What it covers |
+|---|---|
+| `unused_import` | Imports declared but never used (F401, W0611) |
+| `indentation` | Mixed tabs/spaces, non-4-space indent, alignment issues (E1xx, W0311) |
+| `naming_convention` | Non-snake_case functions, non-CamelCase classes, bad variable names (N8xx, C0103) |
+| `documentation_formatting` | Missing or malformed docstrings (D1xx-D4xx, C0114-C0116) |
+| `mutable_default` | Mutable objects (list, dict, set) as function default arguments (B006, W0102) |
+
+---
+
+## 2. Evaluation Dataset
+
+| Property | Value |
+|---|---|
+| Total evaluation entries | 103 |
+| Total ground-truth reviews | 721 |
+| Source files directory | `data/processed/evaluation_files/` |
+| Evaluation JSON | `data/processed/evaluation.json` |
+| Framework repos | flask, fastapi, pandas, sklearn, django |
+| PR types | Synthetic (LLM-generated violations) + Manual (hand-annotated) |
+
+**How the dataset was built:**
+
+1. **Synthetic repos** — We created GitHub repos (`synthetic-{framework}`) with 20 PRs each, where violations were injected into clean code files using LLM-based injection + regex fallback (`scripts/create_synthetic_repos.py`).
+2. **Review comments** — PR review comments were collected from these synthetic repos (`scripts/fetch_review_comments.py`) and merged into the retrieval corpus.
+3. **Manual entries** — 6 hand-annotated framework-specific files were added (Django models/tests, FastAPI users, Flask blog, Pandas cleaning, Sklearn estimator).
+4. **Evaluation dataset creation** — `scripts/create_evaluation_dataset.py` matched source files to ground-truth reviews by path/category/timestamp.
+
+Each evaluation entry has this structure:
+```json
+{
+    "id": "<unique_id>",
+    "source_file": "evaluation_files/synthetic-django_PR_21_admin.py",
+    "repo": "synthetic-django",
+    "ground_truth_reviews": [
+        {
+            "line_number": 15,
+            "violation_category": "unused_import",
+            "review_comment": "Module 'os' is imported but never used.",
+            "match_confidence": 1.0
+        }
+    ]
+}
+```
+
+The `data_preprocessor.ipynb` notebook handles the entire data pipeline — corpus creation, synthetic repo generation, review collection, and evaluation dataset assembly.
+
+---
+
+## 3. Tools and Infrastructure
+
+### 3.1 LLM Inference
+
+| Component | Details |
+|---|---|
+| Model | **phi4:14b** (Microsoft, 14B parameters) |
+| Runtime | **Ollama** (local, no API dependency) |
+| Temperature | 0.0 (deterministic) |
+| Max tokens | 1024 |
+| Retry logic | Up to 4 attempts for valid JSON |
+| Caching | SHA256 hash of (prompt + code + model + temperature) → JSON file in `data/llm_cache/` |
+| Cache location | `data/llm_cache/{sha256_hash}.json` |
+
+The caching mechanism ensures reproducibility — every inference result is stored and reused on subsequent runs. The cache key is computed as:
+```python
+hashlib.sha256(f"{prompt}|{code}|{model}|{temperature}".encode()).hexdigest()
+```
+
+### 3.2 Static Analysis Tools
+
+| Tool | Rules used | Categories covered |
+|---|---|---|
+| **flake8** | E101-E131, W191, F401, N801-N818, B006, B008, D100-D417 | All 5 |
+| **flake8-bugbear** | B006, B008 | mutable_default |
+| **flake8-docstrings** | D100-D417 | documentation_formatting |
+| **pep8-naming** | N801-N818 | naming_convention |
+| **pylint** | W0311, C0103-C0105, W0611, W0614, W0404, W0406, W0102, C0114-C0116, C0112, C0199 | All 5 |
+
+The category mapping is defined in `scripts/evaluate_static_analysis.py` through `FLAKE8_MAP` and `PYLINT_MAP` dictionaries that translate tool-specific error codes to our 5 categories.
+
+**Pylint config used:**
+```
+--disable=all --enable=W0311,C0103,W0611,W0102,C0114,C0115,C0116
+```
+
+### 3.3 Retrieval System
+
+| Component | Details |
+|---|---|
+| Embedding model | **BAAI/bge-large-en-v1.5** (SentenceTransformers) |
+| Vector dimension | 1024 |
+| Index type | **FAISS IndexFlatIP** (inner product similarity) |
+| Top-K | 10 chunks per query |
+| Strategy | **S15** (adaptive budget + refined queries + heuristic reranking) |
+| Corpus size | 216+ guideline chunks |
+
+The S15 retrieval strategy in `scripts/retrieve.py` works in 4 steps:
+1. **Category prediction** — heuristic regex analysis of code to predict which categories are likely present (confidence 0–3)
+2. **Adaptive budget** — allocate retrieval slots per category based on confidence: `{3: 4, 2: 3, 1: 2, 0: 1}` slots
+3. **Refined queries** — category-specific keyword-rich queries (e.g., `"unused import module not used remove F401 W0611"` for unused_import)
+4. **Heuristic reranking** — boost scores by confidence: `{3: +0.12, 2: +0.06, 1: +0.02, 0: -0.03}`
+
+S15 was selected from 16 strategies tested in `scripts/evaluate_retrieval.py`:
+- Precision: 59.6%, Recall: 96.3%, MRR: 0.625
+
+### 3.4 Python Dependencies
+
+From `requirements.txt`:
+
+| Package | Purpose |
+|---|---|
+| `faiss-cpu` | Vector similarity search index |
+| `sentence-transformers` | BAAI/bge-large-en-v1.5 embeddings |
+| `flake8` | Base linter |
+| `flake8-bugbear` | Mutable default detection (B006) |
+| `flake8-docstrings` | Docstring rules (D-series) |
+| `pep8-naming` | Naming convention rules (N-series) |
+| `pylint` | Secondary linter |
+| `numpy` | Array operations |
+| `pandas` | Data manipulation |
+| `scikit-learn` | Evaluation metrics |
+| `matplotlib` | Visualization |
+| `python-dotenv` | Environment variable loading |
+| `requests` | HTTP for GitHub API |
+| `tqdm` | Progress bars |
+| `groq` | API-based LLM inference (optional, not used in local analysis) |
+
+---
+
+## 4. Retrieval Corpus
+
+The retrieval corpus is stored in `data/processed/retrival_corpus.json` and contains 216+ chunks organized by category and source.
+
+### Sources
+
+| Source | Type | Categories covered |
+|---|---|---|
+| PEP 8 | Official Python style guide | indentation, naming_convention |
+| PEP 257 | Docstring conventions | documentation_formatting |
+| Ruff | Fast Python linter rules | All 5 |
+| Flake8 / pycodestyle | Linter error codes | indentation, unused_import |
+| Pylint | Static analysis messages | All 5 |
+| Django coding style | Framework guidelines | naming, imports, docs, indentation |
+| Pandas contributing guide | Framework guidelines | imports, docs, naming |
+| Scikit-learn developer guide | Framework guidelines | naming, imports, docs, mutable_default |
+| Flask contributing guide | Framework guidelines | docs |
+| Synthetic review comments | From PR reviews on synthetic repos | All 5 |
+
+### Chunk Design
+
+Following research from [arxiv.org/pdf/2603.06976](https://arxiv.org/pdf/2603.06976) and [arxiv.org/pdf/2505.21700](https://arxiv.org/pdf/2505.21700):
+- Each chunk contains **one idea** (single guideline or rule)
+- Chunk size: **68–128 tokens** for optimal retrieval
+- No duplicate guidelines
+- Each chunk has: `text`, `category`, `source_type`, `source_path`, `chunk_id`
+
+Example chunk:
+```json
+{
+    "text": "F401: Module imported but unused. Remove the import or use it.",
+    "category": "unused_import",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/unused-import/",
+    "chunk_id": "chunk_0066"
+}
+```
+
+The corpus was built in `notebooks/data_preprocessor.ipynb`:
+1. **COMMON_GUIDELINES** — 128 chunks from PEP 8/257, Ruff, Flake8, Pylint
+2. **REPO_GUIDELINES** — 88 chunks from Django, Pandas, Scikit-learn, Flask guidelines
+3. **Review comments** — merged from `data/raw/review_comments/review.json` (chunk_0217+)
+
+---
+
+## 5. Prompt Engineering
+
+### 5.1 Models Evaluated
+
+We tested **7 local Ollama models** across 72 prompt configurations (64 single-issue + 8 multi-issue) using `scripts/evaluate_prompts.py`:
+
+| Model | Size | Avg Latency | Valid JSON % | Avg F1 | Notes |
+|---|---|---|---|---|---|
+| **phi4:14b** | 14B | 16,322ms | **100%** | **0.500** | Zero failures across all configs |
+| **qwen2.5-coder:14b** | 14B | 16,981ms | **100%** | **0.500** | Code-specialized, equally reliable |
+| **codellama:7b-instruct** | 7B | 7,799ms | **100%** | **0.500** | Fast, 100% valid JSON |
+| **gemma4:latest** | — | 25,522ms | 80% | 0.500 | Perfect when valid, 20% failure rate |
+| **deepseek-coder:6.7b** | 6.7B | 8,230ms | 100% | 0.476 | Reduced precision (95.2%) |
+| **llama3.1:8b** | 8B | 4,742ms | 94.4% | 0.441 | Fastest but CoT multi-issue failures |
+| **mistral:7b-instruct** | 7B | 8,772ms | 100% | 0.381 | Weakest precision (76.2%) |
+
+**phi4:14b** was selected as the production model for this analysis — it has perfect reliability (100% valid JSON) and highest F1 across all configurations.
+
+### 5.2 Prompt Dimensions Tested
+
+The 72 configurations come from a Cartesian product of 4 dimensions:
+
+**Strategy (2 variants):**
+- **Minimal** — Direct instruction: Role → Code → Categories → Output format
+- **Chain-of-Thought (CoT)** — Adds 6–8 step explicit reasoning chain
+
+**Result:** Minimal wins (98% valid JSON vs 89% for CoT, higher precision).
+
+**Detection Scope (2 variants):**
+- **Single-issue** — Find one violation per call (64 configs)
+- **Multi-issue** — Find all violations per call (8 configs)
+
+**Result:** Multi-issue is more efficient but less reliable with CoT. Minimal+multi works well.
+
+**Mode (2 variants):**
+- **LLM-only** — Code analysis without retrieval context
+- **RAG** — Code + retrieved coding guidelines prepended
+
+**Result:** LLM slightly edges RAG on simple categories (F1 0.465 vs 0.458). RAG expected to help on harder categories.
+
+**Hints (2–16 variants):**
+- For single-issue: 16 combinations of `{none, exact_line} × {none, ±1, ±2, ±3} × {none, ground_truth}`
+- For multi-issue: Only `no_hints` and `ground_truth` (realistic production setting)
+
+**Result:** `no_hints` is the only realistic production prompt. Adding hints improves scores but is not available at inference time.
+
+### 5.3 Key Findings
+
+1. **Minimal > CoT** — Chain-of-thought reasoning added no accuracy benefit and caused JSON parsing failures (especially with llama3.1:8b multi-issue: 0% valid JSON).
+2. **phi4:14b and qwen2.5-coder:14b tied at the top** — Both achieve perfect F1 (0.500) and 100% valid JSON. phi4:14b was chosen for slightly faster inference.
+3. **No hints = realistic production** — The `no_hints` variant is the only one that doesn't require ground truth information at inference time.
+4. **RAG adds overhead for marginal gain on simple categories** — but is critical for harder categories where the LLM needs domain knowledge.
+
+Full analysis: `docs/prompt_evaluation.md`
+
+---
+
+## 6. Production Prompt Configuration
+
+Based on prompt evaluation, the final production prompts are:
+
+### LLM-only Baseline: `minimal_multi_llm_no_hints`
+
+```
+Role: You are a Python code reviewer...
+Code: {source_code}
+Categories: [unused_import, indentation, naming_convention, documentation_formatting, mutable_default]
+Output: JSON array of {line_number, violation_category, review_comment}
+```
+
+### RAG Baseline: `minimal_multi_rag_no_hints`
+
+```
+Role: You are a Python code reviewer...
+Guidelines: {top_10_retrieved_chunks}
+Code: {source_code}
+Categories: [unused_import, indentation, naming_convention, documentation_formatting, mutable_default]
+Output: JSON array of {line_number, violation_category, review_comment, guideline_chunks_used}
+```
+
+The RAG prompt prepends the top-10 retrieved guideline chunks (from S15 strategy) before the code, allowing the model to reference specific rules in its review.
+
+---
+
+## 7. Three Baselines
+
+### Baseline 1: Static Analysis (flake8 + pylint)
+
+| Property | Value |
+|---|---|
+| Tools | flake8 (with bugbear, docstrings, pep8-naming) + pylint |
+| Total predictions | 1,269 violations |
+| Files with violations | 93 / 103 |
+| How it works | Run both linters on each file, map error codes to 5 categories via FLAKE8_MAP/PYLINT_MAP |
+| Deterministic | Yes |
+| Requires LLM | No |
+
+### Baseline 2: LLM-only (phi4:14b, no retrieval)
+
+| Property | Value |
+|---|---|
+| Model | phi4:14b via Ollama |
+| Prompt | `minimal_multi_llm_no_hints` |
+| Total predictions | 219 violations |
+| Valid JSON responses | 62 / 103 (60.2%) |
+| Files with predictions | 102 / 103 |
+| How it works | Send code + category list to LLM, parse JSON response |
+| Deterministic | Nominally (temp=0.0), but GPU float variance exists |
+
+### Baseline 3: RAG (phi4:14b + S15 retrieval)
+
+| Property | Value |
+|---|---|
+| Model | phi4:14b via Ollama |
+| Prompt | `minimal_multi_rag_no_hints` |
+| Retrieval | S15, BAAI/bge-large-en-v1.5, FAISS IndexFlatIP, top-10 |
+| Total predictions | 114 violations |
+| Valid JSON responses | 102 / 103 (99.0%) |
+| Files with predictions | 103 / 103 |
+| How it works | Retrieve top-10 guideline chunks → prepend to prompt → LLM generates review |
+| Deterministic | Nominally, cached results used |
+
+Interesting: RAG produces far fewer predictions (114 vs 219 for LLM-only) — the retrieved guidelines appear to make the model more conservative, only flagging violations it can back up with evidence.
+
+---
+
+## 8. Classification Metrics
+
+### Scoring Method
+
+Two matching protocols are used (implemented in `score_all()` function, Cell 8 of pipeline.ipynb):
+
+1. **Exact match** — prediction matches ground truth if `line_number == gt_line_number AND violation_category == gt_category`
+2. **±1 Relaxed match** — `abs(pred_line - gt_line) ≤ 1 AND violation_category == gt_category`
+
+Metrics computed:
+- **Per-category**: TP, FP, FN → Precision, Recall, F1
+- **Macro F1**: Average F1 across all 5 categories (preferred — treats each category equally despite class imbalance)
+- **Micro F1**: Global TP/FP/FN aggregation → Precision, Recall, F1
+
+### Aggregate Results
+
+| Baseline | Match | Macro F1 | Micro Precision | Micro Recall | Micro F1 |
+|---|---|---|---|---|---|
+| **Static** | Exact | **0.578** | 42.6% | **75.0%** | 54.3% |
+| **Static** | ±1 Relaxed | **0.578** | 42.6% | 75.0% | 54.3% |
+| **LLM** | Exact | 0.206 | **57.5%** | 17.5% | 26.8% |
+| **LLM** | ±1 Relaxed | 0.225 | 57.5% | 17.5% | 26.8% |
+| **RAG** | Exact | 0.108 | 55.1% | 8.6% | 14.9% |
+| **RAG** | ±1 Relaxed | 0.122 | 55.1% | 8.6% | 14.9% |
+
+**Key observations:**
+- Static has the highest recall (75%) because linters produce many violations — they catch most issues but also flag many false positives
+- LLM and RAG have higher precision (57.5%, 55.1%) but very low recall (17.5%, 8.6%) — they're accurate when they flag something, but miss most violations
+- ±1 relaxed only slightly helps LLM (0.206 → 0.225) and RAG (0.108 → 0.122), meaning most errors are off by more than 1 line or wrong category entirely
+- Static scores are identical for exact and relaxed because linter line numbers are always precise
+
+---
+
+## 9. Per-Category F1 Scores
+
+### Exact Match F1
+
+| Category | Static | LLM | RAG |
+|---|---|---|---|
+| `unused_import` | **0.90** | 0.56 | 0.38 |
+| `indentation` | **0.39** | 0.00 | 0.00 |
+| `naming_convention` | **0.64** | 0.13 | 0.04 |
+| `documentation_formatting` | **0.18** | 0.00 | 0.00 |
+| `mutable_default` | **0.78** | 0.33 | 0.13 |
+
+**Analysis:**
+
+- **unused_import** — Best category for all baselines. Static achieves F1=0.90 because flake8's F401 is near-perfect for this. LLM (0.56) and RAG (0.38) can identify unused imports but sometimes get the line number wrong.
+- **indentation** — LLM and RAG score **0.00**. The models simply cannot detect whitespace issues from code text. Static catches these via pycodestyle rules (E1xx) but only reaches F1=0.39 because many indentation violations in the ground truth are subtle.
+- **naming_convention** — Static dominates (0.64) using pep8-naming rules (N8xx). LLM can sometimes spot obvious camelCase (0.13), RAG barely detects any (0.04).
+- **documentation_formatting** — Both LLM and RAG score **0.00**. Docstring formatting violations require understanding expected docstring structure, which neither model handles well. Static reaches only 0.18 because many doc violations are subjective.
+- **mutable_default** — Static excels (0.78) via flake8-bugbear B006. LLM can spot obvious `def f(x=[])` patterns (0.33), RAG less so (0.13).
+
+---
+
+## 10. Retrieval Quality
+
+Evaluated using the RAG baseline's retrieval system (BAAI/bge-large-en-v1.5 + FAISS IndexFlatIP, S15 strategy).
+
+### Metrics at Different K Values
+
+| K | Recall@K | Precision@K | MRR |
+|---|---|---|---|
+| 1 | 0.60 | **0.94** | 0.94 |
+| 3 | 0.76 | 0.89 | 0.95 |
+| 5 | 0.86 | 0.81 | 0.96 |
+| 10 | **0.97** | 0.59 | 0.96 |
+
+**Definitions:**
+- **Recall@K** — Fraction of ground-truth categories with ≥1 matching chunk in top-K results
+- **Precision@K** — Fraction of top-K chunks whose category matches a ground-truth category
+- **MRR** — Mean Reciprocal Rank: average of 1/rank for the first relevant chunk
+
+**Analysis:**
+
+The retrieval system itself is strong:
+- At K=10 (our production setting), we achieve **97% recall** — almost every relevant guideline category is represented
+- **MRR = 0.96** means the first relevant chunk appears at rank 1 in 96% of queries
+- The precision–recall tradeoff is expected: at K=1 precision is 94% but recall is only 60%; at K=10 recall hits 97% but precision drops to 59%
+
+This confirms the retrieval pipeline is **not the bottleneck** — the issue is the LLM's ability to use the retrieved chunks effectively for line-level prediction.
+
+---
+
+## 11. Hallucination Analysis
+
+A prediction is counted as **hallucinated** if no ground-truth violation exists within ±1 line with the same category.
+
+| Baseline | Hallucinated | Total Predictions | Hallucination Rate |
+|---|---|---|---|
+| **Static** | 662 | 1,269 | **52.2%** |
+| **LLM** | 81 | 219 | **37.0%** |
+| **RAG** | 45 | 114 | **39.5%** |
+
+**Analysis:**
+
+- **Static has the highest hallucination rate (52.2%)** — this is because linters flag everything that matches their rules, regardless of whether it's actually a violation in context. Over half of static predictions don't match any ground-truth review.
+- **LLM has the lowest hallucination rate (37.0%)** — when the model makes a prediction, it's more likely to be correct. But it makes far fewer predictions overall.
+- **RAG is slightly worse than LLM (39.5% vs 37.0%)** — surprising, since retrieved guidelines should help. This may be because RAG sometimes flags violations based on retrieved rules that don't actually apply to the specific code.
+
+---
+
+## 12. Grounding Analysis
+
+A prediction is **grounded** if it's backed by evidence — either a linter rule (Static) or a retrieved guideline chunk (RAG).
+
+| Baseline | Grounding Rate | Grounded / Total | Explanation |
+|---|---|---|---|
+| **Static** | **100.0%** | 1,269 / 1,269 | Every prediction comes from a linter rule (F401, E111, etc.) |
+| **LLM** | **0.0%** | 0 / 219 | No retrieval context — predictions are based purely on model knowledge |
+| **RAG** | **100.0%** | 114 / 114 | Every prediction's category matches at least one retrieved chunk |
+
+**Analysis:**
+
+- Static is fully grounded by design — every violation maps to a specific error code
+- LLM has **zero grounding** because there's no external evidence system. The model generates reviews from training data alone
+- RAG achieves **100% grounding** — the S15 strategy ensures relevant chunks are always retrieved, and the model's predictions align with retrieved categories. However "grounded" doesn't mean "correct" — a prediction can be grounded (backed by a real guideline) but still hallucinated (wrong line or wrong applicability)
+
+---
+
+## 13. Latency Comparison
+
+Measured per-file inference time across all 103 evaluation files.
+
+| Baseline | Mean Latency | P95 Latency | Notes |
+|---|---|---|---|
+| **Static** | **679 ms** | 679 ms | flake8 + pylint per file |
+| **LLM** | 11,783 ms | 27,328 ms | phi4:14b inference only |
+| **RAG** | 15,611 ms | 19,475 ms | Retrieval (~4s) + phi4:14b inference |
+
+**Analysis:**
+
+- Static is **~17× faster** than LLM and **~23× faster** than RAG on average
+- LLM has the highest P95 (27.3s) — some files cause extremely long generation times, likely due to complex or long code
+- RAG's mean is ~4s higher than LLM (retrieval overhead), but its P95 (19.5s) is actually lower — the retrieved guidelines may help the model generate responses more efficiently for complex files
+- For a production system, static analysis is the only baseline that could run in real-time PRs. LLM/RAG baselines would need async processing
+
+---
+
+## 14. Limitations and How We Addressed Them
+
+### 14.1 Static Analysis Limitations
+
+| Limitation | Evidence | Mitigation |
+|---|---|---|
+| **Over-detection** (high false positive rate) | 52.2% hallucination rate, 1269 predictions for 721 GT reviews | Accepted as inherent to rule-based tools; provides high recall as a tradeoff |
+| **No semantic understanding** | Can't tell if an import is used via `__all__` or dynamic lookup | N/A — fundamental limitation of AST-based tools |
+| **Rigid rules** | Can't detect subtle naming issues (e.g., slightly misleading names) | Complemented with LLM baselines |
+| **Category mapping is manual** | FLAKE8_MAP/PYLINT_MAP are hand-crafted | Validated against PEP 8 and tool documentation |
+
+### 14.2 LLM-only Limitations
+
+| Limitation | Evidence | Mitigation |
+|---|---|---|
+| **JSON parse failures** | Only 62/103 valid JSON (60.2% success rate) | Used `minimal` template (dropped CoT), `multi-issue` format, max 4 retries |
+| **Zero F1 on indentation and documentation** | F1 = 0.00 for both categories | These categories require structural code understanding that text-based LLMs lack |
+| **No grounding** | 0% grounding rate | This is by design — LLM-only has no external evidence. Addressed by the RAG baseline |
+| **High latency variance** | P95 = 27,328ms (some files take 27s) | Caching via SHA256 hash ensures repeated runs are instant |
+| **Non-deterministic outputs** | GPU floating-point variance at temp=0.0 | All results cached in `data/llm_cache/` for reproducibility |
+
+### 14.3 RAG Limitations
+
+| Limitation | Evidence | Mitigation |
+|---|---|---|
+| **Lowest recall** (8.6%) | Only 114 predictions total — very conservative | Model becomes too cautious with guidelines; could tune prompt to encourage more predictions |
+| **Same category gaps as LLM** | 0.00 F1 on indentation and documentation | Retrieval can surface relevant chunks (Recall@10=0.97) but model can't use them for line-level detection |
+| **Retrieval adds latency** | +~4s per file (15.6s vs 11.8s mean) | S15 strategy is already optimized from 16 tested strategies |
+| **Higher hallucination than LLM** | 39.5% vs 37.0% | Retrieved chunks sometimes include rules that don't apply to the specific code, misleading the model |
+
+### 14.4 General Limitations
+
+| Limitation | Evidence | Mitigation |
+|---|---|---|
+| **Small evaluation dataset** | 103 files, 721 violations — limited statistical significance | Best available with synthetic + manual data generation |
+| **Single model** | Only phi4:14b used for production analysis | Full prompt evaluation tested 7 models; phi4:14b was the top performer |
+| **Single-file only** | No cross-file context (e.g., imports used in other modules) | Scope constraint from problem statement; standard for PR review tools |
+| **Five categories only** | Ignores security, performance, architecture issues | Intentional focus on style violations per problem statement |
+| **Synthetic ground truth** | Many GT reviews were LLM-generated | Supplemented with 6 manual files; cross-validated during dataset creation |
+
+### 14.5 Experiment History — Failed Approaches
+
+From `docs/experiment_log.md`, several approaches were tried and abandoned:
+
+1. **Dense-only retrieval (early approach)** — PEP 8 chunks dominated regardless of repo type; framework-specific guidelines never surfaced. Fixed by adding repo-aware chunking and S15 adaptive strategy.
+
+2. **Semantic-only indentation matching** — Pure text embeddings miss structural whitespace properties. Accepted as fundamental limitation.
+
+3. **TinyLlama (1.1B)** — RAG significantly underperformed LLM-only (macro F1 0.215 vs 0.240). Root causes: category label leakage in evidence formatting, context overflow at ~1400 tokens, no confidence gating. Fixed by using phi4:14b (14B) with larger context window.
+
+4. **Chain-of-Thought prompts** — All top-15 configs use `minimal` template. CoT added JSON parsing failures, especially on smaller models. Dropped entirely.
+
+5. **Mutable default detection (early)** — F1 was 0.00 until heuristic `detect_mutable_default()` regex was added to `retrieve.py`. After fix: F1 jumped to 0.59–0.64.
+
+---
+
+## 15. Scripts Reference
+
+### `scripts/llm_inference.py` — LLM Inference with Caching
+
+**Purpose:** Run inference via local Ollama models with JSON validation and SHA256 caching.
+
+| Function | What it does |
+|---|---|
+| `infer_ollama()` | Call Ollama HTTP API, return JSON string |
+| `infer_one()` | Single inference with full metadata tracking |
+| `run_inference()` | Batch inference across models with retries |
+| `_cache_key()` | SHA256 hash of (prompt, code, model, temperature) |
+| `_is_valid_json_response()` | Validates JSON structure before caching |
+
+```bash
+python scripts/llm_inference.py --prompt "Review this code" --code-file example.py --model phi4:14b
+```
+
+### `scripts/retrieve.py` — FAISS Retrieval (S15 Strategy)
+
+**Purpose:** Retrieve relevant coding guideline chunks from FAISS index.
+
+| Function | What it does |
+|---|---|
+| `retrieve(query, top_k)` | Basic FAISS similarity search |
+| `retrieve_with_context(code, top_k)` | S15 production strategy with adaptive budget |
+| `predict_categories(code)` | Heuristic regex-based category prediction |
+
+```bash
+# Basic query
+python scripts/retrieve.py query "unused import" -k 10 --json
+
+# S15 strategy (production)
+python scripts/retrieve.py code example.py -k 10 --json
+```
+
+### `scripts/evaluate_static_analysis.py` — Static Analysis Baseline
+
+**Purpose:** Run flake8 + pylint, map violations to 5 categories, compare vs ground truth.
+
+| Command | What it does |
+|---|---|
+| `cmd_scan()` | Run linters on evaluation files |
+| `cmd_compare()` | Match violations vs ground truth (exact, category, semantic) |
+| `cmd_sweep()` | Find optimal similarity threshold for doc-formatting |
+| `cmd_inspect()` | Examine unique text patterns |
+
+```bash
+python scripts/evaluate_static_analysis.py scan
+python scripts/evaluate_static_analysis.py compare
+```
+
+### `scripts/evaluate_prompts.py` — Prompt Configuration Evaluation
+
+**Purpose:** Systematically evaluate prompt templates × hint combinations × models.
+
+Evaluates 72 configurations across 7 models. Produces leaderboard sorted by F1.
+
+```bash
+# Full evaluation (all models, all configs)
+python scripts/evaluate_prompts.py
+
+# Single model
+python scripts/evaluate_prompts.py --models phi4:14b
+
+# Specific config
+python scripts/evaluate_prompts.py --models phi4:14b --detection multi --strategy minimal --mode llm
+```
+
+### `scripts/create_synthetic_repos.py` — Synthetic Repository Generation
+
+**Purpose:** Create GitHub repos with intentional code violations for evaluation.
+
+Generates 20 clean Python files per framework, then creates PRs with injected violations:
+- **Injection methods:** LLM-based code modification + regex fallback
+- **Violation types:** unused_import, indentation, naming_convention, documentation_formatting, mutable_default
+
+```bash
+python scripts/create_synthetic_repos.py \
+    --repo-token $GITHUB_REPO \
+    --llm-token $GITHUB_LLM_TOKEN \
+    --repos flask fastapi pandas sklearn django \
+    --num-prs 20 \
+    --guidelines-dir data/raw/guidelines_raw
+```
+
+### `scripts/create_evaluation_dataset.py` — Evaluation Dataset Builder
+
+**Purpose:** Create `evaluation.json` from source files and collected review comments.
+
+```bash
+python scripts/create_evaluation_dataset.py \
+    --repo-token $GITHUB_REPO \
+    --llm-token $GITHUB_LLM_TOKEN \
+    --repos flask fastapi pandas sklearn django \
+    --num-prs 20 \
+    --output data/processed/evaluation.json
+```
+
+### `scripts/fetch_review_comments.py` — Review Comment Collector
+
+**Purpose:** Fetch PR review comments from synthetic repos, deduplicate, format as corpus chunks.
+
+```bash
+python scripts/fetch_review_comments.py \
+    --repos flask fastapi pandas sklearn django \
+    --start-chunk 217 \
+    --output data/raw/review_comments/review.json
+```
+
+---
+
+## 16. How to Reproduce
+
+### Prerequisites
+
+- Python 3.10+
+- [Ollama](https://ollama.ai/) installed with `phi4:14b` model pulled
+- GitHub token (for synthetic repo creation only — not needed if using cached data)
+
+### Step 1: Install Dependencies
+
+```bash
+cd Group-1-DS-and-AI-Lab-Project
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Step 2: Pull the LLM Model
+
+```bash
+ollama pull phi4:14b
+```
+
+### Step 3: Set Up Environment
+
+Create a `.env` file (not committed):
+```
+GITHUB_REPO=<github_token>
+GITHUB_LLM_TOKEN=<github_token>
+```
+
+### Step 4: Run Data Preprocessing (Optional)
+
+The retrieval corpus and evaluation dataset are already in `data/processed/`. To regenerate from scratch:
+
+```bash
+# Open and run all cells in:
+notebooks/data_preprocessor.ipynb
+```
+
+This will:
+1. Build retrieval corpus from COMMON_GUIDELINES + REPO_GUIDELINES
+2. Create synthetic repos with violations (requires GitHub token)
+3. Fetch review comments
+4. Merge into final corpus
+5. Build evaluation dataset
+
+### Step 5: Run the Pipeline
+
+```bash
+# Open and run all cells (1-12) in:
+notebooks/pipeline.ipynb
+```
+
+Cell-by-cell:
+- **Cells 1–2:** Imports, data loading (103 entries, 721 GT reviews)
+- **Cell 3:** LLM-only baseline (Baseline 2)
+- **Cell 4:** RAG baseline (Baseline 3)
+- **Cells 5–6:** Aggregate comparison and per-PR delta
+- **Cell 7:** Static baseline loading (Baseline 1) + re-extract all predictions
+- **Cell 8:** Enhanced scoring with exact and ±1 relaxed matching
+- **Cell 9:** Retrieval quality metrics (Recall@K, Precision@K, MRR)
+- **Cell 10:** Grounding and hallucination analysis
+- **Cell 11:** Latency analysis (re-runs flake8+pylint for timing)
+- **Cell 12:** All visualizations (7 plots)
+
+### Using Cached Results
+
+All LLM inference results are cached in `data/llm_cache/`. If you have the cache files, the pipeline will skip actual LLM calls and use cached responses, making the notebook run much faster. The cache uses SHA256 hashes, so identical queries always return the same result.
+
+---
+
+## 17. Notebooks
+
+### `notebooks/data_preprocessor.ipynb`
+
+**Purpose:** End-to-end data pipeline — from raw guidelines to evaluation-ready dataset.
+
+| Section | What it does |
+|---|---|
+| Retrieval Corpus | Defines 128 COMMON_GUIDELINES + 88 REPO_GUIDELINES, saves to `retrival_corpus.json` |
+| Corpus Visualization | Bar charts of chunks per source type and category |
+| Synthetic Repos | Calls `create_synthetic_repos.py` to generate violation PRs |
+| Review Comments | Calls `fetch_review_comments.py` to collect PR reviews |
+| Corpus Merge | Merges review comments into retrieval corpus (no duplicates) |
+| Merged Analysis | Visualizes final corpus distribution |
+| Evaluation Dataset | Calls `create_evaluation_dataset.py` + merges manual entries |
+| Dataset Analysis | Visualizes evaluation entries per repo and per category |
+
+### `notebooks/pipeline.ipynb`
+
+**Purpose:** Full evaluation pipeline — inference, scoring, retrieval quality, hallucination, grounding, latency, visualizations.
+
+| Cell | Content |
+|---|---|
+| 1 | Markdown: experiment setup description |
+| 2 | Imports, data loading (103 entries, 721 GT reviews) |
+| 3 | Baseline 2: LLM-only inference → `llm_results` |
+| 4 | Baseline 3: RAG inference → `rag_results` |
+| 5 | Aggregate comparison table |
+| 6 | Per-PR delta table (LLM vs RAG) |
+| 7 | Static baseline + re-extract all predictions from cache |
+| 8 | `score_all()` — exact + ±1 relaxed matching, per-category P/R/F1, macro/micro F1 |
+| 9 | Retrieval metrics: Recall@K, Precision@K, MRR at K=1,3,5,10 |
+| 10 | Hallucination rate + grounding rate for all 3 baselines |
+| 11 | Latency analysis: re-runs static tools for timing, extracts LLM/RAG times from cache |
+| 12 | 7 visualization plots |
+
+---
+
+## 18. Visualizations
+
+The pipeline generates 7 plots (Cell 12 of pipeline.ipynb), saved to `data/processed/`:
+
+1. **Macro F1 Score Comparison** — Grouped bar chart: Static (0.578) vs LLM (0.206/0.225) vs RAG (0.108/0.122) for exact and ±1 relaxed matching.
+
+2. **Per-Category F1 Score** — Grouped bar chart showing F1 for all 5 categories across 3 baselines. Highlights that indentation and documentation_formatting are 0.00 for LLM/RAG.
+
+3. **Retrieval Quality Metrics** — Grouped bar chart: Recall@K, Precision@K, MRR at K=1,3,5,10. Shows retrieval system performs well (Recall@10=0.97).
+
+4. **Hallucination Rate Comparison** — Bar chart with percentage labels and raw counts: Static 52.2% (662/1269), LLM 37.0% (81/219), RAG 39.5% (45/114).
+
+5. **Grounding Rate Comparison** — Bar chart: Static 100% (rule-based), LLM 0% (no retrieval), RAG 100% (category matches chunk). Annotated with explanations.
+
+6. **Latency Comparison** — Grouped bar (mean vs P95): Static 679ms, LLM 11,783/27,328ms, RAG 15,611/19,475ms.
+
+7. **Precision vs Recall Scatter** — Each point = one baseline across all 103 files. Shows Static's high-recall/low-precision trade-off vs LLM/RAG's low-recall/higher-precision positioning.
+
+---
+
+## Summary of Key Results
+
+| Metric | Static | LLM | RAG |
+|---|---|---|---|
+| Macro F1 (exact) | **0.578** | 0.206 | 0.108 |
+| Macro F1 (±1 relaxed) | **0.578** | 0.225 | 0.122 |
+| Micro Precision | 42.6% | **57.5%** | 55.1% |
+| Micro Recall | **75.0%** | 17.5% | 8.6% |
+| Hallucination Rate | 52.2% | **37.0%** | 39.5% |
+| Grounding Rate | **100%** | 0% | **100%** |
+| Mean Latency | **679ms** | 11,783ms | 15,611ms |
+| Total Predictions | 1,269 | 219 | 114 |
+
+**Bottom line:** Static analysis tools still outperform local LLMs for rule-based Python code review. The retrieval system works well (97% recall at K=10), but the LLM struggles to translate retrieved guidelines into accurate line-level predictions. LLM and RAG baselines show higher precision but dramatically lower recall. The main gaps are in indentation and documentation formatting, where both LLM and RAG score 0.00 F1.
