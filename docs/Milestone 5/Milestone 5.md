@@ -1,9 +1,5 @@
 # Milestone 5 Consolidated Report
 
-This consolidated report compiles all Milestone 5 documentation into a single evaluator-facing document for academic and industry review.
-
----
-
 ## Master Table of Contents
 
 1. [Synthetic Data Generation Strategy](#part-1--synthetic-data-generation-strategy)
@@ -2179,7 +2175,7 @@ v1 behavior favored recall (especially for several categories), while v2 priorit
 ## Per-category Snapshot (v2)
 
 | category | precision | recall | f1 | TP | FP | FN |
-|---|---:|---:|---:|---:|---:|
+|---|---:|---:|---:|---:|---:|---:|
 | documentation_formatting | 0.2239 | 0.1948 | 0.2083 | 15 | 52 | 62 |
 | indentation | 0.4234 | 1.0000 | 0.5949 | 105 | 143 | 0 |
 | mutable_default | 1.0000 | 0.8889 | 0.9412 | 64 | 0 | 8 |
