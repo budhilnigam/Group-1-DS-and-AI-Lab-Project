@@ -1,11 +1,12 @@
 === Parsed Input Summary ===
 Ground-truth PRs: 97
 Predicted PRs with static findings: 97
-PRs ignored due to empty/static-no-match response: 10
+PRs with zero static matches: 10
+Note: zero-match PRs are included in analysis and contribute to missed violations (FN).
 
 === Violation Count Comparison ===
-analyzed_pr_count: 87
-missed_violations: 23
+analyzed_pr_count: 97
+missed_violations: 109
 extra_violations: 212
 equal_violations_prs: 24
 
@@ -16,8 +17,8 @@ line_mismatch_total: 389
 === Category-wise Metrics ===
 category                      precision     recall         f1     tp     fp     fn  line_ok  line_bad
 -----------------------------------------------------------------------------------------------------
-documentation_formatting         0.2239     0.1948     0.2083     15     52     62        0        67
-indentation                      0.4234     1.0000     0.5949    105    143      0       79       169
+documentation_formatting         0.2239     0.1630     0.1887     15     52     77        0        67
+indentation                      0.4234     0.7609     0.5440    105    143     33       79       169
 mutable_default                  1.0000     0.8889     0.9412     64      0      8       56         8
-naming_convention                0.5556     0.9467     0.7002    160    128      9      146       142
-unused_import                    0.9820     0.6566     0.7870    109      2     57      108         3
+naming_convention                0.5556     0.8889     0.6838    160    128     20      146       142
+unused_import                    0.9820     0.5648     0.7171    109      2     84      108         3

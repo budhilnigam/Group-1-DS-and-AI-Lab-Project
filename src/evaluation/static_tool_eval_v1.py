@@ -316,12 +316,10 @@ def compute_metrics(gt_by_pr, pred_by_pr):
 
     analyzed_prs = []
 
-    for pr_id, pred_reviews in pred_by_pr.items():
-        gt_reviews = gt_by_pr.get(pr_id, [])
-
-        # Ignore PRs with no static-tool responses.
-        if len(pred_reviews) == 0:
-            continue
+    # Evaluate all ground-truth PRs. Empty static findings are treated as
+    # missed detections (FN), not ignored samples.
+    for pr_id, gt_reviews in gt_by_pr.items():
+        pred_reviews = pred_by_pr.get(pr_id, [])
 
         analyzed_prs.append(pr_id)
 
@@ -408,7 +406,8 @@ def build_report_text(gt_by_pr, pred_by_pr, parse_failures, empty_response_prs, 
     lines.append("=== Parsed Input Summary ===")
     lines.append(f"Ground-truth PRs: {len(gt_by_pr)}")
     lines.append(f"Predicted PRs with static findings: {len(pred_by_pr)}")
-    lines.append(f"PRs ignored due to empty/static-no-match response: {len(empty_response_prs)}")
+    lines.append(f"PRs with zero static matches: {len(empty_response_prs)}")
+    lines.append("Note: zero-match PRs are included in analysis and contribute to missed violations (FN).")
     if parse_failures:
         lines.append(f"Parse failures: {len(parse_failures)}")
 

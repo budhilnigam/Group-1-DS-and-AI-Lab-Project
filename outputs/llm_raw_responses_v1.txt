@@ -69,7 +69,11 @@ repos: ['kannan-dedsec/synthetic-django']
       {
         "line_number": 81,
         "violation_category": "naming_convention",
-        "review_comment": "
+        "review_comment": ""
+      }
+    ]
+  }
+]
 
 
 Batch 5 - PR ids: ['synthetic-django_PR_25']
@@ -1280,10 +1284,10 @@ repos: ['kannan-dedsec/synthetic-pandas']
         "line_number": 13,
         "violation_category": "naming_convention",
         "review_comment": "Function name 'innerMerge' should be snake_case. Rename to inner_merge."
-      },
-      {
-        "line_number": 35,
-        "vi
+      }
+    ]
+  }
+]
 
 
 Batch 69 - PR ids: ['synthetic-pandas_PR_31']
@@ -1507,8 +1511,10 @@ repos: ['kannan-dedsec/synthetic-sklearn']
         "line_number": 10,
         "violation_category": "unused_import",
         "review_comment": "Tuple is imported but never used. Remove the import."
-      },
-      {
+      }
+    ]
+  }
+]
        
 
 
@@ -1722,10 +1728,10 @@ repos: ['kannan-dedsec/synthetic-sklearn']
         "line_number": 16,
         "violation_category": "naming_convention",
         "review_comment": "Parameter 'y' should be snake_case, rename to y."
-      },
-      {
-        "line_number": 28,
-        "violation_category
+      }
+    ]
+  }
+]
 
 
 Batch 95 - PR ids: ['synthetic-sklearn_PR_38']
@@ -1789,8 +1795,9 @@ repos: ['kannan-dedsec/synthetic-sklearn']
         "line_number": 28,
         "violation_category": "naming_convention",
         "review_comment": "Rename parameter 'experimentName' to snake_case: experiment_name."
-      },
-      {
-        "line_number":
+      }
+    ]
+  }
+]
 
 
