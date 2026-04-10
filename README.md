@@ -22,9 +22,6 @@ The system analyzes **single-file Python pull request (PR) diffs** with up to 20
   - Static analysis tools (Pylint, Flake8)
 - **Vector Database Integration**: Uses **Qdrant** as the vector database for efficient similarity-based retrieval
 
-For detailed project context, objectives, and literature review, refer to [Milestone 1 Report](docs/Milestone%201/Milestone-1.md).
-
----
 
 ## Project Structure
 
@@ -94,7 +91,6 @@ For detailed project context, objectives, and literature review, refer to [Miles
 | **scripts/** | Standalone Python scripts for dataset creation, synthetic repository generation, and data fetching |
 | **archive/** | Historical versions of notebooks and previous experimental approaches (for reference only) |
 
----
 
 ## Prerequisites
 
@@ -105,7 +101,6 @@ Before setting up the project, ensure you have:
 - **Qdrant** server running (see [Qdrant Setup](#qdrant-setup) section below)
 - **Git** (for version control)
 
----
 
 ## Setup Instructions
 
@@ -161,7 +156,6 @@ pip install -r requirements.txt
 - `flake8`, `pylint` - Static analysis tools (baseline)
 - `requests` - GitHub API client for dataset generation
 
----
 
 ## Environment Variables Setup
 
@@ -193,7 +187,6 @@ GITHUB_TOKEN=your_github_token_here
 
 Refer to `.env.example` for all available options including embedding model, RAG settings, and LLM parameters.
 
----
 
 ## Datasets
 
@@ -230,7 +223,6 @@ To regenerate datasets:
 2. Use `scripts/create_evaluation_dataset.py` and `scripts/create_synthetic_repos.py`
 3. Follow documentation in that branch for GitHub API setup
 
----
 
 ## Qdrant Vector Database Setup
 
@@ -358,7 +350,6 @@ Access the Qdrant dashboard at `http://localhost:6333/dashboard` to:
 - Monitor vector storage
 - Check collection health
 
----
 
 ## Running the Project
 
@@ -406,7 +397,6 @@ To run the main application (when implemented):
 python app/app.py
 ```
 
----
 
 ## Project Workflow
 
@@ -435,7 +425,6 @@ python app/app.py
    - Generate experiment results and visualizations
    - Document findings in milestone reports
 
----
 
 ## Key Features
 
@@ -463,7 +452,6 @@ The system detects and reviews:
 - Qdrant vector database for efficient semantic retrieval of coding guidelines
 - SentenceTransformers (BAAI/bge-large-en-v1.5) for 1024-dimensional embeddings
 
----
 
 ## Troubleshooting
 
@@ -489,7 +477,6 @@ curl http://localhost:6333/health
 docker logs <container_id>  # If using Docker
 ```
 
----
 
 ## Team Members
 
@@ -500,7 +487,6 @@ docker logs <container_id>  # If using Docker
 | Kannan S | 21f3000990@ds.study.iitm.ac.in |
 | Karunesh | 22f1001606@ds.study.iitm.ac.in |
 
----
 
 ## Documentation
 
@@ -513,13 +499,11 @@ docker logs <container_id>  # If using Docker
 - [Milestone 4 Report](docs/Milestone%204/Milestone%204.md) - Covers scalable data preparation, 'linter-in-the-loop' automated labeling, advanced chunking strategies, and pipeline refinements.
 - [Milestone 5 Report](docs/Milestone%205/Milestone-5.md) - Presents final evaluation, quantitative and qualitative results, error analysis, and conclusions with next-step priorities.
 
----
 
 ## License
 
 This project is part of the IITM Data Science and AI Lab curriculum.
 
----
 
 ## References
 
