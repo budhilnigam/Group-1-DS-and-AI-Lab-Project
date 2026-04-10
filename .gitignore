@@ -5,5 +5,3 @@ __pycache__/
 *.pyc
 
 temp/
-
-src/data_processing/datasets/
