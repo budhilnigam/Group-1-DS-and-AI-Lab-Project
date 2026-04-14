@@ -85,12 +85,15 @@ def index(request: Request):
             config_data[k] = {"value": "***", "hidden": True}
         else:
             config_data[k] = {"value": val, "hidden": False}
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "sched_status_json": json.dumps(sched_status),
-        "sched_repos_json": json.dumps(sched_repos),
-        "config_data_json": json.dumps(config_data),
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "sched_status_json": json.dumps(sched_status),
+            "sched_repos_json": json.dumps(sched_repos),
+            "config_data_json": json.dumps(config_data),
+        },
+    )
 
 
 # ---- Health / Status ----
