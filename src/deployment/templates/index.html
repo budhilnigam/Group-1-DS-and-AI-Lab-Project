@@ -47,6 +47,14 @@ th { background: #f6f8fa; }
 .metric-card { background: #f6f8fa; border: 1px solid #d1d5da; border-radius: 6px; padding: 12px; }
 .metric-card h4 { margin-bottom: 6px; font-size: 14px; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.chunks-toggle { background: none; border: 1px solid #d1d5da; border-radius: 4px; padding: 6px 14px; cursor: pointer; font-size: 13px; color: #0366d6; margin-top: 10px; }
+.chunks-toggle:hover { background: #f6f8fa; }
+.chunks-panel { display: none; margin-top: 8px; border: 1px solid #d1d5da; border-radius: 6px; background: #f6f8fa; padding: 12px; max-height: 400px; overflow-y: auto; }
+.chunks-panel.open { display: block; }
+.chunk-item { background: #fff; border: 1px solid #e1e4e8; border-radius: 4px; padding: 10px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+.chunk-item:last-child { margin-bottom: 0; }
+.chunk-meta { font-size: 11px; color: #586069; margin-bottom: 4px; }
+.chunk-text { white-space: pre-wrap; word-break: break-word; }
 </style>
 </head>
 <body>
@@ -122,6 +130,25 @@ window._configData = _j('_d_config', {});
 
 const CATEGORIES = ["naming_convention","unused_import","indentation","mutable_default","documentation_formatting"];
 
+var _chunkCounter = 0;
+function renderChunksBlock(chunks) {
+  if (!chunks || !chunks.length) return '';
+  var id = 'chunks-' + (++_chunkCounter);
+  var html = '<button class="chunks-toggle" onclick="var p=document.getElementById(\''+id+'\');p.classList.toggle(\'open\');this.textContent=p.classList.contains(\'open\')?\'Hide Retrieved Chunks ('+chunks.length+')\':\' Show Retrieved Chunks ('+chunks.length+')\'">Show Retrieved Chunks ('+chunks.length+')</button>';
+  html += '<div class="chunks-panel" id="'+id+'">';
+  chunks.forEach(function(c, i) {
+    html += '<div class="chunk-item">';
+    html += '<div class="chunk-meta">Chunk '+(i+1);
+    if (c.category) html += ' | '+c.category;
+    if (c.score) html += ' | score: '+c.score;
+    html += '</div>';
+    html += '<div class="chunk-text">'+c.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
 function switchTab(id) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', t.textContent.trim().toLowerCase().includes(id.slice(0,4))));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id===id));
@@ -148,13 +175,16 @@ async function runInference() {
     const data = await resp.json();
     if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
     let html = '';
+    const chunks = data.retrieved_chunks;
     for (const [model, reviews] of Object.entries(data)) {
+      if (model === 'retrieved_chunks') continue;
       html += '<div class="result-box"><h3>'+model+'</h3>';
       if (!reviews.length) { html += '<p>No violations found.</p></div>'; continue; }
       html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
       reviews.forEach(r => html += '<tr><td>'+r.line_number+'</td><td>'+r.violation_category+'</td><td>'+(r.review_comment||'')+'</td></tr>');
       html += '</table></div>';
     }
+    html += renderChunksBlock(chunks);
     out.innerHTML = html;
   } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
   finally { btn.disabled = false; }
@@ -217,6 +247,7 @@ async function runEval() {
       reviews.forEach(r => html += '<tr><td>'+r.line_number+'</td><td>'+r.violation_category+'</td><td>'+(r.review_comment||'–')+'</td></tr>');
       html += '</table></div>';
     });
+    if (data.retrieved_chunks) html += renderChunksBlock(data.retrieved_chunks);
     out.innerHTML = html;
   } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
   finally { btn.disabled = false; }

@@ -756,10 +756,14 @@ def run_pylint(file_path: Path) -> tuple[list[dict[str, Any]], float]:
         line = msg.get("line")
         if not isinstance(line, int):
             continue
+        message = str(msg.get("message", "")).strip()
+        symbol = str(msg.get("symbol", "")).strip()
+        comment = f"{symbol}: {message}" if message else symbol
         findings.append(
             {
                 "line_number": line,
                 "violation_category": category,
+                "review_comment": comment,
             }
         )
 
@@ -799,10 +803,12 @@ def run_flake8(file_path: Path) -> tuple[list[dict[str, Any]], float]:
         if category is None:
             continue
 
+        comment = f"{code.strip()}: {text.strip()}" if text.strip() else code.strip()
         findings.append(
             {
                 "line_number": row,
                 "violation_category": category,
+                "review_comment": comment,
             }
         )
 
@@ -898,7 +904,12 @@ def run_rag_review(
     )
 
     reviews, retries = _call_llm_with_retry(client, prompt, max_retries)
-    return {"reviews": reviews, "chunks_used": len(chunks), "retries": retries}
+    return {
+        "reviews": reviews,
+        "chunks_used": len(chunks),
+        "retries": retries,
+        "retrieved_chunks": [{"text": c["text"], "score": round(c.get("rerank_score", 0), 4), "category": c.get("category", "")} for c in chunks],
+    }
 
 
 def run_eval_on_code(
@@ -963,9 +974,11 @@ def run_eval_on_code(
         "Naive_LLM": {"total": round(naive_total, 3), "api": round(naive_a, 3), "retries": naive_retries},
         "Static_tool": {"total": static_latency.get("total_seconds", 0)},
     }
+    rag_chunk_data = [{"text": c["text"], "score": round(c.get("rerank_score", 0), 4), "category": c.get("category", "")} for c in rag_candidates]
     return {
         "RAG": rag_reviews, "Naive_LLM": naive_reviews, "Static_tool": static_findings,
         "Metrics": metrics, "Latency": latency,
+        "retrieved_chunks": rag_chunk_data,
     }
 
 

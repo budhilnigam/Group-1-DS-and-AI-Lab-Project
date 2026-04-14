@@ -171,6 +171,7 @@ async def api_inference(request: Request):
             max_retries=max_retries,
         )
         result["RAG"] = rag_out["reviews"]
+        result["retrieved_chunks"] = rag_out.get("retrieved_chunks", [])
 
     if run_naive:
         prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
