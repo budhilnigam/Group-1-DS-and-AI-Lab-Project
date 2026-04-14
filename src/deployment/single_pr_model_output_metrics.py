@@ -867,24 +867,22 @@ def _call_llm_with_retry(client, prompt, max_retries=2):
         retries += 1
 
 
-def run_rag_review(
+def prepare_rag_prompt(
     pr_code: str,
     pr_id: str,
     qdrant_url: str,
-    groq_api_key: str,
     prompt_path: str,
     repo_name: str | None = None,
     collection_name: str = DEFAULT_COLLECTION_NAME,
     embed_model_name: str = DEFAULT_EMBED_MODEL,
-    max_retries: int = 2,
 ) -> dict[str, Any]:
-    """Run only the RAG pipeline on raw PR code. Used by the deployment worker."""
+    """Do RAG retrieval and build the final prompt without calling the LLM.
+    Returns dict with prompt, chunks, model, temperature."""
     prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
 
     if pr_code.lstrip().startswith("diff --git") or "@@ " in pr_code:
         pr_code = _extract_added_lines_from_diff(pr_code)
 
-    client = Groq(api_key=groq_api_key)
     query_text = build_query_text_variant2(pr_code)
 
     chunks = retrieve_rag_chunks(
@@ -903,13 +901,41 @@ def run_rag_review(
         retrieved_chunks=[c["text"] for c in chunks],
     )
 
-    reviews, retries = _call_llm_with_retry(client, prompt, max_retries)
+    return {
+        "prompt": prompt,
+        "chunks": chunks,
+        "model": MODEL,
+        "temperature": 0,
+    }
+
+
+def run_rag_review(
+    pr_code: str,
+    pr_id: str,
+    qdrant_url: str,
+    groq_api_key: str,
+    prompt_path: str,
+    repo_name: str | None = None,
+    collection_name: str = DEFAULT_COLLECTION_NAME,
+    embed_model_name: str = DEFAULT_EMBED_MODEL,
+    max_retries: int = 2,
+) -> dict[str, Any]:
+    """Run only the RAG pipeline on raw PR code. Used by the deployment worker."""
+    prep = prepare_rag_prompt(
+        pr_code=pr_code, pr_id=pr_id, qdrant_url=qdrant_url,
+        prompt_path=prompt_path, repo_name=repo_name,
+        collection_name=collection_name, embed_model_name=embed_model_name,
+    )
+
+    client = Groq(api_key=groq_api_key)
+    reviews, retries = _call_llm_with_retry(client, prep["prompt"], max_retries)
+    chunks = prep["chunks"]
     return {
         "reviews": reviews,
         "chunks_used": len(chunks),
         "retries": retries,
         "retrieved_chunks": [{"text": c["text"], "score": round(c.get("rerank_score", 0), 4), "category": c.get("category", "")} for c in chunks],
-        "prompt_used": prompt,
+        "prompt_used": prep["prompt"],
     }
 
 

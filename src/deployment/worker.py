@@ -14,7 +14,7 @@ _no_proxy_opener = build_opener(ProxyHandler({}))
 
 from celery import Celery
 
-from db import init_db, is_pr_cached, cache_pr, get_last_checked, set_last_checked
+from db import init_db, is_pr_cached, cache_pr, get_last_checked, set_last_checked, compute_prompt_hash
 
 
 BASE_DIR = Path(__file__).parent
@@ -204,7 +204,8 @@ def _upload_chunks(client, encoder, chunks):
 
 @app.task(name="worker.fetch_and_review_prs")
 def fetch_and_review_prs():
-    from single_pr_model_output_metrics import run_rag_review
+    from single_pr_model_output_metrics import prepare_rag_prompt, _call_llm_with_retry
+    from groq import Groq
 
     init_db()
     now = datetime.now(timezone.utc).isoformat()
@@ -224,11 +225,6 @@ def fetch_and_review_prs():
             pr_title = pr.get("title", "")
             pr_url = pr.get("html_url", "")
 
-            if CACHE_ENABLED and is_pr_cached(repo, pr_number, head_sha):
-                log.info("PR #%d (%s) cached, skipping", pr_number, repo)
-                summary["skipped"] += 1
-                continue
-
             try:
                 diff = _fetch_pr_diff(repo, pr_number)
             except HTTPError as e:
@@ -236,29 +232,45 @@ def fetch_and_review_prs():
                 summary["errors"].append(f"PR #{pr_number}: fetch diff failed")
                 continue
 
-            
             repo_short = repo.split("/")[-1] if "/" in repo else repo
 
             try:
-                result = run_rag_review(
-                    pr_code=diff,
-                    pr_id=f"PR #{pr_number}",
-                    qdrant_url=QDRANT_URL,
-                    groq_api_key=GROQ_TOKEN,
-                    prompt_path=PROMPT_PATH,
-                    repo_name=repo_short,
-                    collection_name=COLLECTION,
-                    embed_model_name=EMBED_MODEL,
+                prep = prepare_rag_prompt(
+                    pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=QDRANT_URL,
+                    prompt_path=PROMPT_PATH, repo_name=repo_short,
+                    collection_name=COLLECTION, embed_model_name=EMBED_MODEL,
                 )
+            except Exception:
+                log.exception("RAG retrieval failed for PR #%d (%s)", pr_number, repo)
+                summary["errors"].append(f"PR #{pr_number}: retrieval failed")
+                continue
+
+            p_hash = compute_prompt_hash(prep["prompt"], prep["model"], prep["temperature"])
+
+            if CACHE_ENABLED and is_pr_cached(repo, pr_number, head_sha, p_hash):
+                log.info("PR #%d (%s) cached, skipping", pr_number, repo)
+                summary["skipped"] += 1
+                continue
+
+            try:
+                client = Groq(api_key=GROQ_TOKEN)
+                reviews, retries = _call_llm_with_retry(client, prep["prompt"], int(get_config("LLM_MAX_RETRIES")))
+                chunks = prep["chunks"]
+                result = {
+                    "reviews": reviews,
+                    "chunks_used": len(chunks),
+                    "retries": retries,
+                    "retrieved_chunks": [{"text": c["text"], "score": round(c.get("rerank_score", 0), 4), "category": c.get("category", "")} for c in chunks],
+                    "prompt_used": prep["prompt"],
+                }
             except Exception:
                 log.exception("Inference failed for PR #%d (%s)", pr_number, repo)
                 summary["errors"].append(f"PR #{pr_number}: inference failed")
                 continue
 
-            
             email_ok = send_review_email(repo, pr_number, pr_title, pr_url, result["reviews"], email)
 
-            cache_pr(repo, pr_number, head_sha, json.dumps(result), email_sent=email_ok)
+            cache_pr(repo, pr_number, head_sha, json.dumps(result), email_sent=email_ok, prompt_hash=p_hash)
             log.info("Processed PR #%d (%s), %d findings", pr_number, repo, len(result["reviews"]))
             summary["processed"].append({
                 "repo": repo, "pr": pr_number, "title": pr_title,

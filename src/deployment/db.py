@@ -1,8 +1,15 @@
 import sqlite3
 from pathlib import Path
 from datetime import datetime, timezone
+import hashlib
 
 DB_PATH = Path(__file__).parent / "review_app.db"
+
+
+def compute_prompt_hash(final_prompt: str, model: str = "", temperature: float = 0) -> str:
+    """Return SHA-256 hex digest of the final prompt + model + temperature."""
+    content = f"{final_prompt}\n__model__={model}\n__temperature__={temperature}"
+    return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
 
 def _conn():
@@ -22,13 +29,23 @@ def init_db():
                 head_sha TEXT NOT NULL,
                 result_json TEXT,
                 processed_at TEXT NOT NULL,
-                email_sent INTEGER DEFAULT 0
+                email_sent INTEGER DEFAULT 0,
+                prompt_hash TEXT DEFAULT ''
             )
         """)
         c.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS uq_pr
-            ON processed_prs(repo, pr_number, head_sha)
+            CREATE UNIQUE INDEX IF NOT EXISTS uq_pr_prompt
+            ON processed_prs(repo, pr_number, head_sha, prompt_hash)
         """)
+        # migrate: add prompt_hash column if missing
+        cols = [row[1] for row in c.execute("PRAGMA table_info(processed_prs)").fetchall()]
+        if "prompt_hash" not in cols:
+            c.execute("ALTER TABLE processed_prs ADD COLUMN prompt_hash TEXT DEFAULT ''")
+        # migrate: drop old unique index that lacks prompt_hash
+        try:
+            c.execute("DROP INDEX IF EXISTS uq_pr")
+        except Exception:
+            pass
         c.execute("""
             CREATE TABLE IF NOT EXISTS app_state (
                 key TEXT PRIMARY KEY,
@@ -37,11 +54,11 @@ def init_db():
         """)
 
 
-def is_pr_cached(repo, pr_number, head_sha):
+def is_pr_cached(repo, pr_number, head_sha, prompt_hash=""):
     with _conn() as c:
         row = c.execute(
-            "SELECT 1 FROM processed_prs WHERE repo=? AND pr_number=? AND head_sha=?",
-            (repo, pr_number, head_sha),
+            "SELECT 1 FROM processed_prs WHERE repo=? AND pr_number=? AND head_sha=? AND prompt_hash=?",
+            (repo, pr_number, head_sha, prompt_hash),
         ).fetchone()
     return row is not None
 
@@ -55,23 +72,23 @@ def get_cached_result(repo, pr_number, head_sha):
     return row["result_json"] if row else None
 
 
-def get_latest_cached_result(repo, pr_number):
+def get_latest_cached_result(repo, pr_number, prompt_hash=""):
     with _conn() as c:
         row = c.execute(
-            "SELECT result_json FROM processed_prs WHERE repo=? AND pr_number=? ORDER BY processed_at DESC LIMIT 1",
-            (repo, pr_number),
+            "SELECT result_json FROM processed_prs WHERE repo=? AND pr_number=? AND prompt_hash=? ORDER BY processed_at DESC LIMIT 1",
+            (repo, pr_number, prompt_hash),
         ).fetchone()
     return row["result_json"] if row else None
 
 
-def cache_pr(repo, pr_number, head_sha, result_json, email_sent=False):
+def cache_pr(repo, pr_number, head_sha, result_json, email_sent=False, prompt_hash=""):
     now = datetime.now(timezone.utc).isoformat()
     with _conn() as c:
         c.execute(
             """INSERT OR REPLACE INTO processed_prs
-               (repo, pr_number, head_sha, result_json, processed_at, email_sent)
-               VALUES (?, ?, ?, ?, ?, ?)""",
-            (repo, pr_number, head_sha, result_json, now, int(email_sent)),
+               (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash),
         )
 
 

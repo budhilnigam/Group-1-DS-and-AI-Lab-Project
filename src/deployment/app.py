@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 
-from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, set_last_checked
+from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, set_last_checked, compute_prompt_hash, cache_pr
 from worker import (
     sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff,
     runtime_config, schedule_enabled, get_config,
@@ -130,25 +130,15 @@ async def api_inference(request: Request):
     repo, pr_number = m.group(1), int(m.group(2))
     repo_short = repo.split("/")[-1]
 
-    # check cache — only use if requesting RAG alone (cache stores RAG results)
-    if run_rag and not run_naive and not run_static:
-        cached = get_latest_cached_result(repo, pr_number)
-        if cached:
-            try:
-                cached_data = json.loads(cached)
-                return {"RAG": cached_data.get("reviews", []), "_cached": True}
-            except Exception:
-                pass
-
     try:
         diff = _fetch_pr_diff(repo, pr_number)
     except Exception as e:
         return {"error": f"Failed to fetch PR diff: {e}"}
 
     from single_pr_model_output_metrics import (
-        run_rag_review, build_prompt, _call_llm_with_retry,
+        prepare_rag_prompt, build_prompt, _call_llm_with_retry,
         run_static_tool_on_code,
-        _load_prompt_v1, _extract_added_lines_from_diff, build_query_text_variant2,
+        _load_prompt_v1, _extract_added_lines_from_diff,
     )
     from groq import Groq
 
@@ -161,6 +151,7 @@ async def api_inference(request: Request):
 
     result = {}
     prompts = {}
+    cached_models = {}
 
     # normalize diff for naive/static
     code = diff
@@ -168,23 +159,63 @@ async def api_inference(request: Request):
         code = _extract_added_lines_from_diff(code)
 
     if run_rag:
-        rag_out = run_rag_review(
+        # 1. retrieval + prompt building (cheap)
+        prep = prepare_rag_prompt(
             pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=qdrant_url,
-            groq_api_key=groq_key, prompt_path=prompt_path,
-            repo_name=repo_short, collection_name=collection, embed_model_name=embed_model,
-            max_retries=max_retries,
+            prompt_path=prompt_path, repo_name=repo_short,
+            collection_name=collection, embed_model_name=embed_model,
         )
-        result["RAG"] = rag_out["reviews"]
-        result["retrieved_chunks"] = rag_out.get("retrieved_chunks", [])
-        prompts["RAG"] = rag_out.get("prompt_used", "")
+        p_hash = compute_prompt_hash(prep["prompt"], prep["model"], prep["temperature"])
+
+        # 2. check cache with final-prompt hash
+        cached = get_latest_cached_result(repo, pr_number, p_hash)
+        if cached:
+            try:
+                cached_data = json.loads(cached)
+                result["RAG"] = cached_data.get("reviews", [])
+                result["retrieved_chunks"] = cached_data.get("retrieved_chunks", [])
+                prompts["RAG"] = cached_data.get("prompt_used", "")
+                cached_models["RAG"] = True
+            except Exception:
+                cached = None
+
+        if not cached:
+            # 3. LLM call (expensive) — only if cache miss
+            client = Groq(api_key=groq_key)
+            reviews, retries = _call_llm_with_retry(client, prep["prompt"], max_retries)
+            chunks = prep["chunks"]
+            result["RAG"] = reviews
+            result["retrieved_chunks"] = [{"text": c["text"], "score": round(c.get("rerank_score", 0), 4), "category": c.get("category", "")} for c in chunks]
+            prompts["RAG"] = prep["prompt"]
+            # write to cache
+            cache_pr(repo, pr_number, "inference", json.dumps({
+                "reviews": reviews, "retrieved_chunks": result["retrieved_chunks"], "prompt_used": prep["prompt"],
+            }), prompt_hash=p_hash)
 
     if run_naive:
         prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
         prompt = build_prompt(prompt_template, f"PR #{pr_number}", code, None)
-        client = Groq(api_key=groq_key)
-        reviews, _ = _call_llm_with_retry(client, prompt, max_retries)
-        result["Naive_LLM"] = reviews
-        prompts["Naive_LLM"] = prompt
+        from single_pr_model_output_metrics import MODEL as LLM_MODEL
+        n_hash = compute_prompt_hash(prompt, LLM_MODEL, 0)
+
+        cached = get_latest_cached_result(repo, pr_number, n_hash)
+        if cached:
+            try:
+                cached_data = json.loads(cached)
+                result["Naive_LLM"] = cached_data.get("reviews", [])
+                prompts["Naive_LLM"] = cached_data.get("prompt_used", "")
+                cached_models["Naive_LLM"] = True
+            except Exception:
+                cached = None
+
+        if not cached:
+            client = Groq(api_key=groq_key)
+            reviews, _ = _call_llm_with_retry(client, prompt, max_retries)
+            result["Naive_LLM"] = reviews
+            prompts["Naive_LLM"] = prompt
+            cache_pr(repo, pr_number, "inference", json.dumps({
+                "reviews": reviews, "prompt_used": prompt,
+            }), prompt_hash=n_hash)
 
     if run_static:
         findings, _ = run_static_tool_on_code(code)
@@ -192,6 +223,8 @@ async def api_inference(request: Request):
 
     if prompts:
         result["prompts_used"] = prompts
+    if cached_models:
+        result["_cached"] = cached_models
 
     return result
 

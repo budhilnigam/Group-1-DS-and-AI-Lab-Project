@@ -188,11 +188,13 @@ async function runInference() {
     const data = await resp.json();
     if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
     let html = '';
+    const cachedMap = data._cached || {};
     const chunks = data.retrieved_chunks;
     const prompts = data.prompts_used;
     for (const [model, reviews] of Object.entries(data)) {
       if (model === 'retrieved_chunks' || model === 'prompts_used' || model === '_cached') continue;
-      html += '<div class="result-box"><h3>'+model+'</h3>';
+      var badge = cachedMap[model] ? ' <span style="display:inline-block;background:#b8860b30;color:#b8860b;border:1px solid #b8860b;border-radius:12px;padding:1px 8px;font-size:11px;vertical-align:middle;margin-left:6px">cached</span>' : '';
+      html += '<div class="result-box"><h3>'+model+badge+'</h3>';
       if (!reviews.length) { html += '<p>No violations found.</p></div>'; continue; }
       html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
       reviews.forEach(r => html += '<tr><td>'+r.line_number+'</td><td>'+r.violation_category+'</td><td>'+(r.review_comment||'')+'</td></tr>');
