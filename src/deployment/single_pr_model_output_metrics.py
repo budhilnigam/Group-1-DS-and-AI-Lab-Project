@@ -961,7 +961,7 @@ def run_eval_on_code(
     latency = {
         "RAG": {"total": round(rag_total, 3), "query": round(rag_q, 3), "retrieval": round(rag_r, 3), "api": round(rag_a, 3), "retries": rag_retries},
         "Naive_LLM": {"total": round(naive_total, 3), "api": round(naive_a, 3), "retries": naive_retries},
-        "Static_tool": static_latency,
+        "Static_tool": {"total": static_latency.get("total_seconds", 0)},
     }
     return {
         "RAG": rag_reviews, "Naive_LLM": naive_reviews, "Static_tool": static_findings,
