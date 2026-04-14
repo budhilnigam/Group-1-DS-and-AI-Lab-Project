@@ -909,6 +909,7 @@ def run_rag_review(
         "chunks_used": len(chunks),
         "retries": retries,
         "retrieved_chunks": [{"text": c["text"], "score": round(c.get("rerank_score", 0), 4), "category": c.get("category", "")} for c in chunks],
+        "prompt_used": prompt,
     }
 
 
@@ -979,6 +980,7 @@ def run_eval_on_code(
         "RAG": rag_reviews, "Naive_LLM": naive_reviews, "Static_tool": static_findings,
         "Metrics": metrics, "Latency": latency,
         "retrieved_chunks": rag_chunk_data,
+        "prompts_used": {"RAG": rag_prompt, "Naive_LLM": naive_prompt},
     }
 
 

@@ -160,6 +160,7 @@ async def api_inference(request: Request):
     max_retries = int(get_config("LLM_MAX_RETRIES"))
 
     result = {}
+    prompts = {}
 
     # normalize diff for naive/static
     code = diff
@@ -175,6 +176,7 @@ async def api_inference(request: Request):
         )
         result["RAG"] = rag_out["reviews"]
         result["retrieved_chunks"] = rag_out.get("retrieved_chunks", [])
+        prompts["RAG"] = rag_out.get("prompt_used", "")
 
     if run_naive:
         prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
@@ -182,10 +184,14 @@ async def api_inference(request: Request):
         client = Groq(api_key=groq_key)
         reviews, _ = _call_llm_with_retry(client, prompt, max_retries)
         result["Naive_LLM"] = reviews
+        prompts["Naive_LLM"] = prompt
 
     if run_static:
         findings, _ = run_static_tool_on_code(code)
         result["Static_tool"] = findings
+
+    if prompts:
+        result["prompts_used"] = prompts
 
     return result
 
