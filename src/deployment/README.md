@@ -66,6 +66,29 @@ deployment/
 - Python 3.9 or later
 - Docker (for Qdrant vector database)
 
+## Before running
+
+Open `config.properties` and fill in the following values.
+
+**Required** (app will not work without these):
+
+| Property | What to put |
+|---|---|
+| GITHUB_TOKEN | GitHub personal access token with `repo` scope. Generate one at https://github.com/settings/tokens |
+| GROQ_TOKEN | Groq API key. Get one at https://console.groq.com/keys |
+| REPOS_MAIL_MAP | JSON object mapping GitHub repos to email addresses, e.g. `{"owner/repo": "you@example.com"}` |
+
+**Optional** (app works without these, but email notifications will be skipped):
+
+| Property | What to put |
+|---|---|
+| SMTP_HOST | SMTP server, default is `smtp.gmail.com` |
+| SMTP_PORT | SMTP port, default is `587` |
+| SMTP_USER | your email address used to send reports |
+| SMTP_PASSWORD | app password for the email account (for Gmail, generate at https://myaccount.google.com/apppasswords) |
+
+Everything else in `config.properties` has working defaults and does not need to be changed.
+
 ## How to run
 
 ### Mac / Linux
