@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import ast
 import json
@@ -48,8 +50,11 @@ def _project_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
-def _load_prompt_v1(root: Path) -> str:
-    prompt_path = root / "src" / "rag_model" / "prompts" / "v1.txt"
+def _load_prompt_v1(root: Path, explicit_path: str | None = None) -> str:
+    if explicit_path:
+        prompt_path = Path(explicit_path)
+    else:
+        prompt_path = root / "src" / "rag_model" / "prompts" / "v1.txt"
     if not prompt_path.exists():
         raise FileNotFoundError(f"Prompt template not found: {prompt_path}")
     return prompt_path.read_text(encoding="utf-8").strip()
@@ -840,6 +845,128 @@ def run_static_tool_on_code(pr_code: str) -> tuple[list[dict[str, Any]], dict[st
             tmp_path.unlink(missing_ok=True)
         except Exception:
             pass
+
+
+def _call_llm_with_retry(client, prompt, max_retries=2):
+    """Call LLM and parse; retry up to max_retries times if result is empty."""
+    retries = 0
+    while True:
+        try:
+            raw = call_groq_json(client, prompt)
+        except Exception:
+            raw = ""
+        reviews = parse_llm_reviews_preserve_partial(raw)
+        if reviews or retries >= max_retries:
+            return reviews, retries
+        retries += 1
+
+
+def run_rag_review(
+    pr_code: str,
+    pr_id: str,
+    qdrant_url: str,
+    groq_api_key: str,
+    prompt_path: str,
+    repo_name: str | None = None,
+    collection_name: str = DEFAULT_COLLECTION_NAME,
+    embed_model_name: str = DEFAULT_EMBED_MODEL,
+    max_retries: int = 2,
+) -> dict[str, Any]:
+    """Run only the RAG pipeline on raw PR code. Used by the deployment worker."""
+    prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
+
+    if pr_code.lstrip().startswith("diff --git") or "@@ " in pr_code:
+        pr_code = _extract_added_lines_from_diff(pr_code)
+
+    client = Groq(api_key=groq_api_key)
+    query_text = build_query_text_variant2(pr_code)
+
+    chunks = retrieve_rag_chunks(
+        pr_code=pr_code,
+        query_text=query_text,
+        qdrant_url=qdrant_url,
+        repo_name=repo_name,
+        collection_name=collection_name,
+        embed_model_name=embed_model_name,
+    )
+
+    prompt = build_prompt(
+        prompt_template=prompt_template,
+        pr_id=pr_id,
+        pr_code=pr_code,
+        retrieved_chunks=[c["text"] for c in chunks],
+    )
+
+    reviews, retries = _call_llm_with_retry(client, prompt, max_retries)
+    return {"reviews": reviews, "chunks_used": len(chunks), "retries": retries}
+
+
+def run_eval_on_code(
+    pr_code,
+    ground_truth,
+    qdrant_url,
+    groq_api_key,
+    prompt_path,
+    repo_name=None,
+    collection_name=DEFAULT_COLLECTION_NAME,
+    embed_model_name=DEFAULT_EMBED_MODEL,
+    max_retries=2,
+):
+    """Run all 3 baselines on raw code + ground truth. Returns reviews, metrics, latency."""
+    prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
+
+    if pr_code.lstrip().startswith("diff --git") or "@@ " in pr_code:
+        pr_code = _extract_added_lines_from_diff(pr_code)
+
+    client = Groq(api_key=groq_api_key)
+    pr_id = "eval"
+
+    # --- RAG ---
+    rag_t0 = time.perf_counter()
+    query_text = build_query_text_variant2(pr_code)
+    rag_q = time.perf_counter() - rag_t0
+
+    rag_r0 = time.perf_counter()
+    rag_candidates = retrieve_rag_chunks(
+        pr_code=pr_code, query_text=query_text, qdrant_url=qdrant_url,
+        repo_name=repo_name, collection_name=collection_name,
+        embed_model_name=embed_model_name,
+    )
+    rag_r = time.perf_counter() - rag_r0
+
+    rag_prompt = build_prompt(prompt_template, pr_id, pr_code, [c["text"] for c in rag_candidates])
+    rag_a0 = time.perf_counter()
+    rag_reviews, rag_retries = _call_llm_with_retry(client, rag_prompt, max_retries)
+    rag_a = time.perf_counter() - rag_a0
+    rag_total = time.perf_counter() - rag_t0
+
+    # --- Naive LLM ---
+    naive_t0 = time.perf_counter()
+    naive_prompt = build_prompt(prompt_template, pr_id, pr_code, None)
+    naive_a0 = time.perf_counter()
+    naive_reviews, naive_retries = _call_llm_with_retry(client, naive_prompt, max_retries)
+    naive_a = time.perf_counter() - naive_a0
+    naive_total = time.perf_counter() - naive_t0
+
+    # --- Static ---
+    static_findings, static_latency = run_static_tool_on_code(pr_code)
+
+    # --- Metrics ---
+    gt = [{"line_number": g["line_number"], "violation_category": g["violation_category"]} for g in ground_truth]
+    metrics = {
+        "RAG": compute_micro_metrics(rag_reviews, gt),
+        "Naive_LLM": compute_micro_metrics(naive_reviews, gt),
+        "Static_tool": compute_micro_metrics(static_findings, gt),
+    }
+    latency = {
+        "RAG": {"total": round(rag_total, 3), "query": round(rag_q, 3), "retrieval": round(rag_r, 3), "api": round(rag_a, 3), "retries": rag_retries},
+        "Naive_LLM": {"total": round(naive_total, 3), "api": round(naive_a, 3), "retries": naive_retries},
+        "Static_tool": static_latency,
+    }
+    return {
+        "RAG": rag_reviews, "Naive_LLM": naive_reviews, "Static_tool": static_findings,
+        "Metrics": metrics, "Latency": latency,
+    }
 
 
 def run_models_for_pr(

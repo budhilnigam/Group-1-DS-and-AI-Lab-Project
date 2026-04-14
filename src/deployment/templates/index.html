@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PR Code Review Bot</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; }
+.header { background: #24292e; color: #fff; padding: 14px 24px; font-size: 18px; font-weight: 600; }
+.tabs { display: flex; background: #fff; border-bottom: 2px solid #e1e4e8; padding: 0 24px; }
+.tab { padding: 12px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; font-size: 14px; color: #586069; }
+.tab:hover { color: #24292e; }
+.tab.active { color: #24292e; border-bottom-color: #0366d6; font-weight: 600; }
+.panel { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+.panel.active { display: block; }
+label { display: block; font-weight: 600; margin: 10px 0 4px; font-size: 13px; }
+input[type=text], input[type=number], input[type=password], textarea, select {
+  width: 100%; padding: 8px 10px; border: 1px solid #d1d5da; border-radius: 4px; font-size: 14px; font-family: inherit;
+}
+textarea { resize: vertical; font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; }
+button { padding: 8px 20px; background: #0366d6; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+button:hover { background: #0256b9; }
+button:disabled { background: #94d3a2; cursor: wait; }
+.cb-row { display: flex; gap: 18px; align-items: center; margin: 8px 0; }
+.cb-row label { display: inline; margin: 0; font-weight: normal; }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+th, td { border: 1px solid #d1d5da; padding: 6px 10px; text-align: left; }
+th { background: #f6f8fa; }
+.result-box { background: #fff; border: 1px solid #d1d5da; border-radius: 6px; padding: 16px; margin-top: 16px; }
+.result-box h3 { margin-bottom: 8px; font-size: 15px; }
+.error { color: #cb2431; font-weight: 600; margin-top: 12px; }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ccc; border-top-color: #0366d6; border-radius: 50%; animation: spin .6s linear infinite; margin-left: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.toggle { position: relative; display: inline-block; width: 42px; height: 22px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle .slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 22px; transition: .2s; }
+.toggle .slider:before { content: ""; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+.toggle input:checked + .slider { background: #2ea44f; }
+.toggle input:checked + .slider:before { transform: translateX(20px); }
+.gt-row { display: flex; gap: 8px; align-items: center; margin: 4px 0; }
+.gt-row input { width: 100px; }
+.gt-row select { width: 220px; }
+.gt-row button { padding: 4px 10px; font-size: 12px; background: #cb2431; margin: 0; }
+.banner { background: #fff8c5; border: 1px solid #f9c513; padding: 8px 14px; border-radius: 4px; margin-bottom: 14px; font-size: 13px; }
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.metric-card { background: #f6f8fa; border: 1px solid #d1d5da; border-radius: 6px; padding: 12px; }
+.metric-card h4 { margin-bottom: 6px; font-size: 14px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+</style>
+</head>
+<body>
+<div class="header">PR Code Review Bot</div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('inference')">Custom Inference</div>
+  <div class="tab" onclick="switchTab('evaluation')">Evaluation</div>
+  <div class="tab" onclick="switchTab('schedule')">Schedule</div>
+  <div class="tab" onclick="switchTab('config')">Configuration</div>
+</div>
+
+<!-- ==================== TAB 1: CUSTOM INFERENCE ==================== -->
+<div id="inference" class="panel active">
+  <label>PR URL</label>
+  <input type="text" id="pr-url" placeholder="https://github.com/owner/repo/pull/42">
+  <div class="cb-row" style="margin-top:10px">
+    <input type="checkbox" id="cb-rag" checked><label for="cb-rag">RAG</label>
+    <input type="checkbox" id="cb-naive"><label for="cb-naive">Naive LLM</label>
+    <input type="checkbox" id="cb-static"><label for="cb-static">Static Tools</label>
+  </div>
+  <button id="btn-infer" onclick="runInference()">Run Review</button>
+  <div id="infer-result"></div>
+</div>
+
+<!-- ==================== TAB 2: EVALUATION ==================== -->
+<div id="evaluation" class="panel">
+  <div class="two-col">
+    <div>
+      <label>Code (paste Python code or diff)</label>
+      <textarea id="eval-code" rows="16" placeholder="Paste code here..."></textarea>
+    </div>
+    <div>
+      <label>Ground Truth</label>
+      <div id="gt-rows"></div>
+      <button onclick="addGtRow()" style="background:#28a745;margin-top:6px">+ Add Row</button>
+    </div>
+  </div>
+  <button id="btn-eval" onclick="runEval()" style="margin-top:14px">Run Evaluation</button>
+  <div id="eval-result"></div>
+</div>
+
+<!-- ==================== TAB 3: SCHEDULE ==================== -->
+<div id="schedule" class="panel">
+  <h3 style="margin-bottom:12px">Scheduled Repos</h3>
+  <table>
+    <thead><tr><th>Repository</th><th>Email</th><th>Enabled</th></tr></thead>
+    <tbody id="sched-body"></tbody>
+  </table>
+  <button id="btn-run-now" onclick="runNow()" style="margin-top:14px;background:#28a745">Run Now</button>
+  <div id="run-now-result"></div>
+
+  <h3 style="margin-top:24px;margin-bottom:12px">Activity Log</h3>
+  <div id="sched-status">Loading...</div>
+</div>
+
+<!-- ==================== TAB 4: CONFIGURATION ==================== -->
+<div id="config" class="panel">
+  <div class="banner">Changes apply only until the app restarts.</div>
+  <div id="config-form"></div>
+  <button id="btn-config" onclick="saveConfig()">Save</button>
+  <div id="config-result"></div>
+</div>
+
+<script type="application/json" id="_d_status">{{ sched_status_json | safe }}</script>
+<script type="application/json" id="_d_repos">{{ sched_repos_json | safe }}</script>
+<script type="application/json" id="_d_config">{{ config_data_json | safe }}</script>
+
+<script>
+function _j(id,fb){try{return JSON.parse(document.getElementById(id).textContent)}catch(e){return fb}}
+window._schedStatus = _j('_d_status', null);
+window._schedRepos = _j('_d_repos', []);
+window._configData = _j('_d_config', {});
+
+const CATEGORIES = ["naming_convention","unused_import","indentation","mutable_default","documentation_formatting"];
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', t.textContent.trim().toLowerCase().includes(id.slice(0,4))));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id===id));
+  if (id==='schedule') { loadSchedule(); loadStatus(); }
+  if (id==='config') loadConfig();
+}
+
+// ---- Inference ----
+async function runInference() {
+  const btn = document.getElementById('btn-infer');
+  const out = document.getElementById('infer-result');
+  btn.disabled = true;
+  out.innerHTML = '<span class="spinner"></span> Running...';
+  try {
+    const resp = await fetch('/api/inference', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        pr_url: document.getElementById('pr-url').value,
+        run_rag: document.getElementById('cb-rag').checked,
+        run_naive: document.getElementById('cb-naive').checked,
+        run_static: document.getElementById('cb-static').checked,
+      })
+    });
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+    let html = '';
+    for (const [model, reviews] of Object.entries(data)) {
+      html += '<div class="result-box"><h3>'+model+'</h3>';
+      if (!reviews.length) { html += '<p>No violations found.</p></div>'; continue; }
+      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
+      reviews.forEach(r => html += '<tr><td>'+r.line_number+'</td><td>'+r.violation_category+'</td><td>'+(r.review_comment||'')+'</td></tr>');
+      html += '</table></div>';
+    }
+    out.innerHTML = html;
+  } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+  finally { btn.disabled = false; }
+}
+
+// ---- Evaluation ----
+function addGtRow() {
+  const div = document.getElementById('gt-rows');
+  const row = document.createElement('div');
+  row.className = 'gt-row';
+  row.innerHTML = '<input type="number" placeholder="Line #" min="1">' +
+    '<select>'+CATEGORIES.map(c=>'<option value="'+c+'">'+c+'</option>').join('')+'</select>' +
+    '<button onclick="this.parentElement.remove()">✕</button>';
+  div.appendChild(row);
+}
+// start with 1 row
+document.addEventListener('DOMContentLoaded', addGtRow);
+
+async function runEval() {
+  const btn = document.getElementById('btn-eval');
+  const out = document.getElementById('eval-result');
+  btn.disabled = true;
+  out.innerHTML = '<span class="spinner"></span> Running all 3 baselines...';
+
+  const gt = [];
+  document.querySelectorAll('#gt-rows .gt-row').forEach(row => {
+    const line = parseInt(row.querySelector('input').value);
+    const cat = row.querySelector('select').value;
+    if (line > 0) gt.push({line_number: line, violation_category: cat});
+  });
+
+  try {
+    const resp = await fetch('/api/evaluate', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ code: document.getElementById('eval-code').value, ground_truth: gt })
+    });
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+
+    let html = '<div class="metrics-grid">';
+    ['RAG','Naive_LLM','Static_tool'].forEach(m => {
+      const met = data.Metrics[m];
+      const lat = data.Latency[m];
+      html += '<div class="metric-card"><h4>'+m+'</h4>';
+      html += '<p>Accuracy: <b>'+met.Accuracy.toFixed(3)+'</b></p>';
+      html += '<p>Precision: <b>'+met.Precision.toFixed(3)+'</b></p>';
+      html += '<p>Recall: <b>'+met.Recall.toFixed(3)+'</b></p>';
+      html += '<p>F1: <b>'+met.F1.toFixed(3)+'</b></p>';
+      html += '<p style="font-size:12px;color:#586069">Latency: '+lat.total+'s'+(lat.retries ? ' ('+lat.retries+' retries)':'')+'</p>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // findings tables
+    ['RAG','Naive_LLM','Static_tool'].forEach(m => {
+      const reviews = data[m];
+      html += '<div class="result-box"><h3>'+m+' Findings</h3>';
+      if (!reviews.length) { html += '<p>No violations found.</p></div>'; return; }
+      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
+      reviews.forEach(r => html += '<tr><td>'+r.line_number+'</td><td>'+r.violation_category+'</td><td>'+(r.review_comment||'–')+'</td></tr>');
+      html += '</table></div>';
+    });
+    out.innerHTML = html;
+  } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+  finally { btn.disabled = false; }
+}
+
+// ---- Schedule ----
+function loadSchedule() {
+  try {
+    const data = window._schedRepos || [];
+    const tbody = document.getElementById('sched-body');
+    tbody.innerHTML = '';
+    data.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>'+item.repo+'</td><td>'+item.email+'</td><td><label class="toggle"><input type="checkbox" '+(item.enabled?'checked':'')+' onchange="toggleRepo(\''+item.repo+'\',this.checked)"><span class="slider"></span></label></td>';
+      tbody.appendChild(tr);
+    });
+  } catch(e) { console.error('loadSchedule:', e); }
+}
+
+async function toggleRepo(repo, enabled) {
+  try {
+    await fetch('/api/schedule', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({repo, enabled})
+    });
+  } catch(e) { console.error('toggleRepo:', e); }
+}
+
+async function loadStatus() {
+  const out = document.getElementById('sched-status');
+  try {
+    // Use server-rendered data (embedded in page), fall back to API
+    let data = window._schedStatus;
+    if (!data) {
+      const resp = await fetch('/api/schedule/status');
+      data = await resp.json();
+    }
+    renderStatus(data, out);
+  } catch(e) { out.innerHTML = '<p class="error">Failed to load status: '+e+'</p>'; }
+}
+
+function renderStatus(data, out) {
+    if (!data || typeof data !== 'object') { out.innerHTML = '<p>No status data available.</p>'; return; }
+    let html = '<p style="font-size:13px;color:#586069;margin-bottom:8px">Total PRs processed: <b>'+(data.total_processed||0)+'</b>';
+    var lc = data.last_checked || {};
+    for (const [repo, ts] of Object.entries(lc)) {
+      html += ' &nbsp;|&nbsp; Last checked <b>'+repo+'</b>: '+(ts ? new Date(ts).toLocaleString() : 'never');
+    }
+    html += '</p>';
+    if ((data.recent||[]).length) {
+      html += '<table><thead><tr><th>PR #</th><th>Repository</th><th>Processed At</th><th>Email Sent</th></tr></thead><tbody>';
+      (data.recent||[]).forEach(r => {
+        const emailIcon = r.email_sent ? 'true' : 'false';
+        html += '<tr><td>#'+r.pr_number+'</td><td>'+r.repo+'</td><td>'+new Date(r.processed_at).toLocaleString()+'</td><td>'+emailIcon+'</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<p>No PRs processed yet.</p>';
+    }
+    out.innerHTML = html;
+}
+
+async function runNow() {
+  const btn = document.getElementById('btn-run-now');
+  const out = document.getElementById('run-now-result');
+  btn.disabled = true;
+  out.innerHTML = '<span class="spinner"></span> Running fetch & review cycle...';
+  try {
+    const resp = await fetch('/api/schedule/run', {method:'POST'});
+    const text = await resp.text();
+    let data;
+    try { data = JSON.parse(text); } catch(_) { data = null; }
+    if (!data) {
+      out.innerHTML = '<p class="error">Bad response from server (HTTP '+resp.status+')</p>';
+    } else if (data.status === 'error') {
+      out.innerHTML = '<p class="error">Error: '+data.error+'</p>';
+    } else {
+      const s = data.summary || {};
+      const pList = s.processed || [];
+      const skipped = s.skipped || 0;
+      const errors = s.errors || [];
+      let html = '<div class="result-box" style="margin-top:8px"><h3>Run Complete</h3>';
+      html += '<p>Processed: <b>'+pList.length+'</b> &nbsp; Skipped (cached): <b>'+skipped+'</b> &nbsp; Errors: <b>'+errors.length+'</b></p>';
+      if (pList.length) {
+        html += '<table><tr><th>PR #</th><th>Repo</th><th>Title</th><th>Findings</th><th>Email</th></tr>';
+        pList.forEach(p => {
+          html += '<tr><td>#'+p.pr+'</td><td>'+p.repo+'</td><td>'+p.title+'</td><td>'+p.findings+'</td><td>'+(p.email_sent?'true':'false')+'</td></tr>';
+        });
+        html += '</table>';
+      }
+      if (errors.length) {
+        html += '<p class="error" style="margin-top:8px">'+errors.join('<br>')+'</p>';
+      }
+      html += '</div>';
+      out.innerHTML = html;
+      // Refresh status by reloading (avoids proxy issues with AJAX)
+      setTimeout(() => { window.location.hash='#schedule'; window.location.reload(); }, 2000);
+    }
+  } catch(e) { out.innerHTML = '<p class="error">Request failed: '+e+'</p>'; }
+  finally { btn.disabled = false; }
+}
+
+// ---- Configuration ----
+function loadConfig() {
+  try {
+    const data = window._configData || {};
+    const form = document.getElementById('config-form');
+    form.innerHTML = '';
+    for (const [key, info] of Object.entries(data)) {
+      const type = info.hidden ? 'password' : 'text';
+      const val = info.hidden ? '' : info.value;
+      const ph = info.hidden ? '(hidden — enter new value to override)' : '';
+      form.innerHTML += '<label>'+key+'</label><input type="'+type+'" data-key="'+key+'" value="'+val+'" placeholder="'+ph+'">';
+    }
+    document.getElementById('config-result').innerHTML = '';
+  } catch(e) { console.error('loadConfig:', e); }
+}
+
+async function saveConfig() {
+  const inputs = document.querySelectorAll('#config-form input');
+  const body = {};
+  inputs.forEach(inp => {
+    const v = inp.value.trim();
+    if (v && !inp.placeholder.includes('hidden')) body[inp.dataset.key] = v;
+    else if (v && inp.type === 'password') body[inp.dataset.key] = v;
+  });
+  try {
+    const resp = await fetch('/api/config', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    document.getElementById('config-result').innerHTML = '<p style="color:#28a745;margin-top:8px">Updated: '+data.updated.join(', ')+'</p>';
+  } catch(e) { document.getElementById('config-result').innerHTML = '<p class="error">Save failed: '+e+'</p>'; }
+}
+
+// On page load, switch to tab from URL hash if present
+(function(){
+  var h = window.location.hash.replace('#','');
+  if (h && ['inference','eval','schedule','config'].indexOf(h) !== -1) {
+    switchTab(h);
+  }
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,3537 @@
+[
+  {
+    "text": "Use 4 spaces per indentation level.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#indentation",
+    "chunk_id": "chunk_0001"
+  },
+  {
+    "text": "Spaces are the preferred indentation method.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#tabs-or-spaces",
+    "chunk_id": "chunk_0002"
+  },
+  {
+    "text": "Tabs should be used solely to remain consistent with code that is already indented with tabs.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#tabs-or-spaces",
+    "chunk_id": "chunk_0003"
+  },
+  {
+    "text": "Python disallows mixing tabs and spaces for indentation.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#tabs-or-spaces",
+    "chunk_id": "chunk_0004"
+  },
+  {
+    "text": "Continuation lines should align wrapped elements vertically using implicit line joining inside parentheses, brackets, and braces, or use a hanging indent.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#indentation",
+    "chunk_id": "chunk_0005"
+  },
+  {
+    "text": "When using a hanging indent, there should be no arguments on the first line and further indentation should be used to clearly distinguish itself as a continuation line.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#indentation",
+    "chunk_id": "chunk_0006"
+  },
+  {
+    "text": "The 4-space rule is optional for continuation lines.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#indentation",
+    "chunk_id": "chunk_0007"
+  },
+  {
+    "text": "Closing brace/bracket/parenthesis on multiline constructs may line up under the first non-whitespace character of the last item or under the first character of the line that starts the construct.",
+    "category": "indentation",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#indentation",
+    "chunk_id": "chunk_0008"
+  },
+  {
+    "text": "E101: Indentation contains mixed spaces and tabs.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0009"
+  },
+  {
+    "text": "E111: Indentation is not a multiple of four spaces.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0010"
+  },
+  {
+    "text": "E112: Expected an indented block.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0011"
+  },
+  {
+    "text": "E113: Unexpected indentation (block not expected here).",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0012"
+  },
+  {
+    "text": "E114: Indentation is not a multiple of four (comment).",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0013"
+  },
+  {
+    "text": "E115: Expected an indented block (comment).",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0014"
+  },
+  {
+    "text": "E116: Unexpected indentation (comment).",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0015"
+  },
+  {
+    "text": "E117: Over-indented code.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0016"
+  },
+  {
+    "text": "E121: Continuation line under-indented for hanging indent.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0017"
+  },
+  {
+    "text": "E122: Continuation line missing indentation or outdented.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0018"
+  },
+  {
+    "text": "E123: Closing bracket does not match indentation of opening line's bracket.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0019"
+  },
+  {
+    "text": "E124: Closing bracket does not match visual indentation.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0020"
+  },
+  {
+    "text": "E125: Continuation line with same indent as next logical line.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0021"
+  },
+  {
+    "text": "E126: Continuation line over-indented for hanging indent.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0022"
+  },
+  {
+    "text": "E127: Continuation line over-indented for visual indent.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0023"
+  },
+  {
+    "text": "E128: Continuation line under-indented for visual indent.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0024"
+  },
+  {
+    "text": "E129: Visually indented line with same indent as next logical line.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0025"
+  },
+  {
+    "text": "E131: Continuation line unaligned for block comment.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0026"
+  },
+  {
+    "text": "E133: Closing bracket is missing indentation.",
+    "category": "indentation",
+    "source_type": "flake8",
+    "source_path": "https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes",
+    "chunk_id": "chunk_0027"
+  },
+  {
+    "text": "Ruff E111: Indentation is not a multiple of the configured indent-width (default 4). Per PEP 8, use 4 spaces per indentation level.",
+    "category": "indentation",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/indentation-with-invalid-multiple/",
+    "chunk_id": "chunk_0028"
+  },
+  {
+    "text": "W0311 (bad-indentation): Code has incorrect indentation. Expected indentation does not match actual indentation level.",
+    "category": "indentation",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/bad-indentation.html",
+    "chunk_id": "chunk_0029"
+  },
+  {
+    "text": "Function names should be lowercase, with words separated by underscores as necessary to improve readability.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#function-and-variable-names",
+    "chunk_id": "chunk_0030"
+  },
+  {
+    "text": "Variable names follow the same convention as function names: lowercase with underscores.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#function-and-variable-names",
+    "chunk_id": "chunk_0031"
+  },
+  {
+    "text": "Class names should normally use the CapWords (CamelCase) convention.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#class-names",
+    "chunk_id": "chunk_0032"
+  },
+  {
+    "text": "Constants are usually defined on a module level and written in all capital letters with underscores separating words. Examples: MAX_OVERFLOW, TOTAL.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#constants",
+    "chunk_id": "chunk_0033"
+  },
+  {
+    "text": "Modules should have short, all-lowercase names. Underscores can be used in the module name if it improves readability.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#package-and-module-names",
+    "chunk_id": "chunk_0034"
+  },
+  {
+    "text": "Python packages should have short, all-lowercase names. The use of underscores is discouraged in package names.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#package-and-module-names",
+    "chunk_id": "chunk_0035"
+  },
+  {
+    "text": "Always use self for the first argument to instance methods.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#function-and-method-arguments",
+    "chunk_id": "chunk_0036"
+  },
+  {
+    "text": "Always use cls for the first argument to class methods.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#function-and-method-arguments",
+    "chunk_id": "chunk_0037"
+  },
+  {
+    "text": "Never use the characters l (lowercase el), O (uppercase oh), or I (uppercase eye) as single character variable names. They are indistinguishable from numerals in some fonts.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#names-to-avoid",
+    "chunk_id": "chunk_0038"
+  },
+  {
+    "text": "Exception names should use the CapWords convention and end with the suffix 'Error' if the exception is an error.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#exception-names",
+    "chunk_id": "chunk_0039"
+  },
+  {
+    "text": "Use one leading underscore for non-public methods and instance variables.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#method-names-and-instance-variables",
+    "chunk_id": "chunk_0040"
+  },
+  {
+    "text": "Use two leading underscores to invoke Python's name mangling for avoiding name clashes in subclasses.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#method-names-and-instance-variables",
+    "chunk_id": "chunk_0041"
+  },
+  {
+    "text": "If a function argument name clashes with a reserved keyword, append a single trailing underscore rather than use an abbreviation or spelling corruption.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#function-and-method-arguments",
+    "chunk_id": "chunk_0042"
+  },
+  {
+    "text": "Type variable names should normally use CapWords preferring short names: T, AnyStr, Num. Use suffixes _co or _contra for covariant or contravariant behavior.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#type-variable-names",
+    "chunk_id": "chunk_0043"
+  },
+  {
+    "text": "When using acronyms in CapWords class names, capitalize all the letters of the acronym. For example: HTTPServerError, not HttpServerError.",
+    "category": "naming_convention",
+    "source_type": "pep8",
+    "source_path": "https://peps.python.org/pep-0008/#class-names",
+    "chunk_id": "chunk_0044"
+  },
+  {
+    "text": "N801: Class name should use CapWords convention. For example, use MyClass instead of my_class or myClass.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/invalid-class-name/",
+    "chunk_id": "chunk_0045"
+  },
+  {
+    "text": "N802: Function name should be lowercase. Use snake_case for function names.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/invalid-function-name/",
+    "chunk_id": "chunk_0046"
+  },
+  {
+    "text": "N803: Argument name should be lowercase. Use snake_case for function arguments.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/invalid-argument-name/",
+    "chunk_id": "chunk_0047"
+  },
+  {
+    "text": "N804: First argument of a class method should be named cls.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/invalid-first-argument-name-for-class-method/",
+    "chunk_id": "chunk_0048"
+  },
+  {
+    "text": "N805: First argument of a method should be named self.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/invalid-first-argument-name-for-method/",
+    "chunk_id": "chunk_0049"
+  },
+  {
+    "text": "N806: Variable in function should be lowercase. Do not use uppercase or CamelCase for local variables.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/non-lowercase-variable-in-function/",
+    "chunk_id": "chunk_0050"
+  },
+  {
+    "text": "N807: Function name should not start and end with double underscores (__). Dunder names are reserved for Python special methods.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/dunder-function-name/",
+    "chunk_id": "chunk_0051"
+  },
+  {
+    "text": "N811: Constant imported as non-constant. Constants should remain UPPER_CASE when imported.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/constant-imported-as-non-constant/",
+    "chunk_id": "chunk_0052"
+  },
+  {
+    "text": "N812: Lowercase imported as non-lowercase. Do not alias a lowercase import to an uppercase name.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/lowercase-imported-as-non-lowercase/",
+    "chunk_id": "chunk_0053"
+  },
+  {
+    "text": "N813: CamelCase imported as lowercase. Preserve CamelCase when importing class names.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/camelcase-imported-as-lowercase/",
+    "chunk_id": "chunk_0054"
+  },
+  {
+    "text": "N814: CamelCase imported as constant. Do not alias CamelCase imports to UPPER_CASE names.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/camelcase-imported-as-constant/",
+    "chunk_id": "chunk_0055"
+  },
+  {
+    "text": "N815: Variable in class scope should not use mixedCase. Use snake_case instead.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/mixed-case-variable-in-class-scope/",
+    "chunk_id": "chunk_0056"
+  },
+  {
+    "text": "N816: Variable in global scope should not use mixedCase. Use snake_case instead.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/mixed-case-variable-in-global-scope/",
+    "chunk_id": "chunk_0057"
+  },
+  {
+    "text": "N817: CamelCase imported as acronym. Do not alias CamelCase imports to ALL_CAPS acronyms.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/camelcase-imported-as-acronym/",
+    "chunk_id": "chunk_0058"
+  },
+  {
+    "text": "N818: Exception name should be named with an Error suffix. For example, use ValidationError instead of ValidationException.",
+    "category": "naming_convention",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/error-suffix-on-exception-name/",
+    "chunk_id": "chunk_0059"
+  },
+  {
+    "text": "C0103 (invalid-name): Name does not conform to the naming convention associated with its type (module, class, function, method, variable, constant).",
+    "category": "naming_convention",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/invalid-name.html",
+    "chunk_id": "chunk_0060"
+  },
+  {
+    "text": "C0104 (disallowed-name): Name is one of the disallowed names configured in pylint (e.g., foo, bar, baz).",
+    "category": "naming_convention",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/disallowed-name.html",
+    "chunk_id": "chunk_0061"
+  },
+  {
+    "text": "C0105 (typevar-name-incorrect-variance): TypeVar name does not reflect its variance. Covariant TypeVars should have a _co suffix, contravariant should have _contra.",
+    "category": "naming_convention",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/typevar-name-incorrect-variance.html",
+    "chunk_id": "chunk_0062"
+  },
+  {
+    "text": "C0132 (typevar-name-mismatch): TypeVar name does not match the variable it is assigned to.",
+    "category": "naming_convention",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/typevar-name-mismatch.html",
+    "chunk_id": "chunk_0063"
+  },
+  {
+    "text": "C2401 (non-ascii-name): Identifier contains non-ASCII characters. Use only ASCII characters in names for maximum compatibility.",
+    "category": "naming_convention",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/non-ascii-name.html",
+    "chunk_id": "chunk_0064"
+  },
+  {
+    "text": "W3201 (bad-dunder-name): Dunder method name is incorrect or not a recognized Python special method name.",
+    "category": "naming_convention",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/bad-dunder-name.html",
+    "chunk_id": "chunk_0065"
+  },
+  {
+    "text": "F401: Module imported but unused. Remove the import or use it. Unused imports add performance overhead at runtime and risk creating import cycles.",
+    "category": "unused_import",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/unused-import/",
+    "chunk_id": "chunk_0066"
+  },
+  {
+    "text": "F401: Unused imports increase the cognitive load of reading the code. Remove imports that are not referenced anywhere in the module.",
+    "category": "unused_import",
+    "source_type": "flake8",
+    "source_path": "https://flake8.pycqa.org/en/latest/user/error-codes.html",
+    "chunk_id": "chunk_0067"
+  },
+  {
+    "text": "For module availability checks, use importlib.util.find_spec instead of importing the module, to avoid unused import warnings.",
+    "category": "unused_import",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/unused-import/",
+    "chunk_id": "chunk_0068"
+  },
+  {
+    "text": "For intentional re-exports, mark them with a redundant alias (from module import name as name) or include them in __all__ to suppress unused import warnings.",
+    "category": "unused_import",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/unused-import/",
+    "chunk_id": "chunk_0069"
+  },
+  {
+    "text": "Be cautious when auto-removing unused imports in __init__.py files, as these may be intentional re-exports that form the module's public API.",
+    "category": "unused_import",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/unused-import/",
+    "chunk_id": "chunk_0070"
+  },
+  {
+    "text": "W0611 (unused-import): Imported module is not used in the module. Remove the unused import to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-import.html",
+    "chunk_id": "chunk_0071"
+  },
+  {
+    "text": "W0614 (unused-wildcard-import): A wildcard import (from module import *) was used but not all imported names are utilized. Use explicit imports instead.",
+    "category": "unused_import",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-wildcard-import.html",
+    "chunk_id": "chunk_0072"
+  },
+  {
+    "text": "W0404 (reimported): A module is imported more than once. Remove the duplicate import statement.",
+    "category": "unused_import",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/reimported.html",
+    "chunk_id": "chunk_0073"
+  },
+  {
+    "text": "W0406 (import-self): A module is importing itself, which is almost always an error and can cause circular import issues.",
+    "category": "unused_import",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/import-self.html",
+    "chunk_id": "chunk_0074"
+  },
+  {
+    "text": "B006: Do not use mutable data structures (list, dict, set) as default argument values. Function defaults are evaluated once at definition time and shared across all calls.",
+    "category": "mutable_default",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/mutable-argument-default/",
+    "chunk_id": "chunk_0075"
+  },
+  {
+    "text": "B006: Mutable default arguments cause unexpected behavior because modifications persist across function calls. Use None as default and create a new mutable object inside the function body.",
+    "category": "mutable_default",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/mutable-argument-default/",
+    "chunk_id": "chunk_0076"
+  },
+  {
+    "text": "B006 example fix: Instead of 'def func(items=[]):', write 'def func(items=None):' and then 'if items is None: items = []' inside the function body.",
+    "category": "mutable_default",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/mutable-argument-default/",
+    "chunk_id": "chunk_0077"
+  },
+  {
+    "text": "W0102 (dangerous-default-value): Mutable default value (e.g., list or dict) as argument. The default is created once and shared between all calls, leading to unexpected side effects.",
+    "category": "mutable_default",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/dangerous-default-value.html",
+    "chunk_id": "chunk_0078"
+  },
+  {
+    "text": "Avoid using [], {}, or set() as default argument values. These mutable objects will accumulate state across function invocations.",
+    "category": "mutable_default",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/dangerous-default-value.html",
+    "chunk_id": "chunk_0079"
+  },
+  {
+    "text": "Always use triple double quotes (\"\"\"triple double quotes\"\"\") around docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#what-is-a-docstring",
+    "chunk_id": "chunk_0080"
+  },
+  {
+    "text": "Use r\"\"\"raw triple double quotes\"\"\" if any backslashes appear in docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#what-is-a-docstring",
+    "chunk_id": "chunk_0081"
+  },
+  {
+    "text": "One-line docstrings should have the closing quotes on the same line as the opening quotes.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#one-line-docstrings",
+    "chunk_id": "chunk_0082"
+  },
+  {
+    "text": "No blank line before or after a one-line docstring.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#one-line-docstrings",
+    "chunk_id": "chunk_0083"
+  },
+  {
+    "text": "Docstring should be a phrase ending in a period. It prescribes the effect as a command, e.g., 'Do X and return Y.' not 'Returns Y.'",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#one-line-docstrings",
+    "chunk_id": "chunk_0084"
+  },
+  {
+    "text": "Multi-line docstrings should start with a summary line, followed by a blank line, followed by a more elaborate description.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0085"
+  },
+  {
+    "text": "The summary line of a multi-line docstring should fit on one line and be separated from the rest of the docstring by a blank line.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0086"
+  },
+  {
+    "text": "Insert a blank line after all docstrings that document a class. This separates the docstring from the first method or class variable.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0087"
+  },
+  {
+    "text": "The closing quotes of a multi-line docstring should be on a line by themselves.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0088"
+  },
+  {
+    "text": "The entire docstring should be indented to the same level as the quotes at its first line.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#handling-docstring-indentation",
+    "chunk_id": "chunk_0089"
+  },
+  {
+    "text": "Module docstrings should list the classes, exceptions, functions, and other objects exported by the module, with a one-line summary of each.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0090"
+  },
+  {
+    "text": "Function and method docstrings should describe behavior, arguments, return values, side effects, exceptions raised, and restrictions on when it can be called.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0091"
+  },
+  {
+    "text": "Class docstrings should summarize the class behavior, list public methods and instance variables, and document the constructor in the __init__ method docstring.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0092"
+  },
+  {
+    "text": "A script's docstring should serve as its usage message, describing the script's function, command line syntax, environment variables, and files.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#multi-line-docstrings",
+    "chunk_id": "chunk_0093"
+  },
+  {
+    "text": "Do not repeat the function or method's signature in its docstring. Focus on the return value and behavior instead.",
+    "category": "documentation_formatting",
+    "source_type": "pep257",
+    "source_path": "https://peps.python.org/pep-0257/#one-line-docstrings",
+    "chunk_id": "chunk_0094"
+  },
+  {
+    "text": "D100: Missing docstring in public module. Public modules should have a docstring describing their purpose and exported objects.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-module/",
+    "chunk_id": "chunk_0095"
+  },
+  {
+    "text": "D101: Missing docstring in public class. Every public class should have a docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-class/",
+    "chunk_id": "chunk_0096"
+  },
+  {
+    "text": "D102: Missing docstring in public method. Every public method should have a docstring describing its behavior.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-method/",
+    "chunk_id": "chunk_0097"
+  },
+  {
+    "text": "D103: Missing docstring in public function. Every public function should have a docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-function/",
+    "chunk_id": "chunk_0098"
+  },
+  {
+    "text": "D104: Missing docstring in public package. The __init__.py file of a public package should have a docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-package/",
+    "chunk_id": "chunk_0099"
+  },
+  {
+    "text": "D105: Missing docstring in magic method. Dunder methods like __repr__ and __eq__ should have docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-magic-method/",
+    "chunk_id": "chunk_0100"
+  },
+  {
+    "text": "D106: Missing docstring in public nested class.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-nested-class/",
+    "chunk_id": "chunk_0101"
+  },
+  {
+    "text": "D107: Missing docstring in __init__ method. The __init__ method should document the constructor arguments and behavior.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-public-init/",
+    "chunk_id": "chunk_0102"
+  },
+  {
+    "text": "D200: One-line docstring should fit on one line. Do not spread a short docstring across multiple lines.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/fits-on-one-line/",
+    "chunk_id": "chunk_0103"
+  },
+  {
+    "text": "D201: No blank lines allowed before a function docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/no-blank-line-before-function/",
+    "chunk_id": "chunk_0104"
+  },
+  {
+    "text": "D202: No blank lines allowed after a function docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/no-blank-line-after-function/",
+    "chunk_id": "chunk_0105"
+  },
+  {
+    "text": "D203: One blank line required before class docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/one-blank-line-before-class/",
+    "chunk_id": "chunk_0106"
+  },
+  {
+    "text": "D204: One blank line required after class docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/one-blank-line-after-class/",
+    "chunk_id": "chunk_0107"
+  },
+  {
+    "text": "D205: One blank line required between the summary line and the description in a multi-line docstring.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/blank-line-after-summary/",
+    "chunk_id": "chunk_0108"
+  },
+  {
+    "text": "D206: Docstring should be indented with spaces, not tabs.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/indent-with-spaces/",
+    "chunk_id": "chunk_0109"
+  },
+  {
+    "text": "D207: Docstring is under-indented. Adjust indentation to match the opening triple quotes.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/under-indentation/",
+    "chunk_id": "chunk_0110"
+  },
+  {
+    "text": "D208: Docstring is over-indented. Reduce indentation to match the opening triple quotes.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/over-indentation/",
+    "chunk_id": "chunk_0111"
+  },
+  {
+    "text": "D209: Multi-line docstring closing quotes should be on a separate line.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/new-line-after-last-paragraph/",
+    "chunk_id": "chunk_0112"
+  },
+  {
+    "text": "D210: No whitespace allowed surrounding docstring text.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/no-surrounding-whitespace/",
+    "chunk_id": "chunk_0113"
+  },
+  {
+    "text": "D211: No blank lines allowed before class docstring (mutually exclusive with D203).",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/blank-line-before-class/",
+    "chunk_id": "chunk_0114"
+  },
+  {
+    "text": "D212: Multi-line docstring summary should start at the first line, immediately after the opening triple quotes.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/multi-line-summary-first-line/",
+    "chunk_id": "chunk_0115"
+  },
+  {
+    "text": "D213: Multi-line docstring summary should start at the second line (mutually exclusive with D212).",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/multi-line-summary-second-line/",
+    "chunk_id": "chunk_0116"
+  },
+  {
+    "text": "D300: Use triple double quotes (\"\"\") instead of triple single quotes (''') for docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/triple-single-quotes/",
+    "chunk_id": "chunk_0117"
+  },
+  {
+    "text": "D400: First line of the docstring should end with a period.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/ends-in-period/",
+    "chunk_id": "chunk_0118"
+  },
+  {
+    "text": "D401: First line of the docstring should be in imperative mood (e.g., 'Return' instead of 'Returns').",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/non-imperative-mood/",
+    "chunk_id": "chunk_0119"
+  },
+  {
+    "text": "D402: First line of the docstring should not be the function's signature. Describe the behavior instead.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/no-signature/",
+    "chunk_id": "chunk_0120"
+  },
+  {
+    "text": "D403: First word of the first line in the docstring should be properly capitalized.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/first-line-capitalized/",
+    "chunk_id": "chunk_0121"
+  },
+  {
+    "text": "D404: First word of the docstring should not be 'This'. Describe the object directly instead.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/docstring-starts-with-this/",
+    "chunk_id": "chunk_0122"
+  },
+  {
+    "text": "D417: Missing argument descriptions in the docstring. All function parameters should be documented.",
+    "category": "documentation_formatting",
+    "source_type": "ruff",
+    "source_path": "https://docs.astral.sh/ruff/rules/undocumented-param/",
+    "chunk_id": "chunk_0123"
+  },
+  {
+    "text": "C0114 (missing-module-docstring): Module has no docstring. Add a docstring at the top of the module.",
+    "category": "documentation_formatting",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/missing-module-docstring.html",
+    "chunk_id": "chunk_0124"
+  },
+  {
+    "text": "C0115 (missing-class-docstring): Class has no docstring. Add a docstring to the class definition.",
+    "category": "documentation_formatting",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/missing-class-docstring.html",
+    "chunk_id": "chunk_0125"
+  },
+  {
+    "text": "C0116 (missing-function-docstring): Function or method has no docstring. Add a docstring describing the function's purpose and parameters.",
+    "category": "documentation_formatting",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/missing-function-docstring.html",
+    "chunk_id": "chunk_0126"
+  },
+  {
+    "text": "C0112 (empty-docstring): Docstring is present but empty. Either add meaningful content or remove the empty docstring.",
+    "category": "documentation_formatting",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/empty-docstring.html",
+    "chunk_id": "chunk_0127"
+  },
+  {
+    "text": "C0199 (docstring-first-line-empty): First line of the docstring is empty. The summary should begin immediately after the opening triple quotes.",
+    "category": "documentation_formatting",
+    "source_type": "pylint",
+    "source_path": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/docstring-first-line-empty.html",
+    "chunk_id": "chunk_0128"
+  },
+  {
+    "text": "All files should be formatted using the black auto-formatter. This will be run by pre-commit if that is configured.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0129"
+  },
+  {
+    "text": "The project repository includes an .editorconfig file. We recommend using a text editor with EditorConfig support to avoid indentation and whitespace issues.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0130"
+  },
+  {
+    "text": "The Python files use 4 spaces for indentation and the HTML files use 2 spaces. Unless otherwise specified, follow PEP 8. Remember that PEP 8 is only a guide, so respect the style of the surrounding code as a primary goal.",
+    "category": "indentation",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0131"
+  },
+  {
+    "text": "Use flake8 to check for problems in this area. Note that the .flake8 file excludes some errors that are not considered gross violations.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0132"
+  },
+  {
+    "text": "An exception to PEP 8 is the rules on line lengths. Allow up to 88 characters in code as this is the line length used by black. Documentation, comments, and docstrings should be wrapped at 79 characters.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0133"
+  },
+  {
+    "text": "String variable interpolation may use %-formatting, f-strings, or str.format() as appropriate, with the goal of maximizing code readability.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0134"
+  },
+  {
+    "text": "f-strings should use only plain variable and property access, with prior local variable assignment for more complex cases.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0135"
+  },
+  {
+    "text": "f-strings should not be used for any string that may require translation, including error and logging messages.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0136"
+  },
+  {
+    "text": "Avoid use of 'we' in comments, e.g. 'Loop over' rather than 'We loop over'.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0137"
+  },
+  {
+    "text": "Use underscores, not camelCase, for variable, function and method names.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0138"
+  },
+  {
+    "text": "Use InitialCaps for class names or for factory functions that return classes.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0139"
+  },
+  {
+    "text": "In docstrings, follow the style of existing docstrings and PEP 257.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0140"
+  },
+  {
+    "text": "In test docstrings, state the expected behavior that each test demonstrates. Don't include preambles such as 'Tests that' or 'Ensures that'.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0141"
+  },
+  {
+    "text": "Reserve ticket references for obscure issues where the ticket has additional details that can't be easily described in docstrings or comments.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0142"
+  },
+  {
+    "text": "Where applicable, use unpacking generalizations compliant with PEP 448, such as merging mappings or sequences. This improves performance, readability, and maintainability.",
+    "category": "documentation_formatting",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0143"
+  },
+  {
+    "text": "Use isort to automate import sorting. If you need imports out of order to avoid a circular import, use a comment like: import module  # isort:skip.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0144"
+  },
+  {
+    "text": "Put imports in these groups: future, standard library, third-party libraries, other Django components, local Django component, try/excepts.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0145"
+  },
+  {
+    "text": "Sort lines in each import group alphabetically by the full module name. Place all import module statements before from module import objects in each section.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0146"
+  },
+  {
+    "text": "Use absolute imports for other Django components and a one-dot relative import for local components. Avoid multi-dot relative imports.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0147"
+  },
+  {
+    "text": "On each import line, alphabetize the items with the upper case items grouped before the lowercase items.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0148"
+  },
+  {
+    "text": "Break long import lines using parentheses and indent continuation lines by 4 spaces. Include a trailing comma after the last import and put the closing parenthesis on its own line.",
+    "category": "indentation",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0149"
+  },
+  {
+    "text": "Use a single blank line between the last import and any module level code, and use two blank lines above the first function or class.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0150"
+  },
+  {
+    "text": "Use convenience imports whenever available. For example, import from django.views instead of django.views.generic.base.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0151"
+  },
+  {
+    "text": "In Django views, the first parameter in a view function should be called request.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0152"
+  },
+  {
+    "text": "Model field names should be all lowercase, using underscores instead of camelCase.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0153"
+  },
+  {
+    "text": "The class Meta should appear after the fields are defined, with a single blank line separating the fields and the class definition.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0154"
+  },
+  {
+    "text": "The order of model inner classes and standard methods should be: all database fields, custom manager attributes, class Meta, __str__ and magic methods, save(), get_absolute_url(), then any custom methods.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0155"
+  },
+  {
+    "text": "If choices is defined for a model field, define each choice as a mapping with an all-uppercase name as a class attribute on the model.",
+    "category": "naming_convention",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0156"
+  },
+  {
+    "text": "Modules should not use settings stored in django.conf.settings at the top level, i.e. evaluated when the module is imported.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0157"
+  },
+  {
+    "text": "If any setting is accessed before settings.configure, manual configuration will not work. Settings is a LazyObject which configures itself automatically when accessed.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0158"
+  },
+  {
+    "text": "Instead of evaluating settings at import time, use a level of laziness or indirection such as LazyObject, lazy(), or lambda.",
+    "category": "unused_import",
+    "source_type": "django_guidelines",
+    "source_path": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/",
+    "chunk_id": "chunk_0159"
+  },
+  {
+    "text": "Import optional dependencies using pandas.compat._optional.import_optional_dependency to ensure consistent error messages.",
+    "category": "unused_import",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing.rst",
+    "chunk_id": "chunk_0160"
+  },
+  {
+    "text": "Methods using optional dependencies must include tests for ImportError. Skip test if dependency is present.",
+    "category": "unused_import",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing.rst",
+    "chunk_id": "chunk_0161"
+  },
+  {
+    "text": "Use PEP 484 style type hints. New code should include type hints. Contributions adding type hints are encouraged.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing.rst",
+    "chunk_id": "chunk_0162"
+  },
+  {
+    "text": "Prefer built-in types for type annotations, e.g. list instead of typing.List. Code may be auto-rewritten by pre-commit checks.",
+    "category": "unused_import",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0163"
+  },
+  {
+    "text": "When a class defines variables shadowing builtins, create an alias to avoid ambiguity.",
+    "category": "naming_convention",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0164"
+  },
+  {
+    "text": "Using cast from typing is strongly discouraged. Refactor code to use isinstance checks instead of relying on cast.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0165"
+  },
+  {
+    "text": "Changes should be reflected in the release notes. Add an entry to document your fix, enhancement, or breaking change. Include the GitHub issue number.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0166"
+  },
+  {
+    "text": "Use Sphinx directives when mentioning API: :func:, :meth:, :class:. Add links only if they resolve.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0167"
+  },
+  {
+    "text": "Use the versionadded directive for new functions, methods, and keyword arguments.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0168"
+  },
+  {
+    "text": "A docstring documents modules, classes, functions, or methods. It helps understand functionality without reading implementation.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0169"
+  },
+  {
+    "text": "Follow PEP 257 conventions. pandas follows the NumPy docstring convention. numpydoc is a Sphinx extension used for documentation generation.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0170"
+  },
+  {
+    "text": "Use triple double-quotes for docstrings. No blank lines before or after the docstring.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0171"
+  },
+  {
+    "text": "The docstring text starts on the next line after opening quotes. Closing quotes should be on a separate line.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0172"
+  },
+  {
+    "text": "Use backticks for parameter names, Python code, modules, types, and literals in docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0173"
+  },
+  {
+    "text": "The short summary in a docstring must start with a capital letter, end with a dot, fit on one line, and use an infinitive verb.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0174"
+  },
+  {
+    "text": "The extended summary provides detailed explanation without parameter details or implementation notes. Leave a blank line after the short summary. Each paragraph ends with a dot.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0175"
+  },
+  {
+    "text": "Document all parameters except self. Format as: name : type, with a space before the colon. Description is indented, starts with a capital letter, and ends with a dot.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0176"
+  },
+  {
+    "text": "For default parameter values, use format: int, default 0. For optional values: str, optional. Use 'default None' only when None is the actual value.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_codebase.rst",
+    "chunk_id": "chunk_0177"
+  },
+  {
+    "text": "Use Python built-in data types directly in parameter documentation: int, float, str, bool. Define subtypes explicitly using brackets for readability.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0178"
+  },
+  {
+    "text": "For allowed parameter values, use curly brackets and separate with commas. Maintain order if values are ordinal, otherwise list the default value first.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0179"
+  },
+  {
+    "text": "When documenting multiple types, separate using commas. The last two types are separated by 'or'. Always place None at the end.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0180"
+  },
+  {
+    "text": "Document returned or yielded values in the Returns or Yields section. Use the same type conventions as the Parameters section. Description must end with a dot.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0181"
+  },
+  {
+    "text": "No name is required for single return values. Use names when returning multiple values.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0182"
+  },
+  {
+    "text": "Use the See Also section to highlight related pandas functionality. Use one line per related item: function_name : description.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0183"
+  },
+  {
+    "text": "See Also descriptions must explain functionality, explain relevance, highlight key differences, and end with a dot.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0184"
+  },
+  {
+    "text": "Use full module names for external libraries in See Also: numpy not np, scipy.sparse.coo_matrix for the full path.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0185"
+  },
+  {
+    "text": "Docstring examples must be valid Python code, produce deterministic output, and be copy-paste runnable.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0186"
+  },
+  {
+    "text": "Present examples as Python terminal sessions using >>> for code and ... for continuation. Output appears immediately after code with no blank lines between.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0187"
+  },
+  {
+    "text": "Assume numpy and pandas are already imported as np and pd in examples. Import other modules explicitly, one per line, without aliases.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0188"
+  },
+  {
+    "text": "Use naming conventions in docstring examples: Series as ser, DataFrame as df, Index as idx.",
+    "category": "naming_convention",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0189"
+  },
+  {
+    "text": "Keep example data compact, approximately 4 rows. Use simple values. Prefer keyword arguments over positional arguments.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0190"
+  },
+  {
+    "text": "Avoid using random data in docstring examples. If random data is required, always use a fixed random seed.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0191"
+  },
+  {
+    "text": "Show exceptions in examples using the full traceback header. Only the error name is required afterward.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_docstring.rst",
+    "chunk_id": "chunk_0192"
+  },
+  {
+    "text": "Validate docstrings using numpydoc checks and pandas-specific conventions enforced during the Sphinx build. Failing doctests block PR merge.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_guidelines",
+    "source_path": "doc/source/development/contributing_documentation.rst",
+    "chunk_id": "chunk_0193"
+  },
+  {
+    "text": "The scikit-learn project closely follows the official Python guidelines detailed in PEP 8 for code formatting and indentation.",
+    "category": "indentation",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "chunk_id": "chunk_0194"
+  },
+  {
+    "text": "Use underscores to separate words in non-class names: n_samples rather than nsamples.",
+    "category": "naming_convention",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "chunk_id": "chunk_0195"
+  },
+  {
+    "text": "Avoid multiple statements on one line. Prefer a line return after a control flow statement such as if or for.",
+    "category": "indentation",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "chunk_id": "chunk_0196"
+  },
+  {
+    "text": "Use absolute imports. Do not use import * in any case. It makes the code harder to read and prevents using static analysis tools like pyflakes.",
+    "category": "unused_import",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "chunk_id": "chunk_0197"
+  },
+  {
+    "text": "Unit tests should import from the public API. If sklearn.foo exports a class implemented in sklearn.foo.bar.baz, the test should import it from sklearn.foo.",
+    "category": "unused_import",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "chunk_id": "chunk_0198"
+  },
+  {
+    "text": "Use the numpy docstring standard in all your docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#coding-guidelines",
+    "chunk_id": "chunk_0199"
+  },
+  {
+    "text": "The __init__ method should accept constants as arguments that determine the estimator's behavior. It should not take the actual training data as an argument.",
+    "category": "mutable_default",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "chunk_id": "chunk_0200"
+  },
+  {
+    "text": "Every keyword argument accepted by __init__ should correspond to an attribute on the instance with the same name.",
+    "category": "naming_convention",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "chunk_id": "chunk_0201"
+  },
+  {
+    "text": "There should be no logic or input validation in __init__, and the parameters should not be changed. The corresponding logic should be put where the parameters are used, typically in fit.",
+    "category": "mutable_default",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "chunk_id": "chunk_0202"
+  },
+  {
+    "text": "Init parameters should ideally not be mutable objects such as lists or dictionaries. If they are mutable, they should be copied before being modified.",
+    "category": "mutable_default",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "chunk_id": "chunk_0203"
+  },
+  {
+    "text": "Parameters with trailing underscore are not to be set inside the __init__ method. They are reserved for estimated attributes.",
+    "category": "naming_convention",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#instantiation",
+    "chunk_id": "chunk_0204"
+  },
+  {
+    "text": "Attributes estimated or learned from data must have a name ending with trailing underscore, for example coef_.",
+    "category": "naming_convention",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#estimated-attributes",
+    "chunk_id": "chunk_0205"
+  },
+  {
+    "text": "Attributes to store internally but not expose to users should have a leading underscore, for example _intermediate_coefs.",
+    "category": "naming_convention",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#estimated-attributes",
+    "chunk_id": "chunk_0206"
+  },
+  {
+    "text": "Estimated attributes are expected to be overridden when you call fit a second time.",
+    "category": "naming_convention",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/develop.html#estimated-attributes",
+    "chunk_id": "chunk_0207"
+  },
+  {
+    "text": "The correct order of docstring sections is: Parameters, Returns, See Also, Notes, Examples.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0208"
+  },
+  {
+    "text": "Use Python basic types in docstring parameter descriptions: bool instead of boolean.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0209"
+  },
+  {
+    "text": "Use parentheses for defining shapes: array-like of shape (n_samples,). For strings with multiple options, use brackets: {'log', 'squared'}.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0210"
+  },
+  {
+    "text": "1D or 2D data can be a subset of array-like, ndarray, sparse matrix, dataframe. Note that array-like can also be a list, while ndarray is explicitly only a numpy.ndarray.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0211"
+  },
+  {
+    "text": "When specifying the dtype of an ndarray, use dtype=np.int32 after defining the shape. Use integral and floating for arbitrary precision rather than int and float.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0212"
+  },
+  {
+    "text": "When the default is None, only specify default=None at the end. Include in the docstring what it means for the parameter to be None.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0213"
+  },
+  {
+    "text": "Add See Also in docstrings for related classes and functions. One line per reference with a colon and an explanation.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0214"
+  },
+  {
+    "text": "Add one or two snippets of code in the Examples section. The code should be runnable as-is, including all required imports. Keep the section brief.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_guidelines",
+    "source_path": "https://scikit-learn.org/stable/developers/contributing.html#contribute-documentation",
+    "chunk_id": "chunk_0215"
+  },
+  {
+    "text": "Try to follow PEP8, but you may ignore the line length limit if following it would make the code uglier.",
+    "category": "documentation_formatting",
+    "source_type": "flask_guidelines",
+    "source_path": "https://azcv.readthedocs.io/en/latest/contributing.html",
+    "chunk_id": "chunk_0216"
+  },
+  {
+    "text": "It looks like the `os` and `sys` imports are unused, as well as the newly added `re` import. Consider removing them to keep the code clean and focused.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/permissions.py@6ef5d1e8",
+    "chunk_id": "chunk_0217"
+  },
+  {
+    "text": "The import for `os` is unused and can be safely removed to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/permissions.py@6ef5d1e8",
+    "chunk_id": "chunk_0218"
+  },
+  {
+    "text": "The import for `os` isn't used anywhere in this file—it's better to remove it to keep the code clean and avoid confusion.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/permissions.py@6ef5d1e8",
+    "chunk_id": "chunk_0219"
+  },
+  {
+    "text": "The indentation here is 6 spaces instead of the standard 4, which makes the code less consistent and harder to read. Please adjust it to match the rest of the file's indentation style.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/templatetags/custom_tags.py@7f724e48",
+    "chunk_id": "chunk_0220"
+  },
+  {
+    "text": "The indentation here mixes tabs and spaces, which can cause issues with consistency and readability. Please standardize the indentation to use spaces, as it's the convention for Python code.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/templatetags/custom_tags.py@7f724e48",
+    "chunk_id": "chunk_0221"
+  },
+  {
+    "text": "The indentation in the `markdown_to_html` function docstring deviates from the project's 4-space standard. Please adjust it to maintain consistency with the rest of the codebase.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/templatetags/custom_tags.py@7f724e48",
+    "chunk_id": "chunk_0222"
+  },
+  {
+    "text": "The `send_notification_email` function is missing its docstring, which makes it harder to understand its purpose and usage. Please add a concise docstring describing its functionality, parameters, and expected behavior.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@a680a4ab",
+    "chunk_id": "chunk_0223"
+  },
+  {
+    "text": "The docstring is missing a blank line after the summary, which is required for proper formatting. Please add a blank line before the detailed description to improve readability and adhere to PEP 257.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@a680a4ab",
+    "chunk_id": "chunk_0224"
+  },
+  {
+    "text": "The updated docstring format is inconsistent with the typical convention used in this project, where closing quotes start on a new line for multi-line docstrings. Consider aligning with the project's style guide for consistency.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@a680a4ab",
+    "chunk_id": "chunk_0225"
+  },
+  {
+    "text": "Using a mutable default argument like `extra_data: dict = {}` can lead to unexpected behavior since the same dictionary instance is shared across function calls. Consider using `None` as the default and initializing a new dictionary inside the function if `extra_data` is `None`.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/conftest.py@4eac719d",
+    "chunk_id": "chunk_0226"
+  },
+  {
+    "text": "Using a mutable default argument like `set()` can lead to unexpected behavior since the same set instance will be shared across all calls to `_create_article`. Consider using `None` as the default and initializing a new set inside the function instead.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/conftest.py@4eac719d",
+    "chunk_id": "chunk_0227"
+  },
+  {
+    "text": "Using a mutable default argument like `tags: list = []` in `_create_category` can lead to unexpected behavior because the default list is shared across all calls to the function. Consider using `tags: Optional[List] = None` and initializing it with `tags = tags or []` inside the function.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/conftest.py@4eac719d",
+    "chunk_id": "chunk_0228"
+  },
+  {
+    "text": "It looks like the `clean_name` method is using a mix of tabs and spaces for indentation, which can lead to inconsistencies. Please standardize the indentation to use either tabs or spaces throughout the method to maintain code clarity and prevent potential issues.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/forms.py@e1cffae5",
+    "chunk_id": "chunk_0229"
+  },
+  {
+    "text": "It looks like the indentation for the `clean_title` method has changed from 4 spaces to 6 spaces, which can affect code readability and consistency. Please revert it back to 4 spaces to maintain uniformity with the rest of the codebase.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/forms.py@e1cffae5",
+    "chunk_id": "chunk_0230"
+  },
+  {
+    "text": "It looks like the indentation in the `ArticleForm` class is inconsistent with the rest of the file; please ensure it uses 4 spaces to maintain uniformity across the codebase.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/forms.py@e1cffae5",
+    "chunk_id": "chunk_0231"
+  },
+  {
+    "text": "I see you've renamed the function to `withinDateRange`. For consistency with Python's naming conventions, it's generally better to stick to snake_case for function names, so I recommend changing it back to `within_date_range`.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@b6ab4b85",
+    "chunk_id": "chunk_0232"
+  },
+  {
+    "text": "It's a common convention in Python to use snake_case for function names, so I recommend renaming `byAuthor` back to `by_author` for consistency with PEP 8 guidelines. This will improve readability and maintainability of the code.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@b6ab4b85",
+    "chunk_id": "chunk_0233"
+  },
+  {
+    "text": "The function name `byAuthor` should be updated to `by_author` to maintain consistency with Python's naming conventions for functions, which typically use snake_case.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@b6ab4b85",
+    "chunk_id": "chunk_0234"
+  },
+  {
+    "text": "Using camelCase for function names is not consistent with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `withinDateRange` to `within_date_range` for better readability and adherence to Python conventions.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@b6ab4b85",
+    "chunk_id": "chunk_0235"
+  },
+  {
+    "text": "The change from `None` to `set()` for the default argument in `yet_another_view` can lead to unexpected behavior, as mutable default arguments can retain changes between function calls. It's better to use `None` and then initialize the set inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/urls.py@4057e12d",
+    "chunk_id": "chunk_0236"
+  },
+  {
+    "text": "Using a mutable default argument like `set()` can lead to unexpected behavior if the function is called multiple times. It’s better to use `None` as the default and initialize the set inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/urls.py@4057e12d",
+    "chunk_id": "chunk_0237"
+  },
+  {
+    "text": "Using a mutable default argument like a list can lead to unexpected behavior, as it retains changes across function calls. Consider using `None` as the default and initializing the list inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/urls.py@4057e12d",
+    "chunk_id": "chunk_0238"
+  },
+  {
+    "text": "It looks like `sys` is imported but not used anywhere in the file. Please remove this import to keep our code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/admin.py@a7fc4283",
+    "chunk_id": "chunk_0239"
+  },
+  {
+    "text": "It looks like the `json` import on line 11 is not being used anywhere in the file. You can safely remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/admin.py@a7fc4283",
+    "chunk_id": "chunk_0240"
+  },
+  {
+    "text": "It looks like the imports for `os` and `sys` on lines 9 and 10 are not being used in the code. Please remove them to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/admin.py@a7fc4283",
+    "chunk_id": "chunk_0241"
+  },
+  {
+    "text": "It looks like the indentation for the `create_user` function is inconsistent with the rest of the file. Please change it back to 4 spaces to maintain uniformity throughout the codebase.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/conftest.py@ba7ee910",
+    "chunk_id": "chunk_0242"
+  },
+  {
+    "text": "It looks like there's a mix of tabs and spaces in the `create_category` function. For consistency and to avoid potential issues, please standardize the indentation to use either tabs or spaces throughout the file—spaces are generally preferred in Python projects.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/conftest.py@ba7ee910",
+    "chunk_id": "chunk_0243"
+  },
+  {
+    "text": "The indentation for the parameters in the `create_category` function is inconsistent; please align them to 4 spaces to maintain uniformity with the rest of the code.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/conftest.py@ba7ee910",
+    "chunk_id": "chunk_0244"
+  },
+  {
+    "text": "It’s a good practice to stick to the PEP 8 naming conventions, which recommend using snake_case for function names in Python. Please rename `configureEnvironment` back to `configure_environment` for consistency with standard conventions.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/wsgi.py@97f2ef33",
+    "chunk_id": "chunk_0245"
+  },
+  {
+    "text": "It looks like the docstring was removed from the function; it's important to keep this documentation to help other developers understand the purpose and usage of the function. Please consider adding it back in to maintain clarity.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@f8397873",
+    "chunk_id": "chunk_0246"
+  },
+  {
+    "text": "The docstring at line 21 is better suited as a single line since it doesn’t require multiple lines for clarity. Consider reverting it to a single line for consistency with the style used in other parts of the project.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@f8397873",
+    "chunk_id": "chunk_0247"
+  },
+  {
+    "text": "The multiline docstring for the `subject` argument could be simplified back to a single line for clarity and consistency with the rest of the argument descriptions. It helps maintain a clean and concise format, especially since it’s a straightforward type annotation.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@f8397873",
+    "chunk_id": "chunk_0248"
+  },
+  {
+    "text": "Using a mutable default argument like `filters={}` can lead to unexpected behavior due to shared state across function calls. Consider using `None` as the default and initializing `filters` inside the function if it’s `None`.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@299552c7",
+    "chunk_id": "chunk_0249"
+  },
+  {
+    "text": "Using a mutable default argument like `filters={}` can lead to unexpected behavior if the function modifies the dictionary. Consider using `None` as the default value and then initializing the dictionary inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@299552c7",
+    "chunk_id": "chunk_0250"
+  },
+  {
+    "text": "Using a mutable default argument like `tags=set()` can lead to unexpected behavior since the same set instance is shared across all calls. Consider using `None` as the default value and initializing `tags` inside the function if it's `None`.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/managers.py@299552c7",
+    "chunk_id": "chunk_0251"
+  },
+  {
+    "text": "It looks like the `os` import isn't being used anywhere in this file. You can safely remove it to keep the code clean and improve readability.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/settings.py@c38547be",
+    "chunk_id": "chunk_0252"
+  },
+  {
+    "text": "It looks like the import statement for `json` on line 3 is not being used anywhere in the file. Consider removing it to keep the code clean and improve readability.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/settings.py@c38547be",
+    "chunk_id": "chunk_0253"
+  },
+  {
+    "text": "It looks like the import statement for `sys` is not being used in this file. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/settings.py@c38547be",
+    "chunk_id": "chunk_0254"
+  },
+  {
+    "text": "Please replace the tabs with spaces in the `handle_article_tags_change` function to maintain consistent indentation throughout the file. This will help improve code readability and prevent potential issues in the future.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/signals.py@04e81594",
+    "chunk_id": "chunk_0255"
+  },
+  {
+    "text": "The indentation for the `generate_article_slug` function should be consistent with the rest of the file; please change it back to 4 spaces to maintain clarity and adherence to our coding style.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/signals.py@04e81594",
+    "chunk_id": "chunk_0256"
+  },
+  {
+    "text": "The indentation in the `generate_article_slug` function should be consistent with the rest of the codebase, which uses 4 spaces. Please update it to maintain uniformity throughout the file.",
+    "category": "indentation",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/signals.py@04e81594",
+    "chunk_id": "chunk_0257"
+  },
+  {
+    "text": "Let's stick with the PEP 8 style guide, which recommends using snake_case for function names in Python. Please rename `testCategoryCreation` back to `test_category_creation` for better consistency and readability.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/test_models.py@edfbcb06",
+    "chunk_id": "chunk_0258"
+  },
+  {
+    "text": "The function name `testSlugGeneration` should be in snake_case to maintain consistency with the naming conventions used in Python. Please rename it to `test_slug_generation`.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/test_models.py@edfbcb06",
+    "chunk_id": "chunk_0259"
+  },
+  {
+    "text": "The function name `test_category_relationship` is correctly using snake_case, which is the standard convention in Python. Please ensure that any future function names remain consistent with this style for better readability and adherence to the convention.",
+    "category": "naming_convention",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/test_models.py@edfbcb06",
+    "chunk_id": "chunk_0260"
+  },
+  {
+    "text": "It looks like the docstring was removed from the `test_valid_form` function. Please consider adding it back to maintain clarity about the purpose of the test and to follow our documentation standards.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/test_forms.py@5cc2ad62",
+    "chunk_id": "chunk_0261"
+  },
+  {
+    "text": "The docstring for `test_empty_form` should remain concise and informative; let's convert it back to a single line or ensure it's properly formatted if it needs to be multi-line. This will improve readability and maintain consistency with the rest of the test cases.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/test_forms.py@5cc2ad62",
+    "chunk_id": "chunk_0262"
+  },
+  {
+    "text": "The docstring on line 9 can be simplified back to a single line for better readability. You can change it to `\"\"\"TestCase for validating ExampleForm behavior.\"\"\"` to maintain clarity without unnecessary formatting.",
+    "category": "documentation_formatting",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/tests/test_forms.py@5cc2ad62",
+    "chunk_id": "chunk_0263"
+  },
+  {
+    "text": "Changing the default argument from `None` to `{}` can lead to unexpected behavior since mutable default arguments can retain changes across function calls. It's better to keep it as `None` and then initialize the dictionary inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@9a99684e",
+    "chunk_id": "chunk_0264"
+  },
+  {
+    "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior if the function modifies it. Consider changing `extra_params` to `None` and initializing it to an empty dictionary inside the function to avoid potential issues.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@9a99684e",
+    "chunk_id": "chunk_0265"
+  },
+  {
+    "text": "Using a mutable default argument like an empty list can lead to unexpected behavior since it persists across function calls. It's safer to use `None` as the default and then initialize the list inside the function if needed. Consider changing it back to `None` and handling it accordingly.",
+    "category": "mutable_default",
+    "source_type": "django_review_comment",
+    "source_path": "kannan-dedsec/synthetic-django/utils/helpers.py@9a99684e",
+    "chunk_id": "chunk_0266"
+  },
+  {
+    "text": "Looks like `os` is imported but not used in this file—can you remove it to keep things clean?",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/users.py@af6d289d",
+    "chunk_id": "chunk_0267"
+  },
+  {
+    "text": "Please remove the unused import of 'os' on line 12—it's not referenced anywhere in this file.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/users.py@af6d289d",
+    "chunk_id": "chunk_0268"
+  },
+  {
+    "text": "The import of 'json' isn't used anywhere in this file—let's remove it to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/users.py@af6d289d",
+    "chunk_id": "chunk_0269"
+  },
+  {
+    "text": "Looks like the indentation in get_current_user switched from 4 spaces to a mix of tabs and spaces—can you standardize it to 4 spaces throughout for consistency and to avoid potential issues?",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/auth.py@98ba1fa9",
+    "chunk_id": "chunk_0270"
+  },
+  {
+    "text": "Noticed the TokenResponse class is using 2-space indentation instead of the project's standard 4 spaces—let's keep it consistent to avoid confusion and maintain readability.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/auth.py@98ba1fa9",
+    "chunk_id": "chunk_0271"
+  },
+  {
+    "text": "The indentation at line 56 is inconsistent with the rest of the function—please revert it back to 4 spaces to maintain readability and follow project style guidelines.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/auth.py@98ba1fa9",
+    "chunk_id": "chunk_0272"
+  },
+  {
+    "text": "Good job keeping naming consistent, but let's stick with snake_case for variable names (e.g., item_id, owner_id) to align with Python conventions and improve readability throughout the codebase.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/crud/item.py@0b936e5b",
+    "chunk_id": "chunk_0273"
+  },
+  {
+    "text": "Let's stick with snake_case for function and argument names to maintain consistency with Python's naming conventions—please revert getItem to get_item and itemId/ownerId to item_id/owner_id.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/crud/item.py@0b936e5b",
+    "chunk_id": "chunk_0274"
+  },
+  {
+    "text": "Please stick to PEP 8 naming conventions—function names and arguments should use snake_case (e.g., create_item, item_data, owner_id) instead of camelCase. This helps maintain consistency throughout the codebase.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/crud/item.py@0b936e5b",
+    "chunk_id": "chunk_0275"
+  },
+  {
+    "text": "The docstring for get_db_session was removed, which makes the documentation inconsistent with db_session_context and harder to follow for new contributors. Please re-add a brief docstring describing its purpose.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/dependencies.py@45cf716e",
+    "chunk_id": "chunk_0276"
+  },
+  {
+    "text": "The multi-line docstring in `db_session_context` needs a blank line after the summary and clearer formatting—let’s follow PEP 257 for readability and consistency.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/dependencies.py@45cf716e",
+    "chunk_id": "chunk_0277"
+  },
+  {
+    "text": "The multi-line docstring in get_current_user is missing a blank line after the summary and the closing quotes are placed incorrectly; please follow PEP 257 formatting for readability and consistency.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/dependencies.py@45cf716e",
+    "chunk_id": "chunk_0278"
+  },
+  {
+    "text": "Using a mutable default argument (`extra_data={}`) in `validate_database_url` can lead to unexpected behavior. Please change the default to `None` and initialize it inside the function.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/config.py@52411efb",
+    "chunk_id": "chunk_0279"
+  },
+  {
+    "text": "Using a mutable default argument like `extra_data={}` in `validate_database_url` can lead to unexpected behavior due to shared state across function calls. Please change it to `extra_data=None` and initialize inside the function.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/config.py@52411efb",
+    "chunk_id": "chunk_0280"
+  },
+  {
+    "text": "Using a mutable default argument like `flags=set()` can lead to unexpected behavior since the same set instance will be shared across all calls to `cast_debug`. Consider initializing it inside the function to avoid this issue, e.g., `flags=None` and then `flags = flags or set()`.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/config.py@52411efb",
+    "chunk_id": "chunk_0281"
+  },
+  {
+    "text": "It looks like both the `os` and `sys` imports on lines 8 and 9 are not being used in this file. Consider removing them to keep the code clean and improve readability.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/crud/user.py@73bf8672",
+    "chunk_id": "chunk_0282"
+  },
+  {
+    "text": "It looks like the `json` import on line 10 is not being used in the file. Consider removing it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/crud/user.py@73bf8672",
+    "chunk_id": "chunk_0283"
+  },
+  {
+    "text": "It looks like the import statement for `os` on line 8 is not being used anywhere in the file. Consider removing it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/crud/user.py@73bf8672",
+    "chunk_id": "chunk_0284"
+  },
+  {
+    "text": "It looks like there's a mix of tabs and spaces in this section of the code. To maintain consistency and prevent potential issues, please replace tabs with spaces throughout the file, especially here in the logger setup.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/middleware.py@d143dc88",
+    "chunk_id": "chunk_0285"
+  },
+  {
+    "text": "The indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file; please revert it to 4 spaces to maintain uniformity and improve readability.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/middleware.py@d143dc88",
+    "chunk_id": "chunk_0286"
+  },
+  {
+    "text": "The indentation for the docstring at line 41 appears to be inconsistent with the rest of the class; please adjust it back to 4 spaces for readability and to maintain our coding standards.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/middleware.py@d143dc88",
+    "chunk_id": "chunk_0287"
+  },
+  {
+    "text": "Consider renaming the function `list_items` to `listItems` to follow the camelCase convention you’ve set in the rest of your code. Consistency in naming conventions helps improve readability and maintainability of the codebase.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@d71f924a",
+    "chunk_id": "chunk_0288"
+  },
+  {
+    "text": "It's great to see the filtering logic implemented here, but please consider renaming the function from `get_item` to `getItem` to maintain consistency with the camelCase naming convention we've established in the project.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@d71f924a",
+    "chunk_id": "chunk_0289"
+  },
+  {
+    "text": "It's great to see your work on the API, but could we stick to the PEP 8 naming conventions for function names? Let's rename `createItem` back to `create_item` to maintain consistency and readability in our codebase.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@d71f924a",
+    "chunk_id": "chunk_0290"
+  },
+  {
+    "text": "It's best to avoid using a mutable default like an empty list for the `tags` parameter, as it can lead to unexpected behavior. Instead, consider setting it to `None` and then initializing it inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a0816b2",
+    "chunk_id": "chunk_0291"
+  },
+  {
+    "text": "It's best to avoid using mutable defaults like lists as function parameters because they can lead to unexpected behavior. Consider changing it to `None` and then initializing the list inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a0816b2",
+    "chunk_id": "chunk_0292"
+  },
+  {
+    "text": "Using a mutable default like an empty dictionary can lead to unexpected behavior when the function is called multiple times. Consider changing the default value of `metadata` to `None` and then initializing it within the function if necessary.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a0816b2",
+    "chunk_id": "chunk_0293"
+  },
+  {
+    "text": "It looks like the `import sys` statement on line 1 is not being used anywhere in this module. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/auth.py@3aedf377",
+    "chunk_id": "chunk_0294"
+  },
+  {
+    "text": "It looks like the import statement for `os` is not being used anywhere in the file. We should remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/auth.py@3aedf377",
+    "chunk_id": "chunk_0295"
+  },
+  {
+    "text": "The import statement for `json` at line 3 isn't being used anywhere in this file. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/auth.py@3aedf377",
+    "chunk_id": "chunk_0296"
+  },
+  {
+    "text": "It looks like the indentation for the `RequestTimingMiddleware` class is inconsistent with the rest of the file, switching from 4 spaces to 2 spaces. Please adjust the indentation to maintain uniformity throughout the codebase.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/middleware.py@6d5071c2",
+    "chunk_id": "chunk_0297"
+  },
+  {
+    "text": "Please use consistent indentation throughout this section; it looks like there's a mix of tabs and spaces which can lead to confusion. Stick to one style, preferably spaces, for better readability and to avoid potential issues with the code execution.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/middleware.py@6d5071c2",
+    "chunk_id": "chunk_0298"
+  },
+  {
+    "text": "The indentation on line 30 appears to be inconsistent with the rest of the file, as it uses 6 spaces instead of the standard 4. Please adjust it to match the existing style for better readability and maintainability.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/middleware.py@6d5071c2",
+    "chunk_id": "chunk_0299"
+  },
+  {
+    "text": "Consider renaming `sample_items` to `sampleItems` for consistency with the camelCase naming convention used throughout the codebase. This will help maintain a uniform style and improve readability.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/test_items.py@8b70029b",
+    "chunk_id": "chunk_0300"
+  },
+  {
+    "text": "It's a good practice to stick to the common naming conventions in Python, which typically prefer snake_case for function names. Consider renaming `asyncClient` to `async_client` for better readability and consistency with PEP 8 guidelines.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/test_items.py@8b70029b",
+    "chunk_id": "chunk_0301"
+  },
+  {
+    "text": "It's best to stick with the snake_case naming convention for test functions in Python. Please rename `testCreateItem` to `test_create_item` to maintain consistency with PEP 8 guidelines.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/test_items.py@8b70029b",
+    "chunk_id": "chunk_0302"
+  },
+  {
+    "text": "It looks like the docstring for this function was removed. Please consider adding a new docstring to explain what the function does, its parameters, and the return value, as it helps with code readability and maintainability.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/test_items.py@cde69a3e",
+    "chunk_id": "chunk_0303"
+  },
+  {
+    "text": "Please convert the single-line docstring to a properly formatted multi-line docstring by adding a blank line after the opening triple quotes. This will enhance readability and maintain consistency with PEP 257 conventions.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/test_items.py@cde69a3e",
+    "chunk_id": "chunk_0304"
+  },
+  {
+    "text": "The docstring format here needs to be fixed; please ensure that there's a blank line before the multi-line docstring for better readability and adherence to conventions.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/test_items.py@cde69a3e",
+    "chunk_id": "chunk_0305"
+  },
+  {
+    "text": "Using a mutable default argument like `session_data={}` can lead to unexpected behavior since the same instance is shared across function calls. Consider using `None` as the default and initializing the dictionary inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/conftest.py@9211ba92",
+    "chunk_id": "chunk_0306"
+  },
+  {
+    "text": "Using a mutable default argument like `{}` can lead to unexpected behavior, as it persists across function calls. Consider using `None` as the default and then initializing the dictionary inside the function to avoid any potential issues.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/conftest.py@9211ba92",
+    "chunk_id": "chunk_0307"
+  },
+  {
+    "text": "Using an empty dictionary as a default argument can lead to unexpected behavior, as it is mutable and can be modified across function calls. Consider changing the default to `None` and then initializing the dictionary inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/tests/conftest.py@9211ba92",
+    "chunk_id": "chunk_0308"
+  },
+  {
+    "text": "It looks like the `json` import on line 3 isn't being used anywhere in the file. Consider removing it to keep the code clean and avoid any confusion.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/models/user.py@d5687e97",
+    "chunk_id": "chunk_0309"
+  },
+  {
+    "text": "It looks like the import of `sys` on line 1 isn't being used anywhere in this file. You can safely remove it to keep the code clean and improve readability.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/models/user.py@d5687e97",
+    "chunk_id": "chunk_0310"
+  },
+  {
+    "text": "It looks like the import statement for `os` is not being used anywhere in this file. You can safely remove it to keep the code clean and avoid unnecessary imports.",
+    "category": "unused_import",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/models/user.py@d5687e97",
+    "chunk_id": "chunk_0311"
+  },
+  {
+    "text": "It looks like the indentation in the `UserBase` class has changed from 4 spaces to 2 spaces. Consistency in indentation is crucial for readability and to avoid potential issues, so please ensure that it remains at 4 spaces throughout the file.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/schemas/user.py@d834f78f",
+    "chunk_id": "chunk_0312"
+  },
+  {
+    "text": "The indentation for the `email` field in the UserCreate class is inconsistent with the rest of the codebase; please align it to 4 spaces to maintain uniformity.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/schemas/user.py@d834f78f",
+    "chunk_id": "chunk_0313"
+  },
+  {
+    "text": "There's a mix of tabs and spaces for indentation around line 38. To maintain consistency and avoid potential issues, please standardize to either tabs or spaces throughout the file.",
+    "category": "indentation",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/schemas/user.py@d834f78f",
+    "chunk_id": "chunk_0314"
+  },
+  {
+    "text": "For consistency with our naming conventions, please consider renaming `createItem` to `create_item` to follow the snake_case style commonly used in Python. This will help maintain readability and uniformity across the codebase.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a190e3f",
+    "chunk_id": "chunk_0315"
+  },
+  {
+    "text": "It's generally more Pythonic to use snake_case for function names, so please consider renaming `listItems` back to `list_items` for consistency with PEP 8 guidelines.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a190e3f",
+    "chunk_id": "chunk_0316"
+  },
+  {
+    "text": "Let's stick to the PEP 8 style guide for function naming and use `get_item` instead of `getItem` for consistency with the rest of the codebase. This will help maintain readability and adherence to Python conventions.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a190e3f",
+    "chunk_id": "chunk_0317"
+  },
+  {
+    "text": "Let's stick to the Python naming conventions and rename `updateItem` to `update_item` to maintain consistency with the rest of the codebase. This will help improve readability and maintainability.",
+    "category": "naming_convention",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/routers/items.py@5a190e3f",
+    "chunk_id": "chunk_0318"
+  },
+  {
+    "text": "Consider adding a docstring to the `validate_secret_key` method to explain its purpose and the expected input. This will improve clarity for anyone reading the code in the future.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/config.py@8e9c655b",
+    "chunk_id": "chunk_0319"
+  },
+  {
+    "text": "It looks like the docstring for the `get_settings` function was removed, which can hinder understanding of its purpose. Please consider adding a clear docstring to describe its functionality and expected behavior.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/config.py@8e9c655b",
+    "chunk_id": "chunk_0320"
+  },
+  {
+    "text": "The multi-line docstring for the AppSettings class seems unnecessary and is not properly formatted; consider reverting it to a single-line docstring for better readability and consistency.",
+    "category": "documentation_formatting",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/config.py@8e9c655b",
+    "chunk_id": "chunk_0321"
+  },
+  {
+    "text": "Using a mutable default argument like `values: List[str] = []` can lead to unexpected behavior due to shared state between calls. Consider using `None` as the default and initializing the list inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/schemas/item.py@877188ef",
+    "chunk_id": "chunk_0322"
+  },
+  {
+    "text": "Using a mutable default argument like `values: List[str] = []` can lead to unexpected behavior since the same list instance will be shared across all calls. Consider using `None` as the default and initializing the list inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/schemas/item.py@877188ef",
+    "chunk_id": "chunk_0323"
+  },
+  {
+    "text": "Using a mutable default argument like `values: List[str] = []` can lead to unexpected behavior, as the same list instance is shared across all calls. Consider using `None` as the default and initializing the list inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "fastapi_review_comment",
+    "source_path": "kannan-dedsec/synthetic-fastapi/schemas/item.py@877188ef",
+    "chunk_id": "chunk_0324"
+  },
+  {
+    "text": "It looks like the `os` import on line 5 isn't being used anywhere in the file. Please remove it to keep the code clean and avoid confusion.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/models/post.py@c7c96a91",
+    "chunk_id": "chunk_0325"
+  },
+  {
+    "text": "The import of `os` and `sys` seems unnecessary since they are not being used in this file. Consider removing these imports to keep the code clean and improve readability.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/models/post.py@c7c96a91",
+    "chunk_id": "chunk_0326"
+  },
+  {
+    "text": "The import statement for `os` on line 8 is not used anywhere in the file; please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/models/post.py@c7c96a91",
+    "chunk_id": "chunk_0327"
+  },
+  {
+    "text": "It looks like the indentation for the `paginate_query` function has been changed to 6 spaces, which is inconsistent with the rest of the codebase that follows 4 spaces. Please revert it to maintain uniformity and improve readability.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/helpers.py@e07b065a",
+    "chunk_id": "chunk_0328"
+  },
+  {
+    "text": "It looks like the indentation of the `format_datetime` function has changed from 4 spaces to 2 spaces. Consistency in indentation is crucial for readability, so please revert it back to 4 spaces to align with the rest of the code style.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/helpers.py@e07b065a",
+    "chunk_id": "chunk_0329"
+  },
+  {
+    "text": "It looks like there's a mix of tabs and spaces in the `send_email` function, which can lead to inconsistent formatting and make the code harder to read. Please standardize the indentation to use either tabs or spaces consistently throughout the function.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/helpers.py@e07b065a",
+    "chunk_id": "chunk_0330"
+  },
+  {
+    "text": "It's a good practice to use snake_case for function names in Python to maintain consistency with PEP 8 guidelines. Please rename `manageUsers` to `manage_users` to align with the convention.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/blueprints/admin.py@f13880ed",
+    "chunk_id": "chunk_0331"
+  },
+  {
+    "text": "Let's rename the function `toggle_user_activation` to `toggleUserActivation` to maintain consistency with camelCase naming conventions used in the rest of the code. This will improve readability and adherence to the project's coding style.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/blueprints/admin.py@f13880ed",
+    "chunk_id": "chunk_0332"
+  },
+  {
+    "text": "Let's stick with snake_case for variable names to maintain consistency with Python conventions. Please rename `activeUsers` to `active_users` for better readability.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/blueprints/admin.py@f13880ed",
+    "chunk_id": "chunk_0333"
+  },
+  {
+    "text": "It's important to maintain docstrings for public functions like `send_email` to ensure clarity and understanding of the function's purpose and parameters. Please consider adding a docstring back in to provide users with necessary context and usage details.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/helpers.py@c7bf7acd",
+    "chunk_id": "chunk_0334"
+  },
+  {
+    "text": "The docstring formatting could be improved for better readability. Please add a blank line after the summary to adhere to the conventions for multi-line docstrings.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/helpers.py@c7bf7acd",
+    "chunk_id": "chunk_0335"
+  },
+  {
+    "text": "The docstring formatting needs a slight adjustment; please add a blank line after the summary to improve readability. This will help maintain consistency with the style guidelines and make it easier for others to navigate the documentation.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/helpers.py@c7bf7acd",
+    "chunk_id": "chunk_0336"
+  },
+  {
+    "text": "Using a mutable default argument like `attempts=set()` can lead to unexpected behavior, as the same set instance will be shared across all calls to the function. It's better to use `None` as the default and then initialize `attempts` inside the function if it's `None`. This will prevent any unintended side effects between test runs.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@d33d01b1",
+    "chunk_id": "chunk_0337"
+  },
+  {
+    "text": "Using a mutable default argument like an empty list can lead to unexpected behavior, especially if the fixture is used in multiple tests. Consider changing the default to None and handling it inside the function to avoid potential issues.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@d33d01b1",
+    "chunk_id": "chunk_0338"
+  },
+  {
+    "text": "Using a mutable default like `{}` can lead to unexpected behavior in your tests. Consider changing it to `None` and initializing the default inside the function to ensure each test run starts with a fresh state.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@d33d01b1",
+    "chunk_id": "chunk_0339"
+  },
+  {
+    "text": "It looks like the `import os` statement at the top of this file isn't being used anywhere in the code. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/forms/auth.py@082734f7",
+    "chunk_id": "chunk_0340"
+  },
+  {
+    "text": "It looks like the `json` import on line 1 is not being used anywhere in this file. Please remove it to keep the code clean and improve readability.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/forms/auth.py@082734f7",
+    "chunk_id": "chunk_0341"
+  },
+  {
+    "text": "It looks like the import of `sys` on line 2 is not being used anywhere in this module. You can safely remove it to keep the code clean and avoid unnecessary imports.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/forms/auth.py@082734f7",
+    "chunk_id": "chunk_0342"
+  },
+  {
+    "text": "I noticed that the indentation for the lines in the `register` function has changed from 4 spaces to 2 spaces. Please ensure consistent indentation throughout the file to maintain readability and avoid potential issues with code execution.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/auth.py@0f99e426",
+    "chunk_id": "chunk_0343"
+  },
+  {
+    "text": "It looks like the indentation on line 41 is inconsistent with the rest of the function, using 6 spaces instead of 4. Please adjust it to maintain uniformity throughout the code for better readability.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/auth.py@0f99e426",
+    "chunk_id": "chunk_0344"
+  },
+  {
+    "text": "Please revert the indentation of the `username` field back to 4 spaces to maintain consistency with the rest of the codebase. This helps improve readability and adheres to our style guidelines.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/auth.py@0f99e426",
+    "chunk_id": "chunk_0345"
+  },
+  {
+    "text": "It's a good practice to follow the PEP 8 naming conventions, which recommend using snake_case for function names in Python. Please rename `seedData` back to `seed_data` for consistency and clarity.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/cli.py@9b5ea265",
+    "chunk_id": "chunk_0346"
+  },
+  {
+    "text": "It's best to stick to the PEP 8 naming conventions for function names, which recommend using snake_case. Please rename `initDb` back to `init_db` to maintain consistency with the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/cli.py@9b5ea265",
+    "chunk_id": "chunk_0347"
+  },
+  {
+    "text": "Let's stick to the Python naming conventions and use `create_admin` instead of `createAdmin` for the function name to maintain consistency and improve readability.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/cli.py@9b5ea265",
+    "chunk_id": "chunk_0348"
+  },
+  {
+    "text": "It looks like the docstring for the `test_about_page_contains_contact_info` function was removed, which makes it harder to understand the purpose of the test. Please consider adding a brief docstring to explain what this test is verifying.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_main.py@6e910a1e",
+    "chunk_id": "chunk_0349"
+  },
+  {
+    "text": "It's important to include a docstring for the `test_dashboard_requires_login` function to clearly describe its purpose and expected behavior. This will help others understand the test at a glance and improve code maintainability. Please add a brief docstring to enhance clarity.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_main.py@6e910a1e",
+    "chunk_id": "chunk_0350"
+  },
+  {
+    "text": "The docstring for `test_index_page_has_navigation` is clear, but it would be better to use the imperative mood for consistency with other test docstrings. Consider rephrasing it to \"Test that the index page contains navigation links.\" for improved clarity and alignment.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_main.py@6e910a1e",
+    "chunk_id": "chunk_0351"
+  },
+  {
+    "text": "Using a mutable default argument like `posts_list=[]` can lead to unexpected behavior since the same list instance will be used across multiple calls. Consider using `None` as the default and initializing the list inside the function instead.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/blueprints/blog.py@073e46ce",
+    "chunk_id": "chunk_0352"
+  },
+  {
+    "text": "Using a mutable default argument like `updates={}` can lead to unexpected behavior since the same dictionary is shared across all function calls. Consider setting `updates` to `None` by default and then initializing it to a new dictionary inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/blueprints/blog.py@073e46ce",
+    "chunk_id": "chunk_0353"
+  },
+  {
+    "text": "Using a mutable default like `post=None` can lead to unexpected behavior if the function is called multiple times. It's safer to use `post` as a required parameter or set it to `None` inside the function body if needed.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/blueprints/blog.py@073e46ce",
+    "chunk_id": "chunk_0354"
+  },
+  {
+    "text": "It looks like the `os` and `sys` imports on lines 9 and 10 are unused in this file. If you don't need them, please consider removing them to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/validators.py@30acceab",
+    "chunk_id": "chunk_0355"
+  },
+  {
+    "text": "It looks like the `os` import on line 8 is unused in this file; consider removing it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/validators.py@30acceab",
+    "chunk_id": "chunk_0356"
+  },
+  {
+    "text": "It looks like the import for `os` is not being used in this file. If it's not needed, please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/validators.py@30acceab",
+    "chunk_id": "chunk_0357"
+  },
+  {
+    "text": "It looks like the indentation for the `app` fixture has been changed to 2 spaces. Please revert it back to 4 spaces to maintain consistency with the rest of the codebase.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_auth.py@4c8f0f10",
+    "chunk_id": "chunk_0358"
+  },
+  {
+    "text": "Please ensure consistent indentation throughout the file. The `test_register` function should be aligned with the rest of the test functions, using 4 spaces instead of 6.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_auth.py@4c8f0f10",
+    "chunk_id": "chunk_0359"
+  },
+  {
+    "text": "Please ensure consistent indentation throughout the file; I see a mix of tabs and spaces in the `test_register` function. This can lead to confusion and potential errors, so it's best to stick to one style—typically, using spaces is preferred in Python projects.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_auth.py@4c8f0f10",
+    "chunk_id": "chunk_0360"
+  },
+  {
+    "text": "Function names in Python should follow snake_case, not camelCase. Please rename `setupDatabase` to `setup_database` to adhere to PEP 8 naming conventions.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@50e0ffed",
+    "chunk_id": "chunk_0361"
+  },
+  {
+    "text": "Python conventionally uses snake_case for function names, especially in tests. Consider renaming `testUserCreation` to `test_user_creation` for consistency with the rest of the codebase and PEP 8 guidelines.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@50e0ffed",
+    "chunk_id": "chunk_0362"
+  },
+  {
+    "text": "Python conventionally uses snake_case for function names. Renaming `setup_database` to `setupDatabase` introduces inconsistency with PEP 8 style guidelines; consider reverting to `setup_database` for clarity and consistency with the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@50e0ffed",
+    "chunk_id": "chunk_0363"
+  },
+  {
+    "text": "Python typically uses snake_case for variable names, so renaming `user` to `user_instance` would align better with PEP 8 conventions. Consider updating this for consistency with the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@50e0ffed",
+    "chunk_id": "chunk_0364"
+  },
+  {
+    "text": "The docstring format is off here—single-line docstrings should stay on one line, or if multi-line, include a blank line after the summary for readability.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@a88cc66a",
+    "chunk_id": "chunk_0365"
+  },
+  {
+    "text": "The function's purpose isn't immediately clear without the docstring—consider adding a short one to explain its intent, especially since this is test code and clarity is crucial for maintainability.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@a88cc66a",
+    "chunk_id": "chunk_0366"
+  },
+  {
+    "text": "The initialization of `db` here is fine, but it seems the multi-line docstring formatting is off. Ensure the closing triple quotes are on their own line to maintain consistent and readable formatting.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/test_models.py@a88cc66a",
+    "chunk_id": "chunk_0367"
+  },
+  {
+    "text": "The default value for 'allowed_extensions' should not be a mutable set; consider using None and initializing it inside the function to avoid unexpected behavior when the function is called multiple times.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/validators.py@7dd1a28e",
+    "chunk_id": "chunk_0368"
+  },
+  {
+    "text": "Using a mutable default argument like `allowed_domains: List[str] = []` can lead to unexpected behavior—it's safer to use `None` as the default and initialize the list inside the function.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/validators.py@7dd1a28e",
+    "chunk_id": "chunk_0369"
+  },
+  {
+    "text": "Using a mutable default argument like `errors=[]` can lead to unexpected behavior because the list persists across function calls. Consider using `None` as the default value and initializing the list inside the function instead.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/utils/validators.py@7dd1a28e",
+    "chunk_id": "chunk_0370"
+  },
+  {
+    "text": "Looks like the import for sys isn't being used in this file—let's remove it to keep things tidy.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/cli.py@2bada8d3",
+    "chunk_id": "chunk_0371"
+  },
+  {
+    "text": "The import for 'json' appears to be unused in this file—let's remove it to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/cli.py@2bada8d3",
+    "chunk_id": "chunk_0372"
+  },
+  {
+    "text": "The import of 'os' isn't used anywhere in the file—let's remove it to keep things clean.",
+    "category": "unused_import",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/cli.py@2bada8d3",
+    "chunk_id": "chunk_0373"
+  },
+  {
+    "text": "Looks like the indentation was changed to 2 spaces here—let's stick to 4 spaces throughout the project for consistency and to avoid potential syntax errors.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/conftest.py@3f52d861",
+    "chunk_id": "chunk_0374"
+  },
+  {
+    "text": "Please switch the indentation in the sample_user fixture block back to spaces to stay consistent with the rest of the file and PEP8 guidelines. Mixing tabs and spaces can cause unexpected issues and reduce code readability.",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/conftest.py@3f52d861",
+    "chunk_id": "chunk_0375"
+  },
+  {
+    "text": "The indentation for the db fixture block doesn’t match the rest of the file—can we revert it back to 4 spaces for consistency and readability?",
+    "category": "indentation",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/tests/conftest.py@3f52d861",
+    "chunk_id": "chunk_0376"
+  },
+  {
+    "text": "Let's stick to snake_case for variable names (i.e., `posts_data`) to be consistent with Python conventions and the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@01f8ff1a",
+    "chunk_id": "chunk_0377"
+  },
+  {
+    "text": "Please stick with snake_case for variable names like 'posts_data' to maintain consistency with Python conventions throughout the codebase.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@01f8ff1a",
+    "chunk_id": "chunk_0378"
+  },
+  {
+    "text": "Python convention favors snake_case for function names, so please revert `getPosts` back to `get_posts` for consistency with PEP 8 and the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@01f8ff1a",
+    "chunk_id": "chunk_0379"
+  },
+  {
+    "text": "Please add a docstring to the create_post function describing its purpose and expected input/output; this will help with maintainability and clarity for other contributors.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@0496b884",
+    "chunk_id": "chunk_0380"
+  },
+  {
+    "text": "The docstring formatting in get_user isn't consistent with PEP 257—please move the closing quotes to their own line and add a blank line after the summary for readability.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@0496b884",
+    "chunk_id": "chunk_0381"
+  },
+  {
+    "text": "The multi-line docstring for get_users is missing a blank line after the summary, as per PEP 257. Please add a blank line between the summary and the detailed description for clarity.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@0496b884",
+    "chunk_id": "chunk_0382"
+  },
+  {
+    "text": "The multi-line docstring in get_posts should include a blank line after the summary line for proper formatting—please update to follow PEP 257 conventions.",
+    "category": "documentation_formatting",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/views/api.py@0496b884",
+    "chunk_id": "chunk_0383"
+  },
+  {
+    "text": "Using a mutable default argument like `blueprints: list = []` can lead to unexpected behavior since the same list instance is shared across function calls. Consider using `None` as the default and initializing the list inside the function instead.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/app.py@8f045185",
+    "chunk_id": "chunk_0384"
+  },
+  {
+    "text": "Using a mutable default argument like `data: set = set()` can lead to unexpected behavior since the same set instance is shared across function calls. It's safer to use `None` as the default and initialize the set inside the function body.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/app.py@8f045185",
+    "chunk_id": "chunk_0385"
+  },
+  {
+    "text": "Using a mutable default argument like `options: dict = {}` can lead to unexpected behavior since the same dictionary will be shared across function calls. It's safer to use `None` as the default and initialize the dict inside the function.",
+    "category": "mutable_default",
+    "source_type": "flask_review_comment",
+    "source_path": "kannan-dedsec/synthetic-flask/app.py@8f045185",
+    "chunk_id": "chunk_0386"
+  },
+  {
+    "text": "It looks like the `import re` statement is not being used anywhere in the code. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_validator.py@2b0b0e30",
+    "chunk_id": "chunk_0387"
+  },
+  {
+    "text": "It looks like the `sys` import is not being used in this file. Please remove it to keep the code clean and avoid unnecessary clutter.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_validator.py@2b0b0e30",
+    "chunk_id": "chunk_0388"
+  },
+  {
+    "text": "It looks like the import statement for `os` is not being used in this file. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_validator.py@2b0b0e30",
+    "chunk_id": "chunk_0389"
+  },
+  {
+    "text": "It looks like there's a mix of tabs and spaces for indentation in the `check_unique_columns` function, which can lead to issues with code readability and consistency. Please standardize the indentation to use either tabs or spaces throughout the function.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_validator.py@c9069393",
+    "chunk_id": "chunk_0390"
+  },
+  {
+    "text": "The indentation in the `check_schema` function appears to have changed from 4 spaces to 2 spaces, which can lead to inconsistencies in the code style. Please standardize the indentation to maintain readability and consistency throughout the file.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_validator.py@c9069393",
+    "chunk_id": "chunk_0391"
+  },
+  {
+    "text": "The indentation in the `validate_ranges` function seems inconsistent; please align it to 4 spaces for better readability and to maintain consistency with the rest of the code.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_validator.py@c9069393",
+    "chunk_id": "chunk_0392"
+  },
+  {
+    "text": "Consider renaming `inner_merge` to `innerMerge` to maintain consistency with the camelCase naming convention used elsewhere in the codebase. This will enhance readability and ensure a uniform style throughout the project.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/merge_operations.py@9a009281",
+    "chunk_id": "chunk_0393"
+  },
+  {
+    "text": "Consider using snake_case for function names in line with Python's naming conventions, so renaming `concatFrames` to `concat_frames` would enhance readability and maintain consistency throughout the codebase.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/merge_operations.py@9a009281",
+    "chunk_id": "chunk_0394"
+  },
+  {
+    "text": "It's a good practice to maintain consistent naming conventions across your codebase. Please consider renaming `leftJoin` to `left_join` to align with the PEP 8 style guide's recommendations for function names.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/merge_operations.py@9a009281",
+    "chunk_id": "chunk_0395"
+  },
+  {
+    "text": "The docstring for `group_and_transform` could be improved for clarity; consider maintaining it as a single line or using a consistent format for multi-line docstrings, such as a summary line followed by a more detailed description. This will enhance readability and maintainability.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/groupby_operations.py@8f2e36dc",
+    "chunk_id": "chunk_0396"
+  },
+  {
+    "text": "The docstring for `group_ranking` could benefit from being reformatted back to a single line for clarity and conciseness, as multi-line docstrings can make it harder to quickly understand the purpose of the function at a glance. Consider keeping it more streamlined while still providing essential information.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/groupby_operations.py@8f2e36dc",
+    "chunk_id": "chunk_0397"
+  },
+  {
+    "text": "The docstring is missing for the `apply_custom_func` method, which makes it harder for users to understand its purpose and usage. Please add a docstring that describes the function's parameters, return value, and any important details to improve clarity and maintainability.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/groupby_operations.py@8f2e36dc",
+    "chunk_id": "chunk_0398"
+  },
+  {
+    "text": "Changing the default for `filter_func` from `None` to an empty list might lead to unexpected behavior if a user modifies the list in place. It would be safer to keep it as `None` and handle the default case inside the function to avoid potential side effects.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/groupby_operations.py@5f87b27e",
+    "chunk_id": "chunk_0399"
+  },
+  {
+    "text": "Changing the default value of `group_by_cols` from `None` to an empty list (`[]`) can lead to unexpected behavior since mutable default arguments can be modified by the caller. It would be safer to keep it as `None` and then initialize it to an empty list within the function if needed.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/groupby_operations.py@5f87b27e",
+    "chunk_id": "chunk_0400"
+  },
+  {
+    "text": "It looks like you're adding `extra_params` with a default empty dictionary to the `apply_custom_func`, but it's not currently being used within the function. Consider either implementing its usage for better flexibility or removing it if it's not necessary.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/groupby_operations.py@5f87b27e",
+    "chunk_id": "chunk_0401"
+  },
+  {
+    "text": "It looks like both `os` and `sys` imports on lines 8 and 9 are not being used in the code. Consider removing them to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_transformer.py@33ee7f13",
+    "chunk_id": "chunk_0402"
+  },
+  {
+    "text": "It looks like the `import os` statement on line 8 is not being used anywhere in this file. Consider removing it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_transformer.py@33ee7f13",
+    "chunk_id": "chunk_0403"
+  },
+  {
+    "text": "It looks like you've imported `json` but aren't using it anywhere in the code. Consider removing this import to keep the code clean and avoid confusion.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_transformer.py@33ee7f13",
+    "chunk_id": "chunk_0404"
+  },
+  {
+    "text": "It looks like you're mixing tabs and spaces for indentation in `memory_optimize_categories`. To maintain consistency and avoid potential parsing issues, stick to using spaces throughout the file.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/categorical_data.py@2d9d4651",
+    "chunk_id": "chunk_0405"
+  },
+  {
+    "text": "The indentation inside the `encode_categories` function is inconsistent with the rest of the file's 4-space standard. Please adjust it to maintain consistency and readability.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/categorical_data.py@2d9d4651",
+    "chunk_id": "chunk_0406"
+  },
+  {
+    "text": "The indentation on line 23 uses 6 spaces instead of 4, which is inconsistent with the rest of the file and Python's style guide. Please adjust it to match the standard 4-space indentation.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/categorical_data.py@2d9d4651",
+    "chunk_id": "chunk_0407"
+  },
+  {
+    "text": "Python conventionally uses snake_case for function names. Renaming 'grouped_agg' to 'groupedAgg' goes against PEP 8 guidelines and could make the code less consistent with the rest of the project. Consider reverting to 'grouped_agg' for clarity and consistency.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@8680f597",
+    "chunk_id": "chunk_0408"
+  },
+  {
+    "text": "Python typically follows snake_case for naming variables and parameters. Consider renaming `groupBy` back to `group_by` to align with PEP 8 conventions and maintain consistency with the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@8680f597",
+    "chunk_id": "chunk_0409"
+  },
+  {
+    "text": "Python's naming convention for functions typically follows snake_case, not camelCase. Consider renaming `summaryStats` back to `summary_stats` to align with PEP 8 guidelines and maintain consistency with the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@8680f597",
+    "chunk_id": "chunk_0410"
+  },
+  {
+    "text": "Please add a docstring to load_json describing its purpose, parameters, and return value—this will help with maintainability and make the function clearer for future contributors.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_loader.py@3dd3800a",
+    "chunk_id": "chunk_0411"
+  },
+  {
+    "text": "The docstring for `load_csv` is missing a blank line after the summary, which is required for proper formatting. Please add a blank line to separate the summary from the detailed description.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_loader.py@3dd3800a",
+    "chunk_id": "chunk_0412"
+  },
+  {
+    "text": "The docstring for `load_excel` is improperly formatted—closing quotes should be on the same line for a single-line docstring. Consider fixing this to follow PEP 257 and improve readability.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_loader.py@3dd3800a",
+    "chunk_id": "chunk_0413"
+  },
+  {
+    "text": "Using a mutable default argument like 'notes={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. It's better to default 'notes' to None and initialize it inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/performance_utils.py@62cb5110",
+    "chunk_id": "chunk_0414"
+  },
+  {
+    "text": "Using a mutable default argument like 'options={}' in 'chunked_processing' can lead to unexpected behavior due to argument state persisting across function calls; consider using 'options=None' and initializing the dict inside the function instead.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/performance_utils.py@62cb5110",
+    "chunk_id": "chunk_0415"
+  },
+  {
+    "text": "Using a mutable default argument like `extra_columns=[]` can lead to unexpected behavior; consider setting the default to `None` and initializing it within the function.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/performance_utils.py@62cb5110",
+    "chunk_id": "chunk_0416"
+  },
+  {
+    "text": "Looks like the import of 'os' isn't used anywhere in this file—let's remove it to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_transformer.py@bdba5f1a",
+    "chunk_id": "chunk_0417"
+  },
+  {
+    "text": "Looks like the import of sys isn't used in this file—let's remove it to keep things clean.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_transformer.py@bdba5f1a",
+    "chunk_id": "chunk_0418"
+  },
+  {
+    "text": "The import of 're' on line 3 isn't used anywhere in the file—let's remove it to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_transformer.py@bdba5f1a",
+    "chunk_id": "chunk_0419"
+  },
+  {
+    "text": "Looks like the indentation in the split_columns function mixes tabs and spaces—let's stick to 4 spaces throughout for consistency and to avoid potential syntax errors.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/string_operations.py@131cdf98",
+    "chunk_id": "chunk_0420"
+  },
+  {
+    "text": "Noticed the docstring indentation switches from 4 to 2 spaces here—let's keep it consistent with the rest of the codebase for readability.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/string_operations.py@131cdf98",
+    "chunk_id": "chunk_0421"
+  },
+  {
+    "text": "Noticed the indentation changed from 4 to 6 spaces in the extract_patterns function—can you revert this to 4 spaces for consistency with the rest of the codebase?",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/string_operations.py@131cdf98",
+    "chunk_id": "chunk_0422"
+  },
+  {
+    "text": "For consistency with PEP 8 naming conventions, please use snake_case for function names—could you rename `loadCsv` to `load_csv`?",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_loader.py@327876c0",
+    "chunk_id": "chunk_0423"
+  },
+  {
+    "text": "Let's stick with Python's naming conventions and use snake_case for function names—can you rename 'loadExcel' back to 'load_excel' for consistency?",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_loader.py@327876c0",
+    "chunk_id": "chunk_0424"
+  },
+  {
+    "text": "Let's stick with snake_case for parameter names to maintain Python conventions—can you rename sheetName back to sheet_name?",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/data_loader.py@327876c0",
+    "chunk_id": "chunk_0425"
+  },
+  {
+    "text": "Looks like the docstring for `to_excel_formatted` was removed—can you add it back in to maintain clarity on the function's purpose and parameters? This helps with code readability and downstream documentation.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/io_operations.py@fe4699e4",
+    "chunk_id": "chunk_0426"
+  },
+  {
+    "text": "Thanks for updating the docstring in `to_sql_chunked`, but multi-line docstrings should include a blank line after the summary line for readability and PEP 257 compliance. Could you adjust the formatting accordingly?",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/io_operations.py@fe4699e4",
+    "chunk_id": "chunk_0427"
+  },
+  {
+    "text": "The docstring for to_parquet should include a blank line after the summary and place the closing quotes on a new line to follow PEP 257 for better readability.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/io_operations.py@fe4699e4",
+    "chunk_id": "chunk_0428"
+  },
+  {
+    "text": "Using a mutable default argument for `extra_labels` can lead to unexpected behavior since the same list instance is shared across calls; consider setting the default to `None` and initializing it inside the function.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@59101635",
+    "chunk_id": "chunk_0429"
+  },
+  {
+    "text": "Using a mutable default argument like 'cache=set()' can lead to unexpected behavior because the same set is shared across all calls—consider defaulting to None and initializing the set inside the function.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@59101635",
+    "chunk_id": "chunk_0430"
+  },
+  {
+    "text": "Using a mutable default argument like 'options={}' can lead to unexpected behavior since the same dictionary will be shared across function calls. Consider setting the default to None and initializing a new dict inside the function.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@59101635",
+    "chunk_id": "chunk_0431"
+  },
+  {
+    "text": "It looks like `sys` is imported but not used anywhere in the file—let's remove it to keep the imports clean.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/string_operations.py@050b8e5c",
+    "chunk_id": "chunk_0432"
+  },
+  {
+    "text": "The import of 'json' on line 3 isn't used anywhere in the file—let's remove it to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/string_operations.py@050b8e5c",
+    "chunk_id": "chunk_0433"
+  },
+  {
+    "text": "The import of 'os' is unused and can be safely removed to keep the code clean.",
+    "category": "unused_import",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/string_operations.py@050b8e5c",
+    "chunk_id": "chunk_0434"
+  },
+  {
+    "text": "Indentation for the `with pd.ExcelWriter...` block should be consistent with the rest of the project (typically 4 spaces); using 6 spaces here could cause confusion and affect readability.",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/io_operations.py@bbc176fa",
+    "chunk_id": "chunk_0435"
+  },
+  {
+    "text": "Looks like the indentation for the df.to_parquet block is set to 2 spaces instead of the standard 4—can you please update it for consistency with the rest of the file?",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/io_operations.py@bbc176fa",
+    "chunk_id": "chunk_0436"
+  },
+  {
+    "text": "Looks like there's a mix of tabs and spaces in the indentation for the inner block of the to_sql_chunked function—can you standardize on spaces to keep things consistent with the rest of the file?",
+    "category": "indentation",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/io_operations.py@bbc176fa",
+    "chunk_id": "chunk_0437"
+  },
+  {
+    "text": "Consider renaming the parameter `group_by` to `groupBy` for consistency with the camelCase style used throughout the codebase. This will help maintain a uniform style and improve readability.",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@037d8411",
+    "chunk_id": "chunk_0438"
+  },
+  {
+    "text": "Let's stick with snake_case for function names to follow Python's naming conventions—can you rename 'summaryStats' back to 'summary_stats'?",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@037d8411",
+    "chunk_id": "chunk_0439"
+  },
+  {
+    "text": "Let's stick with snake_case for function names to maintain consistency with Python conventions; can you rename 'groupedAgg' back to 'grouped_agg'?",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@037d8411",
+    "chunk_id": "chunk_0440"
+  },
+  {
+    "text": "Let's stick with snake_case for parameter names—can we rename `numericCols` back to `numeric_cols` for consistency with Python conventions?",
+    "category": "naming_convention",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/aggregations.py@037d8411",
+    "chunk_id": "chunk_0441"
+  },
+  {
+    "text": "It looks like the docstring for the `drop_incomplete` function was removed entirely; please consider adding a new docstring to explain the function's purpose and parameters. This will help maintain clarity for anyone using or modifying the code in the future.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/missing_data.py@5d8e0316",
+    "chunk_id": "chunk_0442"
+  },
+  {
+    "text": "Please add a blank line after the summary of your docstring in the `fill_strategies` function to improve readability and conform to PEP 257 conventions.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/missing_data.py@5d8e0316",
+    "chunk_id": "chunk_0443"
+  },
+  {
+    "text": "The docstring for the `detect_missing` function should be reformatted to include a blank line after the summary for better readability. Please update it to follow the standard formatting conventions.",
+    "category": "documentation_formatting",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/missing_data.py@5d8e0316",
+    "chunk_id": "chunk_0444"
+  },
+  {
+    "text": "It looks like setting the `levels` parameter default to an empty list `[]` in the `create_multi_index` function could lead to unexpected behavior if the caller doesn't provide a value. Consider using `None` as the default and then initializing `levels` inside the function to maintain clarity and avoid potential issues with mutable defaults.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@894158ef",
+    "chunk_id": "chunk_0445"
+  },
+  {
+    "text": "It looks like you added a `filters` parameter to the `cross_section` function, but I don't see it mentioned in the docstring. Please update the docstring to include this parameter and its purpose for better clarity.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@894158ef",
+    "chunk_id": "chunk_0446"
+  },
+  {
+    "text": "It looks like you added the `additional_data` parameter to the `level_operations` function, but I don't see it being used in the current implementation. If it's intended for future use, consider adding a comment for clarity, or if it's not needed yet, you might want to remove it to avoid confusion.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@894158ef",
+    "chunk_id": "chunk_0447"
+  },
+  {
+    "text": "It looks like you've changed the default value of the `labels` parameter to an empty list in the `create_multi_index` function. Make sure to update the function's docstring to reflect this change, as it currently doesn't mention this default behavior, which could lead to confusion for users.",
+    "category": "mutable_default",
+    "source_type": "pandas_review_comment",
+    "source_path": "kannan-dedsec/synthetic-pandas/multi_index.py@894158ef",
+    "chunk_id": "chunk_0448"
+  },
+  {
+    "text": "It looks like the import statement for `json` on line 3 is not being used in the code. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_evaluation.py@c4e607c4",
+    "chunk_id": "chunk_0449"
+  },
+  {
+    "text": "It looks like you've imported the `os` module but haven't used it anywhere in the code. Consider removing this import to keep the code clean and avoid confusion.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_evaluation.py@c4e607c4",
+    "chunk_id": "chunk_0450"
+  },
+  {
+    "text": "The `import sys` statement on line 2 is unnecessary since it isn't being used anywhere in the file. Please remove it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_evaluation.py@c4e607c4",
+    "chunk_id": "chunk_0451"
+  },
+  {
+    "text": "It looks like the indentation for the docstring at line 22 has changed to 6 spaces, which is inconsistent with the 4 spaces used in the rest of the file. Please revert it back to 4 spaces for better readability and consistency.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/clustering.py@4ea49f91",
+    "chunk_id": "chunk_0452"
+  },
+  {
+    "text": "It looks like the indentation in the `kmeans_cluster` function has switched from 4 spaces to 2 spaces, which can lead to inconsistent styling in the codebase. Please standardize the indentation to 4 spaces to maintain consistency throughout the project.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/clustering.py@4ea49f91",
+    "chunk_id": "chunk_0453"
+  },
+  {
+    "text": "It looks like there's a mix of tabs and spaces in the `elbow_method` function, which can lead to inconsistent indentation. Please ensure that you use either tabs or spaces consistently throughout the function to maintain code readability and avoid potential issues.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/clustering.py@4ea49f91",
+    "chunk_id": "chunk_0454"
+  },
+  {
+    "text": "I see you've renamed the function to `imputeMissing`, but it would be more consistent with Python's naming conventions to use `impute_missing` instead. This helps maintain readability and adheres to the style commonly used in Python codebases.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/preprocessing.py@67beff46",
+    "chunk_id": "chunk_0455"
+  },
+  {
+    "text": "Let's keep our naming convention consistent by using snake_case for the `scale_features` function instead of camelCase. This will improve readability and align with Python's style guidelines.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/preprocessing.py@67beff46",
+    "chunk_id": "chunk_0456"
+  },
+  {
+    "text": "To keep our code consistent with Python conventions, please rename the function `encodeLabels` to `encode_labels`. This will improve readability and maintain the standard naming style we use throughout the project.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/preprocessing.py@67beff46",
+    "chunk_id": "chunk_0457"
+  },
+  {
+    "text": "It looks like the docstring for this function was removed; it would be great to add one back in to clarify its purpose and the meanings of the returned values. This will help future developers understand the code better.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@88a36ddc",
+    "chunk_id": "chunk_0458"
+  },
+  {
+    "text": "Please add a blank line after the summary in the docstring at line 76 to improve readability and maintain consistency with the standard docstring format.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@88a36ddc",
+    "chunk_id": "chunk_0459"
+  },
+  {
+    "text": "Please add a blank line after the summary in your docstring for the `local_outlier_factor_detect` function. This helps improve readability and maintain the consistent formatting of our codebase.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@88a36ddc",
+    "chunk_id": "chunk_0460"
+  },
+  {
+    "text": "It's generally a good practice to avoid using mutable default arguments like sets. Consider changing the function signature to use `None` as the default value and then instantiate the set within the function if needed. This prevents unexpected behavior when the function is called multiple times.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_persistence.py@98aa5924",
+    "chunk_id": "chunk_0461"
+  },
+  {
+    "text": "It's generally unsafe to use a mutable default argument like a dictionary. Instead, consider setting `cache` to `None` by default and initializing it to an empty dictionary inside the function if it's `None`. This prevents unexpected behavior when the function is called multiple times.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_persistence.py@98aa5924",
+    "chunk_id": "chunk_0462"
+  },
+  {
+    "text": "Using a mutable default argument like a list for `history` can lead to unexpected behavior since it retains state between function calls. Consider initializing `history` to `None` and creating a new list inside the function if it's `None`.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_persistence.py@98aa5924",
+    "chunk_id": "chunk_0463"
+  },
+  {
+    "text": "It looks like the `sys` module is imported but not used in the code. You can safely remove this import to keep the code clean and tidy.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@3493cde4",
+    "chunk_id": "chunk_0464"
+  },
+  {
+    "text": "It looks like the imports on lines 10-12 are not being used anywhere in the file. Consider removing them to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@3493cde4",
+    "chunk_id": "chunk_0465"
+  },
+  {
+    "text": "The import statement for `os` on line 10 is unnecessary since it isn't used anywhere in the code. Please remove it to keep the code clean and free of unused imports.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@3493cde4",
+    "chunk_id": "chunk_0466"
+  },
+  {
+    "text": "It looks like there's an indentation inconsistency at line 27; it should match the 4 spaces used in the rest of the docstring. Please correct it for consistency.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/ensemble_models.py@989deee9",
+    "chunk_id": "chunk_0467"
+  },
+  {
+    "text": "The indentation for the parameters section on line 51 appears to be inconsistent with the rest of the docstring; please align it with 4 spaces to maintain uniformity and readability.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/ensemble_models.py@989deee9",
+    "chunk_id": "chunk_0468"
+  },
+  {
+    "text": "The indentation is inconsistent in the `build_random_forest` function; let's stick to 4 spaces for better readability and to maintain the style of the rest of the code.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/ensemble_models.py@989deee9",
+    "chunk_id": "chunk_0469"
+  },
+  {
+    "text": "It's a good practice to maintain consistent naming conventions across the codebase, so I recommend renaming `apply_tsne` to `apply_tsne` to keep it in snake_case, which is more in line with Python's style guidelines.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/dimensionality_reduction.py@b249405d",
+    "chunk_id": "chunk_0470"
+  },
+  {
+    "text": "It's generally best to stick with the PEP 8 naming conventions in Python, which recommend using snake_case for function names. I suggest renaming `applyPCA` back to `apply_pca` for consistency and readability.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/dimensionality_reduction.py@b249405d",
+    "chunk_id": "chunk_0471"
+  },
+  {
+    "text": "The function name `applyUmap` should be changed to `apply_umap` to follow the Python naming conventions for functions, which prefer snake_case. This will help maintain consistency across the codebase.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/dimensionality_reduction.py@b249405d",
+    "chunk_id": "chunk_0472"
+  },
+  {
+    "text": "It looks like the docstring for the `format_results` function was removed; please consider adding it back to maintain clarity on what this function does and its parameters. Clear documentation is essential for future maintainability and understanding of the code.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/utils/helpers.py@e022c28f",
+    "chunk_id": "chunk_0473"
+  },
+  {
+    "text": "The multi-line docstring for `set_seed` seems unnecessarily lengthy and lacks proper formatting. Consider reverting to a concise single-line docstring that clearly describes the function's purpose for better readability and consistency with the rest of the code.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/utils/helpers.py@e022c28f",
+    "chunk_id": "chunk_0474"
+  },
+  {
+    "text": "The multi-line docstring for `timer_decorator` at line 51 is poorly formatted and doesn't follow the conventions for clarity. Please revert it back to a single line or format it properly for better readability and consistency with the project's docstring style.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/utils/helpers.py@e022c28f",
+    "chunk_id": "chunk_0475"
+  },
+  {
+    "text": "Setting `random_state` to a mutable default like a list is risky because it can lead to unintended side effects if the list is modified elsewhere. Consider using `None` as the default and initializing the list inside the function or method if needed.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@4c4e4173",
+    "chunk_id": "chunk_0476"
+  },
+  {
+    "text": "Using a mutable default for `random_state` can lead to unexpected behavior due to shared state across calls. Consider reverting to `None` and documenting how users can set a specific seed if needed.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@4c4e4173",
+    "chunk_id": "chunk_0477"
+  },
+  {
+    "text": "Using a mutable default like a dictionary for `additional_params` can lead to unexpected behavior since it persists across function calls. Consider using `None` as the default and initializing the dictionary inside the function instead.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@4c4e4173",
+    "chunk_id": "chunk_0478"
+  },
+  {
+    "text": "It looks like `os` is imported but not used anywhere in the file. If it's not needed, consider removing it to keep the code clean and reduce unnecessary imports.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_evaluation.py@123edb27",
+    "chunk_id": "chunk_0479"
+  },
+  {
+    "text": "It looks like the `os` import is not being used in this file—consider removing it to keep the code clean and avoid unnecessary dependencies.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_evaluation.py@123edb27",
+    "chunk_id": "chunk_0480"
+  },
+  {
+    "text": "The `sys` module is imported but not used in the code. Consider removing it to keep the imports clean and avoid unnecessary dependencies.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_evaluation.py@123edb27",
+    "chunk_id": "chunk_0481"
+  },
+  {
+    "text": "Python conventionally uses snake_case for function names. Consider renaming `trainLasso` back to `train_lasso` to maintain consistency with PEP 8 and the rest of the codebase.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/regression_models.py@4dab5aea",
+    "chunk_id": "chunk_0482"
+  },
+  {
+    "text": "Python conventionally uses snake_case for function names. Consider renaming `trainLinear` back to `train_linear` for consistency with PEP 8 and the rest of the codebase, unless there’s a specific reason to deviate.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/regression_models.py@4dab5aea",
+    "chunk_id": "chunk_0483"
+  },
+  {
+    "text": "Python's convention is to use snake_case for function names to maintain consistency and readability across the codebase. Consider renaming `evaluateModel` back to `evaluate_model`.",
+    "category": "naming_convention",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/regression_models.py@4dab5aea",
+    "chunk_id": "chunk_0484"
+  },
+  {
+    "text": "The docstring for `preprocess_data` appears to have been removed. Can you re-add it to ensure the function's purpose and behavior are clear to other contributors? Consistent documentation is crucial for maintainability.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@2ca3d04c",
+    "chunk_id": "chunk_0485"
+  },
+  {
+    "text": "The docstring format here is inconsistent with the rest of the file. If you're switching to multi-line style, ensure all docstrings follow the same format for clarity and uniformity.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@2ca3d04c",
+    "chunk_id": "chunk_0486"
+  },
+  {
+    "text": "The docstring format is off here; there should be a blank line after the summary line to follow PEP 257. This helps improve readability and maintain consistency across the project.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/anomaly_detection.py@2ca3d04c",
+    "chunk_id": "chunk_0487"
+  },
+  {
+    "text": "Using `[]` as a default argument can lead to unexpected behavior because lists are mutable. Consider using `None` as the default value and initializing the list inside the function to avoid potential side effects.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@0642662a",
+    "chunk_id": "chunk_0488"
+  },
+  {
+    "text": "Using a mutable default argument like an empty dictionary can lead to unexpected behavior since the same dictionary instance is shared across calls. Consider using `None` as the default value and initializing it inside the function with `extra_params = extra_params or {}`.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@0642662a",
+    "chunk_id": "chunk_0489"
+  },
+  {
+    "text": "Using a mutable default like `set()` for the `transformations` parameter in `preprocess_data` can lead to unexpected behavior since defaults are shared across function calls. Consider using `None` as the default and initializing a new set inside the function if needed.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@0642662a",
+    "chunk_id": "chunk_0490"
+  },
+  {
+    "text": "It looks like `sys` is imported but not used in this file. If it's not needed, consider removing it to keep the code clean and avoid confusion.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/regression_models.py@f8e43f86",
+    "chunk_id": "chunk_0491"
+  },
+  {
+    "text": "The `os` import on line 9 is unused and can be safely removed to keep the code clean and avoid confusion.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/regression_models.py@f8e43f86",
+    "chunk_id": "chunk_0492"
+  },
+  {
+    "text": "The import for `os` appears to be unused in this file. If it's not needed, consider removing it to keep the code clean and maintainable.",
+    "category": "unused_import",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/regression_models.py@f8e43f86",
+    "chunk_id": "chunk_0493"
+  },
+  {
+    "text": "The indentation here mixes tabs and spaces, which can lead to inconsistencies and errors in Python. Please use spaces consistently throughout the method to align with PEP 8 guidelines.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/custom_transformer.py@299c7565",
+    "chunk_id": "chunk_0494"
+  },
+  {
+    "text": "The indentation in the `__init__` method doesn't match the rest of the file's 4-space convention. Consistent indentation is important for readability and maintaining the project's style guidelines—please adjust this back to 4 spaces.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/custom_transformer.py@299c7565",
+    "chunk_id": "chunk_0495"
+  },
+  {
+    "text": "The indentation in the `fit` method is inconsistent—line 28 uses 6 spaces while the rest of the method appears to use 4. Please align the indentation to match the 4-space standard used elsewhere in the file for readability and consistency.",
+    "category": "indentation",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/custom_transformer.py@299c7565",
+    "chunk_id": "chunk_0496"
+  },
+  {
+    "text": "The docstring formatting is off—after the summary line in a multi-line docstring, there should be a blank line to separate it from the detailed description. This improves readability and aligns with PEP 257.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/metrics_utils.py@c77147cf",
+    "chunk_id": "chunk_0497"
+  },
+  {
+    "text": "The multi-line docstring formatting appears off—make sure the closing triple quotes are on their own line to maintain readability and follow standard Python conventions.",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/metrics_utils.py@c77147cf",
+    "chunk_id": "chunk_0498"
+  },
+  {
+    "text": "This function is missing a docstring, which makes it harder to understand its purpose and usage. Can you add a brief explanation of what this function does and what its inputs and outputs are?",
+    "category": "documentation_formatting",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/metrics_utils.py@c77147cf",
+    "chunk_id": "chunk_0499"
+  },
+  {
+    "text": "Using a mutable default argument like `[]` for `extra_params` can lead to unexpected behavior because the list is shared across function calls. Consider using `None` as the default and initializing it inside the function with `extra_params = extra_params or []`.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/hyperparameter_tuning.py@5159665a",
+    "chunk_id": "chunk_0500"
+  },
+  {
+    "text": "Using a mutable default argument like `set()` for `extra_params` can lead to unexpected behavior because the same set instance will be shared across calls. Consider using `None` as the default and initializing it with `set()` inside the function if necessary.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/hyperparameter_tuning.py@5159665a",
+    "chunk_id": "chunk_0501"
+  },
+  {
+    "text": "Using a mutable default argument like `{}` for `extra_params` can lead to unexpected behavior because it’s shared across all calls to the function. Consider using `None` as the default and initializing it inside the function with `extra_params = {}` if needed.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/hyperparameter_tuning.py@5159665a",
+    "chunk_id": "chunk_0502"
+  },
+  {
+    "text": "Changing the default value of `random_state` from `None` to an empty list `[]` can lead to unexpected behavior when users expect a single integer for reproducibility. It's better to stick with `None` or set a default integer if you want to ensure consistency in randomness. Please consider reverting this change for clarity.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@8de67b04",
+    "chunk_id": "chunk_0503"
+  },
+  {
+    "text": "It looks like there’s a potential issue with the default value of `random_state` being set to an empty dictionary instead of `None`, which could lead to unexpected behavior if it's treated like a scalar. Please revert it to `None` or ensure that the function handles the dictionary type correctly.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@8de67b04",
+    "chunk_id": "chunk_0504"
+  },
+  {
+    "text": "It's best to avoid using mutable defaults like `set()` for the `items` parameter in `some_function_with_default`. Instead, set it to `None` and initialize it within the function to prevent unexpected behavior due to shared references.",
+    "category": "mutable_default",
+    "source_type": "sklearn_review_comment",
+    "source_path": "kannan-dedsec/synthetic-sklearn/model_training.py@8de67b04",
+    "chunk_id": "chunk_0505"
+  }
+]
