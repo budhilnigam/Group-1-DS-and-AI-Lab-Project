@@ -278,7 +278,7 @@ def fetch_and_review_prs():
 
             p_hash = compute_prompt_hash(prep["prompt"], prep["model"], prep["temperature"])
 
-            if CACHE_ENABLED and is_pr_cached(repo, pr_number, head_sha, p_hash):
+            if str(get_config("CACHE_ENABLED")).lower() in ("true", "1", "yes") and is_pr_cached(repo, pr_number, head_sha, p_hash):
                 log.info("PR #%d (%s) cached, skipping", pr_number, repo)
                 summary["skipped"] += 1
                 continue

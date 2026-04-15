@@ -691,22 +691,39 @@ function loadConfig() {
     const form = document.getElementById('config-form');
     form.innerHTML = '';
     for (const [key, info] of Object.entries(data)) {
-      const type = info.hidden ? 'password' : 'text';
-      const val = info.hidden ? '' : info.value;
-      const ph = info.hidden ? '(hidden — enter new value to override)' : '';
-      form.innerHTML += '<label>'+key+'</label><input type="'+type+'" data-key="'+key+'" value="'+val+'" placeholder="'+ph+'">';
+      if (info.toggle) {
+        const checked = info.value ? 'checked' : '';
+        form.innerHTML += '<div style="display:flex;align-items:center;gap:10px;margin:10px 0"><label style="margin:0;min-width:140px">'+key+'</label><label class="toggle"><input type="checkbox" data-key="'+key+'" data-toggle="1" '+checked+'><span class="slider"></span></label><span style="font-size:12px;color:#586069" id="cache-label">'+(info.value?'Enabled':'Disabled')+'</span></div>';
+      } else {
+        const type = info.hidden ? 'password' : 'text';
+        const val = info.hidden ? '' : info.value;
+        const ph = info.hidden ? '(hidden — enter new value to override)' : '';
+        form.innerHTML += '<label>'+key+'</label><input type="'+type+'" data-key="'+key+'" value="'+val+'" placeholder="'+ph+'">';
+      }
+    }
+    // Add toggle label update listener
+    var toggleInput = form.querySelector('input[data-toggle="1"]');
+    if (toggleInput) {
+      toggleInput.addEventListener('change', function() {
+        document.getElementById('cache-label').textContent = this.checked ? 'Enabled' : 'Disabled';
+      });
     }
     document.getElementById('config-result').innerHTML = '';
   } catch(e) { console.error('loadConfig:', e); }
 }
 
 async function saveConfig() {
-  const inputs = document.querySelectorAll('#config-form input');
+  const form = document.getElementById('config-form');
+  const inputs = form.querySelectorAll('input:not([data-toggle])');
+  const toggles = form.querySelectorAll('input[data-toggle]');
   const body = {};
   inputs.forEach(inp => {
     const v = inp.value.trim();
     if (v && !inp.placeholder.includes('hidden')) body[inp.dataset.key] = v;
     else if (v && inp.type === 'password') body[inp.dataset.key] = v;
+  });
+  toggles.forEach(t => {
+    body[t.dataset.key] = t.checked ? 'true' : 'false';
   });
   try {
     const resp = await fetch('/api/config', {
@@ -714,6 +731,12 @@ async function saveConfig() {
       body: JSON.stringify(body)
     });
     const data = await resp.json();
+    // Update in-memory config data so toggle state persists without refresh
+    for (const k of data.updated) {
+      if (window._configData[k] && window._configData[k].toggle) {
+        window._configData[k].value = body[k] === 'true';
+      }
+    }
     document.getElementById('config-result').innerHTML = '<p style="color:#28a745;margin-top:8px">Updated: '+data.updated.join(', ')+'</p>';
   } catch(e) { document.getElementById('config-result').innerHTML = '<p class="error">Save failed: '+e+'</p>'; }
 }

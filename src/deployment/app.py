@@ -24,6 +24,12 @@ BASE_DIR = Path(__file__).parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 HIDDEN_KEYS = {"GITHUB_TOKEN", "GROQ_TOKEN", "SMTP_PASSWORD"}
 
+
+def _cache_read_enabled():
+    """Return True if cache reads are enabled (runtime override or default)."""
+    val = str(get_config("CACHE_ENABLED")).lower()
+    return val in ("true", "1", "yes")
+
 SCHEDULE_MINUTES = 60  # background auto-run interval
 
 # In-memory prompt overrides (reset on restart). Only used by inference/eval, NOT schedule.
@@ -77,10 +83,8 @@ def index(request: Request):
     ]
     config_keys = {
         "QDRANT_URL": QDRANT_URL, "GROQ_TOKEN": GROQ_TOKEN, "GITHUB_TOKEN": GITHUB_TOKEN,
-        "DEFAULT_COLLECTION_NAME": COLLECTION, "DEFAULT_EMBED_MODEL": EMBED_MODEL,
-        "PROMPT_PATH": PROMPT_PATH, "SCHEDULE_INTERVAL": SCHEDULE_INTERVAL,
+        "SCHEDULE_INTERVAL": SCHEDULE_INTERVAL,
         "CACHE_ENABLED": CACHE_ENABLED, "LLM_MAX_RETRIES": LLM_MAX_RETRIES,
-        "SMTP_HOST": SMTP_HOST, "SMTP_PORT": SMTP_PORT,
         "SMTP_USER": SMTP_USER, "SMTP_PASSWORD": SMTP_PASSWORD,
     }
     config_data = {}
@@ -88,6 +92,8 @@ def index(request: Request):
         val = runtime_config.get(k, default_val)
         if k in HIDDEN_KEYS:
             config_data[k] = {"value": "***", "hidden": True}
+        elif k == "CACHE_ENABLED":
+            config_data[k] = {"value": str(val).lower() in ("true", "1", "yes"), "toggle": True}
         else:
             config_data[k] = {"value": val, "hidden": False}
     return templates.TemplateResponse(
@@ -192,7 +198,7 @@ async def api_inference(request: Request):
         p_hash = compute_prompt_hash(prep["prompt"], prep["model"], prep["temperature"])
 
         # 2. check cache with final-prompt hash
-        cached = get_latest_cached_result(repo, pr_number, p_hash)
+        cached = get_latest_cached_result(repo, pr_number, p_hash) if _cache_read_enabled() else None
         if cached:
             try:
                 cached_data = json.loads(cached)
@@ -225,7 +231,7 @@ async def api_inference(request: Request):
         from single_pr_model_output_metrics import MODEL as LLM_MODEL
         n_hash = compute_prompt_hash(prompt, LLM_MODEL, 0)
 
-        cached = get_latest_cached_result(repo, pr_number, n_hash)
+        cached = get_latest_cached_result(repo, pr_number, n_hash) if _cache_read_enabled() else None
         if cached:
             try:
                 cached_data = json.loads(cached)
@@ -450,7 +456,7 @@ async def api_schedule_reprocess(request: Request):
     from groq import Groq
 
     # First, try to get any existing cached result for this PR (fast path)
-    cached = get_latest_cached_result_any(repo, pr_number)
+    cached = get_latest_cached_result_any(repo, pr_number) if _cache_read_enabled() else None
     used_cache = False
     reviews = []
     if cached:
@@ -518,10 +524,8 @@ async def api_schedule_reprocess(request: Request):
 def api_config_get():
     keys = {
         "QDRANT_URL": QDRANT_URL, "GROQ_TOKEN": GROQ_TOKEN, "GITHUB_TOKEN": GITHUB_TOKEN,
-        "DEFAULT_COLLECTION_NAME": COLLECTION, "DEFAULT_EMBED_MODEL": EMBED_MODEL,
-        "PROMPT_PATH": PROMPT_PATH, "SCHEDULE_INTERVAL": SCHEDULE_INTERVAL,
+        "SCHEDULE_INTERVAL": SCHEDULE_INTERVAL,
         "CACHE_ENABLED": CACHE_ENABLED, "LLM_MAX_RETRIES": LLM_MAX_RETRIES,
-        "SMTP_HOST": SMTP_HOST, "SMTP_PORT": SMTP_PORT,
         "SMTP_USER": SMTP_USER, "SMTP_PASSWORD": SMTP_PASSWORD,
     }
     out = {}
@@ -529,6 +533,8 @@ def api_config_get():
         val = runtime_config.get(k, default_val)
         if k in HIDDEN_KEYS:
             out[k] = {"value": "***", "hidden": True}
+        elif k == "CACHE_ENABLED":
+            out[k] = {"value": str(val).lower() in ("true", "1", "yes"), "toggle": True}
         else:
             out[k] = {"value": val, "hidden": False}
     return out
