@@ -708,6 +708,9 @@ def compute_micro_metrics(
         "Recall": round(recall, 6),
         "Precision": round(precision, 6),
         "F1": round(f1, 6),
+        "TP": tp,
+        "FP": fp,
+        "FN": fn,
     }
 
 

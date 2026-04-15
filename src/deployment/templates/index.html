@@ -83,17 +83,61 @@ th { background: #f6f8fa; }
 <div id="evaluation" class="panel">
   <div class="two-col">
     <div>
-      <label>Code (paste Python code or diff)</label>
-      <textarea id="eval-code" rows="16" placeholder="Paste code here..."></textarea>
+      <label>Code (paste Python code or diff, or JSON evaluation entries)
+        <span onclick="document.getElementById('json-sample-modal').style.display='flex'" style="cursor:pointer;color:#0366d6;font-weight:normal;font-size:12px;margin-left:8px" title="Show sample JSON format">&#9432; JSON format</span>
+      </label>
+      <textarea id="eval-code" rows="16" placeholder="Paste code here... or paste a JSON array of evaluation entries with ground_truth_reviews"></textarea>
     </div>
     <div>
-      <label>Ground Truth</label>
+      <label>Ground Truth <span style="font-weight:normal;font-size:12px;color:#586069">(ignored when JSON input is used)</span></label>
       <div id="gt-rows"></div>
       <button onclick="addGtRow()" style="background:#28a745;margin-top:6px">+ Add Row</button>
     </div>
   </div>
   <button id="btn-eval" onclick="runEval()" style="margin-top:14px">Run Evaluation</button>
   <div id="eval-result"></div>
+</div>
+
+<!-- JSON sample modal -->
+<div id="json-sample-modal" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:8px;padding:20px 24px;max-width:680px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 8px 30px rgba(0,0,0,.3);position:relative">
+    <button onclick="document.getElementById('json-sample-modal').style.display='none'" style="position:absolute;top:10px;right:14px;background:none;color:#586069;font-size:20px;border:none;cursor:pointer;padding:0;margin:0">&times;</button>
+    <h3 style="margin-bottom:12px;font-size:16px">JSON Batch Evaluation Format</h3>
+    <p style="font-size:13px;color:#586069;margin-bottom:10px">Paste a JSON array in the code box. Each entry is evaluated independently against all 3 baselines. Ground truth rows on the right are ignored in this mode.</p>
+    <p style="font-size:13px;color:#586069;margin-bottom:6px">Provide code via <b>source_file</b> (path relative to <code>data/processed/</code>) <i>or</i> <b>source_code</b> (inline).</p>
+    <pre style="background:#f6f8fa;border:1px solid #d1d5da;border-radius:6px;padding:14px;font-size:12px;line-height:1.5;overflow-x:auto;white-space:pre;margin-top:10px">[
+  {
+    "id": "synthetic-django_PR_21",
+    "repo": "kannan-dedsec/synthetic-django",
+    "source_path": "admin.py",
+    "source_file": "evaluation_files/synthetic-django_PR_21_admin.py",
+    "ground_truth_reviews": [
+      {
+        "line_number": 9,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      }
+    ]
+  },
+  {
+    "id": "inline_example",
+    "repo": "my-org/my-repo",
+    "source_path": "app.py",
+    "source_code": "import os\nimport sys\nx = 1\n",
+    "ground_truth_reviews": [
+      {
+        "line_number": 1,
+        "violation_category": "unused_import",
+        "review_comment": "Unused import: os"
+      }
+    ]
+  }
+]</pre>
+    <div style="margin-top:14px;display:flex;gap:10px">
+      <button onclick="document.getElementById('eval-code').value=document.querySelector('#json-sample-modal pre').textContent;document.getElementById('json-sample-modal').style.display='none'" style="font-size:13px;padding:6px 16px">Copy to Code Box</button>
+      <button onclick="document.getElementById('json-sample-modal').style.display='none'" style="font-size:13px;padding:6px 16px;background:#6c757d">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- ==================== TAB 3: SCHEDULE ==================== -->
@@ -240,6 +284,35 @@ async function runEval() {
   const btn = document.getElementById('btn-eval');
   const out = document.getElementById('eval-result');
   btn.disabled = true;
+
+  const codeVal = document.getElementById('eval-code').value.trim();
+
+  // Detect JSON batch mode: if input is a JSON array, send as entries
+  let isBatch = false;
+  let parsed = null;
+  try {
+    parsed = JSON.parse(codeVal);
+    if (Array.isArray(parsed) && parsed.length && parsed[0].ground_truth_reviews) {
+      isBatch = true;
+    }
+  } catch(_) { /* not JSON, treat as code */ }
+
+  if (isBatch) {
+    out.innerHTML = '<span class="spinner"></span> Running batch evaluation on '+parsed.length+' entries...';
+    try {
+      const resp = await fetch('/api/evaluate', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ entries: parsed })
+      });
+      const data = await resp.json();
+      if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+      out.innerHTML = renderBatchResults(data);
+    } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+    finally { btn.disabled = false; }
+    return;
+  }
+
+  // Single code mode (existing)
   out.innerHTML = '<span class="spinner"></span> Running all 3 baselines...';
 
   const gt = [];
@@ -252,7 +325,7 @@ async function runEval() {
   try {
     const resp = await fetch('/api/evaluate', {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ code: document.getElementById('eval-code').value, ground_truth: gt })
+      body: JSON.stringify({ code: codeVal, ground_truth: gt })
     });
     const data = await resp.json();
     if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
@@ -285,6 +358,74 @@ async function runEval() {
     out.innerHTML = html;
   } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
   finally { btn.disabled = false; }
+}
+
+var _batchEntryCounter = 0;
+function renderBatchResults(data) {
+  let html = '';
+  const agg = data.aggregate || {};
+  const results = data.results || [];
+
+  // Aggregate metrics
+  html += '<h3 style="margin-bottom:8px">Aggregate Metrics ('+results.length+' entries)</h3>';
+  html += '<div class="metrics-grid">';
+  ['RAG','Naive_LLM','Static_tool'].forEach(m => {
+    const met = agg[m] || {};
+    html += '<div class="metric-card"><h4>'+m+'</h4>';
+    html += '<p>Accuracy: <b>'+(met.Accuracy||0).toFixed(3)+'</b></p>';
+    html += '<p>Precision: <b>'+(met.Precision||0).toFixed(3)+'</b></p>';
+    html += '<p>Recall: <b>'+(met.Recall||0).toFixed(3)+'</b></p>';
+    html += '<p>F1: <b>'+(met.F1||0).toFixed(3)+'</b></p>';
+    html += '<p style="font-size:12px;color:#586069">TP:'+met.TP+' FP:'+met.FP+' FN:'+met.FN+'</p>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Per-entry collapsible results
+  html += '<h3 style="margin-top:18px;margin-bottom:8px">Per-Entry Results</h3>';
+  results.forEach(function(r) {
+    var eid = 'batch-entry-' + (++_batchEntryCounter);
+    var label = (r.id || 'unknown') + (r.source_path ? ' ('+r.source_path+')' : '');
+
+    if (r.error) {
+      html += '<div class="result-box"><h4>'+label+' <span style="color:#f85149">— Error</span></h4><p class="error">'+r.error+'</p></div>';
+      return;
+    }
+
+    // Status badge with per-entry F1
+    var ragF1 = (r.Metrics && r.Metrics.RAG) ? r.Metrics.RAG.F1.toFixed(3) : '?';
+    html += '<button class="chunks-toggle" onclick="var p=document.getElementById(\''+eid+'\');p.classList.toggle(\'open\');this.querySelector(\'.arrow\').textContent=p.classList.contains(\'open\')?\'\u25BC\':\'\u25B6\'" style="text-align:left;width:100%;margin-bottom:2px">';
+    html += '<span class="arrow">\u25B6</span> '+label+' &nbsp; <span style="font-size:12px;color:#8b949e">RAG F1: '+ragF1+'</span></button>';
+    html += '<div class="chunks-panel" id="'+eid+'">';
+
+    // Per-entry metrics
+    html += '<div class="metrics-grid" style="margin-bottom:10px">';
+    ['RAG','Naive_LLM','Static_tool'].forEach(function(m) {
+      var met = (r.Metrics || {})[m] || {};
+      var lat = (r.Latency || {})[m] || {};
+      html += '<div class="metric-card"><h4>'+m+'</h4>';
+      html += '<p>Acc: <b>'+(met.Accuracy||0).toFixed(3)+'</b> P: <b>'+(met.Precision||0).toFixed(3)+'</b> R: <b>'+(met.Recall||0).toFixed(3)+'</b> F1: <b>'+(met.F1||0).toFixed(3)+'</b></p>';
+      html += '<p style="font-size:12px;color:#586069">Latency: '+(lat.total||0)+'s</p>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Findings tables
+    ['RAG','Naive_LLM','Static_tool'].forEach(function(m) {
+      var reviews = r[m] || [];
+      html += '<div class="result-box"><h4>'+m+' ('+reviews.length+' findings)</h4>';
+      if (!reviews.length) { html += '<p>No violations found.</p></div>'; return; }
+      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
+      reviews.forEach(function(rv) { html += '<tr><td>'+rv.line_number+'</td><td>'+rv.violation_category+'</td><td>'+(rv.review_comment||'–')+'</td></tr>'; });
+      html += '</table></div>';
+    });
+
+    if (r.retrieved_chunks) html += renderChunksBlock(r.retrieved_chunks);
+    if (r.prompts_used) html += renderPromptsBlock(r.prompts_used);
+    html += '</div>'; // close panel
+  });
+
+  return html;
 }
 
 // ---- Schedule ----

@@ -240,6 +240,12 @@ async def api_inference(request: Request):
 @app.post("/api/evaluate")
 async def api_evaluate(request: Request):
     body = await request.json()
+
+    # Batch mode: entries list from evaluation JSON
+    entries = body.get("entries")
+    if entries and isinstance(entries, list):
+        return _run_batch_eval(entries)
+
     code = body.get("code", "")
     ground_truth = body.get("ground_truth", [])
 
@@ -263,6 +269,79 @@ async def api_evaluate(request: Request):
         naive_prompt_override=prompt_overrides.get("Naive_LLM"),
     )
     return result
+
+
+def _run_batch_eval(entries):
+    """Process a list of evaluation entries (from evaluation.json format)."""
+    from single_pr_model_output_metrics import run_eval_on_code
+
+    data_dir = Path(__file__).resolve().parents[2] / "data" / "processed"
+    results = []
+    agg = {m: {"TP": 0, "FP": 0, "FN": 0} for m in ("RAG", "Naive_LLM", "Static_tool")}
+
+    for entry in entries:
+        eid = entry.get("id", "unknown")
+        repo = entry.get("repo", "")
+        source_path = entry.get("source_path", "")
+        gt = entry.get("ground_truth_reviews", [])
+
+        # Resolve code: source_code (inline) OR source_file (path)
+        code = entry.get("source_code", "")
+        if not code:
+            rel = entry.get("source_file", "")
+            if not rel:
+                results.append({"id": eid, "error": "No source_code or source_file"})
+                continue
+            fpath = data_dir / rel
+            if not fpath.exists():
+                results.append({"id": eid, "error": f"File not found: {rel}"})
+                continue
+            code = fpath.read_text(encoding="utf-8", errors="ignore")
+
+        if not code.strip():
+            results.append({"id": eid, "error": "Empty source code"})
+            continue
+
+        repo_name = repo.split("/")[-1] if repo else None
+        try:
+            r = run_eval_on_code(
+                pr_code=code,
+                ground_truth=gt,
+                qdrant_url=get_config("QDRANT_URL"),
+                groq_api_key=get_config("GROQ_TOKEN"),
+                prompt_path=get_config("PROMPT_PATH"),
+                repo_name=repo_name,
+                collection_name=get_config("DEFAULT_COLLECTION_NAME"),
+                embed_model_name=get_config("DEFAULT_EMBED_MODEL"),
+                max_retries=int(get_config("LLM_MAX_RETRIES")),
+                rag_prompt_override=prompt_overrides.get("RAG"),
+                naive_prompt_override=prompt_overrides.get("Naive_LLM"),
+            )
+            r["id"] = eid
+            r["source_path"] = source_path
+            results.append(r)
+            # accumulate TP/FP/FN for aggregate metrics
+            for m in ("RAG", "Naive_LLM", "Static_tool"):
+                met = r.get("Metrics", {}).get(m, {})
+                agg[m]["TP"] += met.get("TP", 0)
+                agg[m]["FP"] += met.get("FP", 0)
+                agg[m]["FN"] += met.get("FN", 0)
+        except Exception as exc:
+            log.exception("Batch eval failed for %s", eid)
+            results.append({"id": eid, "error": str(exc)})
+
+    # Compute aggregate metrics from accumulated counts
+    agg_metrics = {}
+    for m in ("RAG", "Naive_LLM", "Static_tool"):
+        tp, fp, fn = agg[m]["TP"], agg[m]["FP"], agg[m]["FN"]
+        prec = tp / (tp + fp) if (tp + fp) else 0
+        rec = tp / (tp + fn) if (tp + fn) else 0
+        f1 = 2 * prec * rec / (prec + rec) if (prec + rec) else 0
+        acc = tp / (tp + fp + fn) if (tp + fp + fn) else 0
+        agg_metrics[m] = {"Accuracy": acc, "Precision": prec, "Recall": rec, "F1": f1,
+                          "TP": tp, "FP": fp, "FN": fn}
+
+    return {"batch": True, "results": results, "aggregate": agg_metrics}
 
 
 # ---- Schedule ----
