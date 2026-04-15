@@ -112,16 +112,32 @@ def set_last_checked(repo, timestamp_iso):
             )
 
 
-def recent_prs(limit=10):
+def recent_prs(limit=10, offset=0, search=""):
     with _conn() as c:
-        rows = c.execute(
-            "SELECT repo, pr_number, head_sha, processed_at, email_sent FROM processed_prs ORDER BY id DESC LIMIT ?",
-            (limit,),
-        ).fetchall()
+        if search:
+            like = f"%{search}%"
+            rows = c.execute(
+                "SELECT repo, pr_number, head_sha, processed_at, email_sent FROM processed_prs "
+                "WHERE repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? "
+                "ORDER BY id DESC LIMIT ? OFFSET ?",
+                (like, like, limit, offset),
+            ).fetchall()
+        else:
+            rows = c.execute(
+                "SELECT repo, pr_number, head_sha, processed_at, email_sent FROM processed_prs ORDER BY id DESC LIMIT ? OFFSET ?",
+                (limit, offset),
+            ).fetchall()
     return [dict(r) for r in rows]
 
 
-def pr_count():
+def pr_count(search=""):
     with _conn() as c:
-        row = c.execute("SELECT COUNT(*) as cnt FROM processed_prs").fetchone()
+        if search:
+            like = f"%{search}%"
+            row = c.execute(
+                "SELECT COUNT(*) as cnt FROM processed_prs WHERE repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ?",
+                (like, like),
+            ).fetchone()
+        else:
+            row = c.execute("SELECT COUNT(*) as cnt FROM processed_prs").fetchone()
     return row["cnt"]

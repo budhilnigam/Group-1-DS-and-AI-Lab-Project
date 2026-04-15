@@ -65,9 +65,11 @@ app.add_middleware(
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     sched_status = {
-        "recent": recent_prs(limit=20),
+        "recent": recent_prs(limit=15),
         "last_checked": {repo: get_last_checked(repo) for repo in REPOS_MAIL_MAP},
         "total_processed": pr_count(),
+        "page": 1, "per_page": 15,
+        "total_pages": max(1, -(-pr_count() // 15)),
     }
     sched_repos = [
         {"repo": repo, "email": email, "enabled": schedule_enabled.get(repo, True)}
@@ -381,12 +383,14 @@ def api_schedule_run():
 
 
 @app.get("/api/schedule/status")
-def api_schedule_status():
-    """Return recent processed PRs from DB for the schedule activity log."""
-    rows = recent_prs(limit=20)
+def api_schedule_status(page: int = 1, per_page: int = 15, search: str = ""):
+    """Return paginated processed PRs from DB for the schedule activity log."""
+    offset = (page - 1) * per_page
+    rows = recent_prs(limit=per_page, offset=offset, search=search)
     last_checked = {repo: get_last_checked(repo) for repo in REPOS_MAIL_MAP}
-    total = pr_count()
-    return {"recent": rows, "last_checked": last_checked, "total_processed": total}
+    total = pr_count(search=search)
+    return {"recent": rows, "last_checked": last_checked, "total_processed": total,
+            "page": page, "per_page": per_page, "total_pages": max(1, -(-total // per_page))}
 
 
 # ---- Configuration ----

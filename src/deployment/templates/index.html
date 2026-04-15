@@ -151,6 +151,11 @@ th { background: #f6f8fa; }
   <div id="run-now-result"></div>
 
   <h3 style="margin-top:24px;margin-bottom:12px">Activity Log</h3>
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+    <input type="text" id="sched-search" placeholder="Search by repo or PR #..." style="max-width:300px;font-size:13px" onkeydown="if(event.key==='Enter'){_schedPage=1;loadStatusFromAPI()}">
+    <button onclick="_schedPage=1;loadStatusFromAPI()" style="padding:6px 14px;font-size:13px;margin:0">Search</button>
+    <button onclick="document.getElementById('sched-search').value='';_schedPage=1;loadStatusFromAPI()" style="padding:6px 14px;font-size:13px;margin:0;background:#6c757d">Clear</button>
+  </div>
   <div id="sched-status">Loading...</div>
 </div>
 
@@ -451,22 +456,40 @@ async function toggleRepo(repo, enabled) {
   } catch(e) { console.error('toggleRepo:', e); }
 }
 
+var _schedPage = 1;
+
 async function loadStatus() {
   const out = document.getElementById('sched-status');
   try {
-    // Use server-rendered data (embedded in page), fall back to API
     let data = window._schedStatus;
     if (!data) {
       const resp = await fetch('/api/schedule/status');
       data = await resp.json();
     }
+    // Clear initial data so subsequent calls use the API
+    window._schedStatus = null;
+    renderStatus(data, out);
+  } catch(e) { out.innerHTML = '<p class="error">Failed to load status: '+e+'</p>'; }
+}
+
+async function loadStatusFromAPI() {
+  const out = document.getElementById('sched-status');
+  const search = (document.getElementById('sched-search').value || '').trim();
+  out.innerHTML = '<span class="spinner"></span> Loading...';
+  try {
+    const resp = await fetch('/api/schedule/status?page='+_schedPage+'&per_page=15&search='+encodeURIComponent(search));
+    const data = await resp.json();
     renderStatus(data, out);
   } catch(e) { out.innerHTML = '<p class="error">Failed to load status: '+e+'</p>'; }
 }
 
 function renderStatus(data, out) {
     if (!data || typeof data !== 'object') { out.innerHTML = '<p>No status data available.</p>'; return; }
-    let html = '<p style="font-size:13px;color:#586069;margin-bottom:8px">Total PRs processed: <b>'+(data.total_processed||0)+'</b>';
+    var page = data.page || 1;
+    var totalPages = data.total_pages || 1;
+    var total = data.total_processed || 0;
+
+    let html = '<p style="font-size:13px;color:#586069;margin-bottom:8px">Total PRs processed: <b>'+total+'</b>';
     var lc = data.last_checked || {};
     for (const [repo, ts] of Object.entries(lc)) {
       html += ' &nbsp;|&nbsp; Last checked <b>'+repo+'</b>: '+(ts ? new Date(ts).toLocaleString() : 'never');
@@ -479,8 +502,17 @@ function renderStatus(data, out) {
         html += '<tr><td>#'+r.pr_number+'</td><td>'+r.repo+'</td><td>'+new Date(r.processed_at).toLocaleString()+'</td><td>'+emailIcon+'</td></tr>';
       });
       html += '</tbody></table>';
+
+      // Pagination controls
+      html += '<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px">';
+      html += '<button onclick="_schedPage=1;loadStatusFromAPI()" style="padding:4px 10px;font-size:12px;margin:0"'+(page<=1?' disabled':'')+'>&#171;</button>';
+      html += '<button onclick="_schedPage='+Math.max(1,page-1)+';loadStatusFromAPI()" style="padding:4px 10px;font-size:12px;margin:0"'+(page<=1?' disabled':'')+'>&#8249; Prev</button>';
+      html += '<span style="color:#586069">Page <b>'+page+'</b> of <b>'+totalPages+'</b></span>';
+      html += '<button onclick="_schedPage='+Math.min(totalPages,page+1)+';loadStatusFromAPI()" style="padding:4px 10px;font-size:12px;margin:0"'+(page>=totalPages?' disabled':'')+'>Next &#8250;</button>';
+      html += '<button onclick="_schedPage='+totalPages+';loadStatusFromAPI()" style="padding:4px 10px;font-size:12px;margin:0"'+(page>=totalPages?' disabled':'')+'>&#187;</button>';
+      html += '</div>';
     } else {
-      html += '<p>No PRs processed yet.</p>';
+      html += '<p>No PRs found.</p>';
     }
     out.innerHTML = html;
 }
@@ -518,8 +550,8 @@ async function runNow() {
       }
       html += '</div>';
       out.innerHTML = html;
-      // Refresh status by reloading (avoids proxy issues with AJAX)
-      setTimeout(() => { window.location.hash='#schedule'; window.location.reload(); }, 2000);
+      // Refresh activity log after run
+      setTimeout(() => { _schedPage=1; loadStatusFromAPI(); }, 2000);
     }
   } catch(e) { out.innerHTML = '<p class="error">Request failed: '+e+'</p>'; }
   finally { btn.disabled = false; }
