@@ -202,6 +202,20 @@ th { background: #f6f8fa; }
 
 <!-- ==================== TAB 4: CONFIGURATION ==================== -->
 <div id="config" class="panel">
+  <h3 style="margin-bottom:12px">Managed Repositories</h3>
+  <p style="font-size:13px;color:#586069;margin-bottom:10px">Add or remove GitHub repos. Removing a repo permanently deletes all its processed PR data from the database.</p>
+  <table id="repos-table">
+    <thead><tr><th>Repository</th><th>Owner Email</th><th style="width:80px">Action</th></tr></thead>
+    <tbody id="repos-body"></tbody>
+  </table>
+  <div style="display:flex;gap:8px;align-items:flex-end;margin-top:10px">
+    <div><label style="font-size:12px">Repository (owner/name)</label><input type="text" id="add-repo-name" placeholder="owner/repo" style="width:250px"></div>
+    <div><label style="font-size:12px">Owner Email</label><input type="text" id="add-repo-email" placeholder="email@example.com" style="width:250px"></div>
+    <button id="btn-add-repo" onclick="addRepoAction()" style="background:#28a745;margin:0;white-space:nowrap">+ Add Repo</button>
+  </div>
+  <div id="repo-result"></div>
+
+  <hr style="margin:24px 0;border-color:#e1e4e8">
   <div class="banner">Changes apply only until the app restarts.</div>
   <div id="config-form"></div>
   <button id="btn-config" onclick="saveConfig()">Save</button>
@@ -272,7 +286,7 @@ function switchTab(id) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', t.textContent.trim().toLowerCase().includes(id.slice(0,4))));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id===id));
   if (id==='schedule') { loadSchedule(); loadStatus(); }
-  if (id==='config') { loadConfig(); loadPrompts(); }
+  if (id==='config') { loadConfig(); loadPrompts(); loadRepos(); }
   if (id==='dashboard') { loadDashboard(); }
 }
 
@@ -528,7 +542,19 @@ function renderBatchResults(data) {
 // ---- Schedule ----
 function loadSchedule() {
   try {
-    const data = window._schedRepos || [];
+    var data = window._schedRepos;
+    if (!data) {
+      fetch('/api/schedule').then(r=>r.json()).then(function(d){
+        window._schedRepos = d;
+        _renderScheduleTable(d);
+      });
+      return;
+    }
+    _renderScheduleTable(data);
+  } catch(e) { console.error('loadSchedule:', e); }
+}
+
+function _renderScheduleTable(data) {
     const tbody = document.getElementById('sched-body');
     tbody.innerHTML = '';
     data.forEach(item => {
@@ -536,7 +562,6 @@ function loadSchedule() {
       tr.innerHTML = '<td>'+item.repo+'</td><td>'+item.email+'</td><td><label class="toggle"><input type="checkbox" '+(item.enabled?'checked':'')+' onchange="toggleRepo(\''+item.repo+'\',this.checked)"><span class="slider"></span></label></td>';
       tbody.appendChild(tr);
     });
-  } catch(e) { console.error('loadSchedule:', e); }
 }
 
 async function toggleRepo(repo, enabled) {
@@ -704,6 +729,59 @@ async function runNow() {
 }
 
 // ---- Configuration ----
+async function loadRepos() {
+  try {
+    const resp = await fetch('/api/repos');
+    const repos = await resp.json();
+    const tbody = document.getElementById('repos-body');
+    tbody.innerHTML = '';
+    repos.forEach(function(item) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>'+item.repo+'</td><td>'+item.email+'</td><td><button onclick="removeRepoAction(\''+item.repo+'\',this)" style="padding:3px 10px;font-size:11px;margin:0;background:#cb2431">Remove</button></td>';
+      tbody.appendChild(tr);
+    });
+  } catch(e) { console.error('loadRepos:', e); }
+}
+
+async function addRepoAction() {
+  var repo = document.getElementById('add-repo-name').value.trim();
+  var email = document.getElementById('add-repo-email').value.trim();
+  var out = document.getElementById('repo-result');
+  if (!repo || !email) { out.innerHTML = '<p class="error">Both repo and email are required.</p>'; return; }
+  try {
+    const resp = await fetch('/api/repos', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({repo: repo, email: email})
+    });
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+    out.innerHTML = '<p style="color:#28a745;margin-top:8px">Added '+repo+'</p>';
+    document.getElementById('add-repo-name').value = '';
+    document.getElementById('add-repo-email').value = '';
+    loadRepos();
+    // Refresh schedule tab data
+    window._schedRepos = null;
+  } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+}
+
+async function removeRepoAction(repo, btn) {
+  if (!confirm('Remove "'+repo+'"? This will permanently delete all processed PR data for this repo from the database.')) return;
+  btn.disabled = true;
+  btn.textContent = '...';
+  var out = document.getElementById('repo-result');
+  try {
+    const resp = await fetch('/api/repos', {
+      method: 'DELETE', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({repo: repo})
+    });
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; btn.disabled = false; btn.textContent = 'Remove'; return; }
+    out.innerHTML = '<p style="color:#28a745;margin-top:8px">Removed '+repo+' and all its data.</p>';
+    loadRepos();
+    window._schedRepos = null;
+  } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; btn.disabled = false; btn.textContent = 'Remove'; }
+}
+
 function loadConfig() {
   try {
     const data = window._configData || {};

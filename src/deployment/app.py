@@ -2,6 +2,7 @@ import json
 import re
 import asyncio
 import logging
+import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from fastapi.templating import Jinja2Templates
 from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses, dashboard_stats
 from worker import (
     sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_pr_comments, _fetch_open_prs,
-    runtime_config, schedule_enabled, get_config,
+    runtime_config, schedule_enabled, get_config, add_repo, remove_repo,
     QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
     SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD,
@@ -30,23 +31,29 @@ def _cache_read_enabled():
     val = str(get_config("CACHE_ENABLED")).lower()
     return val in ("true", "1", "yes")
 
-SCHEDULE_MINUTES = 60  # background auto-run interval
-
 # In-memory prompt overrides (reset on restart). Only used by inference/eval, NOT schedule.
 prompt_overrides: dict[str, str] = {}  # keys: "RAG", "Naive_LLM"
 
+_schedule_lock = threading.Lock()
+
 
 async def _background_scheduler():
-    """Run fetch_and_review_prs every SCHEDULE_MINUTES in the background."""
+    """Run fetch_and_review_prs at the configured SCHEDULE_INTERVAL (minutes)."""
     while True:
-        await asyncio.sleep(SCHEDULE_MINUTES * 60)
-        log.info("Background scheduler: starting PR review cycle")
+        interval = int(get_config("SCHEDULE_INTERVAL"))
+        await asyncio.sleep(interval * 60)
+        if not _schedule_lock.acquire(blocking=False):
+            log.info("Background scheduler: skipped, another run is in progress")
+            continue
         try:
+            log.info("Background scheduler: starting PR review cycle (interval=%dm)", interval)
             loop = asyncio.get_event_loop()
             await loop.run_in_executor(None, fetch_and_review_prs)
             log.info("Background scheduler: cycle complete")
         except Exception:
             log.exception("Background scheduler: cycle failed")
+        finally:
+            _schedule_lock.release()
 
 
 @asynccontextmanager
@@ -403,6 +410,8 @@ def api_schedule_run():
     """Trigger an immediate PR fetch-and-review cycle (synchronous).
     Clears last_checked so ALL open PRs are re-scanned (cached ones still skip).
     """
+    if not _schedule_lock.acquire(blocking=False):
+        return {"status": "error", "error": "A schedule run is already in progress. Please wait."}
     try:
         init_db()
         for repo in REPOS_MAIL_MAP:
@@ -412,6 +421,8 @@ def api_schedule_run():
     except Exception as e:
         log.exception("Run Now failed")
         return {"status": "error", "error": str(e)}
+    finally:
+        _schedule_lock.release()
 
 
 @app.get("/api/schedule/status")
@@ -555,6 +566,39 @@ async def api_config_post(request: Request):
         runtime_config[k] = v
         updated.append(k)
     return {"updated": updated}
+
+
+# ---- Repository Management ----
+@app.get("/api/repos")
+def api_repos_get():
+    return [{"repo": r, "email": e} for r, e in REPOS_MAIL_MAP.items()]
+
+
+@app.post("/api/repos")
+async def api_repos_add(request: Request):
+    body = await request.json()
+    repo = body.get("repo", "").strip()
+    email = body.get("email", "").strip()
+    if not repo or not email:
+        return {"error": "Both repo (owner/name) and email are required."}
+    if "/" not in repo:
+        return {"error": "Repo must be in owner/name format."}
+    if repo in REPOS_MAIL_MAP:
+        return {"error": f"Repository '{repo}' is already tracked."}
+    add_repo(repo, email)
+    return {"status": "ok", "repo": repo, "email": email}
+
+
+@app.delete("/api/repos")
+async def api_repos_remove(request: Request):
+    body = await request.json()
+    repo = body.get("repo", "").strip()
+    if not repo:
+        return {"error": "repo is required."}
+    if repo not in REPOS_MAIL_MAP:
+        return {"error": f"Repository '{repo}' is not tracked."}
+    remove_repo(repo)
+    return {"status": "ok", "repo": repo}
 
 
 # ---- Prompt Overrides (runtime only, reset on restart) ----

@@ -287,3 +287,10 @@ def dashboard_stats(repo_filter=""):
         "violation_categories": violation_categories,
         "top_prs_by_violations": pr_violation_counts[:15],
     }
+
+
+def delete_repo_data(repo):
+    """Delete all processed PR rows and app_state entries for a repo."""
+    with _conn() as c:
+        c.execute("DELETE FROM processed_prs WHERE repo=?", (repo,))
+        c.execute("DELETE FROM app_state WHERE key=?", (f"last_checked:{repo}",))

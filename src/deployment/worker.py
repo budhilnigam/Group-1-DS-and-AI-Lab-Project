@@ -49,6 +49,35 @@ runtime_config = {}
 schedule_enabled = {repo: True for repo in REPOS_MAIL_MAP}
 
 
+def _save_repos_to_config():
+    """Persist current REPOS_MAIL_MAP back to config.properties."""
+    config_path = BASE_DIR / "config.properties"
+    lines = config_path.read_text().splitlines()
+    new_lines = []
+    for line in lines:
+        if line.strip().startswith("REPOS_MAIL_MAP"):
+            new_lines.append(f"REPOS_MAIL_MAP = {json.dumps(REPOS_MAIL_MAP)}")
+        else:
+            new_lines.append(line)
+    config_path.write_text("\n".join(new_lines) + "\n")
+
+
+def add_repo(repo, email):
+    """Add a repo to REPOS_MAIL_MAP, persist, and enable scheduling."""
+    REPOS_MAIL_MAP[repo] = email
+    schedule_enabled[repo] = True
+    _save_repos_to_config()
+
+
+def remove_repo(repo):
+    """Remove a repo from REPOS_MAIL_MAP, persist, delete DB data."""
+    from db import delete_repo_data
+    REPOS_MAIL_MAP.pop(repo, None)
+    schedule_enabled.pop(repo, None)
+    _save_repos_to_config()
+    delete_repo_data(repo)
+
+
 def get_config(key):
     """Return runtime override if set, else the file-loaded default."""
     defaults = {
