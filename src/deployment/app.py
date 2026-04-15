@@ -26,6 +26,9 @@ HIDDEN_KEYS = {"GITHUB_TOKEN", "GROQ_TOKEN", "SMTP_PASSWORD"}
 
 SCHEDULE_MINUTES = 60  # background auto-run interval
 
+# In-memory prompt overrides (reset on restart). Only used by inference/eval, NOT schedule.
+prompt_overrides: dict[str, str] = {}  # keys: "RAG", "Naive_LLM"
+
 
 async def _background_scheduler():
     """Run fetch_and_review_prs every SCHEDULE_MINUTES in the background."""
@@ -164,6 +167,7 @@ async def api_inference(request: Request):
             pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=qdrant_url,
             prompt_path=prompt_path, repo_name=repo_short,
             collection_name=collection, embed_model_name=embed_model,
+            prompt_template_override=prompt_overrides.get("RAG"),
         )
         p_hash = compute_prompt_hash(prep["prompt"], prep["model"], prep["temperature"])
 
@@ -194,6 +198,9 @@ async def api_inference(request: Request):
 
     if run_naive:
         prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
+        naive_override = prompt_overrides.get("Naive_LLM")
+        if naive_override:
+            prompt_template = naive_override
         prompt = build_prompt(prompt_template, f"PR #{pr_number}", code, None)
         from single_pr_model_output_metrics import MODEL as LLM_MODEL
         n_hash = compute_prompt_hash(prompt, LLM_MODEL, 0)
@@ -252,6 +259,8 @@ async def api_evaluate(request: Request):
         collection_name=get_config("DEFAULT_COLLECTION_NAME"),
         embed_model_name=get_config("DEFAULT_EMBED_MODEL"),
         max_retries=int(get_config("LLM_MAX_RETRIES")),
+        rag_prompt_override=prompt_overrides.get("RAG"),
+        naive_prompt_override=prompt_overrides.get("Naive_LLM"),
     )
     return result
 
@@ -330,3 +339,36 @@ async def api_config_post(request: Request):
         runtime_config[k] = v
         updated.append(k)
     return {"updated": updated}
+
+
+# ---- Prompt Overrides (runtime only, reset on restart) ----
+@app.get("/api/prompts")
+def api_prompts_get():
+    from single_pr_model_output_metrics import _load_prompt_v1
+    default = _load_prompt_v1(Path("."), explicit_path=get_config("PROMPT_PATH"))
+    return {
+        "default": default,
+        "RAG": prompt_overrides.get("RAG", ""),
+        "Naive_LLM": prompt_overrides.get("Naive_LLM", ""),
+    }
+
+
+@app.post("/api/prompts")
+async def api_prompts_post(request: Request):
+    body = await request.json()
+    updated = []
+    for key in ("RAG", "Naive_LLM"):
+        val = body.get(key, "").strip()
+        if val:
+            prompt_overrides[key] = val
+            updated.append(key)
+        elif key in body and not val:
+            prompt_overrides.pop(key, None)
+            updated.append(f"{key} (reset)")
+    return {"updated": updated}
+
+
+@app.post("/api/prompts/reset")
+def api_prompts_reset():
+    prompt_overrides.clear()
+    return {"status": "ok", "message": "Prompts reset to default"}

@@ -116,6 +116,22 @@ th { background: #f6f8fa; }
   <div id="config-form"></div>
   <button id="btn-config" onclick="saveConfig()">Save</button>
   <div id="config-result"></div>
+
+  <hr style="margin:24px 0;border-color:#30363d">
+  <h3 style="margin-bottom:4px">Prompt Overrides <span style="font-size:12px;color:#8b949e;font-weight:normal">(inference &amp; evaluation only — schedule uses default)</span></h3>
+  <div id="prompt-status" style="font-size:12px;margin-bottom:10px"></div>
+
+  <label style="margin-top:12px">RAG Prompt</label>
+  <textarea id="prompt-rag" rows="12" style="width:100%;font-family:monospace;font-size:13px;background:#161b22;color:#e6edf3;border:1px solid #30363d;border-radius:6px;padding:10px;resize:vertical" placeholder="Loading..."></textarea>
+
+  <label style="margin-top:12px">Naive LLM Prompt</label>
+  <textarea id="prompt-naive" rows="12" style="width:100%;font-family:monospace;font-size:13px;background:#161b22;color:#e6edf3;border:1px solid #30363d;border-radius:6px;padding:10px;resize:vertical" placeholder="Loading..."></textarea>
+
+  <div style="margin-top:12px">
+    <button onclick="savePrompts()">Save Prompts</button>
+    <button onclick="resetPrompts()" style="margin-left:8px;background:#b8860b">Reset to Default</button>
+  </div>
+  <div id="prompt-result"></div>
 </div>
 
 <script type="application/json" id="_d_status">{{ sched_status_json | safe }}</script>
@@ -166,7 +182,7 @@ function switchTab(id) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', t.textContent.trim().toLowerCase().includes(id.slice(0,4))));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id===id));
   if (id==='schedule') { loadSchedule(); loadStatus(); }
-  if (id==='config') loadConfig();
+  if (id==='config') { loadConfig(); loadPrompts(); }
 }
 
 // ---- Inference ----
@@ -409,6 +425,53 @@ async function saveConfig() {
     switchTab(h);
   }
 })();
+
+// ---- Prompt Overrides ----
+var _promptDefault = '';
+async function loadPrompts() {
+  try {
+    const resp = await fetch('/api/prompts');
+    const data = await resp.json();
+    _promptDefault = data['default'] || '';
+    var ragEl = document.getElementById('prompt-rag');
+    var naiveEl = document.getElementById('prompt-naive');
+    ragEl.value = data.RAG || _promptDefault;
+    naiveEl.value = data.Naive_LLM || _promptDefault;
+    var status = document.getElementById('prompt-status');
+    var parts = [];
+    if (data.RAG) parts.push('RAG: <b>custom</b>');
+    else parts.push('RAG: <span style="color:#8b949e">default</span>');
+    if (data.Naive_LLM) parts.push('Naive LLM: <b>custom</b>');
+    else parts.push('Naive LLM: <span style="color:#8b949e">default</span>');
+    status.innerHTML = parts.join(' &nbsp;|&nbsp; ');
+  } catch(e) { console.error('loadPrompts:', e); }
+}
+
+async function savePrompts() {
+  var ragVal = document.getElementById('prompt-rag').value.trim();
+  var naiveVal = document.getElementById('prompt-naive').value.trim();
+  var body = {};
+  // if same as default, send empty to clear override
+  body.RAG = (ragVal === _promptDefault) ? '' : ragVal;
+  body.Naive_LLM = (naiveVal === _promptDefault) ? '' : naiveVal;
+  try {
+    const resp = await fetch('/api/prompts', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    document.getElementById('prompt-result').innerHTML = '<p style="color:#28a745;margin-top:8px">Updated: '+data.updated.join(', ')+'</p>';
+    loadPrompts();
+  } catch(e) { document.getElementById('prompt-result').innerHTML = '<p class="error">'+e+'</p>'; }
+}
+
+async function resetPrompts() {
+  try {
+    await fetch('/api/prompts/reset', {method:'POST'});
+    document.getElementById('prompt-result').innerHTML = '<p style="color:#28a745;margin-top:8px">Prompts reset to default</p>';
+    loadPrompts();
+  } catch(e) { document.getElementById('prompt-result').innerHTML = '<p class="error">'+e+'</p>'; }
+}
 
 </script>
 </body>

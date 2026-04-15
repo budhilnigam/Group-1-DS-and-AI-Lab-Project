@@ -31,6 +31,7 @@ VIOLATION TYPES (ONLY these):
    - Function parameters using [] or {} as default values
 
 5) documentation_formatting:
+   - Missing module, class, or function docstring
    - Docstring indentation inconsistent with block level
    - Misaligned triple quotes
    - Broken or inconsistent docstring structure

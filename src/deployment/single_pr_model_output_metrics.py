@@ -673,15 +673,17 @@ def compute_micro_metrics(
     pred_counter = {}
     gt_counter = {}
 
-    for r in predictions:
-        cat = r.get("violation_category")
-        if cat in TARGET_CATEGORIES:
-            pred_counter[cat] = pred_counter.get(cat, 0) + 1
-
     for r in ground_truth:
         cat = r.get("violation_category")
         if cat in TARGET_CATEGORIES:
             gt_counter[cat] = gt_counter.get(cat, 0) + 1
+
+    # Only count predictions in categories that appear in ground truth
+    gt_cats = set(gt_counter)
+    for r in predictions:
+        cat = r.get("violation_category")
+        if cat in TARGET_CATEGORIES and cat in gt_cats:
+            pred_counter[cat] = pred_counter.get(cat, 0) + 1
 
     cats = set(pred_counter) | set(gt_counter)
     tp = 0
@@ -875,10 +877,11 @@ def prepare_rag_prompt(
     repo_name: str | None = None,
     collection_name: str = DEFAULT_COLLECTION_NAME,
     embed_model_name: str = DEFAULT_EMBED_MODEL,
+    prompt_template_override: str | None = None,
 ) -> dict[str, Any]:
     """Do RAG retrieval and build the final prompt without calling the LLM.
     Returns dict with prompt, chunks, model, temperature."""
-    prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
+    prompt_template = prompt_template_override or _load_prompt_v1(Path("."), explicit_path=prompt_path)
 
     if pr_code.lstrip().startswith("diff --git") or "@@ " in pr_code:
         pr_code = _extract_added_lines_from_diff(pr_code)
@@ -949,9 +952,13 @@ def run_eval_on_code(
     collection_name=DEFAULT_COLLECTION_NAME,
     embed_model_name=DEFAULT_EMBED_MODEL,
     max_retries=2,
+    rag_prompt_override=None,
+    naive_prompt_override=None,
 ):
     """Run all 3 baselines on raw code + ground truth. Returns reviews, metrics, latency."""
-    prompt_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
+    default_template = _load_prompt_v1(Path("."), explicit_path=prompt_path)
+    rag_template = rag_prompt_override or default_template
+    naive_template = naive_prompt_override or default_template
 
     if pr_code.lstrip().startswith("diff --git") or "@@ " in pr_code:
         pr_code = _extract_added_lines_from_diff(pr_code)
@@ -972,7 +979,7 @@ def run_eval_on_code(
     )
     rag_r = time.perf_counter() - rag_r0
 
-    rag_prompt = build_prompt(prompt_template, pr_id, pr_code, [c["text"] for c in rag_candidates])
+    rag_prompt = build_prompt(rag_template, pr_id, pr_code, [c["text"] for c in rag_candidates])
     rag_a0 = time.perf_counter()
     rag_reviews, rag_retries = _call_llm_with_retry(client, rag_prompt, max_retries)
     rag_a = time.perf_counter() - rag_a0
@@ -980,7 +987,7 @@ def run_eval_on_code(
 
     # --- Naive LLM ---
     naive_t0 = time.perf_counter()
-    naive_prompt = build_prompt(prompt_template, pr_id, pr_code, None)
+    naive_prompt = build_prompt(naive_template, pr_id, pr_code, None)
     naive_a0 = time.perf_counter()
     naive_reviews, naive_retries = _call_llm_with_retry(client, naive_prompt, max_retries)
     naive_a = time.perf_counter() - naive_a0
