@@ -139,41 +139,56 @@ def set_last_checked(repo, timestamp_iso):
 
 
 def recent_prs(limit=10, offset=0, search="", only_open=True):
+    # Use a subquery to get latest status per PR, then filter
     base = (
         "SELECT repo, pr_number, MAX(processed_at) as processed_at, "
         "MAX(email_sent) as email_sent, MAX(title) as title, "
-        "MAX(pr_status) as pr_status FROM processed_prs"
+        "(SELECT pr_status FROM processed_prs p2 "
+        " WHERE p2.repo=processed_prs.repo AND p2.pr_number=processed_prs.pr_number "
+        " ORDER BY p2.processed_at DESC LIMIT 1) as pr_status "
+        "FROM processed_prs"
     )
     conditions = []
     params = []
-    if only_open:
-        conditions.append("pr_status='open'")
     if search:
         like = f"%{search}%"
         conditions.append("(repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? OR title LIKE ?)")
         params.extend([like, like, like])
     where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
+    group_having = " GROUP BY repo, pr_number"
+    if only_open:
+        group_having += " HAVING pr_status='open'"
     with _conn() as c:
         rows = c.execute(
-            base + where + " GROUP BY repo, pr_number ORDER BY processed_at DESC LIMIT ? OFFSET ?",
+            base + where + group_having + " ORDER BY processed_at DESC LIMIT ? OFFSET ?",
             params + [limit, offset],
         ).fetchall()
     return [dict(r) for r in rows]
 
 
 def pr_count(search="", only_open=True):
-    base = "SELECT COUNT(*) as cnt FROM (SELECT 1 FROM processed_prs"
+    inner = (
+        "SELECT "
+        "(SELECT pr_status FROM processed_prs p2 "
+        " WHERE p2.repo=processed_prs.repo AND p2.pr_number=processed_prs.pr_number "
+        " ORDER BY p2.processed_at DESC LIMIT 1) as pr_status "
+        "FROM processed_prs"
+    )
     conditions = []
     params = []
-    if only_open:
-        conditions.append("pr_status='open'")
     if search:
         like = f"%{search}%"
         conditions.append("(repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? OR title LIKE ?)")
         params.extend([like, like, like])
     where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
+    group_having = " GROUP BY repo, pr_number"
+    if only_open:
+        group_having += " HAVING pr_status='open'"
     with _conn() as c:
-        row = c.execute(base + where + " GROUP BY repo, pr_number)", params).fetchone()
+        row = c.execute(
+            "SELECT COUNT(*) as cnt FROM (" + inner + where + group_having + ")",
+            params,
+        ).fetchone()
     return row["cnt"] if row else 0
 
 

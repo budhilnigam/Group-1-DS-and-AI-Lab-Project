@@ -127,6 +127,27 @@ def _fetch_pr_info(repo, pr_number):
     return state, data.get("title", "")
 
 
+def _fetch_pr_comments(repo, pr_number):
+    """Return list of {user, body, created_at} for issue comments + review comments."""
+    comments = []
+    # Issue comments
+    url = f"{GH_API}/repos/{repo}/issues/{pr_number}/comments?per_page=100"
+    try:
+        for c in json.loads(_gh_get(url)):
+            comments.append({"user": c.get("user", {}).get("login", ""), "body": c.get("body", ""), "created_at": c.get("created_at", "")})
+    except Exception:
+        pass
+    # Review comments (inline)
+    url2 = f"{GH_API}/repos/{repo}/pulls/{pr_number}/comments?per_page=100"
+    try:
+        for c in json.loads(_gh_get(url2)):
+            comments.append({"user": c.get("user", {}).get("login", ""), "body": c.get("body", ""), "created_at": c.get("created_at", ""), "path": c.get("path", ""), "line": c.get("line")})
+    except Exception:
+        pass
+    comments.sort(key=lambda x: x.get("created_at", ""))
+    return comments
+
+
 def _fetch_pr_diff(repo, pr_number):
     url = f"{GH_API}/repos/{repo}/pulls/{pr_number}"
     return _gh_get(url, accept="application/vnd.github.v3.diff")

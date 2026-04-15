@@ -12,7 +12,7 @@ from fastapi.templating import Jinja2Templates
 
 from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses
 from worker import (
-    sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_open_prs,
+    sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_pr_comments, _fetch_open_prs,
     runtime_config, schedule_enabled, get_config,
     QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
@@ -141,7 +141,7 @@ async def api_inference(request: Request):
 
     # Validate PR is open
     try:
-        pr_state, _ = _fetch_pr_info(repo, pr_number)
+        pr_state, pr_title = _fetch_pr_info(repo, pr_number)
     except Exception as e:
         return {"error": f"Failed to fetch PR info: {e}"}
     if pr_state != "open":
@@ -151,6 +151,12 @@ async def api_inference(request: Request):
         diff = _fetch_pr_diff(repo, pr_number)
     except Exception as e:
         return {"error": f"Failed to fetch PR diff: {e}"}
+
+    # Fetch PR comments (non-blocking, best effort)
+    try:
+        pr_comments = _fetch_pr_comments(repo, pr_number)
+    except Exception:
+        pr_comments = []
 
     from single_pr_model_output_metrics import (
         prepare_rag_prompt, build_prompt, _call_llm_with_retry,
@@ -246,6 +252,14 @@ async def api_inference(request: Request):
         result["prompts_used"] = prompts
     if cached_models:
         result["_cached"] = cached_models
+
+    result["pr_meta"] = {
+        "title": pr_title,
+        "number": pr_number,
+        "repo": repo,
+        "diff": diff,
+        "comments": pr_comments,
+    }
 
     return result
 

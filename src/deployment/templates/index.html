@@ -141,6 +141,28 @@ th { background: #f6f8fa; }
 </div>
 
 <!-- ==================== TAB 3: SCHEDULE ==================== -->
+
+<!-- PR Details Modal -->
+<div id="pr-details-modal" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:8px;padding:0;max-width:900px;width:94%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 8px 30px rgba(0,0,0,.3);position:relative">
+    <div style="padding:16px 20px;border-bottom:1px solid #e1e4e8;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div>
+        <h3 id="pr-modal-title" style="font-size:16px;margin:0"></h3>
+        <span id="pr-modal-subtitle" style="font-size:12px;color:#586069"></span>
+      </div>
+      <button onclick="document.getElementById('pr-details-modal').style.display='none'" style="background:none;color:#586069;font-size:22px;border:none;cursor:pointer;padding:0;margin:0;line-height:1">&times;</button>
+    </div>
+    <div style="display:flex;border-bottom:1px solid #e1e4e8;flex-shrink:0">
+      <div id="pr-tab-diff" class="pr-modal-tab active" onclick="switchPrTab('diff')" style="padding:8px 18px;cursor:pointer;font-size:13px;font-weight:600;border-bottom:2px solid #0366d6;color:#24292e">Diff</div>
+      <div id="pr-tab-comments" class="pr-modal-tab" onclick="switchPrTab('comments')" style="padding:8px 18px;cursor:pointer;font-size:13px;color:#586069;border-bottom:2px solid transparent">Comments <span id="pr-comment-count" style="background:#e1e4e8;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px"></span></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:16px 20px">
+      <div id="pr-modal-diff" style="display:block"><pre id="pr-diff-content" style="background:#f6f8fa;border:1px solid #d1d5da;border-radius:6px;padding:14px;font-size:12px;line-height:1.6;overflow-x:auto;white-space:pre;margin:0;font-family:SFMono-Regular,Consolas,monospace;max-height:none"></pre></div>
+      <div id="pr-modal-comments" style="display:none"><div id="pr-comments-content"></div></div>
+    </div>
+  </div>
+</div>
+
 <div id="schedule" class="panel">
   <h3 style="margin-bottom:12px">Scheduled Repos</h3>
   <table>
@@ -235,6 +257,44 @@ function switchTab(id) {
   if (id==='config') { loadConfig(); loadPrompts(); }
 }
 
+function showPrDetails() {
+  const m = window._prMeta;
+  if (!m) return;
+  document.getElementById('pr-modal-title').textContent = m.title || 'PR #' + m.number;
+  document.getElementById('pr-modal-subtitle').textContent = m.repo + ' #' + m.number;
+  document.getElementById('pr-diff-content').textContent = m.diff || 'No diff available.';
+  // Render comments
+  const cc = m.comments || [];
+  document.getElementById('pr-comment-count').textContent = cc.length;
+  let ch = '';
+  if (!cc.length) {
+    ch = '<p style="color:#586069;font-size:13px">No comments on this PR.</p>';
+  } else {
+    cc.forEach(function(c) {
+      ch += '<div style="border:1px solid #e1e4e8;border-radius:6px;padding:12px;margin-bottom:10px;background:#f6f8fa">';
+      ch += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+      ch += '<strong style="font-size:13px">'+((c.user||'unknown').replace(/</g,'&lt;'))+'</strong>';
+      if (c.path) ch += '<span style="font-size:11px;color:#586069;background:#e1e4e8;border-radius:3px;padding:1px 6px">'+c.path.replace(/</g,'&lt;')+(c.line?' L'+c.line:'')+'</span>';
+      ch += '<span style="font-size:11px;color:#586069">'+new Date(c.created_at).toLocaleString()+'</span>';
+      ch += '</div>';
+      ch += '<div style="font-size:13px;white-space:pre-wrap;word-break:break-word;line-height:1.5">'+(c.body||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+      ch += '</div>';
+    });
+  }
+  document.getElementById('pr-comments-content').innerHTML = ch;
+  switchPrTab('diff');
+  document.getElementById('pr-details-modal').style.display = 'flex';
+}
+
+function switchPrTab(tab) {
+  document.getElementById('pr-modal-diff').style.display = tab === 'diff' ? 'block' : 'none';
+  document.getElementById('pr-modal-comments').style.display = tab === 'comments' ? 'block' : 'none';
+  document.getElementById('pr-tab-diff').style.borderBottomColor = tab === 'diff' ? '#0366d6' : 'transparent';
+  document.getElementById('pr-tab-diff').style.color = tab === 'diff' ? '#24292e' : '#586069';
+  document.getElementById('pr-tab-comments').style.borderBottomColor = tab === 'comments' ? '#0366d6' : 'transparent';
+  document.getElementById('pr-tab-comments').style.color = tab === 'comments' ? '#24292e' : '#586069';
+}
+
 // ---- Inference ----
 async function runInference() {
   const btn = document.getElementById('btn-infer');
@@ -257,8 +317,20 @@ async function runInference() {
     const cachedMap = data._cached || {};
     const chunks = data.retrieved_chunks;
     const prompts = data.prompts_used;
+    const meta = data.pr_meta;
+
+    // PR header with View Details button
+    if (meta) {
+      window._prMeta = meta;
+      html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">';
+      html += '<span style="font-size:15px;font-weight:600">' + (meta.title||'PR #'+meta.number).replace(/</g,'&lt;') + '</span>';
+      html += '<span style="font-size:12px;color:#586069">' + meta.repo + ' #' + meta.number + '</span>';
+      html += '<button onclick="showPrDetails()" style="padding:4px 12px;font-size:12px;margin:0;background:#28a745">View PR Details</button>';
+      html += '</div>';
+    }
+
     for (const [model, reviews] of Object.entries(data)) {
-      if (model === 'retrieved_chunks' || model === 'prompts_used' || model === '_cached') continue;
+      if (model === 'retrieved_chunks' || model === 'prompts_used' || model === '_cached' || model === 'pr_meta') continue;
       var badge = cachedMap[model] ? ' <span style="display:inline-block;background:#b8860b30;color:#b8860b;border:1px solid #b8860b;border-radius:12px;padding:1px 8px;font-size:11px;vertical-align:middle;margin-left:6px">cached</span>' : '';
       html += '<div class="result-box"><h3>'+model+badge+'</h3>';
       if (!reviews.length) { html += '<p>No violations found.</p></div>'; continue; }
