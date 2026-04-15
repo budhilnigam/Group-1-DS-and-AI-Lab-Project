@@ -117,6 +117,16 @@ def _fetch_open_prs(repo, since_iso=None):
     return [pr for pr in data if datetime.fromisoformat(pr["updated_at"].replace("Z", "+00:00")) > since_dt]
 
 
+def _fetch_pr_info(repo, pr_number):
+    """Return (state, title) for a single PR. state is 'open', 'closed', or 'merged'."""
+    url = f"{GH_API}/repos/{repo}/pulls/{pr_number}"
+    data = json.loads(_gh_get(url))
+    state = data.get("state", "unknown")
+    if state == "closed" and data.get("merged_at"):
+        state = "merged"
+    return state, data.get("title", "")
+
+
 def _fetch_pr_diff(repo, pr_number):
     url = f"{GH_API}/repos/{repo}/pulls/{pr_number}"
     return _gh_get(url, accept="application/vnd.github.v3.diff")

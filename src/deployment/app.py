@@ -12,7 +12,7 @@ from fastapi.templating import Jinja2Templates
 
 from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses
 from worker import (
-    sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_open_prs,
+    sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_open_prs,
     runtime_config, schedule_enabled, get_config,
     QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
@@ -134,6 +134,18 @@ async def api_inference(request: Request):
 
     repo, pr_number = m.group(1), int(m.group(2))
     repo_short = repo.split("/")[-1]
+
+    # Validate repo is in tracked list
+    if repo not in REPOS_MAIL_MAP:
+        return {"error": f"Repository '{repo}' is not added for monitoring. Only tracked repos can be processed."}
+
+    # Validate PR is open
+    try:
+        pr_state, _ = _fetch_pr_info(repo, pr_number)
+    except Exception as e:
+        return {"error": f"Failed to fetch PR info: {e}"}
+    if pr_state != "open":
+        return {"error": f"This PR is {pr_state}. Only open PRs can be processed."}
 
     try:
         diff = _fetch_pr_diff(repo, pr_number)
