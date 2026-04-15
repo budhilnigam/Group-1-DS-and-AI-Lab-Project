@@ -37,7 +37,7 @@ VIOLATION TYPES (ONLY these):
    - Broken or inconsistent docstring structure
 
 CONSTRAINTS:
-- Max 5 findings per PR
+- Max 30 findings per PR
 - Detect ONLY clear, high-confidence violations
 - Do NOT guess or infer
 - Be precise: exact line_number
