@@ -98,11 +98,17 @@ def get_latest_cached_result_any(repo, pr_number):
 def cache_pr(repo, pr_number, head_sha, result_json, email_sent=False, prompt_hash="", title=""):
     now = datetime.now(timezone.utc).isoformat()
     with _conn() as c:
+        # Preserve existing pr_status; default to 'open' for new PRs
+        existing = c.execute(
+            "SELECT pr_status FROM processed_prs WHERE repo=? AND pr_number=? ORDER BY id DESC LIMIT 1",
+            (repo, pr_number),
+        ).fetchone()
+        status = existing["pr_status"] if existing and existing["pr_status"] else "open"
         c.execute(
             """INSERT OR REPLACE INTO processed_prs
                (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash, title, pr_status)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'open')""",
-            (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash, title),
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash, title, status),
         )
 
 
@@ -211,3 +217,73 @@ def update_pr_statuses(open_prs):
                     "UPDATE processed_prs SET pr_status='closed' WHERE repo=? AND pr_number=?",
                     (key[0], key[1]),
                 )
+
+
+def dashboard_stats(repo_filter=""):
+    """Aggregate stats for the dashboard, optionally filtered by repo."""
+    import json as _json
+    with _conn() as c:
+        # Get all distinct repos
+        all_repos = [r["repo"] for r in c.execute(
+            "SELECT DISTINCT repo FROM processed_prs"
+        ).fetchall()]
+
+        # Get latest result per PR (deduplicated)
+        q = ("SELECT repo, pr_number, result_json, pr_status, email_sent, title "
+             "FROM processed_prs WHERE id IN ("
+             "  SELECT MAX(id) FROM processed_prs GROUP BY repo, pr_number"
+             ") AND result_json IS NOT NULL")
+        params = []
+        if repo_filter:
+            q += " AND repo=?"
+            params.append(repo_filter)
+        rows = c.execute(q, params).fetchall()
+
+    total_prs = len(rows)
+    open_prs = sum(1 for r in rows if r["pr_status"] == "open")
+    closed_prs = total_prs - open_prs
+    emails_sent = sum(1 for r in rows if r["email_sent"])
+
+    violation_categories = {}
+    pr_violation_counts = []  # (pr_number, title, count)
+    prs_with_violations = 0
+    prs_clean = 0
+    total_violations = 0
+
+    for r in rows:
+        try:
+            data = _json.loads(r["result_json"])
+            reviews = data.get("reviews", [])
+        except Exception:
+            reviews = []
+        count = len(reviews)
+        total_violations += count
+        if count > 0:
+            prs_with_violations += 1
+        else:
+            prs_clean += 1
+        pr_violation_counts.append({
+            "pr_number": r["pr_number"],
+            "title": r["title"] or f"PR #{r['pr_number']}",
+            "repo": r["repo"],
+            "count": count,
+        })
+        for rv in reviews:
+            cat = rv.get("violation_category", "unknown")
+            violation_categories[cat] = violation_categories.get(cat, 0) + 1
+
+    # Top 10 PRs by violation count
+    pr_violation_counts.sort(key=lambda x: x["count"], reverse=True)
+
+    return {
+        "repos": all_repos,
+        "total_prs": total_prs,
+        "open_prs": open_prs,
+        "closed_prs": closed_prs,
+        "emails_sent": emails_sent,
+        "total_violations": total_violations,
+        "prs_with_violations": prs_with_violations,
+        "prs_clean": prs_clean,
+        "violation_categories": violation_categories,
+        "top_prs_by_violations": pr_violation_counts[:15],
+    }

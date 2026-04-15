@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 
-from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses
+from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses, dashboard_stats
 from worker import (
     sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_pr_comments, _fetch_open_prs,
     runtime_config, schedule_enabled, get_config,
@@ -517,6 +517,13 @@ async def api_schedule_reprocess(request: Request):
         "used_cache": used_cache,
         "email_sent": email_ok,
     }
+
+
+# ---- Dashboard ----
+@app.get("/api/dashboard")
+def api_dashboard(request: Request):
+    repo = request.query_params.get("repo", "")
+    return dashboard_stats(repo_filter=repo)
 
 
 # ---- Configuration ----
