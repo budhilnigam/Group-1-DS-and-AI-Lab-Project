@@ -37,10 +37,14 @@ def init_db():
             CREATE UNIQUE INDEX IF NOT EXISTS uq_pr_prompt
             ON processed_prs(repo, pr_number, head_sha, prompt_hash)
         """)
-        # migrate: add prompt_hash column if missing
+        # migrate: add columns if missing
         cols = [row[1] for row in c.execute("PRAGMA table_info(processed_prs)").fetchall()]
         if "prompt_hash" not in cols:
             c.execute("ALTER TABLE processed_prs ADD COLUMN prompt_hash TEXT DEFAULT ''")
+        if "title" not in cols:
+            c.execute("ALTER TABLE processed_prs ADD COLUMN title TEXT DEFAULT ''")
+        if "pr_status" not in cols:
+            c.execute("ALTER TABLE processed_prs ADD COLUMN pr_status TEXT DEFAULT 'open'")
         # migrate: drop old unique index that lacks prompt_hash
         try:
             c.execute("DROP INDEX IF EXISTS uq_pr")
@@ -81,14 +85,36 @@ def get_latest_cached_result(repo, pr_number, prompt_hash=""):
     return row["result_json"] if row else None
 
 
-def cache_pr(repo, pr_number, head_sha, result_json, email_sent=False, prompt_hash=""):
+def get_latest_cached_result_any(repo, pr_number):
+    """Get the most recent cached result for a PR regardless of prompt_hash."""
+    with _conn() as c:
+        row = c.execute(
+            "SELECT result_json FROM processed_prs WHERE repo=? AND pr_number=? AND result_json IS NOT NULL ORDER BY processed_at DESC LIMIT 1",
+            (repo, pr_number),
+        ).fetchone()
+    return row["result_json"] if row else None
+
+
+def cache_pr(repo, pr_number, head_sha, result_json, email_sent=False, prompt_hash="", title=""):
     now = datetime.now(timezone.utc).isoformat()
     with _conn() as c:
         c.execute(
             """INSERT OR REPLACE INTO processed_prs
-               (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash),
+               (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash, title, pr_status)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'open')""",
+            (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash, title),
+        )
+
+
+def update_email_sent(repo, pr_number, email_sent):
+    """Update email_sent and processed_at on the most recent row for this repo/pr."""
+    now = datetime.now(timezone.utc).isoformat()
+    with _conn() as c:
+        c.execute(
+            "UPDATE processed_prs SET email_sent=?, processed_at=? WHERE id = ("
+            "  SELECT id FROM processed_prs WHERE repo=? AND pr_number=? ORDER BY id DESC LIMIT 1"
+            ")",
+            (int(email_sent), now, repo, pr_number),
         )
 
 
@@ -112,32 +138,61 @@ def set_last_checked(repo, timestamp_iso):
             )
 
 
-def recent_prs(limit=10, offset=0, search=""):
+def recent_prs(limit=10, offset=0, search="", only_open=True):
+    base = (
+        "SELECT repo, pr_number, MAX(processed_at) as processed_at, "
+        "MAX(email_sent) as email_sent, MAX(title) as title, "
+        "MAX(pr_status) as pr_status FROM processed_prs"
+    )
+    conditions = []
+    params = []
+    if only_open:
+        conditions.append("pr_status='open'")
+    if search:
+        like = f"%{search}%"
+        conditions.append("(repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? OR title LIKE ?)")
+        params.extend([like, like, like])
+    where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
     with _conn() as c:
-        if search:
-            like = f"%{search}%"
-            rows = c.execute(
-                "SELECT repo, pr_number, head_sha, processed_at, email_sent FROM processed_prs "
-                "WHERE repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? "
-                "ORDER BY id DESC LIMIT ? OFFSET ?",
-                (like, like, limit, offset),
-            ).fetchall()
-        else:
-            rows = c.execute(
-                "SELECT repo, pr_number, head_sha, processed_at, email_sent FROM processed_prs ORDER BY id DESC LIMIT ? OFFSET ?",
-                (limit, offset),
-            ).fetchall()
+        rows = c.execute(
+            base + where + " GROUP BY repo, pr_number ORDER BY processed_at DESC LIMIT ? OFFSET ?",
+            params + [limit, offset],
+        ).fetchall()
     return [dict(r) for r in rows]
 
 
-def pr_count(search=""):
+def pr_count(search="", only_open=True):
+    base = "SELECT COUNT(*) as cnt FROM (SELECT 1 FROM processed_prs"
+    conditions = []
+    params = []
+    if only_open:
+        conditions.append("pr_status='open'")
+    if search:
+        like = f"%{search}%"
+        conditions.append("(repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? OR title LIKE ?)")
+        params.extend([like, like, like])
+    where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
     with _conn() as c:
-        if search:
-            like = f"%{search}%"
-            row = c.execute(
-                "SELECT COUNT(*) as cnt FROM processed_prs WHERE repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ?",
-                (like, like),
-            ).fetchone()
-        else:
-            row = c.execute("SELECT COUNT(*) as cnt FROM processed_prs").fetchone()
-    return row["cnt"]
+        row = c.execute(base + where + " GROUP BY repo, pr_number)", params).fetchone()
+    return row["cnt"] if row else 0
+
+
+def update_pr_statuses(open_prs):
+    """Mark PRs as open or closed based on the set of currently open PR numbers.
+    open_prs: dict of {(repo, pr_number): title}"""
+    with _conn() as c:
+        all_prs = c.execute(
+            "SELECT DISTINCT repo, pr_number FROM processed_prs"
+        ).fetchall()
+        for row in all_prs:
+            key = (row["repo"], row["pr_number"])
+            if key in open_prs:
+                c.execute(
+                    "UPDATE processed_prs SET pr_status='open', title=? WHERE repo=? AND pr_number=?",
+                    (open_prs[key], key[0], key[1]),
+                )
+            else:
+                c.execute(
+                    "UPDATE processed_prs SET pr_status='closed' WHERE repo=? AND pr_number=?",
+                    (key[0], key[1]),
+                )

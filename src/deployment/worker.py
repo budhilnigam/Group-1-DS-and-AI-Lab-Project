@@ -270,7 +270,7 @@ def fetch_and_review_prs():
 
             email_ok = send_review_email(repo, pr_number, pr_title, pr_url, result["reviews"], email)
 
-            cache_pr(repo, pr_number, head_sha, json.dumps(result), email_sent=email_ok, prompt_hash=p_hash)
+            cache_pr(repo, pr_number, head_sha, json.dumps(result), email_sent=email_ok, prompt_hash=p_hash, title=pr_title)
             log.info("Processed PR #%d (%s), %d findings", pr_number, repo, len(result["reviews"]))
             summary["processed"].append({
                 "repo": repo, "pr": pr_number, "title": pr_title,
@@ -314,7 +314,7 @@ Findings:
     msg["To"] = to_email
 
     try:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as s:
             s.starttls()
             s.login(SMTP_USER, SMTP_PASSWORD)
             s.send_message(msg)

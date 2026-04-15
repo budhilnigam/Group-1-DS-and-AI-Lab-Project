@@ -150,11 +150,12 @@ th { background: #f6f8fa; }
   <button id="btn-run-now" onclick="runNow()" style="margin-top:14px;background:#28a745">Run Now</button>
   <div id="run-now-result"></div>
 
-  <h3 style="margin-top:24px;margin-bottom:12px">Activity Log</h3>
+  <h3 style="margin-top:24px;margin-bottom:12px">Activity Log <span style="font-weight:normal;font-size:12px;color:#586069">(open PRs only)</span></h3>
   <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
-    <input type="text" id="sched-search" placeholder="Search by repo or PR #..." style="max-width:300px;font-size:13px" onkeydown="if(event.key==='Enter'){_schedPage=1;loadStatusFromAPI()}">
+    <input type="text" id="sched-search" placeholder="Search by repo, PR # or title..." style="max-width:300px;font-size:13px" onkeydown="if(event.key==='Enter'){_schedPage=1;loadStatusFromAPI()}">
     <button onclick="_schedPage=1;loadStatusFromAPI()" style="padding:6px 14px;font-size:13px;margin:0">Search</button>
     <button onclick="document.getElementById('sched-search').value='';_schedPage=1;loadStatusFromAPI()" style="padding:6px 14px;font-size:13px;margin:0;background:#6c757d">Clear</button>
+    <button id="btn-refresh-status" onclick="refreshPRStatus()" style="padding:6px 14px;font-size:13px;margin:0;background:#b8860b" title="Fetch open/closed status from GitHub">&#x21bb; Sync Status</button>
   </div>
   <div id="sched-status">Loading...</div>
 </div>
@@ -489,17 +490,21 @@ function renderStatus(data, out) {
     var totalPages = data.total_pages || 1;
     var total = data.total_processed || 0;
 
-    let html = '<p style="font-size:13px;color:#586069;margin-bottom:8px">Total PRs processed: <b>'+total+'</b>';
+    let html = '<p style="font-size:13px;color:#586069;margin-bottom:8px">Open PRs: <b>'+total+'</b>';
     var lc = data.last_checked || {};
     for (const [repo, ts] of Object.entries(lc)) {
       html += ' &nbsp;|&nbsp; Last checked <b>'+repo+'</b>: '+(ts ? new Date(ts).toLocaleString() : 'never');
     }
     html += '</p>';
     if ((data.recent||[]).length) {
-      html += '<table><thead><tr><th>PR #</th><th>Repository</th><th>Processed At</th><th>Email Sent</th></tr></thead><tbody>';
+      html += '<table><thead><tr><th>PR #</th><th>Title</th><th>Repository</th><th>Processed At</th><th>Email Sent</th><th style="width:100px">Action</th></tr></thead><tbody>';
       (data.recent||[]).forEach(r => {
         const emailIcon = r.email_sent ? 'true' : 'false';
-        html += '<tr><td>#'+r.pr_number+'</td><td>'+r.repo+'</td><td>'+new Date(r.processed_at).toLocaleString()+'</td><td>'+emailIcon+'</td></tr>';
+        const title = r.title || '';
+        const prUrl = 'https://github.com/' + r.repo + '/pull/' + r.pr_number;
+        html += '<tr><td>#'+r.pr_number+'</td><td><a href="'+prUrl+'" target="_blank" rel="noopener" style="color:#0366d6;text-decoration:none" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'">'+(title||'—')+'</a></td><td>'+r.repo+'</td><td>'+new Date(r.processed_at).toLocaleString()+'</td><td>'+emailIcon+'</td>';
+        html += '<td><button onclick="reprocessPR(\''+r.repo+'\','+r.pr_number+',this)" style="padding:3px 10px;font-size:11px;margin:0;background:#0366d6">Reprocess</button></td>';
+        html += '</tr>';
       });
       html += '</tbody></table>';
 
@@ -512,9 +517,59 @@ function renderStatus(data, out) {
       html += '<button onclick="_schedPage='+totalPages+';loadStatusFromAPI()" style="padding:4px 10px;font-size:12px;margin:0"'+(page>=totalPages?' disabled':'')+'>&#187;</button>';
       html += '</div>';
     } else {
-      html += '<p>No PRs found.</p>';
+      html += '<p>No open PRs found.</p>';
     }
     out.innerHTML = html;
+}
+
+async function reprocessPR(repo, prNum, btn) {
+  var origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const resp = await fetch('/api/schedule/reprocess', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({repo: repo, pr_number: prNum})
+    });
+    const data = await resp.json();
+    if (data.error) {
+      alert('Reprocess failed: ' + data.error);
+    } else {
+      var msg = 'PR #'+prNum+': '+data.findings+' findings';
+      if (data.used_cache) msg += ' (from cache)';
+      msg += data.email_sent ? ', email sent' : ', no email';
+      btn.textContent = '\u2713 Done';
+      btn.style.background = '#28a745';
+      setTimeout(function(){ loadStatusFromAPI(); }, 1500);
+      return;
+    }
+  } catch(e) { alert('Reprocess failed: ' + e); }
+  btn.disabled = false;
+  btn.textContent = origText;
+}
+
+async function refreshPRStatus() {
+  var btn = document.getElementById('btn-refresh-status');
+  btn.disabled = true;
+  btn.textContent = 'Syncing...';
+  try {
+    const resp = await fetch('/api/schedule/refresh-status', {method:'POST'});
+    const data = await resp.json();
+    btn.textContent = '\u2713 Synced';
+    btn.style.background = '#28a745';
+    setTimeout(function(){
+      btn.textContent = '\u21bb Sync Status';
+      btn.style.background = '#b8860b';
+      btn.disabled = false;
+      _schedPage = 1;
+      loadStatusFromAPI();
+    }, 1500);
+  } catch(e) {
+    alert('Sync failed: ' + e);
+    btn.textContent = '\u21bb Sync Status';
+    btn.style.background = '#b8860b';
+    btn.disabled = false;
+  }
 }
 
 async function runNow() {

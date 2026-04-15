@@ -10,9 +10,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 
-from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, set_last_checked, compute_prompt_hash, cache_pr
+from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses
 from worker import (
-    sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff,
+    sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_open_prs,
     runtime_config, schedule_enabled, get_config,
     QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
@@ -391,6 +391,100 @@ def api_schedule_status(page: int = 1, per_page: int = 15, search: str = ""):
     total = pr_count(search=search)
     return {"recent": rows, "last_checked": last_checked, "total_processed": total,
             "page": page, "per_page": per_page, "total_pages": max(1, -(-total // per_page))}
+
+
+@app.post("/api/schedule/refresh-status")
+def api_refresh_pr_status():
+    """Fetch open PRs from GitHub and mark closed ones in the DB."""
+    open_prs = {}  # {(repo, pr_number): title}
+    for repo in REPOS_MAIL_MAP:
+        try:
+            prs = _fetch_open_prs(repo)
+            for pr in prs:
+                open_prs[(repo, pr["number"])] = pr.get("title", "")
+        except Exception:
+            log.exception("Failed to fetch open PRs for %s", repo)
+    update_pr_statuses(open_prs)
+    return {"status": "ok", "open_count": len(open_prs)}
+
+
+@app.post("/api/schedule/reprocess")
+async def api_schedule_reprocess(request: Request):
+    """Reprocess a single PR: fetch diff, run RAG inference (use cache if hit), send email."""
+    body = await request.json()
+    repo = body.get("repo", "").strip()
+    pr_number = body.get("pr_number")
+
+    if not repo or not pr_number:
+        return {"error": "repo and pr_number are required"}
+    pr_number = int(pr_number)
+
+    from single_pr_model_output_metrics import prepare_rag_prompt, _call_llm_with_retry
+    from worker import send_review_email
+    from groq import Groq
+
+    # First, try to get any existing cached result for this PR (fast path)
+    cached = get_latest_cached_result_any(repo, pr_number)
+    used_cache = False
+    reviews = []
+    if cached:
+        try:
+            cached_data = json.loads(cached)
+            reviews = cached_data.get("reviews", [])
+            used_cache = True
+        except Exception:
+            cached = None
+
+    if not cached:
+        # Fetch diff
+        try:
+            diff = _fetch_pr_diff(repo, pr_number)
+        except Exception as e:
+            return {"error": f"Failed to fetch PR diff: {e}"}
+
+        repo_short = repo.split("/")[-1] if "/" in repo else repo
+        qdrant_url = get_config("QDRANT_URL")
+        groq_key = get_config("GROQ_TOKEN")
+        prompt_path = get_config("PROMPT_PATH")
+        collection = get_config("DEFAULT_COLLECTION_NAME")
+        embed_model = get_config("DEFAULT_EMBED_MODEL")
+        max_retries = int(get_config("LLM_MAX_RETRIES"))
+
+        # Prepare RAG prompt
+        try:
+            prep = prepare_rag_prompt(
+                pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=qdrant_url,
+                prompt_path=prompt_path, repo_name=repo_short,
+                collection_name=collection, embed_model_name=embed_model,
+            )
+        except Exception as e:
+            return {"error": f"RAG retrieval failed: {e}"}
+
+        try:
+            client = Groq(api_key=groq_key)
+            reviews, retries = _call_llm_with_retry(client, prep["prompt"], max_retries)
+        except Exception as e:
+            return {"error": f"Inference failed: {e}"}
+
+    # Send email
+    email = REPOS_MAIL_MAP.get(repo, "")
+    email_ok = False
+    if email:
+        pr_title = f"PR #{pr_number} (reprocessed)"
+        pr_url = f"https://github.com/{repo}/pull/{pr_number}"
+        email_ok = send_review_email(repo, pr_number, pr_title, pr_url, reviews, email)
+
+    # Update processed_at and email_sent on existing row
+    update_email_sent(repo, pr_number, email_ok)
+
+    return {
+        "status": "ok",
+        "pr_number": pr_number,
+        "repo": repo,
+        "findings": len(reviews),
+        "used_cache": used_cache,
+        "email_sent": email_ok,
+    }
 
 
 # ---- Configuration ----
