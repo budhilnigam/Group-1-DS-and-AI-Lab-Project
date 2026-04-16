@@ -14,7 +14,7 @@ from fastapi.templating import Jinja2Templates
 from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses, dashboard_stats
 from worker import (
     sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_pr_comments, _fetch_open_prs,
-    runtime_config, schedule_enabled, get_config, add_repo, remove_repo,
+    runtime_config, schedule_enabled, get_config, add_repo, remove_repo, add_repo_rules, get_repo_rules,
     QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
     SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD,
@@ -59,7 +59,8 @@ async def _background_scheduler():
 @asynccontextmanager
 async def lifespan(application):
     init_db()
-    sync_corpus_to_qdrant.delay()
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, sync_corpus_to_qdrant)
     task = asyncio.create_task(_background_scheduler())
     yield
     task.cancel()
@@ -571,7 +572,7 @@ async def api_config_post(request: Request):
 # ---- Repository Management ----
 @app.get("/api/repos")
 def api_repos_get():
-    return [{"repo": r, "email": e} for r, e in REPOS_MAIL_MAP.items()]
+    return [{"repo": r, "email": e, "rules": len(get_repo_rules(r))} for r, e in REPOS_MAIL_MAP.items()]
 
 
 @app.post("/api/repos")
@@ -579,6 +580,7 @@ async def api_repos_add(request: Request):
     body = await request.json()
     repo = body.get("repo", "").strip()
     email = body.get("email", "").strip()
+    rules = body.get("rules", [])
     if not repo or not email:
         return {"error": "Both repo (owner/name) and email are required."}
     if "/" not in repo:
@@ -586,7 +588,10 @@ async def api_repos_add(request: Request):
     if repo in REPOS_MAIL_MAP:
         return {"error": f"Repository '{repo}' is already tracked."}
     add_repo(repo, email)
-    return {"status": "ok", "repo": repo, "email": email}
+    chunks = []
+    if rules:
+        chunks = add_repo_rules(repo, rules)
+    return {"status": "ok", "repo": repo, "email": email, "rules_added": len(chunks)}
 
 
 @app.delete("/api/repos")
@@ -599,6 +604,26 @@ async def api_repos_remove(request: Request):
         return {"error": f"Repository '{repo}' is not tracked."}
     remove_repo(repo)
     return {"status": "ok", "repo": repo}
+
+
+@app.get("/api/repos/rules")
+def api_repos_rules_get(repo: str = ""):
+    if not repo or repo not in REPOS_MAIL_MAP:
+        return {"error": "Unknown or missing repo."}
+    return {"repo": repo, "rules": get_repo_rules(repo)}
+
+
+@app.post("/api/repos/rules")
+async def api_repos_rules_add(request: Request):
+    body = await request.json()
+    repo = body.get("repo", "").strip()
+    rules = body.get("rules", [])
+    if not repo or repo not in REPOS_MAIL_MAP:
+        return {"error": "Unknown or missing repo."}
+    if not rules:
+        return {"error": "No rules provided."}
+    chunks = add_repo_rules(repo, rules)
+    return {"status": "ok", "repo": repo, "rules_added": len(chunks), "chunks": chunks}
 
 
 # ---- Prompt Overrides (runtime only, reset on restart) ----

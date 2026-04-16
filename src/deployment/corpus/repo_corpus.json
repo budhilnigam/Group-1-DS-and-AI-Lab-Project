@@ -1,0 +1,58 @@
+[
+  {
+    "text": "Use snake_case for function names",
+    "category": "naming_convention",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-1",
+    "chunk_id": "chunk_0506"
+  },
+  {
+    "text": "Use PascalCase for class names",
+    "category": "naming_convention",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-1",
+    "chunk_id": "chunk_0507"
+  },
+  {
+    "text": "Use 4 spaces per indentation level",
+    "category": "indentation",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-1",
+    "chunk_id": "chunk_0508"
+  },
+  {
+    "text": "Remove any unused imports",
+    "category": "unused_import",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-1",
+    "chunk_id": "chunk_0509"
+  },
+  {
+    "text": "there should not be a variable named kannan",
+    "category": "naming_convention",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-1",
+    "chunk_id": "chunk_0510"
+  },
+  {
+    "text": "All functions must have docstrings",
+    "category": "documentation",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-2",
+    "chunk_id": "chunk_0511"
+  },
+  {
+    "text": "Use type hints for function parameters",
+    "category": "type_hints",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-2",
+    "chunk_id": "chunk_0512"
+  },
+  {
+    "text": "Avoid global variables",
+    "category": "best_practices",
+    "source_type": "custom_rule",
+    "source_path": "kannan-dedsec/rag-test-3",
+    "chunk_id": "chunk_0513"
+  }
+]

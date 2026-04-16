@@ -203,15 +203,33 @@ th { background: #f6f8fa; }
 <!-- ==================== TAB 4: CONFIGURATION ==================== -->
 <div id="config" class="panel">
   <h3 style="margin-bottom:12px">Managed Repositories</h3>
-  <p style="font-size:13px;color:#586069;margin-bottom:10px">Add or remove GitHub repos. Removing a repo permanently deletes all its processed PR data from the database.</p>
+  <p style="font-size:13px;color:#586069;margin-bottom:10px">Add or remove GitHub repos. Removing a repo permanently deletes all its processed PR data, custom rules, and Qdrant chunks.</p>
   <table id="repos-table">
-    <thead><tr><th>Repository</th><th>Owner Email</th><th style="width:80px">Action</th></tr></thead>
+    <thead><tr><th>Repository</th><th>Owner Email</th><th>Rules</th><th style="width:140px">Action</th></tr></thead>
     <tbody id="repos-body"></tbody>
   </table>
   <div style="display:flex;gap:8px;align-items:flex-end;margin-top:10px">
     <div><label style="font-size:12px">Repository (owner/name)</label><input type="text" id="add-repo-name" placeholder="owner/repo" style="width:250px"></div>
     <div><label style="font-size:12px">Owner Email</label><input type="text" id="add-repo-email" placeholder="email@example.com" style="width:250px"></div>
     <button id="btn-add-repo" onclick="addRepoAction()" style="background:#28a745;margin:0;white-space:nowrap">+ Add Repo</button>
+  </div>
+  <div style="margin-top:10px">
+    <label style="font-size:12px">Rules <span style="font-weight:normal;color:#586069">(optional — JSON: <code>{"category": ["rule1", "rule2"]}</code>)</span>
+      <span onclick="document.getElementById('rules-sample-tip').style.display=document.getElementById('rules-sample-tip').style.display==='none'?'block':'none'" style="cursor:pointer;color:#0366d6;font-size:11px;margin-left:6px">&#9432; example</span>
+    </label>
+    <div id="rules-sample-tip" style="display:none;background:#f6f8fa;border:1px solid #d1d5da;border-radius:4px;padding:8px 12px;font-size:12px;margin-bottom:6px;line-height:1.6">
+      <b>JSON format — keys are categories, values are arrays of rule strings:</b><br>
+      <pre style="background:#161b22;color:#e6edf3;padding:8px 10px;border-radius:4px;margin:6px 0;font-size:12px;line-height:1.5">{
+  "naming_convention": [
+    "Use snake_case for function names",
+    "Use PascalCase for class names"
+  ],
+  "indentation": ["Use 4 spaces per indentation level"],
+  "unused_import": ["Remove any unused imports"]
+}</pre>
+      <b>Categories:</b> naming_convention, unused_import, indentation, mutable_default, documentation_formatting
+    </div>
+    <textarea id="add-repo-rules" rows="6" placeholder='{&#10;  "naming_convention": ["Use snake_case for function names"],&#10;  "indentation": ["Use 4 spaces per indentation level"]&#10;}' style="width:100%;font-size:13px;font-family:monospace"></textarea>
   </div>
   <div id="repo-result"></div>
 
@@ -737,7 +755,11 @@ async function loadRepos() {
     tbody.innerHTML = '';
     repos.forEach(function(item) {
       const tr = document.createElement('tr');
-      tr.innerHTML = '<td>'+item.repo+'</td><td>'+item.email+'</td><td><button onclick="removeRepoAction(\''+item.repo+'\',this)" style="padding:3px 10px;font-size:11px;margin:0;background:#cb2431">Remove</button></td>';
+      tr.innerHTML = '<td>'+item.repo+'</td><td>'+item.email+'</td>'+
+        '<td><span style="cursor:pointer;color:#0366d6" onclick="viewRepoRules(\''+item.repo+'\')">'+(item.rules||0)+' rules</span></td>'+
+        '<td style="white-space:nowrap">'+
+        '<button onclick="showAddRulesDialog(\''+item.repo+'\')" style="padding:3px 10px;font-size:11px;margin:0 4px 0 0;background:#0366d6">+ Rules</button>'+
+        '<button onclick="removeRepoAction(\''+item.repo+'\',this)" style="padding:3px 10px;font-size:11px;margin:0;background:#cb2431">Remove</button></td>';
       tbody.appendChild(tr);
     });
   } catch(e) { console.error('loadRepos:', e); }
@@ -746,26 +768,91 @@ async function loadRepos() {
 async function addRepoAction() {
   var repo = document.getElementById('add-repo-name').value.trim();
   var email = document.getElementById('add-repo-email').value.trim();
+  var rulesText = document.getElementById('add-repo-rules').value.trim();
   var out = document.getElementById('repo-result');
   if (!repo || !email) { out.innerHTML = '<p class="error">Both repo and email are required.</p>'; return; }
+  // Parse rules from textarea (JSON format: {"category": ["rule1", ...]})
+  var rules = [];
+  if (rulesText) {
+    try {
+      var parsed = JSON.parse(rulesText);
+      for (var cat in parsed) {
+        var arr = Array.isArray(parsed[cat]) ? parsed[cat] : [parsed[cat]];
+        arr.forEach(function(text) { if (text) rules.push({category: cat, text: String(text)}); });
+      }
+    } catch(e) {
+      out.innerHTML = '<p class="error">Invalid JSON. Expected format: {"category": ["rule1", "rule2"]}</p>';
+      return;
+    }
+  }
   try {
     const resp = await fetch('/api/repos', {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({repo: repo, email: email})
+      body: JSON.stringify({repo: repo, email: email, rules: rules})
     });
     const data = await resp.json();
     if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
-    out.innerHTML = '<p style="color:#28a745;margin-top:8px">Added '+repo+'</p>';
+    var msg = 'Added '+repo;
+    if (data.rules_added) msg += ' with '+data.rules_added+' rules';
+    out.innerHTML = '<p style="color:#28a745;margin-top:8px">'+msg+'</p>';
     document.getElementById('add-repo-name').value = '';
     document.getElementById('add-repo-email').value = '';
+    document.getElementById('add-repo-rules').value = '';
     loadRepos();
     // Refresh schedule tab data
     window._schedRepos = null;
   } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
 }
 
+async function viewRepoRules(repo) {
+  var out = document.getElementById('repo-result');
+  out.innerHTML = '<span class="spinner"></span> Loading rules...';
+  try {
+    const resp = await fetch('/api/repos/rules?repo='+encodeURIComponent(repo));
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+    var rules = data.rules || [];
+    if (!rules.length) { out.innerHTML = '<p style="color:#586069;margin-top:8px">No custom rules for '+repo+'.</p>'; return; }
+    var html = '<div class="result-box" style="margin-top:8px"><h3 style="font-size:14px">Rules for '+repo+' ('+rules.length+')</h3>';
+    html += '<table><tr><th>Chunk ID</th><th>Category</th><th>Text</th></tr>';
+    rules.forEach(function(r) {
+      html += '<tr><td style="white-space:nowrap">'+r.chunk_id+'</td><td>'+r.category+'</td><td style="font-size:12px">'+r.text.replace(/</g,'&lt;').substring(0,120)+'</td></tr>';
+    });
+    html += '</table></div>';
+    out.innerHTML = html;
+  } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+}
+
+async function showAddRulesDialog(repo) {
+  var rulesText = prompt('Add rules for '+repo+' (JSON: {"category": ["rule1", ...]}):');
+  if (!rulesText) return;
+  var rules = [];
+  try {
+    var parsed = JSON.parse(rulesText);
+    for (var cat in parsed) {
+      var arr = Array.isArray(parsed[cat]) ? parsed[cat] : [parsed[cat]];
+      arr.forEach(function(text) { if (text) rules.push({category: cat, text: String(text)}); });
+    }
+  } catch(e) {
+    document.getElementById('repo-result').innerHTML = '<p class="error">Invalid JSON. Expected: {"category": ["rule1"]}</p>';
+    return;
+  }
+  if (!rules.length) return;
+  var out = document.getElementById('repo-result');
+  try {
+    const resp = await fetch('/api/repos/rules', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({repo: repo, rules: rules})
+    });
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+    out.innerHTML = '<p style="color:#28a745;margin-top:8px">Added '+data.rules_added+' rules to '+repo+'</p>';
+    loadRepos();
+  } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+}
+
 async function removeRepoAction(repo, btn) {
-  if (!confirm('Remove "'+repo+'"? This will permanently delete all processed PR data for this repo from the database.')) return;
+  if (!confirm('Remove "'+repo+'"? This will permanently delete all processed PR data, custom rules, and Qdrant chunks for this repo.')) return;
   btn.disabled = true;
   btn.textContent = '...';
   var out = document.getElementById('repo-result');

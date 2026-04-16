@@ -70,12 +70,133 @@ def add_repo(repo, email):
 
 
 def remove_repo(repo):
-    """Remove a repo from REPOS_MAIL_MAP, persist, delete DB data."""
+    """Remove a repo from REPOS_MAIL_MAP, persist, delete DB data, corpus file, and Qdrant chunks."""
     from db import delete_repo_data
     REPOS_MAIL_MAP.pop(repo, None)
     schedule_enabled.pop(repo, None)
     _save_repos_to_config()
     delete_repo_data(repo)
+    # Remove repo-specific corpus file and Qdrant chunks
+    _remove_repo_rules(repo)
+
+
+REPO_CORPUS_PATH = BASE_DIR / "corpus" / "repo_corpus.json"
+
+
+def _repo_corpus_path(repo=None):
+    """Return the path to the shared repo corpus file: corpus/repo_corpus.json"""
+    return REPO_CORPUS_PATH
+
+
+def _next_chunk_id():
+    """Find the next available chunk_id across main corpus and repo_corpus.json."""
+    import re as _re
+    max_id = 0
+    for fpath in [Path(CORPUS_PATH), REPO_CORPUS_PATH]:
+        if not fpath.exists():
+            continue
+        try:
+            data = json.loads(fpath.read_text("utf-8"))
+            for c in data:
+                m = _re.match(r"chunk_(\d+)", c.get("chunk_id", ""))
+                if m:
+                    max_id = max(max_id, int(m.group(1)))
+        except Exception:
+            pass
+    return max_id + 1
+
+
+def _load_repo_corpus():
+    """Load all entries from repo_corpus.json."""
+    if REPO_CORPUS_PATH.exists():
+        try:
+            return json.loads(REPO_CORPUS_PATH.read_text("utf-8"))
+        except Exception:
+            return []
+    return []
+
+
+def _save_repo_corpus(data):
+    """Write data to repo_corpus.json."""
+    REPO_CORPUS_PATH.parent.mkdir(exist_ok=True)
+    REPO_CORPUS_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+
+def add_repo_rules(repo, rules):
+    """Add rules for a repo: save to repo_corpus.json and upsert into Qdrant.
+    rules: list of dicts with keys: text, category, source_type, source_path
+    Returns list of created chunks.
+    """
+    existing = _load_repo_corpus()
+
+    # Assign chunk IDs
+    next_id = _next_chunk_id()
+    new_chunks = []
+    for rule in rules:
+        chunk = {
+            "text": rule.get("text", ""),
+            "category": rule.get("category", ""),
+            "source_type": rule.get("source_type", "custom_rule"),
+            "source_path": rule.get("source_path", repo),
+            "chunk_id": f"chunk_{next_id:04d}",
+        }
+        new_chunks.append(chunk)
+        next_id += 1
+
+    # Save to file
+    existing.extend(new_chunks)
+    _save_repo_corpus(existing)
+
+    # Upsert into Qdrant
+    try:
+        _upsert_chunks_to_qdrant(new_chunks)
+    except Exception:
+        log.exception("Failed to upsert repo rules to Qdrant for %s", repo)
+
+    return new_chunks
+
+
+def _upsert_chunks_to_qdrant(chunks):
+    """Encode and upsert chunks into Qdrant."""
+    from qdrant_client import QdrantClient
+    from sentence_transformers import SentenceTransformer
+
+    qdrant_url = get_config("QDRANT_URL")
+    if not qdrant_url:
+        return
+    client = QdrantClient(url=qdrant_url)
+    encoder = SentenceTransformer(EMBED_MODEL)
+    _upload_chunks(client, encoder, chunks)
+
+
+def _remove_repo_rules(repo):
+    """Remove entries for repo from repo_corpus.json and delete its chunks from Qdrant."""
+    existing = _load_repo_corpus()
+    repo_chunks = [c for c in existing if c.get("source_path") == repo]
+    chunk_ids = [c["chunk_id"] for c in repo_chunks]
+
+    # Rewrite file without this repo's entries
+    remaining = [c for c in existing if c.get("source_path") != repo]
+    _save_repo_corpus(remaining)
+
+    # Delete from Qdrant
+    if chunk_ids:
+        try:
+            from qdrant_client import QdrantClient
+            qdrant_url = get_config("QDRANT_URL")
+            if qdrant_url:
+                client = QdrantClient(url=qdrant_url)
+                point_ids = [_chunk_id_to_int(cid) for cid in chunk_ids]
+                client.delete(COLLECTION, points_selector=point_ids)
+                log.info("Deleted %d chunks from Qdrant for repo %s", len(point_ids), repo)
+        except Exception:
+            log.exception("Failed to delete Qdrant chunks for %s", repo)
+
+
+def get_repo_rules(repo):
+    """Return the list of custom rules for a repo from repo_corpus.json."""
+    all_chunks = _load_repo_corpus()
+    return [c for c in all_chunks if c.get("source_path") == repo]
 
 
 def get_config(key):
@@ -192,23 +313,27 @@ def sync_corpus_to_qdrant():
         log.warning("QDRANT_URL not set, skipping corpus sync")
         return "skipped"
 
+    # Load main corpus + repo-specific corpus (two-way sync)
     corpus = json.loads(Path(CORPUS_PATH).read_text("utf-8"))
+    repo_corpus = _load_repo_corpus()
+    all_chunks = corpus + repo_corpus
+
+    if not all_chunks:
+        return "no chunks to sync"
+
     client = QdrantClient(url=QDRANT_URL)
     encoder = SentenceTransformer(EMBED_MODEL)
 
-    
     collections = [c.name for c in client.get_collections().collections]
     if COLLECTION not in collections:
-        
-        sample_vec = encoder.encode(corpus[0]["text"]).tolist()
+        sample_vec = encoder.encode(all_chunks[0]["text"]).tolist()
         client.create_collection(
             collection_name=COLLECTION,
             vectors_config=models.VectorParams(size=len(sample_vec), distance=models.Distance.COSINE),
         )
-        _upload_chunks(client, encoder, corpus)
-        return f"created collection, uploaded {len(corpus)} chunks"
+        _upload_chunks(client, encoder, all_chunks)
+        return f"created collection, uploaded {len(all_chunks)} chunks (main={len(corpus)}, repo={len(repo_corpus)})"
 
-    
     existing_ids = set()
     offset = None
     while True:
@@ -220,14 +345,14 @@ def sync_corpus_to_qdrant():
         if offset is None:
             break
 
-    corpus_ids = {c["chunk_id"] for c in corpus}
-    missing_ids = corpus_ids - existing_ids
+    all_ids = {c["chunk_id"] for c in all_chunks}
+    missing_ids = all_ids - existing_ids
     if not missing_ids:
-        return "corpus already in sync"
+        return f"corpus already in sync ({len(all_chunks)} chunks)"
 
-    missing_chunks = [c for c in corpus if c["chunk_id"] in missing_ids]
+    missing_chunks = [c for c in all_chunks if c["chunk_id"] in missing_ids]
     _upload_chunks(client, encoder, missing_chunks)
-    return f"uploaded {len(missing_chunks)} new chunks"
+    return f"uploaded {len(missing_chunks)} new chunks (total={len(all_chunks)})"
 
 
 def _chunk_id_to_int(chunk_id):
