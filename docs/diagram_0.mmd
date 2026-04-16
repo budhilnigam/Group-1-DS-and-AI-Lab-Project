@@ -1,0 +1,65 @@
+flowchart TD
+  A[Raw Evaluation Dataset<br/>PR diffs, file path, line number, category labels]
+  B[Raw Retrieval Corpus<br/>PEP, linter rules, project guidelines, historical reviews]
+  C[Static Analysis Input Dataset<br/>Diff code and file path]
+
+  subgraph P1[Query Preparation]
+    A1[Extract relevant diff chunk]
+    A2[Clean and normalize diff]
+    A3[Construct query<br/>file path + diff chunk + repo metadata]
+  end
+
+  subgraph P2[Retrieval Corpus Preparation]
+    B1[Clean guideline documents]
+    B2[Chunk into 200-400 token units]
+    B3[Attach metadata<br/>chunk_id, category, source_type]
+  end
+
+  subgraph P3[Embedding and Indexing]
+    E1[Encode corpus chunks<br/>BAAI/bge-large-en-v1.5]
+    E2[L2 normalize embeddings]
+    E3[Build vector collection + metadata]
+    E4[Encode query at runtime<br/>same embedding model]
+  end
+
+  subgraph P4[Retrieval and Prompting]
+    R1[Top-K retrieval<br/>K = 5 to 7]
+    R2[Retrieved evidence<br/>chunk text, category, source, score]
+    R3[Prompt construction<br/>instructions + metadata + diff + evidence]
+  end
+
+  subgraph P5[Generation and Output]
+    G1[LLM inference]
+    G2[Structured JSON output<br/>category, grounded_comment, cited_chunk_ids]
+  end
+
+  subgraph P6[Static Baseline]
+    S1[Run Flake8 and Pylint]
+    S2[Map rules to 5 categories]
+    S3[Collapse duplicate rule hits per line]
+    S4[Static baseline predictions]
+  end
+
+  subgraph P7[Grounding and Evaluation]
+    V1[Line matching protocol]
+    V2[Retrieval quality metrics]
+    V3[Prediction metrics]
+    V4[Grounding and hallucination checks]
+    V5[Semantic alignment and latency]
+  end
+
+  A --> A1 --> A2 --> A3 --> E4 --> R1
+  B --> B1 --> B2 --> B3 --> E1 --> E2 --> E3 --> R1
+  R1 --> R2 --> R3 --> G1 --> G2
+
+  C --> S1 --> S2 --> S3 --> S4
+
+  A --> V1
+  B3 --> V2
+  R2 --> V2
+  G2 --> V3
+  S4 --> V3
+  G2 --> V4
+  R2 --> V4
+  G2 --> V5
+  S4 --> V5
