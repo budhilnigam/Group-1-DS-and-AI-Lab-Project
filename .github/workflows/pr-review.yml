@@ -1,0 +1,17 @@
+name: PR Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  trigger-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger review on Render
+        run: |
+          curl -s -X POST \
+            "${{ secrets.RENDER_APP_URL }}/api/schedule/run" \
+            -H "Content-Type: application/json" \
+            --max-time 300 \
+            -o /dev/null -w "%{http_code}"

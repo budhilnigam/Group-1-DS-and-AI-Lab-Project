@@ -15,7 +15,7 @@ from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cache
 from worker import (
     sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_pr_comments, _fetch_open_prs,
     runtime_config, schedule_enabled, get_config, add_repo, remove_repo, add_repo_rules, get_repo_rules,
-    QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
+    QDRANT_URL, QDRANT_API_KEY, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
     SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD,
 )
@@ -202,6 +202,7 @@ async def api_inference(request: Request):
             prompt_path=prompt_path, repo_name=repo_short,
             collection_name=collection, embed_model_name=embed_model,
             prompt_template_override=prompt_overrides.get("RAG"),
+            qdrant_api_key=get_config("QDRANT_API_KEY"),
         )
         p_hash = compute_prompt_hash(prep["prompt"], prep["model"], prep["temperature"])
 
@@ -500,6 +501,7 @@ async def api_schedule_reprocess(request: Request):
                 pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=qdrant_url,
                 prompt_path=prompt_path, repo_name=repo_short,
                 collection_name=collection, embed_model_name=embed_model,
+                qdrant_api_key=get_config("QDRANT_API_KEY"),
             )
         except Exception as e:
             return {"error": f"RAG retrieval failed: {e}"}

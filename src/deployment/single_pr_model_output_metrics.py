@@ -366,9 +366,13 @@ def retrieve_rag_chunks(
     embed_model_name: str = DEFAULT_EMBED_MODEL,
     top_n_candidates: int = DEFAULT_TOP_N_CANDIDATES,
     top_k_final: int = DEFAULT_TOP_K_FINAL,
+    qdrant_api_key: str | None = None,
 ) -> list[dict[str, Any]]:
     embed_model = SentenceTransformer(embed_model_name)
-    client = QdrantClient(url=qdrant_url)
+    qkw = {"url": qdrant_url}
+    if qdrant_api_key:
+        qkw["api_key"] = qdrant_api_key
+    client = QdrantClient(**qkw)
     query_vector = embed_model.encode(query_text).tolist()
 
     response = client.query_points(
@@ -881,6 +885,7 @@ def prepare_rag_prompt(
     collection_name: str = DEFAULT_COLLECTION_NAME,
     embed_model_name: str = DEFAULT_EMBED_MODEL,
     prompt_template_override: str | None = None,
+    qdrant_api_key: str | None = None,
 ) -> dict[str, Any]:
     """Do RAG retrieval and build the final prompt without calling the LLM.
     Returns dict with prompt, chunks, model, temperature."""
@@ -898,6 +903,7 @@ def prepare_rag_prompt(
         repo_name=repo_name,
         collection_name=collection_name,
         embed_model_name=embed_model_name,
+        qdrant_api_key=qdrant_api_key,
     )
 
     prompt = build_prompt(

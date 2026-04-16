@@ -1,4 +1,5 @@
 import json
+import os
 import smtplib
 import logging
 import io
@@ -12,35 +13,75 @@ from urllib.error import HTTPError, URLError
 
 _no_proxy_opener = build_opener(ProxyHandler({}))
 
-from celery import Celery
-
 from db import init_db, is_pr_cached, cache_pr, get_last_checked, set_last_checked, compute_prompt_hash
 
 
 BASE_DIR = Path(__file__).parent
-_raw = "[default]\n" + (BASE_DIR / "config.properties").read_text()
-cfg = configparser.ConfigParser()
-cfg.read_string(_raw)
+
+# Config loading: env vars take priority, then config.properties fallback
+_config_path = BASE_DIR / "config.properties"
+if _config_path.exists():
+    _raw = "[default]\n" + _config_path.read_text()
+    cfg = configparser.ConfigParser()
+    cfg.read_string(_raw)
+else:
+    cfg = configparser.ConfigParser()
+    cfg.add_section("default")
 _s = "default"
 
-QDRANT_URL = cfg.get(_s, "QDRANT_URL", fallback="").strip()
-GROQ_TOKEN = cfg.get(_s, "GROQ_TOKEN", fallback="").strip()
-GITHUB_TOKEN = cfg.get(_s, "GITHUB_TOKEN", fallback="").strip()
 
-COLLECTION = cfg.get(_s, "DEFAULT_COLLECTION_NAME", fallback="guideline_embeddings").strip()
-EMBED_MODEL = cfg.get(_s, "DEFAULT_EMBED_MODEL", fallback="BAAI/bge-large-en-v1.5").strip()
-PROMPT_PATH = str(BASE_DIR / cfg.get(_s, "PROMPT_PATH", fallback="prompts/v1.txt").strip())
-CORPUS_PATH = str(BASE_DIR / cfg.get(_s, "CORPUS_PATH", fallback="corpus/retrival_corpus.json").strip())
+def _cfg_get(key, fallback=""):
+    """Read from env var first, then config.properties."""
+    return os.environ.get(key, cfg.get(_s, key, fallback=fallback)).strip()
 
-REPOS_MAIL_MAP = json.loads(cfg.get(_s, "REPOS_MAIL_MAP", fallback="{}"))
-SCHEDULE_INTERVAL = cfg.getint(_s, "SCHEDULE_INTERVAL", fallback=5)
-CACHE_ENABLED = cfg.getboolean(_s, "CACHE_ENABLED", fallback=True)
-LLM_MAX_RETRIES = cfg.getint(_s, "LLM_MAX_RETRIES", fallback=2)
 
-SMTP_HOST = cfg.get(_s, "SMTP_HOST", fallback="").strip()
-SMTP_PORT = cfg.getint(_s, "SMTP_PORT", fallback=587)
-SMTP_USER = cfg.get(_s, "SMTP_USER", fallback="").strip()
-SMTP_PASSWORD = cfg.get(_s, "SMTP_PASSWORD", fallback="").strip()
+def _cfg_getint(key, fallback=0):
+    val = os.environ.get(key, "").strip()
+    if val:
+        return int(val)
+    return cfg.getint(_s, key, fallback=fallback)
+
+
+def _cfg_getbool(key, fallback=False):
+    val = os.environ.get(key, "").strip().lower()
+    if val:
+        return val in ("true", "1", "yes")
+    return cfg.getboolean(_s, key, fallback=fallback)
+
+
+QDRANT_URL = _cfg_get("QDRANT_URL")
+QDRANT_API_KEY = _cfg_get("QDRANT_API_KEY")
+GROQ_TOKEN = _cfg_get("GROQ_TOKEN")
+GITHUB_TOKEN = _cfg_get("GITHUB_TOKEN")
+
+COLLECTION = _cfg_get("DEFAULT_COLLECTION_NAME", "guideline_embeddings")
+EMBED_MODEL = _cfg_get("DEFAULT_EMBED_MODEL", "BAAI/bge-large-en-v1.5")
+PROMPT_PATH = str(BASE_DIR / _cfg_get("PROMPT_PATH", "prompts/v1.txt"))
+CORPUS_PATH = str(BASE_DIR / _cfg_get("CORPUS_PATH", "corpus/retrival_corpus.json"))
+
+def _load_repos_mail_map():
+    """Load REPOS_MAIL_MAP from DB (preferred) or env/config fallback, then persist to DB."""
+    from db import get_app_state, set_app_state, init_db as _init_db
+    _init_db()
+    stored = get_app_state("repos_mail_map")
+    if stored:
+        return json.loads(stored)
+    # Seed from env var / config.properties on first boot
+    initial = json.loads(_cfg_get("REPOS_MAIL_MAP", "{}"))
+    if initial:
+        set_app_state("repos_mail_map", json.dumps(initial))
+    return initial
+
+
+REPOS_MAIL_MAP = _load_repos_mail_map()
+SCHEDULE_INTERVAL = _cfg_getint("SCHEDULE_INTERVAL", 5)
+CACHE_ENABLED = _cfg_getbool("CACHE_ENABLED", True)
+LLM_MAX_RETRIES = _cfg_getint("LLM_MAX_RETRIES", 2)
+
+SMTP_HOST = _cfg_get("SMTP_HOST")
+SMTP_PORT = _cfg_getint("SMTP_PORT", 587)
+SMTP_USER = _cfg_get("SMTP_USER")
+SMTP_PASSWORD = _cfg_get("SMTP_PASSWORD")
 
 log = logging.getLogger(__name__)
 
@@ -49,24 +90,17 @@ runtime_config = {}
 schedule_enabled = {repo: True for repo in REPOS_MAIL_MAP}
 
 
-def _save_repos_to_config():
-    """Persist current REPOS_MAIL_MAP back to config.properties."""
-    config_path = BASE_DIR / "config.properties"
-    lines = config_path.read_text().splitlines()
-    new_lines = []
-    for line in lines:
-        if line.strip().startswith("REPOS_MAIL_MAP"):
-            new_lines.append(f"REPOS_MAIL_MAP = {json.dumps(REPOS_MAIL_MAP)}")
-        else:
-            new_lines.append(line)
-    config_path.write_text("\n".join(new_lines) + "\n")
+def _save_repos_to_db():
+    """Persist current REPOS_MAIL_MAP to the app_state table."""
+    from db import set_app_state
+    set_app_state("repos_mail_map", json.dumps(REPOS_MAIL_MAP))
 
 
 def add_repo(repo, email):
     """Add a repo to REPOS_MAIL_MAP, persist, and enable scheduling."""
     REPOS_MAIL_MAP[repo] = email
     schedule_enabled[repo] = True
-    _save_repos_to_config()
+    _save_repos_to_db()
 
 
 def remove_repo(repo):
@@ -74,7 +108,7 @@ def remove_repo(repo):
     from db import delete_repo_data
     REPOS_MAIL_MAP.pop(repo, None)
     schedule_enabled.pop(repo, None)
-    _save_repos_to_config()
+    _save_repos_to_db()
     delete_repo_data(repo)
     # Remove repo-specific corpus file and Qdrant chunks
     _remove_repo_rules(repo)
@@ -164,7 +198,7 @@ def _upsert_chunks_to_qdrant(chunks):
     qdrant_url = get_config("QDRANT_URL")
     if not qdrant_url:
         return
-    client = QdrantClient(url=qdrant_url)
+    client = QdrantClient(**_qdrant_client_kwargs())
     encoder = SentenceTransformer(EMBED_MODEL)
     _upload_chunks(client, encoder, chunks)
 
@@ -185,7 +219,7 @@ def _remove_repo_rules(repo):
             from qdrant_client import QdrantClient
             qdrant_url = get_config("QDRANT_URL")
             if qdrant_url:
-                client = QdrantClient(url=qdrant_url)
+                client = QdrantClient(**_qdrant_client_kwargs())
                 point_ids = [_chunk_id_to_int(cid) for cid in chunk_ids]
                 client.delete(COLLECTION, points_selector=point_ids)
                 log.info("Deleted %d chunks from Qdrant for repo %s", len(point_ids), repo)
@@ -202,7 +236,8 @@ def get_repo_rules(repo):
 def get_config(key):
     """Return runtime override if set, else the file-loaded default."""
     defaults = {
-        "QDRANT_URL": QDRANT_URL, "GROQ_TOKEN": GROQ_TOKEN, "GITHUB_TOKEN": GITHUB_TOKEN,
+        "QDRANT_URL": QDRANT_URL, "QDRANT_API_KEY": QDRANT_API_KEY,
+        "GROQ_TOKEN": GROQ_TOKEN, "GITHUB_TOKEN": GITHUB_TOKEN,
         "DEFAULT_COLLECTION_NAME": COLLECTION, "DEFAULT_EMBED_MODEL": EMBED_MODEL,
         "PROMPT_PATH": PROMPT_PATH, "CORPUS_PATH": CORPUS_PATH,
         "SCHEDULE_INTERVAL": SCHEDULE_INTERVAL, "CACHE_ENABLED": CACHE_ENABLED,
@@ -213,26 +248,13 @@ def get_config(key):
     return runtime_config.get(key, defaults.get(key, ""))
 
 
-broker_path = BASE_DIR / "celery_broker.db"
-results_path = BASE_DIR / "celery_results.db"
-
-app = Celery(
-    "worker",
-    broker=f"sqla+sqlite:///{broker_path}",
-    backend=f"db+sqlite:///{results_path}",
-)
-app.conf.update(
-    task_serializer="json",
-    accept_content=["json"],
-    result_serializer="json",
-    timezone="UTC",
-    beat_schedule={
-        "poll-prs": {
-            "task": "worker.fetch_and_review_prs",
-            "schedule": SCHEDULE_INTERVAL * 60,  # seconds
-        },
-    },
-)
+def _qdrant_client_kwargs():
+    """Return kwargs for QdrantClient (url + optional api_key)."""
+    kwargs = {"url": get_config("QDRANT_URL")}
+    api_key = get_config("QDRANT_API_KEY")
+    if api_key:
+        kwargs["api_key"] = api_key
+    return kwargs
 
 
 GH_API = "https://api.github.com"
@@ -304,7 +326,6 @@ def _fetch_pr_diff(repo, pr_number):
 
 
 
-@app.task(name="worker.sync_corpus_to_qdrant")
 def sync_corpus_to_qdrant():
     from qdrant_client import QdrantClient, models
     from sentence_transformers import SentenceTransformer
@@ -321,7 +342,7 @@ def sync_corpus_to_qdrant():
     if not all_chunks:
         return "no chunks to sync"
 
-    client = QdrantClient(url=QDRANT_URL)
+    client = QdrantClient(**_qdrant_client_kwargs())
     encoder = SentenceTransformer(EMBED_MODEL)
 
     collections = [c.name for c in client.get_collections().collections]
@@ -387,7 +408,6 @@ def _upload_chunks(client, encoder, chunks):
 
 
 
-@app.task(name="worker.fetch_and_review_prs")
 def fetch_and_review_prs():
     from single_pr_model_output_metrics import prepare_rag_prompt, _call_llm_with_retry
     from groq import Groq
@@ -424,6 +444,7 @@ def fetch_and_review_prs():
                     pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=QDRANT_URL,
                     prompt_path=PROMPT_PATH, repo_name=repo_short,
                     collection_name=COLLECTION, embed_model_name=EMBED_MODEL,
+                    qdrant_api_key=QDRANT_API_KEY,
                 )
             except Exception:
                 log.exception("RAG retrieval failed for PR #%d (%s)", pr_number, repo)

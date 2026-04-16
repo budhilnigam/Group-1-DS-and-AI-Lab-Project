@@ -1,9 +1,17 @@
+import os
 import sqlite3
 from pathlib import Path
 from datetime import datetime, timezone
 import hashlib
 
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
 DB_PATH = Path(__file__).parent / "review_app.db"
+
+# Detect PostgreSQL vs SQLite
+_use_pg = DATABASE_URL.startswith("postgres")
+
+# Placeholder style: %s for PostgreSQL, ? for SQLite
+_PH = "%s" if _use_pg else "?"
 
 
 def compute_prompt_hash(final_prompt: str, model: str = "", temperature: float = 0) -> str:
@@ -12,7 +20,34 @@ def compute_prompt_hash(final_prompt: str, model: str = "", temperature: float =
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
 
+class _PgConn:
+    """Thin wrapper so psycopg2 connections support conn.execute() like SQLite."""
+
+    def __init__(self, dsn):
+        import psycopg2
+        import psycopg2.extras
+        self._conn = psycopg2.connect(dsn)
+        self._conn.autocommit = True
+        self._cf = psycopg2.extras.RealDictCursor
+
+    def execute(self, sql, params=None):
+        cur = self._conn.cursor(cursor_factory=self._cf)
+        cur.execute(sql, params)
+        return cur
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self._conn.close()
+
+    def close(self):
+        self._conn.close()
+
+
 def _conn():
+    if _use_pg:
+        return _PgConn(DATABASE_URL)
     c = sqlite3.connect(str(DB_PATH))
     c.row_factory = sqlite3.Row
     c.execute("PRAGMA journal_mode=WAL")
@@ -21,47 +56,73 @@ def _conn():
 
 def init_db():
     with _conn() as c:
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS processed_prs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                repo TEXT NOT NULL,
-                pr_number INTEGER NOT NULL,
-                head_sha TEXT NOT NULL,
-                result_json TEXT,
-                processed_at TEXT NOT NULL,
-                email_sent INTEGER DEFAULT 0,
-                prompt_hash TEXT DEFAULT ''
-            )
-        """)
-        c.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS uq_pr_prompt
-            ON processed_prs(repo, pr_number, head_sha, prompt_hash)
-        """)
-        # migrate: add columns if missing
-        cols = [row[1] for row in c.execute("PRAGMA table_info(processed_prs)").fetchall()]
-        if "prompt_hash" not in cols:
-            c.execute("ALTER TABLE processed_prs ADD COLUMN prompt_hash TEXT DEFAULT ''")
-        if "title" not in cols:
-            c.execute("ALTER TABLE processed_prs ADD COLUMN title TEXT DEFAULT ''")
-        if "pr_status" not in cols:
-            c.execute("ALTER TABLE processed_prs ADD COLUMN pr_status TEXT DEFAULT 'open'")
-        # migrate: drop old unique index that lacks prompt_hash
-        try:
-            c.execute("DROP INDEX IF EXISTS uq_pr")
-        except Exception:
-            pass
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS app_state (
-                key TEXT PRIMARY KEY,
-                value TEXT NOT NULL
-            )
-        """)
+        if _use_pg:
+            c.execute("""
+                CREATE TABLE IF NOT EXISTS processed_prs (
+                    id SERIAL PRIMARY KEY,
+                    repo TEXT NOT NULL,
+                    pr_number INTEGER NOT NULL,
+                    head_sha TEXT NOT NULL,
+                    result_json TEXT,
+                    processed_at TEXT NOT NULL,
+                    email_sent INTEGER DEFAULT 0,
+                    prompt_hash TEXT DEFAULT '',
+                    title TEXT DEFAULT '',
+                    pr_status TEXT DEFAULT 'open'
+                )
+            """)
+            c.execute("""
+                CREATE UNIQUE INDEX IF NOT EXISTS uq_pr_prompt
+                ON processed_prs(repo, pr_number, head_sha, prompt_hash)
+            """)
+            c.execute("""
+                CREATE TABLE IF NOT EXISTS app_state (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                )
+            """)
+        else:
+            c.execute("""
+                CREATE TABLE IF NOT EXISTS processed_prs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    repo TEXT NOT NULL,
+                    pr_number INTEGER NOT NULL,
+                    head_sha TEXT NOT NULL,
+                    result_json TEXT,
+                    processed_at TEXT NOT NULL,
+                    email_sent INTEGER DEFAULT 0,
+                    prompt_hash TEXT DEFAULT ''
+                )
+            """)
+            c.execute("""
+                CREATE UNIQUE INDEX IF NOT EXISTS uq_pr_prompt
+                ON processed_prs(repo, pr_number, head_sha, prompt_hash)
+            """)
+            # migrate: add columns if missing
+            cols = [row[1] for row in c.execute("PRAGMA table_info(processed_prs)").fetchall()]
+            if "prompt_hash" not in cols:
+                c.execute("ALTER TABLE processed_prs ADD COLUMN prompt_hash TEXT DEFAULT ''")
+            if "title" not in cols:
+                c.execute("ALTER TABLE processed_prs ADD COLUMN title TEXT DEFAULT ''")
+            if "pr_status" not in cols:
+                c.execute("ALTER TABLE processed_prs ADD COLUMN pr_status TEXT DEFAULT 'open'")
+            # migrate: drop old unique index that lacks prompt_hash
+            try:
+                c.execute("DROP INDEX IF EXISTS uq_pr")
+            except Exception:
+                pass
+            c.execute("""
+                CREATE TABLE IF NOT EXISTS app_state (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                )
+            """)
 
 
 def is_pr_cached(repo, pr_number, head_sha, prompt_hash=""):
     with _conn() as c:
         row = c.execute(
-            "SELECT 1 FROM processed_prs WHERE repo=? AND pr_number=? AND head_sha=? AND prompt_hash=?",
+            f"SELECT 1 FROM processed_prs WHERE repo={_PH} AND pr_number={_PH} AND head_sha={_PH} AND prompt_hash={_PH}",
             (repo, pr_number, head_sha, prompt_hash),
         ).fetchone()
     return row is not None
@@ -70,7 +131,7 @@ def is_pr_cached(repo, pr_number, head_sha, prompt_hash=""):
 def get_cached_result(repo, pr_number, head_sha):
     with _conn() as c:
         row = c.execute(
-            "SELECT result_json FROM processed_prs WHERE repo=? AND pr_number=? AND head_sha=?",
+            f"SELECT result_json FROM processed_prs WHERE repo={_PH} AND pr_number={_PH} AND head_sha={_PH}",
             (repo, pr_number, head_sha),
         ).fetchone()
     return row["result_json"] if row else None
@@ -79,7 +140,7 @@ def get_cached_result(repo, pr_number, head_sha):
 def get_latest_cached_result(repo, pr_number, prompt_hash=""):
     with _conn() as c:
         row = c.execute(
-            "SELECT result_json FROM processed_prs WHERE repo=? AND pr_number=? AND prompt_hash=? ORDER BY processed_at DESC LIMIT 1",
+            f"SELECT result_json FROM processed_prs WHERE repo={_PH} AND pr_number={_PH} AND prompt_hash={_PH} ORDER BY processed_at DESC LIMIT 1",
             (repo, pr_number, prompt_hash),
         ).fetchone()
     return row["result_json"] if row else None
@@ -89,7 +150,7 @@ def get_latest_cached_result_any(repo, pr_number):
     """Get the most recent cached result for a PR regardless of prompt_hash."""
     with _conn() as c:
         row = c.execute(
-            "SELECT result_json FROM processed_prs WHERE repo=? AND pr_number=? AND result_json IS NOT NULL ORDER BY processed_at DESC LIMIT 1",
+            f"SELECT result_json FROM processed_prs WHERE repo={_PH} AND pr_number={_PH} AND result_json IS NOT NULL ORDER BY processed_at DESC LIMIT 1",
             (repo, pr_number),
         ).fetchone()
     return row["result_json"] if row else None
@@ -100,16 +161,27 @@ def cache_pr(repo, pr_number, head_sha, result_json, email_sent=False, prompt_ha
     with _conn() as c:
         # Preserve existing pr_status; default to 'open' for new PRs
         existing = c.execute(
-            "SELECT pr_status FROM processed_prs WHERE repo=? AND pr_number=? ORDER BY id DESC LIMIT 1",
+            f"SELECT pr_status FROM processed_prs WHERE repo={_PH} AND pr_number={_PH} ORDER BY id DESC LIMIT 1",
             (repo, pr_number),
         ).fetchone()
         status = existing["pr_status"] if existing and existing["pr_status"] else "open"
-        c.execute(
-            """INSERT OR REPLACE INTO processed_prs
-               (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash, title, pr_status)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash, title, status),
-        )
+        if _use_pg:
+            c.execute(
+                f"""INSERT INTO processed_prs
+                   (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash, title, pr_status)
+                   VALUES ({_PH},{_PH},{_PH},{_PH},{_PH},{_PH},{_PH},{_PH},{_PH})
+                   ON CONFLICT (repo, pr_number, head_sha, prompt_hash)
+                   DO UPDATE SET result_json=EXCLUDED.result_json, processed_at=EXCLUDED.processed_at,
+                                email_sent=EXCLUDED.email_sent, title=EXCLUDED.title, pr_status=EXCLUDED.pr_status""",
+                (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash, title, status),
+            )
+        else:
+            c.execute(
+                """INSERT OR REPLACE INTO processed_prs
+                   (repo, pr_number, head_sha, result_json, processed_at, email_sent, prompt_hash, title, pr_status)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (repo, pr_number, head_sha, result_json, now, int(email_sent), prompt_hash, title, status),
+            )
 
 
 def update_email_sent(repo, pr_number, email_sent):
@@ -117,9 +189,9 @@ def update_email_sent(repo, pr_number, email_sent):
     now = datetime.now(timezone.utc).isoformat()
     with _conn() as c:
         c.execute(
-            "UPDATE processed_prs SET email_sent=?, processed_at=? WHERE id = ("
-            "  SELECT id FROM processed_prs WHERE repo=? AND pr_number=? ORDER BY id DESC LIMIT 1"
-            ")",
+            f"UPDATE processed_prs SET email_sent={_PH}, processed_at={_PH} WHERE id = ("
+            f"  SELECT id FROM processed_prs WHERE repo={_PH} AND pr_number={_PH} ORDER BY id DESC LIMIT 1"
+            f")",
             (int(email_sent), now, repo, pr_number),
         )
 
@@ -127,7 +199,7 @@ def update_email_sent(repo, pr_number, email_sent):
 def get_last_checked(repo):
     with _conn() as c:
         row = c.execute(
-            "SELECT value FROM app_state WHERE key=?",
+            f"SELECT value FROM app_state WHERE key={_PH}",
             (f"last_checked:{repo}",),
         ).fetchone()
     return row["value"] if row else None
@@ -136,16 +208,21 @@ def get_last_checked(repo):
 def set_last_checked(repo, timestamp_iso):
     with _conn() as c:
         if timestamp_iso is None:
-            c.execute("DELETE FROM app_state WHERE key=?", (f"last_checked:{repo}",))
+            c.execute(f"DELETE FROM app_state WHERE key={_PH}", (f"last_checked:{repo}",))
         else:
-            c.execute(
-                "INSERT OR REPLACE INTO app_state (key, value) VALUES (?, ?)",
-                (f"last_checked:{repo}", timestamp_iso),
-            )
+            if _use_pg:
+                c.execute(
+                    f"INSERT INTO app_state (key, value) VALUES ({_PH}, {_PH}) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value",
+                    (f"last_checked:{repo}", timestamp_iso),
+                )
+            else:
+                c.execute(
+                    "INSERT OR REPLACE INTO app_state (key, value) VALUES (?, ?)",
+                    (f"last_checked:{repo}", timestamp_iso),
+                )
 
 
 def recent_prs(limit=10, offset=0, search="", only_open=True):
-    # Use a subquery to get latest status per PR, then filter
     base = (
         "SELECT repo, pr_number, MAX(processed_at) as processed_at, "
         "MAX(email_sent) as email_sent, MAX(title) as title, "
@@ -158,7 +235,7 @@ def recent_prs(limit=10, offset=0, search="", only_open=True):
     params = []
     if search:
         like = f"%{search}%"
-        conditions.append("(repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? OR title LIKE ?)")
+        conditions.append(f"(repo LIKE {_PH} OR CAST(pr_number AS TEXT) LIKE {_PH} OR title LIKE {_PH})")
         params.extend([like, like, like])
     where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
     group_having = " GROUP BY repo, pr_number"
@@ -166,7 +243,7 @@ def recent_prs(limit=10, offset=0, search="", only_open=True):
         group_having += " HAVING pr_status='open'"
     with _conn() as c:
         rows = c.execute(
-            base + where + group_having + " ORDER BY processed_at DESC LIMIT ? OFFSET ?",
+            base + where + group_having + f" ORDER BY processed_at DESC LIMIT {_PH} OFFSET {_PH}",
             params + [limit, offset],
         ).fetchall()
     return [dict(r) for r in rows]
@@ -184,7 +261,7 @@ def pr_count(search="", only_open=True):
     params = []
     if search:
         like = f"%{search}%"
-        conditions.append("(repo LIKE ? OR CAST(pr_number AS TEXT) LIKE ? OR title LIKE ?)")
+        conditions.append(f"(repo LIKE {_PH} OR CAST(pr_number AS TEXT) LIKE {_PH} OR title LIKE {_PH})")
         params.extend([like, like, like])
     where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
     group_having = " GROUP BY repo, pr_number"
@@ -192,7 +269,7 @@ def pr_count(search="", only_open=True):
         group_having += " HAVING pr_status='open'"
     with _conn() as c:
         row = c.execute(
-            "SELECT COUNT(*) as cnt FROM (" + inner + where + group_having + ")",
+            "SELECT COUNT(*) as cnt FROM (" + inner + where + group_having + ") sub",
             params,
         ).fetchone()
     return row["cnt"] if row else 0
@@ -209,12 +286,12 @@ def update_pr_statuses(open_prs):
             key = (row["repo"], row["pr_number"])
             if key in open_prs:
                 c.execute(
-                    "UPDATE processed_prs SET pr_status='open', title=? WHERE repo=? AND pr_number=?",
+                    f"UPDATE processed_prs SET pr_status='open', title={_PH} WHERE repo={_PH} AND pr_number={_PH}",
                     (open_prs[key], key[0], key[1]),
                 )
             else:
                 c.execute(
-                    "UPDATE processed_prs SET pr_status='closed' WHERE repo=? AND pr_number=?",
+                    f"UPDATE processed_prs SET pr_status='closed' WHERE repo={_PH} AND pr_number={_PH}",
                     (key[0], key[1]),
                 )
 
@@ -223,19 +300,17 @@ def dashboard_stats(repo_filter=""):
     """Aggregate stats for the dashboard, optionally filtered by repo."""
     import json as _json
     with _conn() as c:
-        # Get all distinct repos
         all_repos = [r["repo"] for r in c.execute(
             "SELECT DISTINCT repo FROM processed_prs"
         ).fetchall()]
 
-        # Get latest result per PR (deduplicated)
         q = ("SELECT repo, pr_number, result_json, pr_status, email_sent, title "
              "FROM processed_prs WHERE id IN ("
              "  SELECT MAX(id) FROM processed_prs GROUP BY repo, pr_number"
              ") AND result_json IS NOT NULL")
         params = []
         if repo_filter:
-            q += " AND repo=?"
+            q += f" AND repo={_PH}"
             params.append(repo_filter)
         rows = c.execute(q, params).fetchall()
 
@@ -292,5 +367,29 @@ def dashboard_stats(repo_filter=""):
 def delete_repo_data(repo):
     """Delete all processed PR rows and app_state entries for a repo."""
     with _conn() as c:
-        c.execute("DELETE FROM processed_prs WHERE repo=?", (repo,))
-        c.execute("DELETE FROM app_state WHERE key=?", (f"last_checked:{repo}",))
+        c.execute(f"DELETE FROM processed_prs WHERE repo={_PH}", (repo,))
+        c.execute(f"DELETE FROM app_state WHERE key={_PH}", (f"last_checked:{repo}",))
+
+
+def get_app_state(key):
+    """Get a value from the app_state table."""
+    with _conn() as c:
+        row = c.execute(
+            f"SELECT value FROM app_state WHERE key={_PH}", (key,)
+        ).fetchone()
+    return row["value"] if row else None
+
+
+def set_app_state(key, value):
+    """Set a value in the app_state table (upsert)."""
+    with _conn() as c:
+        if _use_pg:
+            c.execute(
+                f"INSERT INTO app_state (key, value) VALUES ({_PH}, {_PH}) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value",
+                (key, value),
+            )
+        else:
+            c.execute(
+                "INSERT OR REPLACE INTO app_state (key, value) VALUES (?, ?)",
+                (key, value),
+            )
