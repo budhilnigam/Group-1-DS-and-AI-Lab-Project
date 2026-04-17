@@ -406,7 +406,7 @@ Milestone 5 conducted comprehensive evaluation of all model variants under a con
 **Category Distribution in Benchmark**
 
 | Category | Count | Share (%) |
-||:|:|
+|:---|:---|:---|
 | unused_import | 193 | 28.59% |
 | naming_convention | 180 | 26.67% |
 | indentation | 138 | 20.44% |
@@ -714,7 +714,7 @@ The deployed system is a containerized and service-oriented architecture designe
 **Technology Stack**
 
 | Component | Technology | Purpose |
-||||
+|:---|:---|:---|
 | Web Framework | FastAPI + Uvicorn | REST API + async request handling |
 | Vector Database | Qdrant (Docker, localhost:6333) | Semantic retrieval of guideline chunks |
 | Embedding Model | BAAI/bge-large-en-v1.5 | Encode PRs and guideline corpus |
@@ -730,7 +730,7 @@ The deployed system is a containerized and service-oriented architecture designe
 **Local Machine Execution**
 
 | Item | Configuration |
-|||
+|:---|:---|
 | Host | `localhost` |
 | FastAPI Port | `8080` |
 | URL | `http://localhost:8080` |
@@ -740,7 +740,7 @@ The deployed system is a containerized and service-oriented architecture designe
 **Qdrant Vector Database**
 
 | Item | Configuration |
-|||
+|:---|:---|
 | URL | `http://localhost:6333` |
 | Docker Command | `docker run -p 6333:6333 qdrant/qdrant` |
 | Collection Name | `guideline_embeddings` |
@@ -751,7 +751,7 @@ The deployed system is a containerized and service-oriented architecture designe
 **SQLite Relational Database**
 
 | Item | Configuration |
-|||
+|:---|:---|
 | File Path | `src/deployment/review_app.db` |
 | Auto-initialization | Yes (created on first startup via `init_db()`) |
 | Main Tables | `processed_prs`, `app_state` |
@@ -760,7 +760,7 @@ The deployed system is a containerized and service-oriented architecture designe
 **External API Dependencies**
 
 | Service | Purpose | Configuration |
-||||
+|:---|:---|:---|
 | GitHub API | Fetch PR diffs, commits, comments | `GITHUB_TOKEN` environment variable |
 | Groq API | LLM inference (gpt-oss-20b) | `GROQ_TOKEN` environment variable |
 | Gmail SMTP | Email notifications | `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD` |
@@ -770,7 +770,7 @@ The deployed system is a containerized and service-oriented architecture designe
 **Primary Configuration File**: `src/deployment/config.properties`
 
 | Parameter | Value | Purpose |
-||||
+|:---|:---|:---|
 | MODEL | openai/gpt-oss-20b | LLM for review generation |
 | DEFAULT_COLLECTION_NAME | guideline_embeddings | Qdrant collection name |
 | DEFAULT_EMBED_MODEL | BAAI/bge-large-en-v1.5 | Embedding model for corpus and queries |
@@ -829,7 +829,7 @@ The system exposes 21 REST endpoints for programmatic access:
 **Table: `processed_prs`**
 
 | Column | Type | Description |
-||||
+|:---|:---|:---|
 | id | INTEGER PK | Row identifier |
 | repo | TEXT | Repository (owner/name) |
 | pr_number | INTEGER | GitHub PR number |
@@ -844,7 +844,7 @@ The system exposes 21 REST endpoints for programmatic access:
 **Table: `app_state`**
 
 | Column | Type | Description |
-||||
+|:---|:---|:---|
 | key | TEXT PK | Configuration key |
 | value | TEXT | Configuration value |
 | last_updated | TIMESTAMP | Last modification time |
@@ -900,7 +900,7 @@ The system exposes 21 REST endpoints for programmatic access:
 **Latency Benchmarks** (on reference hardware: AMD Ryzen 3 7320U, 8GB RAM)
 
 | Operation | Latency (seconds) | Notes |
-||||
+|:---|:---|:---|
 | Single PR embedding | 0.5–1.0 | BAAI model inference |
 | Semantic retrieval (TOP_N=25) | 0.3–0.5 | Qdrant similarity search |
 | Reranking (TOP_K=7) | 0.2–0.3 | Composite score computation |
@@ -1197,7 +1197,7 @@ This project advances the field in three dimensions:
 #### A.1 Architecture and System Design Diagrams
 
 | Figure | Location | Description |
-||||
+|:---|:---|:---|
 | System Architecture | `docs/Milestone 3/Architecture.png` | High-level deployment and component interaction diagram |
 | Process Flow Diagram | `docs/Milestone 3/Process_flow_diagram.png` | End-to-end PR analysis pipeline with decision points |
 | Pipeline Verification | `docs/Milestone 3/end_to_end_pipeline_verification.drawio.png` | Data flow and module interdependencies |
@@ -1205,7 +1205,7 @@ This project advances the field in three dimensions:
 #### A.2 Dataset and EDA Visualizations
 
 | Figure | Location | Description |
-||||
+|:---|:---|:---|
 | Dataset Sizes | `docs/Milestone 6/assets/final_report_dataset_fig1_dataset_sizes.png` | Bar chart: 97 PRs, 2,847 corpus chunks, 97 source files |
 | Category Distribution | `docs/Milestone 6/assets/final_report_dataset_fig2_eval_categories.png` | Histogram: frequency of each 5 violation categories |
 | Repo-Category Heatmap | `docs/Milestone 6/assets/final_report_dataset_fig3_repo_category_heatmap.png` | 2D heatmap showing category prevalence across synthetic repos |
@@ -1214,7 +1214,7 @@ This project advances the field in three dimensions:
 #### A.3 Reranking Impact Analysis
 
 | Figure | Location | Description |
-||||
+|:---|:---|:---|
 | Run A PR-level Metrics | `notebooks/rerank_simple_outputs_20260404_144238/baseline vs reranked PR level metrics.png` | Baseline vs reranked performance: precision, recall, F1 |
 | Run A Category Recall | `notebooks/rerank_simple_outputs_20260404_144238/recall and fp baseline and reranked.png` | Per-category recall and false positive comparison |
 | Run B PR-level Metrics | `notebooks/rerank_simple_outputs_20260404_150553/baseline vs reranked PR level metrics.png` | Baseline vs reranked under different tuning state |
@@ -1664,7 +1664,7 @@ def test_model_quality_regression():
 #### E.1 Common Issues and Solutions
 
 | Issue | Symptoms | Solution |
-||||
+|:---|:---|:---|
 | Qdrant Connection Refused | `Connection refused localhost:6333` | Verify Docker container running: `docker ps \| grep qdrant` |
 | Out of Memory | Process killed, 137 exit code | Increase memory: reduce TOP_N_CANDIDATES from 25 to 10 |
 | JSON Parse Errors | 74.2% empty responses | Increase LLM_RETRY_CAP to 5; implement JSON repair layer |
@@ -1763,7 +1763,7 @@ def test_model_quality_regression():
 #### G.1 Full Per-Category Breakdown (RAG Model)
 
 | Category | TP | FP | FN | Precision | Recall | F1 | Support |
-||:|:|:|:|:|:|:|
+|:---|:---|:---|:---|:---|:---|:---|:---|
 | unused_import | 74 | 0 | 13 | 1.0000 | 0.8506 | 0.9193 | 87 |
 | mutable_default | 12 | 0 | 1 | 1.0000 | 0.9231 | 0.9600 | 13 |
 | naming_convention | 30 | 1 | 7 | 0.9677 | 0.8108 | 0.8824 | 37 |
@@ -1774,7 +1774,7 @@ def test_model_quality_regression():
 #### G.2 Latency Breakdown (50 PR Batch on Reference Hardware)
 
 | Stage | Mean (ms) | Std (ms) | Min | Max |
-||:|:|:|:|
+|:---|:---|:---|:---|:---|
 | Diff preprocessing | 45 | 12 | 28 | 85 |
 | Query embedding | 520 | 78 | 410 | 710 |
 | Retrieval (TOP_N=25) | 380 | 65 | 280 | 520 |
@@ -1789,7 +1789,7 @@ def test_model_quality_regression():
 ### 10.10 Appendix H: Glossary of Terms
 
 | Term | Definition |
-|||
+|:---|:---|
 | **RAG** | Retrieval-Augmented Generation; combining retrieved context with LLM generation |
 | **Grounding** | Traceability of generated suggestions to retrieved source material |
 | **Reranking** | Re-scoring and reordering retrieved candidates using composite scoring functions |
