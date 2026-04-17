@@ -61,11 +61,11 @@ th { background: #f6f8fa; }
 <body>
 <div class="header">PR Code Review Bot</div>
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('dashboard')">Dashboard</div>
-  <div class="tab" onclick="switchTab('schedule')">Schedule</div>
-  <div class="tab" onclick="switchTab('inference')">Custom Inference</div>
-  <div class="tab" onclick="switchTab('evaluation')">Evaluation</div>
-  <div class="tab" onclick="switchTab('config')">Configuration</div>
+  <div class="tab active" data-tab="dashboard" onclick="switchTab('dashboard', true)">Dashboard</div>
+  <div class="tab" data-tab="schedule" onclick="switchTab('schedule', true)">Schedule</div>
+  <div class="tab" data-tab="inference" onclick="switchTab('inference', true)">Custom Inference</div>
+  <div class="tab" data-tab="evaluation" onclick="switchTab('evaluation', true)">Evaluation</div>
+  <div class="tab" data-tab="config" onclick="switchTab('config', true)">Configuration</div>
 </div>
 
 <!-- ==================== TAB: DASHBOARD ==================== -->
@@ -300,8 +300,25 @@ function renderPromptsBlock(prompts) {
   return html;
 }
 
-function switchTab(id) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', t.textContent.trim().toLowerCase().includes(id.slice(0,4))));
+const TAB_PATHS = {
+  dashboard: '/dashboard',
+  schedule: '/schedule',
+  inference: '/inference',
+  evaluation: '/evaluation',
+  config: '/config'
+};
+
+function switchTab(id, navigate) {
+  if (navigate) {
+    var targetPath = TAB_PATHS[id] || '/dashboard';
+    if (window.location.pathname.toLowerCase() !== targetPath) {
+      window.location.href = targetPath;
+      return;
+    }
+  }
+  document.querySelectorAll('.tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.tab === id);
+  });
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id===id));
   if (id==='schedule') { loadSchedule(); loadStatus(); }
   if (id==='config') { loadConfig(); loadPrompts(); loadRepos(); }
@@ -758,11 +775,30 @@ async function loadRepos() {
       tr.innerHTML = '<td>'+item.repo+'</td><td>'+item.email+'</td>'+
         '<td><span style="cursor:pointer;color:#0366d6" onclick="viewRepoRules(\''+item.repo+'\')">'+(item.rules||0)+' rules</span></td>'+
         '<td style="white-space:nowrap">'+
-        '<button onclick="showAddRulesDialog(\''+item.repo+'\')" style="padding:3px 10px;font-size:11px;margin:0 4px 0 0;background:#0366d6">+ Rules</button>'+
         '<button onclick="removeRepoAction(\''+item.repo+'\',this)" style="padding:3px 10px;font-size:11px;margin:0;background:#cb2431">Remove</button></td>';
       tbody.appendChild(tr);
     });
   } catch(e) { console.error('loadRepos:', e); }
+}
+
+function parseRulesJsonInput(rulesText) {
+  var rules = [];
+  if (!rulesText) return rules;
+
+  var parsed = JSON.parse(rulesText);
+  for (var cat in parsed) {
+    var arr = Array.isArray(parsed[cat]) ? parsed[cat] : [parsed[cat]];
+    arr.forEach(function(text) {
+      if (text !== null && text !== undefined && String(text).trim()) {
+        rules.push({category: cat, text: String(text)});
+      }
+    });
+  }
+  return rules;
+}
+
+function escapeHtml(text) {
+  return String(text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 async function addRepoAction() {
@@ -771,20 +807,9 @@ async function addRepoAction() {
   var rulesText = document.getElementById('add-repo-rules').value.trim();
   var out = document.getElementById('repo-result');
   if (!repo || !email) { out.innerHTML = '<p class="error">Both repo and email are required.</p>'; return; }
-  // Parse rules from textarea (JSON format: {"category": ["rule1", ...]})
   var rules = [];
-  if (rulesText) {
-    try {
-      var parsed = JSON.parse(rulesText);
-      for (var cat in parsed) {
-        var arr = Array.isArray(parsed[cat]) ? parsed[cat] : [parsed[cat]];
-        arr.forEach(function(text) { if (text) rules.push({category: cat, text: String(text)}); });
-      }
-    } catch(e) {
-      out.innerHTML = '<p class="error">Invalid JSON. Expected format: {"category": ["rule1", "rule2"]}</p>';
-      return;
-    }
-  }
+  try { rules = parseRulesJsonInput(rulesText); }
+  catch(e) { out.innerHTML = '<p class="error">Invalid JSON. Expected format: {"category": ["rule1", "rule2"]}</p>'; return; }
   try {
     const resp = await fetch('/api/repos', {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -812,33 +837,40 @@ async function viewRepoRules(repo) {
     const data = await resp.json();
     if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
     var rules = data.rules || [];
-    if (!rules.length) { out.innerHTML = '<p style="color:#586069;margin-top:8px">No custom rules for '+repo+'.</p>'; return; }
     var html = '<div class="result-box" style="margin-top:8px"><h3 style="font-size:14px">Rules for '+repo+' ('+rules.length+')</h3>';
-    html += '<table><tr><th>Chunk ID</th><th>Category</th><th>Text</th></tr>';
+    html += '<table><tr><th>Chunk ID</th><th>Category</th><th>Text</th><th style="width:90px">Action</th></tr>';
+    if (!rules.length) {
+      html += '<tr><td colspan="4" style="color:#586069">No custom rules for '+repo+'.</td></tr>';
+    }
     rules.forEach(function(r) {
-      html += '<tr><td style="white-space:nowrap">'+r.chunk_id+'</td><td>'+r.category+'</td><td style="font-size:12px">'+r.text.replace(/</g,'&lt;').substring(0,120)+'</td></tr>';
+      html += '<tr>'+
+        '<td style="white-space:nowrap">'+escapeHtml(r.chunk_id)+'</td>'+
+        '<td>'+escapeHtml(r.category)+'</td>'+
+        '<td style="font-size:12px">'+escapeHtml(r.text).substring(0,240)+'</td>'+
+        '<td><button onclick="removeRepoRuleAction(\''+repo+'\',\''+r.chunk_id+'\')" style="padding:3px 10px;font-size:11px;margin:0;background:#cb2431">Remove</button></td>'+
+      '</tr>';
     });
-    html += '</table></div>';
+    html += '</table>';
+    html += '<div style="margin-top:10px">'+
+      '<label style="font-size:12px">Add Rules JSON (append to existing rules)</label>'+
+      '<textarea id="append-rules-input" rows="5" placeholder=\'{&#10;  "naming_convention\": [\"Use snake_case for function names\"],&#10;  \"indentation\": [\"Use 4 spaces per indentation level\"]&#10;}\' style="width:100%;font-size:13px;font-family:monospace"></textarea>'+
+      '<div style="margin-top:8px"><button onclick="appendRepoRulesAction(\''+repo+'\')" style="padding:5px 12px;font-size:12px;background:#0366d6;margin:0">+ Append Rules</button></div>'+
+    '</div>';
+    html += '</div>';
     out.innerHTML = html;
   } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
 }
 
-async function showAddRulesDialog(repo) {
-  var rulesText = prompt('Add rules for '+repo+' (JSON: {"category": ["rule1", ...]}):');
-  if (!rulesText) return;
-  var rules = [];
-  try {
-    var parsed = JSON.parse(rulesText);
-    for (var cat in parsed) {
-      var arr = Array.isArray(parsed[cat]) ? parsed[cat] : [parsed[cat]];
-      arr.forEach(function(text) { if (text) rules.push({category: cat, text: String(text)}); });
-    }
-  } catch(e) {
-    document.getElementById('repo-result').innerHTML = '<p class="error">Invalid JSON. Expected: {"category": ["rule1"]}</p>';
-    return;
-  }
-  if (!rules.length) return;
+async function appendRepoRulesAction(repo) {
   var out = document.getElementById('repo-result');
+  var rulesText = document.getElementById('append-rules-input').value.trim();
+  if (!rulesText) { out.innerHTML = '<p class="error">Please provide rules JSON to append.</p>'; return; }
+
+  var rules = [];
+  try { rules = parseRulesJsonInput(rulesText); }
+  catch(e) { out.innerHTML = '<p class="error">Invalid JSON. Expected: {"category": ["rule1"]}</p>'; return; }
+  if (!rules.length) { out.innerHTML = '<p class="error">No valid rule text found in JSON.</p>'; return; }
+
   try {
     const resp = await fetch('/api/repos/rules', {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -847,8 +879,28 @@ async function showAddRulesDialog(repo) {
     const data = await resp.json();
     if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
     out.innerHTML = '<p style="color:#28a745;margin-top:8px">Added '+data.rules_added+' rules to '+repo+'</p>';
+    await viewRepoRules(repo);
     loadRepos();
   } catch(e) { out.innerHTML = '<p class="error">'+e+'</p>'; }
+}
+
+async function removeRepoRuleAction(repo, chunkId) {
+  if (!confirm('Remove rule '+chunkId+' from '+repo+'?')) return;
+  var out = document.getElementById('repo-result');
+  try {
+    const resp = await fetch('/api/repos/rules', {
+      method: 'DELETE',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({repo: repo, chunk_id: chunkId})
+    });
+    const data = await resp.json();
+    if (data.error) { out.innerHTML = '<p class="error">'+data.error+'</p>'; return; }
+    out.innerHTML = '<p style="color:#28a745;margin-top:8px">Removed rule '+chunkId+' from '+repo+'.</p>';
+    await viewRepoRules(repo);
+    loadRepos();
+  } catch(e) {
+    out.innerHTML = '<p class="error">'+e+'</p>';
+  }
 }
 
 async function removeRepoAction(repo, btn) {
@@ -1006,14 +1058,18 @@ async function loadDashboard() {
   } catch(e) { console.error('loadDashboard:', e); }
 }
 
-// On page load, switch to tab from URL hash if present
+// On page load, switch to tab from URL path
 (function(){
-  var h = window.location.hash.replace('#','');
-  if (h && ['inference','eval','schedule','dashboard','config'].indexOf(h) !== -1) {
-    switchTab(h);
-  } else {
-    loadDashboard();
-  }
+  var path = window.location.pathname.toLowerCase();
+  var tabByPath = {
+    '/': 'dashboard',
+    '/dashboard': 'dashboard',
+    '/schedule': 'schedule',
+    '/inference': 'inference',
+    '/evaluation': 'evaluation',
+    '/config': 'config'
+  };
+  switchTab(tabByPath[path] || 'dashboard', false);
 })();
 
 // ---- Prompt Overrides ----

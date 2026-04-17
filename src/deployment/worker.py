@@ -199,6 +199,42 @@ def get_repo_rules(repo):
     return [c for c in all_chunks if c.get("source_path") == repo]
 
 
+def remove_repo_rule(repo, chunk_id):
+    """Remove one custom rule for a repo and delete its matching Qdrant point.
+
+    Returns the removed chunk dict, or None if no matching rule exists.
+    """
+    if not chunk_id:
+        return None
+
+    existing = _load_repo_corpus()
+    removed = None
+    remaining = []
+
+    for chunk in existing:
+        if removed is None and chunk.get("source_path") == repo and chunk.get("chunk_id") == chunk_id:
+            removed = chunk
+            continue
+        remaining.append(chunk)
+
+    if removed is None:
+        return None
+
+    _save_repo_corpus(remaining)
+
+    try:
+        from qdrant_client import QdrantClient
+
+        qdrant_url = get_config("QDRANT_URL")
+        if qdrant_url:
+            client = QdrantClient(url=qdrant_url)
+            client.delete(COLLECTION, points_selector=[_chunk_id_to_int(chunk_id)])
+    except Exception:
+        log.exception("Failed to delete Qdrant chunk %s for %s", chunk_id, repo)
+
+    return removed
+
+
 def get_config(key):
     """Return runtime override if set, else the file-loaded default."""
     defaults = {

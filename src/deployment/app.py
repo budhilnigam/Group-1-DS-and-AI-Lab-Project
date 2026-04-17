@@ -14,7 +14,7 @@ from fastapi.templating import Jinja2Templates
 from db import init_db, recent_prs, pr_count, get_last_checked, get_latest_cached_result, get_latest_cached_result_any, set_last_checked, compute_prompt_hash, cache_pr, update_email_sent, update_pr_statuses, dashboard_stats
 from worker import (
     sync_corpus_to_qdrant, fetch_and_review_prs, REPOS_MAIL_MAP, _fetch_pr_diff, _fetch_pr_info, _fetch_pr_comments, _fetch_open_prs,
-    runtime_config, schedule_enabled, get_config, add_repo, remove_repo, add_repo_rules, get_repo_rules,
+    runtime_config, schedule_enabled, get_config, add_repo, remove_repo, add_repo_rules, get_repo_rules, remove_repo_rule,
     QDRANT_URL, GROQ_TOKEN, GITHUB_TOKEN, COLLECTION, EMBED_MODEL,
     PROMPT_PATH, SCHEDULE_INTERVAL, CACHE_ENABLED, LLM_MAX_RETRIES,
     SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD,
@@ -76,8 +76,7 @@ app.add_middleware(
 
 
 # ---- Pages ----
-@app.get("/", response_class=HTMLResponse)
-def index(request: Request):
+def _render_index_page(request: Request):
     sched_status = {
         "recent": recent_prs(limit=15),
         "last_checked": {repo: get_last_checked(repo) for repo in REPOS_MAIL_MAP},
@@ -113,6 +112,36 @@ def index(request: Request):
             "config_data_json": json.dumps(config_data),
         },
     )
+
+
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return _render_index_page(request)
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard_page(request: Request):
+    return _render_index_page(request)
+
+
+@app.get("/schedule", response_class=HTMLResponse)
+def schedule_page(request: Request):
+    return _render_index_page(request)
+
+
+@app.get("/inference", response_class=HTMLResponse)
+def inference_page(request: Request):
+    return _render_index_page(request)
+
+
+@app.get("/evaluation", response_class=HTMLResponse)
+def evaluation_page(request: Request):
+    return _render_index_page(request)
+
+
+@app.get("/config", response_class=HTMLResponse)
+def config_page(request: Request):
+    return _render_index_page(request)
 
 
 # ---- Health / Status ----
@@ -624,6 +653,23 @@ async def api_repos_rules_add(request: Request):
         return {"error": "No rules provided."}
     chunks = add_repo_rules(repo, rules)
     return {"status": "ok", "repo": repo, "rules_added": len(chunks), "chunks": chunks}
+
+
+@app.delete("/api/repos/rules")
+async def api_repos_rules_remove(request: Request):
+    body = await request.json()
+    repo = body.get("repo", "").strip()
+    chunk_id = body.get("chunk_id", "").strip()
+    if not repo or repo not in REPOS_MAIL_MAP:
+        return {"error": "Unknown or missing repo."}
+    if not chunk_id:
+        return {"error": "chunk_id is required."}
+
+    removed = remove_repo_rule(repo, chunk_id)
+    if not removed:
+        return {"error": f"Rule '{chunk_id}' not found for repo '{repo}'."}
+
+    return {"status": "ok", "repo": repo, "removed_chunk_id": chunk_id}
 
 
 # ---- Prompt Overrides (runtime only, reset on restart) ----
