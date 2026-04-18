@@ -504,12 +504,13 @@ def build_prompt(prompt_template: str, pr_id: str, pr_code: str, retrieved_chunk
         if not chunk_block:
             chunk_block = "[No retrieved payload chunks available]"
         blocks.append(
-            f"""RETRIEVED_PAYLOAD_CHUNKS:
+            f"""IMPORTANT GUIDELINES FROM RETRIEVAL (read carefully before reviewing the PR):
 {chunk_block}
 END
 
 PR:
 ID: {pr_id}
+
 CODE:
 {pr_code}
 """
