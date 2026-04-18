@@ -56,7 +56,7 @@ The PR Code Review Bot is an automated code review system that monitors GitHub r
 | Relational Database | SQLite | Built-in |
 | Static Analysis | Pylint, Flake8 | >= 3.0 |
 | Templating | Jinja2 | >= 3.1 |
-| Task Queue | Celery (defined, unused at runtime) | >= 5.4 |
+| Scheduler | asyncio (built into app.py) | Python stdlib |
 | Source Control | GitHub | — |
 
 ---
@@ -239,7 +239,7 @@ python3 -m uvicorn app:app --host 0.0.0.0 --port 8080
 
 1. **SQLite for persistence** — zero-config, file-based, no external DB server needed.
 2. **Qdrant for vector search** — efficient similarity search for RAG retrieval with hybrid scoring.
-3. **Asyncio scheduler** — native `asyncio.create_task` instead of Celery, eliminating Redis/RabbitMQ dependency.
+3. **Asyncio scheduler** — native `asyncio.create_task` runs the periodic PR-polling task inside the FastAPI process, avoiding the need for any external worker, broker, or queue.
 4. **Config.properties** — simple key-value config file for all settings, kept out of git via `.gitignore`.
 5. **Prompt hash caching** — results are cached by `(repo, pr_number, head_sha, prompt_hash)` so prompt changes trigger re-review without re-fetching.
 6. **Two-way corpus sync** — corpus files and Qdrant collection are synced on startup, supporting both file-first and Qdrant-first workflows.

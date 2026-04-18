@@ -656,7 +656,7 @@ The deployed system is a containerized and service-oriented architecture designe
 | Static Analysis | Pylint, Flake8 | Deterministic violation detection |
 | Relational DB | SQLite (review_app.db) | PR state, cache, scheduler state |
 | Templating | Jinja2 | HTML dashboard and email templates |
-| Task Queue | Celery (prepared but unused) | Future horizontal scaling |
+| Scheduler | asyncio (built into app.py) | Periodic PR polling inside FastAPI process |
 | Source Control | GitHub API | Fetch PR diffs, update PR status |
 
 ### 8.2 Deployment Infrastructure
@@ -868,7 +868,7 @@ The system exposes 21 REST endpoints for programmatic access:
 - ⚠️ Monitoring dashboards (Prometheus/Grafana)
 - ⚠️ Multi-seed evaluation with confidence intervals
 - ⚠️ External real-world dataset validation
-- ⚠️ Horizontal scaling support (Celery workers, load balancing)
+- ⚠️ Horizontal scaling support (distributed task queue, load balancing)
 
 
 

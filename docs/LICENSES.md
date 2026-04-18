@@ -33,7 +33,6 @@ The project uses the following open-source libraries and models under their resp
 **Python Runtime & Web Framework**:
 - FastAPI, Uvicorn (BSD 3-Clause License)
 - Jinja2 (BSD 3-Clause License)
-- Celery (BSD License)
 
 **Data Processing & Analysis**:
 - pandas, numpy, scikit-learn (BSD 3-Clause License)
