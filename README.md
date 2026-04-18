@@ -391,11 +391,78 @@ python scripts/fetch_review_comments.py
 
 ### Main Application
 
-To run the main application (when implemented):
+To run the main application (local deployment):
 
 ```bash
-python app/app.py
+# Option A: use the provided setup scripts (recommended)
+# macOS / Linux
+cd src/deployment && ./setup.sh
+
+# Windows
+cd src\deployment && setup.bat
+
+# Option B: run Uvicorn directly
+cd src/deployment
+python -m uvicorn app:app --host 0.0.0.0 --port 8080
 ```
+
+Notes:
+- The `setup` scripts install dependencies, start Qdrant (via Docker), and launch the web server.
+- The FastAPI process runs a built-in asyncio scheduler for scheduled PR polling; no separate Celery/worker is required for the local deployment.
+
+The web dashboard will be available at `http://localhost:8080`.
+
+### Dashboard & Interface
+
+**Dashboard Overview:**
+
+![](screenshots/Screenshot%20(1470).png)
+
+![](screenshots/Screenshot%20(1471).png)
+
+![](screenshots/Screenshot%20(1472).png)
+
+**Single PR Inference:**
+
+![](screenshots/Screenshot%20(1474).png)
+
+![](screenshots/Screenshot%20(1475).png)
+
+![](screenshots/Screenshot%20(1476).png)
+
+![](screenshots/Screenshot%20(1477).png)
+
+![](screenshots/Screenshot%20(1478).png)
+
+![](screenshots/Screenshot%20(1479).png)
+
+**Scheduled Reviews:**
+
+![](screenshots/Screenshot%20(1473).png)
+
+**Configuration Settings:**
+
+![](screenshots/Screenshot%20(1486).png)
+
+![](screenshots/Screenshot%20(1487).png)
+
+![](screenshots/Screenshot%20(1488).png)
+
+![](screenshots/Screenshot%20(1489).png)
+
+**Evaluation Benchmarking:**
+
+![](screenshots/Screenshot%20(1480).png)
+
+![](screenshots/Screenshot%20(1481).png)
+
+![](screenshots/Screenshot%20(1482).png)
+
+![](screenshots/Screenshot%20(1483).png)
+
+![](screenshots/Screenshot%20(1484).png)
+
+![](screenshots/Screenshot%20(1485).png)
 
 
 ## Project Workflow

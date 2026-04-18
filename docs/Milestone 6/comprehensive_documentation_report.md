@@ -349,6 +349,58 @@ The current deployment is a local Python deployment on the developer machine. It
 - Use the Schedule tab to manage repo polling and manual runs.
 - Use the Configuration tab to inspect runtime values.
 
+#### Dashboard & Interface Screenshots
+
+**Dashboard Overview:**
+
+![](../../screenshots/Screenshot%20(1470).png)
+
+![](../../screenshots/Screenshot%20(1471).png)
+
+![](../../screenshots/Screenshot%20(1472).png)
+
+**Inference Interface:**
+
+![](../../screenshots/Screenshot%20(1474).png)
+
+![](../../screenshots/Screenshot%20(1475).png)
+
+![](../../screenshots/Screenshot%20(1476).png)
+
+![](../../screenshots/Screenshot%20(1477).png)
+
+![](../../screenshots/Screenshot%20(1478).png)
+
+![](../../screenshots/Screenshot%20(1479).png)
+
+**Schedule Management:**
+
+![](../../screenshots/Screenshot%20(1473).png)
+
+**Configuration Panel:**
+
+![](../../screenshots/Screenshot%20(1486).png)
+
+![](../../screenshots/Screenshot%20(1487).png)
+
+![](../../screenshots/Screenshot%20(1488).png)
+
+![](../../screenshots/Screenshot%20(1489).png)
+
+**Evaluation Interface:**
+
+![](../../screenshots/Screenshot%20(1480).png)
+
+![](../../screenshots/Screenshot%20(1481).png)
+
+![](../../screenshots/Screenshot%20(1482).png)
+
+![](../../screenshots/Screenshot%20(1483).png)
+
+![](../../screenshots/Screenshot%20(1484).png)
+
+![](../../screenshots/Screenshot%20(1485).png)
+
 #### Example launch command
 
 ```bash
