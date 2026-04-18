@@ -425,12 +425,10 @@ def fetch_and_review_prs():
                 summary["errors"].append(f"PR #{pr_number}: fetch diff failed")
                 continue
 
-            repo_short = repo.split("/")[-1] if "/" in repo else repo
-
             try:
                 prep = prepare_rag_prompt(
                     pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=QDRANT_URL,
-                    prompt_path=PROMPT_PATH, repo_name=repo_short,
+                    prompt_path=PROMPT_PATH, repo_name=repo,
                     collection_name=COLLECTION, embed_model_name=EMBED_MODEL,
                 )
             except Exception:

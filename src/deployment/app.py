@@ -228,7 +228,7 @@ async def api_inference(request: Request):
         # 1. retrieval + prompt building (cheap)
         prep = prepare_rag_prompt(
             pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=qdrant_url,
-            prompt_path=prompt_path, repo_name=repo_short,
+            prompt_path=prompt_path, repo_name=repo,
             collection_name=collection, embed_model_name=embed_model,
             prompt_template_override=prompt_overrides.get("RAG"),
         )
