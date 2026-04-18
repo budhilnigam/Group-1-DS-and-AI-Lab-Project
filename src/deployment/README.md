@@ -29,7 +29,7 @@ FastAPI web server (app.py)
     +-- Qdrant vector DB (stores guideline embeddings from corpus/)
     +-- SQLite (review_app.db - stores processed PRs and app state)
     |
-Celery worker + beat (worker.py)
+Background scheduler (asyncio task inside app.py)
     +-- periodic task: fetch_and_review_prs every SCHEDULE_INTERVAL minutes
     +-- startup task: sync_corpus_to_qdrant (loads corpus/retrival_corpus.json into Qdrant)
 ```
@@ -46,7 +46,7 @@ The RAG pipeline works like this:
 ```
 deployment/
     app.py                          - FastAPI web server, routes, background scheduler
-    worker.py                       - Celery app, GitHub API calls, email sending, Qdrant sync
+    worker.py                       - GitHub API calls, email sending, Qdrant sync, scheduled review task
     db.py                           - SQLite data layer (processed PRs, app state)
     single_pr_model_output_metrics.py - LLM inference, RAG retrieval, static analysis, evaluation
     config.properties               - all configuration (tokens, DB URLs, SMTP, schedule settings)
@@ -107,8 +107,7 @@ setup.bat
 The script will:
 1. Install Python dependencies from requirements.txt
 2. Start Qdrant in Docker (pulls the image if needed)
-3. Start the Celery worker in the background (handles periodic PR polling and corpus sync)
-4. Start the FastAPI web server on port 8080
+3. Start the FastAPI web server on port 8080 (includes a built-in asyncio background scheduler)
 
 Open http://127.0.0.1:8080 in your browser after everything starts.
 
@@ -135,7 +134,7 @@ Open http://127.0.0.1:8080 in your browser after everything starts.
 | SMTP_USER | SMTP login username (email address) |
 | SMTP_PASSWORD | SMTP login password or app password |
 | REPOS_MAIL_MAP | JSON mapping of GitHub repos to notification email addresses |
-| SCHEDULE_INTERVAL | how often (in minutes) the Celery beat checks for new PRs |
+| SCHEDULE_INTERVAL | how often (in minutes) the background scheduler checks for new PRs |
 | CACHE_ENABLED | if true, skip PRs that have already been reviewed at the same commit |
 | LLM_MAX_RETRIES | number of times to retry LLM calls if the response is empty |
 
