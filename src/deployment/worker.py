@@ -12,8 +12,6 @@ from urllib.error import HTTPError, URLError
 
 _no_proxy_opener = build_opener(ProxyHandler({}))
 
-from celery import Celery
-
 from db import init_db, is_pr_cached, cache_pr, get_last_checked, set_last_checked, compute_prompt_hash
 
 
@@ -249,28 +247,6 @@ def get_config(key):
     return runtime_config.get(key, defaults.get(key, ""))
 
 
-broker_path = BASE_DIR / "celery_broker.db"
-results_path = BASE_DIR / "celery_results.db"
-
-app = Celery(
-    "worker",
-    broker=f"sqla+sqlite:///{broker_path}",
-    backend=f"db+sqlite:///{results_path}",
-)
-app.conf.update(
-    task_serializer="json",
-    accept_content=["json"],
-    result_serializer="json",
-    timezone="UTC",
-    beat_schedule={
-        "poll-prs": {
-            "task": "worker.fetch_and_review_prs",
-            "schedule": SCHEDULE_INTERVAL * 60,  # seconds
-        },
-    },
-)
-
-
 GH_API = "https://api.github.com"
 
 
@@ -339,8 +315,6 @@ def _fetch_pr_diff(repo, pr_number):
     return _gh_get(url, accept="application/vnd.github.v3.diff")
 
 
-
-@app.task(name="worker.sync_corpus_to_qdrant")
 def sync_corpus_to_qdrant():
     from qdrant_client import QdrantClient, models
     from sentence_transformers import SentenceTransformer
@@ -422,8 +396,6 @@ def _upload_chunks(client, encoder, chunks):
         client.upsert(COLLECTION, points=points[i:i + 100])
 
 
-
-@app.task(name="worker.fetch_and_review_prs")
 def fetch_and_review_prs():
     from single_pr_model_output_metrics import prepare_rag_prompt, _call_llm_with_retry
     from groq import Groq
@@ -453,12 +425,10 @@ def fetch_and_review_prs():
                 summary["errors"].append(f"PR #{pr_number}: fetch diff failed")
                 continue
 
-            repo_short = repo.split("/")[-1] if "/" in repo else repo
-
             try:
                 prep = prepare_rag_prompt(
                     pr_code=diff, pr_id=f"PR #{pr_number}", qdrant_url=QDRANT_URL,
-                    prompt_path=PROMPT_PATH, repo_name=repo_short,
+                    prompt_path=PROMPT_PATH, repo_name=repo,
                     collection_name=COLLECTION, embed_model_name=EMBED_MODEL,
                 )
             except Exception:

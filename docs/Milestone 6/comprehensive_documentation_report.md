@@ -75,8 +75,7 @@ The live deployment uses [src/deployment/requirements.txt](../../src/deployment/
 
 Core runtime packages include:
 
-- FastAPI and Uvicorn for the web server
-- Celery for background scheduling support
+- FastAPI and Uvicorn for the web server (includes a built-in asyncio background scheduler)
 - Jinja2 for the HTML dashboard
 - Groq for LLM inference
 - qdrant-client for semantic retrieval

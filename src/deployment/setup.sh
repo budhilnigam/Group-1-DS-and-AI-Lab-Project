@@ -34,14 +34,6 @@ else
     done
 fi
 
-if pgrep -f "celery -A worker" >/dev/null 2>&1; then
-    echo "Celery worker already running."
-else
-    celery -A worker worker --beat --loglevel=info --concurrency=1 &
-    CELERY_PID=$!
-    sleep 3
-fi
-
 if lsof -i :8080 >/dev/null 2>&1; then
     echo "Port 8080 already in use. Killing old server..."
     lsof -ti :8080 | xargs kill -9 2>/dev/null
@@ -51,7 +43,5 @@ fi
 echo "Starting web server on port 8080..."
 echo "Open http://127.0.0.1:8080 in your browser."
 echo "Press Ctrl+C to stop."
-
-trap "echo 'Shutting down...'; kill $CELERY_PID 2>/dev/null; exit 0" INT TERM
 
 python3 -m uvicorn app:app --host 0.0.0.0 --port 8080

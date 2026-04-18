@@ -23,10 +23,7 @@ pip install -r requirements.txt
 # Configure (edit with your API keys)
 nano config.properties
 
-# Start Celery worker (handles scheduled PR polling & email)
-celery -A worker worker --beat --loglevel=info --concurrency=1 &
-
-# Launch the web server
+# Launch the web server (includes built-in asyncio scheduler for PR polling & email)
 python3 -m uvicorn app:app --host 0.0.0.0 --port 8080
 ```
 
@@ -34,7 +31,7 @@ python3 -m uvicorn app:app --host 0.0.0.0 --port 8080
 
 ### Quick Start (Setup Script)
 
-The project includes platform-specific setup scripts that handle everything automatically — installing dependencies, starting Qdrant via Docker, launching the Celery worker, and starting the web server.
+The project includes platform-specific setup scripts that handle everything automatically — installing dependencies, starting Qdrant via Docker, and starting the web server (which runs the built-in asyncio scheduler for PR polling).
 
 **macOS / Linux:**
 ```bash
@@ -53,10 +50,9 @@ Both scripts perform the same steps:
 1. Install Python dependencies from `requirements.txt`
 2. Check Docker is installed and running
 3. Start Qdrant container (`qdrant_review`) on port 6333 — reuses existing container if found
-4. Start the Celery worker with beat scheduler in the background
-5. Launch the Uvicorn web server on port 8080
+4. Launch the Uvicorn web server on port 8080 (includes the asyncio background scheduler)
 
-Press `Ctrl+C` to stop. On macOS/Linux the script automatically shuts down the Celery worker on exit.
+Press `Ctrl+C` to stop.
 
 ---
 
@@ -262,35 +258,22 @@ When violations are found, the bot sends an email containing:
 
 ---
 
-## 7. Celery Worker
+## 7. Background Scheduler
 
-The Celery worker runs alongside the web server and handles scheduled PR polling. It uses SQLite as both the message broker and result backend (no Redis/RabbitMQ required).
+The application runs a built-in asyncio background scheduler inside the FastAPI process — no separate worker, broker, or queue is required. The scheduler is started on application startup and polls all enabled repos for new/updated open PRs every `SCHEDULE_INTERVAL` minutes.
 
-### Starting Celery Manually
+### How It Works
 
-```bash
-cd src/deployment
-celery -A worker worker --beat --loglevel=info --concurrency=1
-```
+- On startup, `app.py` creates an asyncio background task via `asyncio.create_task(_background_scheduler())`.
+- The loop calls `fetch_and_review_prs()` (from `worker.py`), then `await asyncio.sleep(SCHEDULE_INTERVAL * 60)` before the next tick.
+- A `threading.Lock` (`_schedule_lock`) prevents overlapping runs if a cycle takes longer than the interval.
+- The scheduler shuts down automatically when the Uvicorn server exits.
 
-| Flag | Purpose |
-|------|---------|
-| `-A worker` | Use `worker.py` as the Celery app |
-| `--beat` | Enable the built-in periodic task scheduler |
-| `--loglevel=info` | Show task execution logs |
-| `--concurrency=1` | Single worker process (sufficient for PR polling) |
+### Manual Trigger
 
-The beat scheduler triggers the `fetch_and_review_prs` task every `SCHEDULE_INTERVAL` minutes (configured in `config.properties`).
+You can also trigger a review cycle on demand from the dashboard via **Schedule → Run Now**, which calls the same `fetch_and_review_prs()` function without waiting for the next tick.
 
-### Celery Data Files
-
-Celery creates two SQLite files in `src/deployment/`:
-- `celery_broker.db` — message queue
-- `celery_results.db` — task result storage
-
-These are auto-created and can be safely deleted to reset task state.
-
-> **Note:** The setup scripts (`setup.sh` / `setup.bat`) start Celery automatically in the background. You only need to start it manually if you're not using the setup scripts.
+> **Note:** No Redis, RabbitMQ, or separate worker process is needed. The scheduler lives inside the same FastAPI process as the web server.
 
 ---
 
@@ -311,10 +294,8 @@ chmod +x setup.sh
 2. Checks Docker is installed and running
 3. Starts Qdrant container (`qdrant_review`) on port 6333 — creates or reuses
 4. Waits up to 30 seconds for Qdrant health check
-5. Starts Celery worker + beat in the background
-6. Kills any existing process on port 8080
-7. Starts Uvicorn on port 8080
-8. Registers a trap to shut down Celery on `Ctrl+C`
+5. Kills any existing process on port 8080
+6. Starts Uvicorn on port 8080 (which runs the asyncio scheduler inside the same process)
 
 ### Windows — `setup.bat`
 
@@ -328,18 +309,14 @@ setup.bat
 2. Checks Docker is running
 3. Starts Qdrant container (`qdrant_review`) on port 6333 — creates or reuses
 4. Waits up to 30 seconds for Qdrant health check
-5. Starts Celery worker + beat in the background (`start /b`)
-6. Starts Uvicorn on port 8080
+5. Starts Uvicorn on port 8080 (which runs the asyncio scheduler inside the same process)
 
 ### Key Differences
 
 | Aspect | macOS/Linux (`setup.sh`) | Windows (`setup.bat`) |
 |--------|--------------------------|------------------------|
 | Python command | `python3` / `pip3` | `python` / `pip` |
-| Background process | `&` (shell job) | `start /b` |
-| Process detection | `pgrep -f "celery"` | `tasklist /fi "imagename eq celery.exe"` |
 | Port cleanup | `lsof -ti :8080 \| xargs kill -9` | Not automated |
-| Graceful shutdown | `trap` shuts down Celery on exit | Manual (close window) |
 
 ---
 
@@ -360,7 +337,6 @@ cd src/deployment
 pip install -r requirements.txt
 # Edit config.properties with your API keys
 docker run -d -p 6333:6333 qdrant/qdrant
-celery -A worker worker --beat --loglevel=info --concurrency=1 &
 python3 -m uvicorn app:app --host 0.0.0.0 --port 8080
 ```
 

@@ -38,14 +38,6 @@ goto wait_loop
 
 :qdrant_ready
 
-tasklist /fi "imagename eq celery.exe" 2>nul | find /i "celery" >nul
-if not errorlevel 1 (
-    echo Celery worker already running.
-) else (
-    start /b celery -A worker worker --beat --loglevel=info --concurrency=1
-    timeout /t 3 /nobreak >nul
-)
-
 echo Starting web server on port 8080...
 echo Open http://127.0.0.1:8080 in your browser.
 echo Press Ctrl+C to stop.

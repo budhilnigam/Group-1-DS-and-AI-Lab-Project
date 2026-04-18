@@ -322,7 +322,25 @@ def _build_query_filter(repo_name: str | None):
             ),
         )
 
-    return models.Filter(should=should_conditions)
+    base_filter = models.Filter(should=should_conditions)
+
+    if repo_name:
+        # Nest: match base (global guidelines) OR (custom_rule scoped to this repo)
+        repo_custom_filter = models.Filter(
+            must=[
+                models.FieldCondition(
+                    key="source_type",
+                    match=models.MatchValue(value="custom_rule"),
+                ),
+                models.FieldCondition(
+                    key="source_path",
+                    match=models.MatchValue(value=repo_name),
+                ),
+            ]
+        )
+        return models.Filter(should=[base_filter, repo_custom_filter])
+
+    return base_filter
 
 
 def _payload_text(payload: Any) -> str:
@@ -369,7 +387,13 @@ def retrieve_rag_chunks(
 ) -> list[dict[str, Any]]:
     embed_model = SentenceTransformer(embed_model_name)
     client = QdrantClient(url=qdrant_url)
-    query_vector = embed_model.encode(query_text).tolist()
+
+    # Enrich query with raw PR code snippet so repo-specific identifiers (e.g. a
+    # forbidden variable name) contribute to both the embedding and the lexical
+    # overlap signal. This is the anchor that lets custom_rule chunks surface.
+    pr_snippet = (pr_code or "")[:500]
+    embedding_query = f"{query_text}\n\nPR_CODE:\n{pr_snippet}" if pr_snippet else query_text
+    query_vector = embed_model.encode(embedding_query).tolist()
 
     response = client.query_points(
         collection_name=collection_name,
@@ -378,9 +402,40 @@ def retrieve_rag_chunks(
         limit=top_n_candidates,
     )
 
-    points = response.points if hasattr(response, "points") else []
+    points = list(response.points if hasattr(response, "points") else [])
+
+    # Also fetch this repo's custom rules directly so they always reach the
+    # reranker, even if their semantic score is outside the top_n_candidates
+    # cutoff (custom rules are scarce and repo-scoped by design).
+    if repo_name:
+        try:
+            custom_filter = models.Filter(
+                must=[
+                    models.FieldCondition(
+                        key="source_type",
+                        match=models.MatchValue(value="custom_rule"),
+                    ),
+                    models.FieldCondition(
+                        key="source_path",
+                        match=models.MatchValue(value=repo_name),
+                    ),
+                ]
+            )
+            custom_resp = client.query_points(
+                collection_name=collection_name,
+                query=query_vector,
+                query_filter=custom_filter,
+                limit=50,
+            )
+            custom_points = custom_resp.points if hasattr(custom_resp, "points") else []
+            existing_ids = {getattr(p, "id", None) for p in points}
+            for cp in custom_points:
+                if getattr(cp, "id", None) not in existing_ids:
+                    points.append(cp)
+        except Exception:
+            pass
     predicted_categories = set(_extract_predicted_categories_from_query(query_text))
-    query_tokens = _tokenize_for_overlap(query_text)
+    query_tokens = _tokenize_for_overlap(embedding_query)
 
     candidates: list[dict[str, Any]] = []
     for idx, p in enumerate(points):
@@ -389,6 +444,8 @@ def retrieve_rag_chunks(
         if not text:
             continue
         category = _extract_candidate_category(payload)
+        source_type = payload.get("source_type") if isinstance(payload, dict) else None
+        is_custom_rule = source_type == "custom_rule"
 
         lexical_tokens = _tokenize_for_overlap(text)
         overlap = 0.0
@@ -397,13 +454,24 @@ def retrieve_rag_chunks(
 
         semantic_score = float(getattr(p, "score", 0.0) or 0.0)
         category_bonus = CATEGORY_BONUS if category in predicted_categories else 0.0
-        rerank_score = semantic_score + (LEXICAL_WEIGHT * overlap) + category_bonus - (RANK_PENALTY * idx)
+        # Boost repo-specific custom rules so they aren't drowned out by the much
+        # larger base corpus (PEP 8 / pylint / flake8).
+        custom_bonus = 0.30 if is_custom_rule else 0.0
+        rerank_score = (
+            semantic_score
+            + (LEXICAL_WEIGHT * overlap)
+            + category_bonus
+            + custom_bonus
+            - (RANK_PENALTY * idx)
+        )
 
         candidates.append(
             {
                 "text": text,
                 "score": semantic_score,
                 "category": category,
+                "source_type": source_type,
+                "is_custom_rule": is_custom_rule,
                 "lexical_overlap": overlap,
                 "rank_idx": idx,
                 "rerank_score": rerank_score,
@@ -417,7 +485,9 @@ def retrieve_rag_chunks(
     for c in candidates:
         cat = c.get("category") or "uncategorized"
         count = per_cat_count.get(cat, 0)
-        if cat != "uncategorized" and count >= MAX_PER_CATEGORY:
+        # Custom rules are scarce and repo-specific; never drop them to enforce
+        # the per-category cap that exists to diversify the general corpus.
+        if not c.get("is_custom_rule") and cat != "uncategorized" and count >= MAX_PER_CATEGORY:
             continue
         final.append(c)
         per_cat_count[cat] = count + 1
