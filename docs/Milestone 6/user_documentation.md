@@ -69,6 +69,14 @@ The main dashboard at `/` displays:
 - **Top PRs by Violation Count** — Ranked list of most problematic PRs
 - **Repository Filter** — Dropdown to filter all stats by a specific repo
 
+### Dashboard Screenshots
+
+![](../../screenshots/Screenshot%20(1470).png)
+
+![](../../screenshots/Screenshot%20(1471).png)
+
+![](../../screenshots/Screenshot%20(1472).png)
+
 ---
 
 ## 3. Features & How to Use
@@ -126,6 +134,20 @@ This clears last-checked timestamps and re-scans all open PRs. Cached results ar
 
 Results show violations with file, line, category, and explanation.
 
+### Inference Screenshots
+
+![](../../screenshots/Screenshot%20(1474).png)
+
+![](../../screenshots/Screenshot%20(1475).png)
+
+![](../../screenshots/Screenshot%20(1476).png)
+
+![](../../screenshots/Screenshot%20(1477).png)
+
+![](../../screenshots/Screenshot%20(1478).png)
+
+![](../../screenshots/Screenshot%20(1479).png)
+
 **Reprocess a PR:**  
 From the schedule activity log, click "Reprocess" on any PR. This re-fetches the diff, runs inference (uses cache if available), and resends the email notification.
 
@@ -135,6 +157,10 @@ From the schedule activity log, click "Reprocess" on any PR. This re-fetches the
 - **Enable/Disable** — Toggle the switch next to a repo name. Disabled repos are skipped during scheduled runs.
 - **Refresh PR Status** — Click "Refresh Status" to sync open/closed PR states from GitHub
 - **Activity Log** — Paginated list of processed PRs with search by repo name, PR number, or title
+
+### Schedule Screenshots
+
+![](../../screenshots/Screenshot%20(1473).png)
 
 ### 3.5 Configuration
 
@@ -147,6 +173,15 @@ Runtime configuration can be adjusted from the dashboard without restarting:
 | `LLM_MAX_RETRIES` | Retry count for failed LLM calls | 2 |
 
 > API keys are hidden in the UI for security.
+### Configuration Screenshots
+
+![](../../screenshots/Screenshot%20(1486).png)
+
+![](../../screenshots/Screenshot%20(1487).png)
+
+![](../../screenshots/Screenshot%20(1488).png)
+
+![](../../screenshots/Screenshot%20(1489).png)
 
 ### 3.6 Prompt Customization
 
@@ -165,6 +200,20 @@ Paste code and ground truth violations → returns precision, recall, F1, and ac
 
 **Batch Evaluation:**  
 Submit a JSON with multiple entries → returns per-entry and aggregate metrics across all models.
+
+### Evaluation Screenshots
+
+![](../../screenshots/Screenshot%20(1480).png)
+
+![](../../screenshots/Screenshot%20(1481).png)
+
+![](../../screenshots/Screenshot%20(1482).png)
+
+![](../../screenshots/Screenshot%20(1483).png)
+
+![](../../screenshots/Screenshot%20(1484).png)
+
+![](../../screenshots/Screenshot%20(1485).png)
 
 ---
 
