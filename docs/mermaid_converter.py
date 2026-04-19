@@ -3,7 +3,7 @@ import os
 import subprocess
 
 input_md = "Final Report.md"
-output_md = "Final Report processed.md"
+output_md = "Final Report processed new v2.md"
 
 with open(input_md, "r", encoding="utf-8") as f:
     content = f.read()

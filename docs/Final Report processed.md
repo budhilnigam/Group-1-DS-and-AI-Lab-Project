@@ -223,7 +223,7 @@ The following figures are generated from the current processed data via `src/dat
 
 ![Dataset Size Overview](./Milestone%206/assets/final_report_dataset_fig1_dataset_sizes.png)
 
-This bar chart presents the absolute counts of dataset components: the 97 evaluation PR entries, 2,847 retrieval corpus chunks, and 97 evaluation source files. The scale demonstrates the imbalance between retrieval resource size and evaluation benchmark size, which is intentional—the retrieval corpus is designed to be comprehensive and searchable for any category, while the evaluation set is intentionally selective to focus on challenging multi-violation cases.
+This bar chart presents the absolute counts of dataset components: the 97 evaluation PR entries, 505 retrieval corpus chunks, and 97 evaluation source files. The scale demonstrates the imbalance between retrieval resource size and evaluation benchmark size, which is intentional—the retrieval corpus is designed to be comprehensive and searchable for any category, while the evaluation set is intentionally selective to focus on challenging multi-violation cases.
 
 **Figure 5.6.2: Evaluation Category Distribution**
 
@@ -264,7 +264,7 @@ Milestone 4 focused on developing and tuning the retrieval and generation pipeli
 
 **Retrieval Storage and Indexing**
 - Vector store: Qdrant collection with metadata filtering
-- Corpus size: ~2,847 chunks combining guidelines, linter-derived rules, and review-comment examples
+- Corpus size: ~505 chunks combining guidelines, linter-derived rules, and review-comment examples
 - Metadata fields: chunk_id, category, source_type, source_path for post-retrieval filtering and grounding traceability
 
 **Query Construction Strategy**
@@ -455,54 +455,68 @@ Two static-tool evaluators were compared, with v2 representing significant refin
 
 ### 7.5 Reranking Impact Analysis
 
-**Run A (Earlier Tuning State)**
+We evaluated reranking using the finalized notebook sweep under fixed settings (`RANDOM_SEED=42`, `SAMPLE_SIZE=50`, `TOP_N_CANDIDATES=25`, `TOP_K_FINAL=7`). The comparison is between one baseline retrieval order and three reranking sets:
+- `balanced`
+- `semantic_lean`
+- `diversity_lexical`
 
-Reranking improvements over baseline at K=7:
-- Recall@7: 0.9167 → 0.9596 (+0.0429)
-- Precision@7: 0.3896 → 0.3983 (+0.0087)
-- MRR@7: 0.3826 → 0.4830 (+0.1003)
+Conceptually, the notebook compares:
+1. How ranking quality changes across K (`Recall@K`, `Precision@K`, `MRR@K`).
+2. How category coverage and category noise change at the final selection depth (`K=7`).
+3. Which reranking parameter set gives the best global trade-off.
 
-Category-wise at K=7 (Run A):
-- naming_convention: 0.7647 → 1.0000 recall (+0.2353)
-- indentation: 0.6000 → 1.0000 recall (+0.4000)
-- unused_import: 1.0000 → 1.0000 recall (stable)
-- mutable_default: 1.0000 → 0.7000 recall (-0.3000) ← trade-off
-- documentation_formatting: 1.0000 → 1.0000 recall (stable)
+Average metrics across K (latest run):
 
-**Run B (Later Tuning State)**
+| Config | Recall@K (avg) | Precision@K (avg) | MRR@K (avg) | Composite Score |
+|:---|---:|---:|---:|---:|
+| diversity_lexical | 0.8475 | 0.5763 | 0.6365 | 0.6868 |
+| baseline | 0.7100 | 0.7454 | 0.5777 | 0.6777 |
+| semantic_lean | 0.7442 | 0.7141 | 0.5747 | 0.6776 |
+| balanced | 0.7900 | 0.6502 | 0.5917 | 0.6773 |
 
-Reranking improvements over baseline at K=7:
-- Recall@7: 0.5606 → 0.8485 (+0.2879)
-- Precision@7: 0.2597 → 0.3463 (+0.0866)
-- MRR@7: 0.3257 → 0.3603 (+0.0345)
+K=7 comparison (final retrieval depth used by the RAG pipeline):
 
-Category-wise at K=7 (Run B):
-- unused_import: 0.3333 → 1.0000 recall (+0.6667) ← major gain
-- naming_convention: 1.0000 → 1.0000 recall (stable)
-- indentation: 1.0000 → 1.0000 recall (stable)
-- mutable_default: 0.0000 → 0.0000 recall (remains unavailable)
-- documentation_formatting: 1.0000 → 1.0000 recall (stable)
+| Config | Recall@7 | Precision@7 | MRR@7 |
+|:---|---:|---:|---:|
+| baseline | 0.8233 | 0.7029 | 0.6121 |
+| balanced | 0.9867 | 0.5170 | 0.6466 |
+| semantic_lean | 0.9417 | 0.6257 | 0.6267 |
+| diversity_lexical | 0.9933 | 0.4827 | 0.6940 |
 
-**Reranking Analysis Visualizations**
+Selected set: **`diversity_lexical`**
+- `LEXICAL_WEIGHT=0.50`
+- `CATEGORY_BONUS=0.25`
+- `RANK_PENALTY=0.02`
+- `MAX_PER_CATEGORY=1`
 
-Fig 7.5.1 - Run A PR-level ranking metrics:
-![Run A PR-level baseline vs reranked metrics](../../notebooks/results/rerank_simple_outputs_20260404_144238/baseline%20vs%20reranked%20PR%20level%20metrics.png)
+Selection rationale:
+- Best category-level recall robustness across the five target categories.
+- Highest MRR and strongest high-K coverage in the finalized sweep.
 
-Fig 7.5.2 - Run A category-wise comparison:
-![Run A category recall and false positives](../../notebooks/results/rerank_simple_outputs_20260404_144238/recall%20and%20fp%20baseline%20and%20reranked.png)
+Reranking analysis visualizations (latest run):
 
-Fig 7.5.3 - Run B PR-level ranking metrics:
-![Run B PR-level baseline vs reranked metrics](../../notebooks/results/rerank_simple_outputs_20260404_150553/baseline%20vs%20reranked%20PR%20level%20metrics.png)
+Fig 7.5.1 - Metric-vs-K curves:
+![Metric-vs-K curves](./Milestone 6/assets/reranking_simple_comparison/metrics_vs_k.png)
 
-Fig 7.5.4 - Run B category-wise comparison:
-![Run B category recall and false positives](../../notebooks/results/rerank_simple_outputs_20260404_150553/recall%20and%20fp%20baseline%20and%20reranked.png)
+Fig 7.5.2 - Summary metrics at K=7:
+![Summary metrics at K=7](./Milestone 6/assets/reranking_simple_comparison/average_metrics_by_config.png)
 
-**Reranking Observations**
-1. Strong overall gains at K=7 in both runs indicate reranking is effective for PR-level coverage
-2. Per-category behavior is sensitive to hyperparameter tuning and candidate pool composition
-3. Category-cap constraint (MAX_PER_CATEGORY=2) can suppress underrepresented categories when true positives are sparse
-4. mutable_default retrieval bottleneck in Run B indicates that reranking cannot recover missing candidates—root cause is retrieval corpus or query coverage
-5. Trade-off between global ranking quality and per-category balance is expected; both runs are valid outcomes of the same framework under different tuning
+Fig 7.5.3 - Category false positives at K=7:
+![Category false positives at K=7](./Milestone 6/assets/reranking_simple_comparison/category_false_positives_k7.png)
+
+Fig 7.5.4 - Category recall at K=7:
+![Category recall at K=7](./Milestone 6/assets/reranking_simple_comparison/category_recall_k7.png)
+
+Fig 7.5.5 - Category precision at K=7:
+![Category precision at K=7](./Milestone 6/assets/reranking_simple_comparison/category_precision_k7.png)
+
+Saved artifacts from the finalized sweep:
+- `docs/Milestone 6/assets/reranking_simple_comparison/metrics_vs_k.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/average_metrics_by_config.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_false_positives_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_recall_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_precision_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/summary_metrics.csv`
 
 ### 7.6 Error Analysis and Reliability Breakdown
 
@@ -678,7 +692,7 @@ The deployed system is a containerized and service-oriented architecture designe
 | URL | `http://localhost:6333` |
 | Docker Command | `docker run -p 6333:6333 qdrant/qdrant` |
 | Collection Name | `guideline_embeddings` |
-| Corpus Size | ~2,847 chunks (guidelines + linter rules + review examples) |
+| Corpus Size | ~505 chunks (guidelines + linter rules + review examples) |
 | Embedding Dimension | 1024 (BAAI/bge-large-en-v1.5) |
 | Index Type | HNSW (flat search with metadata filtering) |
 
@@ -1140,7 +1154,7 @@ This project advances the field in three dimensions:
 
 | Figure | Location | Description |
 ||||
-| Dataset Sizes | `docs/Milestone 6/assets/final_report_dataset_fig1_dataset_sizes.png` | Bar chart: 97 PRs, 2,847 corpus chunks, 97 source files |
+| Dataset Sizes | `docs/Milestone 6/assets/final_report_dataset_fig1_dataset_sizes.png` | Bar chart: 97 PRs, 505 corpus chunks, 97 source files |
 | Category Distribution | `docs/Milestone 6/assets/final_report_dataset_fig2_eval_categories.png` | Histogram: frequency of each 5 violation categories |
 | Repo-Category Heatmap | `docs/Milestone 6/assets/final_report_dataset_fig3_repo_category_heatmap.png` | 2D heatmap showing category prevalence across synthetic repos |
 | Retrieval Source Mix | `docs/Milestone 6/assets/final_report_dataset_fig4_retrieval_sources.png` | Stacked bar chart: guidelines vs rules vs reviews per category |
@@ -1149,10 +1163,11 @@ This project advances the field in three dimensions:
 
 | Figure | Location | Description |
 ||||
-| Run A PR-level Metrics | `notebooks/rerank_simple_outputs_20260404_144238/baseline vs reranked PR level metrics.png` | Baseline vs reranked performance: precision, recall, F1 |
-| Run A Category Recall | `notebooks/rerank_simple_outputs_20260404_144238/recall and fp baseline and reranked.png` | Per-category recall and false positive comparison |
-| Run B PR-level Metrics | `notebooks/rerank_simple_outputs_20260404_150553/baseline vs reranked PR level metrics.png` | Baseline vs reranked under different tuning state |
-| Run B Category Recall | `notebooks/rerank_simple_outputs_20260404_150553/recall and fp baseline and reranked.png` | Per-category analysis showing category-cap impact |
+| Metric-vs-K Curves | `docs/Milestone 6/assets/reranking_simple_comparison/metrics_vs_k.png` | Baseline + 3 reranking sets across K for Recall/Precision/MRR |
+| Summary Metrics at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/average_metrics_by_config.png` | Final-depth comparison used for model selection |
+| Category False Positives at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/category_false_positives_k7.png` | Category-wise noise profile by configuration |
+| Category Recall at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/category_recall_k7.png` | Category-wise coverage comparison |
+| Category Precision at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/category_precision_k7.png` | Category-wise precision comparison |
 
 
 

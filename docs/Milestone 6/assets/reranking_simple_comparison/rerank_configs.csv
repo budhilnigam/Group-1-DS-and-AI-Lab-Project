@@ -1,0 +1,4 @@
+name,LEXICAL_WEIGHT,CATEGORY_BONUS,RANK_PENALTY,MAX_PER_CATEGORY,description
+balanced,0.35,0.15,0.01,2,Default: balanced semantic + lexical signal with mild diversity control
+semantic_lean,0.2,0.1,0.005,3,"Semantic-focused: weaker lexical/category boosts, lower rank penalty, allows more repeats"
+diversity_lexical,0.5,0.25,0.02,1,"Diversity-focused: stronger lexical/category boosts, stronger rank penalty, strict per-category cap"

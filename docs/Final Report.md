@@ -21,7 +21,7 @@ Manual review of pull requests is an essential quality gate in collaborative sof
 
 The system scope is intentionally constrained to single-file diffs with up to 200 modified lines and five guideline categories: indentation, naming convention, unused imports, mutable default arguments, and documentation formatting. The deployed architecture combines diff preprocessing, repository-aware semantic retrieval, reranked context selection, and LLM-based structured JSON output. Evaluation compares three approaches under a common protocol: static analysis baseline, naive LLM baseline, and the RAG pipeline.
 
-The final implementation runs as a local FastAPI service with Qdrant-based retrieval, BAAI/bge-large-en-v1.5 embeddings, Groq-hosted openai/gpt-oss-20b generation, and SQLite-backed state/caching. On the final benchmark dataset (97 PRs, 675 ground-truth comments), the RAG configuration achieves the best Micro F1 on successful outputs (0.8322), while static analysis remains the most reliable end-to-end baseline (0% empty/non-JSON response rate). The report consolidates all milestone work into a single technical narrative from motivation to deployment.
+The final implementation runs as a local FastAPI service with Qdrant-based retrieval, BAAI/bge-large-en-v1.5 embeddings, Groq-hosted openai/gpt-oss-20b generation, and SQLite-backed state/caching. On the final benchmark dataset (97 PRs, 675 ground-truth comments), the RAG configuration achieves the best Micro F1 on successful outputs (0.8083), while static analysis remains the most reliable end-to-end baseline (0% empty/non-JSON response rate). The report consolidates all milestone work into a single technical narrative from motivation to deployment.
 
 
 
@@ -289,7 +289,7 @@ The following figures are generated from the current processed data via `src/dat
 
 ![Dataset Size Overview](./Milestone%206/assets/final_report_dataset_fig1_dataset_sizes.png)
 
-This bar chart presents the absolute counts of dataset components: the 97 evaluation PR entries, 2,847 retrieval corpus chunks, and 97 evaluation source files. The scale demonstrates the imbalance between retrieval resource size and evaluation benchmark size, which is intentional—the retrieval corpus is designed to be comprehensive and searchable for any category, while the evaluation set is intentionally selective to focus on challenging multi-violation cases.
+This bar chart presents the absolute counts of dataset components: the 97 evaluation PR entries, 505 retrieval corpus chunks, and 97 evaluation source files. The scale demonstrates the imbalance between retrieval resource size and evaluation benchmark size, which is intentional—the retrieval corpus is designed to be comprehensive and searchable for any category, while the evaluation set is intentionally selective to focus on challenging multi-violation cases.
 
 **Figure 5.6.2: Evaluation Category Distribution**
 
@@ -323,6 +323,39 @@ Milestone 4 focused on developing and tuning the retrieval and generation pipeli
 
 ### 6.1 Retrieval Pipeline Architecture
 
+To make the design choices explicit, the final pipeline is implemented as a staged architecture where each stage solves a specific failure mode observed in earlier experiments.
+
+**End-to-End Architecture (Inference Path)**
+
+1. **Input Normalization Layer**
+  - Input: single-file PR diff (<= 200 modified lines), repo metadata, file path.
+  - Processing: diff cleaning, line mapping preparation, and lightweight signal extraction.
+
+2. **Query Construction Layer**
+  - Builds retrieval query text from code signals and category-oriented hints.
+  - Final variant selected: `query_regex_intelligent_v2` (see Section 6.2).
+
+3. **Embedding + Retrieval Layer**
+  - Query embedding with BAAI/bge-large-en-v1.5.
+  - Candidate retrieval from Qdrant (`TOP_N_CANDIDATES=25`).
+  - Metadata retained per chunk (`chunk_id`, `category`, `source_type`, `source_path`) for traceability.
+
+4. **Reranking + Diversity Layer**
+  - Composite rerank score (semantic + lexical + category bonus - rank penalty).
+  - Final context selection (`TOP_K_FINAL=7`) with diversity controls.
+
+5. **Prompt Assembly Layer**
+  - Structured prompt sections: role/instructions, allowed categories, code context, retrieved evidence, output schema.
+  - Prompt variant selected after Milestone 5 prompt sweep (see Section 6.3).
+
+6. **LLM Generation Layer**
+  - Model: `openai/gpt-oss-20b` via Groq.
+  - Output target: strict JSON findings (`line_number`, `violation_category`, `review_comment`).
+
+7. **Post-Processing + Validation Layer**
+  - JSON parse/validation, category constraints, normalization of final findings.
+  - Invalid/malformed outputs marked as non-response for reliability accounting.
+
 **Embedding Model**
 - Selected: BAAI/bge-large-en-v1.5
 - Rationale: Optimized for semantic similarity across code-related text and guideline documentation, with strong performance on English technical writing.
@@ -330,22 +363,140 @@ Milestone 4 focused on developing and tuning the retrieval and generation pipeli
 
 **Retrieval Storage and Indexing**
 - Vector store: Qdrant collection with metadata filtering
-- Corpus size: ~2,847 chunks combining guidelines, linter-derived rules, and review-comment examples
+- Corpus size: ~505 chunks combining guidelines, linter-derived rules, and review-comment examples
 - Metadata fields: chunk_id, category, source_type, source_path for post-retrieval filtering and grounding traceability
 
-**Query Construction Strategy**
-- Baseline query: diff chunk + file path + repository metadata
-- Variant 2 (selected): helper/signal-oriented query text that emphasizes violation signals
-- Purpose: Improve semantic alignment with guideline and review chunks by explicitly surfacing potential violation categories in the query representation
+### 6.2 Retrieval Query Strategy (Variants and Final Selection)
 
-### 6.2 Reranking Design and Hyperparameters
+Retrieval quality was highly sensitive to query formulation. We evaluated multiple query-construction families (documented in Milestone 5 retrieval experiments) before standardizing on `query_regex_intelligent_v2` for deployment.
+
+**Variants Explored**
+
+1. **Code-only baseline**
+  - Query form: raw code prefix / diff text.
+  - Strength: simple and fast.
+  - Weakness: weak alignment between raw code tokens and natural-language guideline chunks.
+
+2. **Uniform per-category queries**
+  - Query form: one generic query per category (fixed slots per category).
+  - Strength: very high category recall.
+  - Weakness: budget waste on absent categories, lower precision.
+
+3. **Code + category hybrids**
+  - Query form: category phrase plus code snippet.
+  - Strength: improved ranking in some files.
+  - Weakness: unstable across categories; code noise could dilute category intent.
+
+4. **Repo-aware / keyword-heavy variants**
+  - Query form: framework/repo hints + hand-curated category keywords.
+  - Strength: some local gains.
+  - Weakness: repo hints alone did not reliably filter retrieval in embedding space.
+
+5. **Heuristic/adaptive variants (with confidence signals)**
+  - Query form: query emphasis driven by regex/category cues from code.
+  - Strength: much better slot allocation and ranking of likely-present categories.
+  - Weakness: required careful balancing to avoid recall loss on hard categories.
+
+**Final Query Strategy: `query_regex_intelligent_v2`**
+
+The final query builder is the production version of the heuristic signal-oriented family. It combines:
+
+- **Regex signal extraction** from code for the five target categories.
+- **Category-aware query enrichment** using high-value terms (including linter-style terminology where useful).
+- **Adaptive emphasis** toward likely categories instead of uniform category weighting.
+- **Compatibility with reranking**, so query signals and rerank bonuses reinforce each other.
+
+**Why `query_regex_intelligent_v2` was selected**
+
+- It provided the best practical retrieval context for downstream prompting by improving the precision-recall balance versus raw and uniform-query baselines.
+- It reduced category-budget waste seen in uniform strategies while keeping high coverage for critical categories.
+- It was more robust across mixed-category diffs than purely code-only or purely keyword-only alternatives.
+- It integrated cleanly with the final reranking setup and yielded stronger end-to-end LLM F1 on successful outputs in Milestone 5.
+
+**Operational Query Construction Summary**
+- Baseline query: diff chunk + file path + repository metadata.
+- Final query: `query_regex_intelligent_v2` (helper/signal-oriented, regex-driven, category-aware).
+- Purpose: Improve semantic alignment with guideline/review chunks by explicitly surfacing likely violation signals and suppressing low-value query noise.
+
+### 6.3 Prompting Strategy (Variants and Final Selection)
+
+Prompting was evaluated as a first-class design component, not just a formatting step. The goal was to maximize useful, correctly categorized findings while preserving strict JSON compliance.
+
+The prompting strategy here follows the Milestone 5 prompt-engineering design space and is split into two layers:
+
+1. Structural prompt families used in the end-to-end pipeline.
+2. Controlled prompt-evaluation experiments for model and template selection.
+
+For clarity in this final report: **all result-generation runs used only the three deployment prompt files in `src/rag_model/prompts` (`v1.txt`, `v2.txt`, `v3.txt`)**. Other prompt styles are documented as explored approaches and ablation ideas, not as the prompts used for final result computation.
+
+**Prompt Families Evaluated**
+
+1. **Minimal instruction prompts**
+  - Direct task instruction, allowed categories, code context, required JSON schema.
+  - Lower token overhead and better format adherence.
+
+2. **Chain-of-thought style prompts**
+  - Stepwise reasoning instructions before final output.
+  - Useful for analysis quality in some models, but often harmed JSON compliance in our setup.
+
+3. **LLM-only vs RAG-conditioned prompts**
+  - LLM-only: no retrieved evidence block.
+  - RAG-conditioned: includes top retrieved chunks as grounding evidence.
+
+4. **Single-issue vs multi-issue output framing**
+  - Single-issue prompts for controlled extraction.
+  - Multi-issue prompts for realistic PR-level output.
+
+5. **Operational prompt variants for Groq deployment**
+   - `v1` conservative constraint prompt (cap-style guidance).
+   - `v2` uncapped prompt for broader finding coverage.
+   - `v3` compressed prompt for token-efficiency under rate/context limits.
+
+**Prompt Evaluation Axes (Milestone 5-aligned)**
+
+- Strategy axis: minimal versus chain-of-thought style instructions.
+- Mode axis: LLM-only versus RAG-conditioned evidence blocks.
+- Detection axis: single-issue versus multi-issue output mode.
+- Hint axis (evaluation-only): no-hint, line-hint, and ground-truth-assisted variants.
+- Prompt-template axis (deployment-focused): v1 versus v2 versus v3.
+
+In practice, only the deployment-focused axis (`v1`, `v2`, `v3`) is used for producing the report's official prompt-result comparisons.
+
+**Current Prompting Decision State**
+
+Prompt selection is currently treated as **provisional** pending rerun of the prompt-evaluation scripts with the latest corpus, model settings, and evaluation snapshot.
+
+Until refreshed metrics are available, the pipeline keeps the same structural policy:
+
+- Prefer minimal schema-constrained prompts for production JSON stability.
+- Keep chain-of-thought prompts as analysis variants, not production defaults.
+- Keep both LLM-only and RAG-conditioned templates for ablation and fallback.
+- Retain v1/v2/v3 templates for explicit token-budget and coverage trade-off testing.
+
+Result reporting policy:
+- Use only `src/rag_model/prompts/v1.txt`, `src/rag_model/prompts/v2.txt`, and `src/rag_model/prompts/v3.txt` for benchmark numbers.
+- Mention other prompt constructions only under "approaches explored" without mixing them into the official prompt result table.
+
+**Final Prompt Selection (To Be Confirmed After Rerun)**
+
+The deployed prompting strategy follows a **minimal, schema-constrained, multi-issue-capable template with RAG evidence injection**.
+
+This remains the working selection because it historically provided a strong operating point across:
+
+- **Output validity**: better JSON compliance than more verbose chain-of-thought variants.
+- **Category precision on successful outputs**: maintained high precision while improving recall with retrieved context.
+- **Operational stability**: predictable behavior across batch evaluation and deployment runs.
+
+However, all prompt-performance values are intentionally treated as stale until the rerun is complete.
+
+### 6.4 Reranking Design and Hyperparameters
 
 **Composite Reranking Score**
 
 The final reranking formula combines semantic similarity, lexical overlap, category matching, and rank position:
 
 $$
-\text{rerank\_score} = \text{semantic\_score} + 0.35 \cdot \text{lexical\_overlap} + 0.15 \cdot \text{category\_bonus} - 0.01 \cdot \text{rank\_idx}
+rerank\_score = semantic\_score + 0.35 \cdot lexical\_overlap + 0.15 \cdot category\_bonus - 0.01 \cdot rank\_idx
 $$
 
 Where:
@@ -360,13 +511,13 @@ Where:
 |:---|:---|:---|
 | TOP_N_CANDIDATES | 25 | Search space for reranker, balances coverage and speed |
 | TOP_K_FINAL | 7 | Prompt context size, tuned to stay within LLM context limits |
-| MAX_PER_CATEGORY | 2 | Duplicate-category cap to ensure diversity across all 5 categories |
-| LEXICAL_WEIGHT | 0.35 | Moderate emphasis on textual alignment |
-| CATEGORY_BONUS | 0.15 | Boost for category-relevant candidates |
-| RANK_PENALTY | 0.01 | Light penalty for deep retrieval positions |
+| MAX_PER_CATEGORY | 2 | Balanced diversity cap across categories |
+| LEXICAL_WEIGHT | 0.35 | Moderate lexical emphasis in balanced reranking |
+| CATEGORY_BONUS | 0.15 | Moderate category relevance boost |
+| RANK_PENALTY | 0.01 | Mild depth penalty to avoid over-demotion |
 | LLM_RETRY_CAP | 2 | Retry limit for malformed LLM outputs |
 
-### 6.3 Generation and Prompting
+### 6.4.1 Generation Runtime Configuration
 
 **LLM Configuration**
 - Model: openai/gpt-oss-20b via Groq API
@@ -381,7 +532,7 @@ Where:
 - Category restriction: Only predictions from the 5 target categories
 - JSON validation: Parsing failures treated as non-response, counted in reliability metrics
 
-### 6.4 Development Outcomes
+### 6.5 Development Outcomes
 
 Through iterative tuning, the retrieval and generation pipeline achieved:
 - Stronger grounding on category-relevant evidence through query strategy refinement
@@ -422,6 +573,62 @@ The distribution reflects both real-world prevalence and intentional difficulty 
 - Empty/non-JSON response rate for reliability assessment
 - Retrieval quality: Recall@K, Precision@K, MRR@K
 
+### 7.1.1 What Was Specifically Evaluated for Architecture, Retrieval, and Prompting
+
+To ensure the final system design was evidence-driven, Milestone 5 evaluation explicitly covered three design axes:
+
+1. **Architecture and retrieval stack behavior**
+  - Candidate retrieval depth, reranking, and final context size effects.
+  - Quality diagnostics via Recall@K / Precision@K / MRR@K.
+
+2. **Retrieval query strategy variants**
+  - Baseline, category-driven, hybrid, and adaptive signal-based query families.
+  - Final deployment selection: `query_regex_intelligent_v2`.
+
+3. **Prompting strategy variants**
+  - Minimal vs chain-of-thought.
+  - LLM-only vs RAG-conditioned context.
+  - Single-issue vs multi-issue framing under strict JSON outputs.
+
+These evaluations were run under the same benchmark protocol to avoid selection bias.
+
+### 7.1.2 Prompting Evaluation Protocol (Deployment Prompt Results)
+
+Because prompt-performance values have changed across dataset/model snapshots, the report currently freezes only the protocol and decision criteria, not fixed numbers.
+
+**What is evaluated in the prompt sweep**
+
+1. JSON validity and parseability rate.
+2. Category-level precision, recall, and F1 on valid outputs.
+3. Line localization consistency (exact and near-line matches).
+4. Empty or malformed response rate under deployment limits.
+5. Token-efficiency versus quality trade-off across prompt templates.
+
+**Prompt families compared**
+
+- Minimal versus chain-of-thought style prompts.
+- LLM-only versus RAG-conditioned prompts.
+- Single-issue versus multi-issue prompts.
+- Operational templates v1, v2, v3.
+
+For final numeric reporting in this document, only operational templates `v1`, `v2`, and `v3` are included.
+
+**Decision criteria for final prompting selection**
+
+- Primary: low malformed/empty rate and high JSON validity.
+- Secondary: highest micro-F1 on successful outputs.
+- Tertiary: better line localization and stable behavior under batch runs.
+
+**Deployment prompt results (computed via `src/evaluation/evaluate_llm_raw_txt.py`)**
+
+| Prompt Variant | Valid JSON (%) | Empty/Invalid (%) | Micro Precision | Micro Recall | Micro F1 | Notes |
+|:---|---:|---:|---:|---:|---:|:---|
+| prompt_v1 (`src/rag_model/prompts/v1.txt`) | 46.4 | 53.6 | 0.9568 | 0.6920 | 0.8021 | Conservative constraint-style deployment prompt; analyzed PRs: 43 |
+| prompt_v2 (`src/rag_model/prompts/v2.txt`) | 30.9 | 69.1 | 0.8261 | 0.8962 | 0.8598 | Uncapped deployment prompt; analyzed PRs: 29 |
+| prompt_v3 (`src/rag_model/prompts/v3.txt`) | 20.6 | 79.4 | 0.9048 | 0.9194 | 0.9120 | Compressed/token-efficient deployment prompt; analyzed PRs: 18 |
+
+Explored but not reported prompt styles (minimal/CoT, single/multi, hint variants) are retained as methodology context and are not part of the official prompt result table.
+
 ### 7.2 Static Tool Evaluation (v1 vs v2 Comparison)
 
 **Conceptual Differences Between Versions**
@@ -457,118 +664,183 @@ Two static-tool evaluators were compared, with v2 representing significant refin
 
 **Configuration**
 - Model: openai/gpt-oss-20b via Groq
-- Prompt: Instruction + code diff, no retrieval context
+- Prompt used for reported metrics: `src/rag_model/prompts/v1.txt` (selected by reliability among v1/v2/v3)
 - Output format: JSON with category, line, and comment
 - Strategy: Direct generation without grounding in retrieved evidence
+
+**Reliability-driven prompt selection (Naive LLM)**
+- `v1`: 43 empty/non-JSON PRs (best)
+- `v2`: 71 empty/non-JSON PRs
+- `v3`: 66 empty/non-JSON PRs
+
+Since reliability is prioritized, Naive LLM evaluation and final cross-method comparison use **prompt v1**.
 
 **Performance on Benchmark**
 
 | Metric | Value |
 |:---|:---|
-| Empty/Non-JSON rate | 49.5% |
-| Micro Precision (successful outputs) | 0.9677 |
-| Micro Recall (successful outputs) | 0.6618 |
-| Micro F1 (successful outputs) | 0.7860 |
-| Analyzed PRs (non-empty) | ~49 of 97 |
+| Empty/Non-JSON rate | 44.3% |
+| Micro Precision (successful outputs) | 0.9698 |
+| Micro Recall (successful outputs) | 0.6226 |
+| Micro F1 (successful outputs) | 0.7583 |
+| Analyzed PRs (non-empty) | ~52 of 97 |
 
 **Per-Category Breakdown (on successful outputs)**
-- Strong categories: unused_import, mutable_default (high precision)
-- Weak categories: indentation, documentation_formatting (low recall or zero TP)
-- Trade-off: High precision when model generates output, but frequent hallucinations and format violations
+
+| Category | Precision | Recall | F1 | TP | FP | FN |
+|:---|:---|:---|:---|:---|:---|:---|
+| unused_import | 1.0000 | 0.8304 | 0.9073 | 93 | 0 | 19 |
+| mutable_default | 1.0000 | 0.4222 | 0.5938 | 19 | 0 | 26 |
+| naming_convention | 0.9394 | 0.8158 | 0.8732 | 62 | 4 | 14 |
+| indentation | 0.6471 | 0.2292 | 0.3385 | 11 | 6 | 37 |
+| documentation_formatting | 0.7500 | 0.1034 | 0.1818 | 3 | 1 | 26 |
+
+Summary:
+- Strong categories: `unused_import`, `naming_convention`.
+- Weak categories: `indentation`, `documentation_formatting`, and lower recall for `mutable_default` in this run.
+- Trade-off: High precision when model responds, but reliability remains a primary bottleneck.
 
 **Observations**
 - High precision on valid JSON outputs indicates good category discrimination
-- High empty/non-JSON rate (49.5%) limits practical end-to-end effectiveness
+- High empty/non-JSON rate (44.3%) limits practical end-to-end effectiveness
 - Model struggles with localization: high category accuracy but lower line-number precision
 
 ### 7.4 RAG + LLM Evaluation
 
 **Configuration**
 - Model: openai/gpt-oss-20b via Groq
-- Retrieval: Query strategy variant 2 + semantic retrieval
+- Retrieval: `query_regex_intelligent_v2` + semantic retrieval
+- Prompt used for reported metrics: `src/rag_model/prompts/v1.txt` (selected by reliability among v1/v2/v3)
 - Reranking: Composite scoring with lexical and category bonuses
 - Top-K context: 7 retrieved chunks per query
+
+**Reliability-driven prompt selection (RAG + LLM)**
+- `v1`: 52 empty/non-JSON PRs (best)
+- `v2`: 67 empty/non-JSON PRs
+- `v3`: 77 empty/non-JSON PRs
+
+Since reliability is prioritized, RAG evaluation and final cross-method comparison use **prompt v1**.
 
 **Performance on Benchmark**
 
 | Metric | Value |
 |:---|:---|
-| Empty/Non-JSON rate | 74.2% |
-| Micro Precision (successful outputs) | 0.9520 |
-| Micro Recall (successful outputs) | 0.7391 |
-| Micro F1 (successful outputs) | 0.8322 |
-| Analyzed PRs (non-empty) | ~36 of 97 |
-| LLM comments (analyzed PRs) | 125 |
-| Ground-truth comments (analyzed PRs) | 161 |
-| Line match rate (using llm_line + 1) | 48.0% |
+| Empty/Non-JSON rate | 53.6% |
+| Micro Precision (successful outputs) | 0.9630 |
+| Micro Recall (successful outputs) | 0.6964 |
+| Micro F1 (successful outputs) | 0.8083 |
+| Analyzed PRs (non-empty) | ~43 of 97 |
+| LLM comments (analyzed PRs) | 162 |
+| Ground-truth comments (analyzed PRs) | 224 |
+| Line match rate (using llm_line + 1) | 41.4% |
 
 **Per-Category Breakdown (on successful outputs)**
 
 | Category | Precision | Recall | F1 | TP | FP | FN |
 |:---|:---|:---|:---|:---|:---|:---|
-| unused_import | 1.0000 | 0.8506 | 0.9193 | 74 | 0 | 13 |
-| mutable_default | 1.0000 | 0.9231 | 0.9600 | 12 | 0 | 1 |
-| naming_convention | 0.9677 | 0.8108 | 0.8824 | 30 | 1 | 7 |
-| indentation | 0.2000 | 0.1111 | 0.1429 | 1 | 4 | 8 |
-| documentation_formatting | 0.0000 | 0.0000 | 0.0000 | 0 | 3 | 15 |
+| unused_import | 1.0000 | 0.8627 | 0.9263 | 88 | 0 | 14 |
+| mutable_default | 1.0000 | 0.8000 | 0.8889 | 24 | 0 | 6 |
+| naming_convention | 1.0000 | 0.8750 | 0.9333 | 35 | 0 | 5 |
+| indentation | 0.5833 | 0.3182 | 0.4118 | 7 | 5 | 15 |
+| documentation_formatting | 0.3333 | 0.0333 | 0.0606 | 1 | 2 | 29 |
 
 **Key Findings**
-- Best performance on successful outputs: Micro F1 of 0.8322 exceeds both baselines on analyzed subset
-- Strong categories: unused_import (F1 0.9193), mutable_default (F1 0.9600), naming_convention (F1 0.8824)
+- Best performance on successful outputs: Micro F1 of 0.8083 exceeds both baselines on analyzed subset
+- Strong categories: naming_convention (F1 0.9333), unused_import (F1 0.9263), mutable_default (F1 0.8889)
 - Weak categories: indentation and documentation_formatting remain challenging
 - Retrieval improved recall for strong categories but did not overcome systematic weaknesses in documentation/indentation
-- Dominant bottleneck: 74.2% non-response rate due to empty/malformed JSON outputs, not category confusion
+- Dominant bottleneck: 53.6% non-response rate due to empty/malformed JSON outputs, not category confusion
+
+### 7.4.1 Why the Final Retrieval Query Strategy Was Retained
+
+The final retrieval query strategy (`query_regex_intelligent_v2`) was retained for the final system because it gave the strongest practical operating point for RAG generation:
+
+- It improved context relevance for likely categories compared with naive code-only queries.
+- It reduced over-allocation to irrelevant categories compared with uniform category querying.
+- It paired effectively with reranking and produced stronger downstream category-level outcomes for `unused_import` and `naming_convention`.
+- It remained robust under mixed-violation files where purely lexical or purely semantic queries were less stable.
+
+Even with this query improvement, the evaluation shows output robustness (JSON failures) remains the major bottleneck; therefore, the strategy was kept for quality while reliability is addressed through retries/fallbacks.
+
+### 7.4.2 Why the Final Prompting Strategy Was Retained
+
+The final prompting strategy (minimal, schema-constrained, RAG-conditioned) is currently retained as a provisional default because it historically balanced quality and format compliance:
+
+- More verbose chain-of-thought prompting increased malformed/non-JSON risk in our deployment setting.
+- Minimal prompts with explicit output schema produced more predictable machine-parseable outputs.
+- Injecting retrieved evidence improved recall/F1 on successful outputs relative to naive LLM-only generation.
+- The final design is therefore intentionally conservative on prompt complexity and aggressive on evidence quality.
+
+Final prompt choice for reported deployment results will be selected only among the three prompt files in `src/rag_model/prompts` (`v1`, `v2`, `v3`).
+
+This choice should be periodically revalidated after major corpus, model, or decoding-parameter changes.
 
 ### 7.5 Reranking Impact Analysis
 
-**Run A (Earlier Tuning State)**
+We evaluated reranking using the finalized notebook sweep under fixed settings (`RANDOM_SEED=42`, `SAMPLE_SIZE=50`, `TOP_N_CANDIDATES=25`, `TOP_K_FINAL=7`). The comparison is between one baseline retrieval order and three reranking sets:
+- `balanced`
+- `semantic_lean`
+- `diversity_lexical`
 
-Reranking improvements over baseline at K=7:
-- Recall@7: 0.9167 → 0.9596 (+0.0429)
-- Precision@7: 0.3896 → 0.3983 (+0.0087)
-- MRR@7: 0.3826 → 0.4830 (+0.1003)
+For the final system and all deployment-facing reporting, the active reranking configuration is `balanced`; the other sets are retained only as ablation references.
 
-Category-wise at K=7 (Run A):
-- naming_convention: 0.7647 → 1.0000 recall (+0.2353)
-- indentation: 0.6000 → 1.0000 recall (+0.4000)
-- unused_import: 1.0000 → 1.0000 recall (stable)
-- mutable_default: 1.0000 → 0.7000 recall (-0.3000) ← trade-off
-- documentation_formatting: 1.0000 → 1.0000 recall (stable)
+Conceptually, the notebook compares:
+1. How ranking quality changes across K (`Recall@K`, `Precision@K`, `MRR@K`).
+2. How category coverage and category noise change at the final selection depth (`K=7`).
+3. Which reranking parameter set gives the best global trade-off.
 
-**Run B (Later Tuning State)**
+Average metrics across K (latest run):
 
-Reranking improvements over baseline at K=7:
-- Recall@7: 0.5606 → 0.8485 (+0.2879)
-- Precision@7: 0.2597 → 0.3463 (+0.0866)
-- MRR@7: 0.3257 → 0.3603 (+0.0345)
+| Config | Recall@K (avg) | Precision@K (avg) | MRR@K (avg) | Composite Score |
+|:---|---:|---:|---:|---:|
+| diversity_lexical | 0.8475 | 0.5763 | 0.6365 | 0.6868 |
+| baseline | 0.7100 | 0.7454 | 0.5777 | 0.6777 |
+| semantic_lean | 0.7442 | 0.7141 | 0.5747 | 0.6776 |
+| balanced | 0.7900 | 0.6502 | 0.5917 | 0.6773 |
 
-Category-wise at K=7 (Run B):
-- unused_import: 0.3333 → 1.0000 recall (+0.6667) ← major gain
-- naming_convention: 1.0000 → 1.0000 recall (stable)
-- indentation: 1.0000 → 1.0000 recall (stable)
-- mutable_default: 0.0000 → 0.0000 recall (remains unavailable)
-- documentation_formatting: 1.0000 → 1.0000 recall (stable)
+K=7 comparison (final retrieval depth used by the RAG pipeline):
 
-**Reranking Analysis Visualizations**
+| Config | Recall@7 | Precision@7 | MRR@7 |
+|:---|---:|---:|---:|
+| baseline | 0.8233 | 0.7029 | 0.6121 |
+| balanced | 0.9867 | 0.5170 | 0.6466 |
+| semantic_lean | 0.9417 | 0.6257 | 0.6267 |
+| diversity_lexical | 0.9933 | 0.4827 | 0.6940 |
 
-Fig 7.5.1 - Run A PR-level ranking metrics:
-![Run A PR-level baseline vs reranked metrics](../../notebooks/results/rerank_simple_outputs_20260404_144238/baseline%20vs%20reranked%20PR%20level%20metrics.png)
+Selected set: **`balanced`**
+- `LEXICAL_WEIGHT=0.35`
+- `CATEGORY_BONUS=0.15`
+- `RANK_PENALTY=0.01`
+- `MAX_PER_CATEGORY=2`
 
-Fig 7.5.2 - Run A category-wise comparison:
-![Run A category recall and false positives](../../notebooks/results/rerank_simple_outputs_20260404_144238/recall%20and%20fp%20baseline%20and%20reranked.png)
+Selection rationale:
+- Best final trade-off for downstream prompting: strong Recall@7, materially better Precision@7 than `diversity_lexical`, and a more conservative context mix than the more aggressive rerankers.
+- Avoids overfitting the prompt context to a single objective such as maximum recall, which helps preserve the usefulness of the retrieved evidence.
 
-Fig 7.5.3 - Run B PR-level ranking metrics:
-![Run B PR-level baseline vs reranked metrics](../../notebooks/results/rerank_simple_outputs_20260404_150553/baseline%20vs%20reranked%20PR%20level%20metrics.png)
+Reranking analysis visualizations (latest run):
 
-Fig 7.5.4 - Run B category-wise comparison:
-![Run B category recall and false positives](../../notebooks/results/rerank_simple_outputs_20260404_150553/recall%20and%20fp%20baseline%20and%20reranked.png)
+Fig 7.5.1 - Metric-vs-K curves:
+![Metric-vs-K curves](./Milestone%206/assets/reranking_simple_comparison/metrics_vs_k.png)
 
-**Reranking Observations**
-1. Strong overall gains at K=7 in both runs indicate reranking is effective for PR-level coverage
-2. Per-category behavior is sensitive to hyperparameter tuning and candidate pool composition
-3. Category-cap constraint (MAX_PER_CATEGORY=2) can suppress underrepresented categories when true positives are sparse
-4. mutable_default retrieval bottleneck in Run B indicates that reranking cannot recover missing candidates—root cause is retrieval corpus or query coverage
-5. Trade-off between global ranking quality and per-category balance is expected; both runs are valid outcomes of the same framework under different tuning
+Fig 7.5.2 - Summary metrics at K=7:
+![Summary metrics at K=7](./Milestone%206/assets/reranking_simple_comparison/average_metrics_by_config.png)
+
+Fig 7.5.3 - Category false positives at K=7:
+![Category false positives at K=7](./Milestone%206/assets/reranking_simple_comparison/category_false_positives_k7.png)
+
+Fig 7.5.4 - Category recall at K=7:
+![Category recall at K=7](./Milestone%206/assets/reranking_simple_comparison/category_recall_k7.png)
+
+Fig 7.5.5 - Category precision at K=7:
+![Category precision at K=7](./Milestone%206/assets/reranking_simple_comparison/category_precision_k7.png)
+
+Saved artifacts from the finalized sweep:
+- `docs/Milestone 6/assets/reranking_simple_comparison/metrics_vs_k.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/average_metrics_by_config.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_false_positives_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_recall_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_precision_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/summary_metrics.csv`
 
 ### 7.6 Error Analysis and Reliability Breakdown
 
@@ -576,8 +848,8 @@ Fig 7.5.4 - Run B category-wise comparison:
 
 The dominant failure mode across RAG approaches is **empty/non-JSON response rate**:
 - Static Tool v2: 0.0% (deterministic, always produces output)
-- Naive LLM: 49.5% (half of PRs fail to produce valid JSON)
-- RAG + LLM: 74.2% (three-quarters of PRs fail to produce valid JSON)
+- Naive LLM: 44.3% (large fraction of PRs fail to produce valid JSON)
+- RAG + LLM: 53.6% (over half of PRs fail to produce valid JSON)
 
 Failure modes in RAG combined outputs:
 - Truncated JSON objects (response cut mid-field or mid-string)
@@ -594,12 +866,12 @@ Failure modes in RAG combined outputs:
 
 2. **Weak Categories (indentation, documentation_formatting)**
    - Systematic low recall even on successful outputs
-   - indentation: Many false negatives (8 FN in RAG) despite 1 TP
-   - documentation_formatting: Zero true positives, indicating retrieval corpus does not adequately cover this category
+  - indentation: Many false negatives (15 FN in RAG) despite improved detection (7 TP)
+  - documentation_formatting: Very low detection (1 TP, 29 FN), indicating weak retrieval/prompt coverage for this category
    - Recommendation: Expand retrieval corpus for documentation violations; consider category-specific prompt engineering
 
 3. **Line Localization Challenges**
-   - RAG line-match rate: 48.0% (60 matches out of 125 comments)
+  - RAG line-match rate: 41.4% (67 matches out of 162 comments)
    - Indicates category is often correct but line attribution is off by 1–5 lines
    - Likely causes: LLM confusion on file structure, diff alignment issues, or multi-line violations being localized to first affected line
 
@@ -607,7 +879,7 @@ Failure modes in RAG combined outputs:
 - Unused imports: Reliably detected when LLM responds; strong precision/recall alignment
 - Naming convention: Good coverage, but mix of line mismatches (20+ off by ±1 line)
 - Indentation: Rarely detected, suggesting LLM struggles with whitespace-based violations even with context
-- Documentation: Never detected in RAG outputs; likely the retrieval corpus lacks sufficient documentation-specific examples
+- Documentation: Detected only rarely in RAG outputs; likely the retrieval corpus lacks sufficient documentation-specific examples
 
 ### 7.7 Comprehensive Unified Comparison
 
@@ -616,16 +888,16 @@ Failure modes in RAG combined outputs:
 | Method | Variant | GT PRs | Parsed PRs | Empty Rate (%) | Analyzed PRs | GT Comments | Detected | Missed | Extra | Micro Precision | Micro Recall | Micro F1 | Line Match | Line Mismatch |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
 | Static Tool | v2 | 97 | 97 | 0.0% | 97 | 675 | 778 | 109 | 212 | 0.7275 | 0.8385 | 0.7791 | 389 | 389 |
-| Naive LLM | v1 | 97 | 49 | 49.5% | 47 | 272 | 186 | 92 | 6 | 0.9677 | 0.6618 | 0.7860 | 87 | 99 |
-| RAG + LLM | Query v2 | 97 | 36 | 74.2% | 34 | 161 | 125 | 42 | 6 | 0.9520 | 0.7391 | 0.8322 | 60 | 65 |
+| Naive LLM | Prompt v1 (`src/rag_model/prompts/v1.txt`) | 97 | 54 | 44.3% | 52 | 310 | 199 | 117 | 6 | 0.9698 | 0.6226 | 0.7583 | 91 | 108 |
+| RAG + LLM | Query v2 + Prompt v1 (`src/rag_model/prompts/v1.txt`) | 97 | 45 | 53.6% | 43 | 224 | 162 | 68 | 6 | 0.9630 | 0.6964 | 0.8083 | 67 | 95 |
 
 **Key Metrics Comparison**:
-- Empty/non-JSON rate: Static v2 (0.0%) << Naive v1 (49.5%) < RAG (74.2%)
-- Micro precision: Naive v1 (0.9677) > RAG (0.9520) > Static v2 (0.7275)
-- Micro recall: Static v2 (0.8385) > RAG (0.7391) > Naive v1 (0.6618)
-- Micro F1: RAG (0.8322) > Naive v1 (0.7860) > Static v2 (0.7791)
-- Missed violations (safety): Static v2 (109) << RAG (42) ≈ Naive v1 (92)
-- Line localization: Static v2 (389 matches) > Naive v1 (87) > RAG (60)
+- Empty/non-JSON rate: Static v2 (0.0%) << Naive v1 (44.3%) < RAG (53.6%)
+- Micro precision: Naive v1 (0.9698) > RAG (0.9630) > Static v2 (0.7275)
+- Micro recall: Static v2 (0.8385) > RAG (0.6964) > Naive v1 (0.6226)
+- Micro F1: RAG (0.8083) > Static v2 (0.7791) > Naive v1 (0.7583)
+- Missed violations: RAG (68) < Static v2 (109) < Naive v1 (117)
+- Line localization: Static v2 (389 matches) > Naive v1 (91) > RAG (67)
 
 **Retrieval Ablation Analysis**
 
@@ -633,41 +905,41 @@ Comparing Naive v1 (no retrieval) vs RAG (with retrieval):
 
 | Metric | No Retrieval | With Retrieval | Delta |
 |:---|:---|:---|:---|
-| Empty rate (%) | 49.5 | 74.2 | +24.7 |
-| Micro precision | 0.9677 | 0.9520 | -0.0157 |
-| Micro recall | 0.6618 | 0.7391 | +0.0773 |
-| Micro F1 | 0.7860 | 0.8322 | +0.0462 |
-| Line match rate (%) | 46.8 | 48.0 | +1.2 |
+| Empty rate (%) | 44.3 | 53.6 | +9.3 |
+| Micro precision | 0.9698 | 0.9630 | -0.0068 |
+| Micro recall | 0.6226 | 0.6964 | +0.0738 |
+| Micro F1 | 0.7583 | 0.8083 | +0.0500 |
+| Line match rate (%) | 45.7 | 41.4 | -4.3 |
 
-**Interpretation**: Retrieval improves quality metrics (recall +7.73%, F1 +4.62%) but at the cost of increased output failures (empty rate +24.7%), indicating current implementation has robustness constraints.
+**Interpretation**: Retrieval improves recall and F1 on successful outputs, but increases output failures and worsens exact line-match rate in the current implementation.
 
 **Category-wise Final Performance**
 
 | Category | Static v2 F1 | Naive v1 F1 | RAG F1 | Winner |
 |:---|:---|:---|:---|:---|
-| documentation_formatting | 0.1887 | 0.1818 | 0.0000 | Naive/Static (tied) |
-| indentation | 0.5440 | 0.3385 | 0.1429 | Static v2 |
-| mutable_default | 0.9412 | 0.7391 | 0.9600 | RAG |
-| naming_convention | 0.6838 | 0.9558 | 0.8824 | Naive v1 |
-| unused_import | 0.7171 | 0.9154 | 0.9193 | RAG |
+| documentation_formatting | 0.1887 | 0.1818 | 0.0606 | Static v2 |
+| indentation | 0.5440 | 0.3385 | 0.4118 | Static v2 |
+| mutable_default | 0.9412 | 0.5938 | 0.8889 | Static v2 |
+| naming_convention | 0.6838 | 0.8732 | 0.9333 | RAG |
+| unused_import | 0.7171 | 0.9073 | 0.9263 | RAG |
 
 **Practical Deployment Recommendations**
 
 1. **For Reliability-First Operations**: Use Static Tool v2
    - Zero failure rate (0% empty responses)
-   - Lowest missed violation rate (109 vs 42 in RAG)
+  - Most dependable full-dataset behavior with deterministic output
    - Best line localization accuracy (389 matches)
    - Consistent across all categories
 
 2. **For Quality-First with Risk Tolerance**: Layer RAG + LLM on top
-   - Best Micro F1 on successful outputs (0.8322 vs 0.7791)
-   - Superior on unused_import (F1 0.9193) and mutable_default (F1 0.9600)
-   - Accept 74.2% empty rate; apply static tool as fallback for failures
+  - Best Micro F1 on successful outputs (0.8083 vs 0.7791)
+  - Superior on naming_convention (F1 0.9333) and unused_import (F1 0.9263)
+  - Accept 53.6% empty rate; apply static tool as fallback for failures
 
 3. **For Balanced Precision**: Use Naive LLM v1
-   - Highest precision (0.9677), good for high-confidence alerts
-   - Moderate reliability (49.5% empty rate)
-   - Best for naming_convention violations (F1 0.9558)
+  - Highest precision (0.9698), good for high-confidence alerts
+  - Moderate reliability (44.3% empty rate)
+  - Competitive on unused_import and naming_convention while keeping false positives low
 
 4. **Hybrid Strategy** (Recommended for Production)
    - Run Static Tool v2 first (fast, deterministic, no empty responses)
@@ -744,7 +1016,7 @@ The deployed system is a containerized and service-oriented architecture designe
 | URL | `http://localhost:6333` |
 | Docker Command | `docker run -p 6333:6333 qdrant/qdrant` |
 | Collection Name | `guideline_embeddings` |
-| Corpus Size | ~2,847 chunks (guidelines + linter rules + review examples) |
+| Corpus Size | ~505 chunks (guidelines + linter rules + review examples) |
 | Embedding Dimension | 1024 (BAAI/bge-large-en-v1.5) |
 | Index Type | HNSW (flat search with metadata filtering) |
 
@@ -776,10 +1048,10 @@ The deployed system is a containerized and service-oriented architecture designe
 | DEFAULT_EMBED_MODEL | BAAI/bge-large-en-v1.5 | Embedding model for corpus and queries |
 | DEFAULT_TOP_N_CANDIDATES | 25 | Retrieval candidate pool size |
 | DEFAULT_TOP_K_FINAL | 7 | Final context chunks for LLM |
-| LEXICAL_WEIGHT | 0.35 | Reranking lexical overlap emphasis |
-| CATEGORY_BONUS | 0.15 | Reranking category match bonus |
-| RANK_PENALTY | 0.01 | Reranking rank position penalty |
-| MAX_PER_CATEGORY | 2 | Max retrieved chunks per violation category |
+| LEXICAL_WEIGHT | 0.35 | Reranking lexical overlap emphasis (balanced) |
+| CATEGORY_BONUS | 0.15 | Reranking category match bonus (balanced) |
+| RANK_PENALTY | 0.01 | Reranking rank position penalty (balanced) |
+| MAX_PER_CATEGORY | 2 | Max retrieved chunks per violation category (balanced) |
 | PROMPT_PATH | prompts/v1.txt | Prompt template location |
 | CORPUS_PATH | corpus/retrival_corpus.json | Retrieval corpus location |
 | SCHEDULE_INTERVAL | 1 (hour) | PR fetch frequency |
@@ -953,10 +1225,10 @@ This project delivered a complete RAG-based automated code-review pipeline for P
 - Created comparative analysis across three architecturally distinct approaches
 
 **2. Empirical Findings on RAG Effectiveness**
-- RAG achieves superior quality on successful outputs (F1 0.8322 vs 0.7791 static, 0.7860 naive)
-- Strong performance on specific categories: unused_import (F1 0.9193), mutable_default (F1 0.9600)
-- Identified output reliability as the primary bottleneck (74.2% non-response rate), not category confusion
-- Demonstrated that high precision on valid outputs (0.9520) does not guarantee end-to-end effectiveness
+- RAG achieves superior quality on successful outputs (F1 0.8083 vs 0.7791 static, 0.7583 naive)
+- Strong performance on specific categories: naming_convention (F1 0.9333), unused_import (F1 0.9263)
+- Identified output reliability as the primary bottleneck (53.6% non-response rate), not category confusion
+- Demonstrated that high precision on valid outputs (0.9630) does not guarantee end-to-end effectiveness
 
 **3. Production-Ready Deployment**
 - Designed and implemented 21 REST API endpoints with full OpenAPI documentation
@@ -966,18 +1238,18 @@ This project delivered a complete RAG-based automated code-review pipeline for P
 
 **4. Actionable Recommendations**
 - Static Tool v2 as reliable baseline (0% empty rate, F1 0.7791, best line localization)
-- RAG for quality-critical categories (unused_import, mutable_default)
-- Naive LLM for high-precision naming_convention detection
+- RAG for quality-critical categories (naming_convention, unused_import)
+- Naive LLM for highest-precision alerts when output is valid
 - Hybrid deployment combining deterministic + retrieval-augmented models
 
 #### 9.1.2 Critical Insights on RAG Limitations
 
 The evaluation revealed that **RAG does not universally improve performance**:
 
-- **Output Reliability Crisis**: 74.2% of RAG outputs are empty/non-JSON, reducing practical utility despite high per-output quality
-- **Category Asymmetry**: RAG excels on import/naming violations but fails completely on documentation formatting (F1 0.0000)
-- **Indentation Blindness**: Both LLM variants struggle with whitespace violations (F1 0.1429 for RAG, 0.3385 for naive)
-- **Line Localization Weakness**: Only 48% of RAG outputs match ground-truth line numbers exactly, suggesting structural misalignment in diff parsing or generation
+- **Output Reliability Gap**: 53.6% of RAG outputs are empty/non-JSON, reducing practical utility despite high per-output quality
+- **Category Asymmetry**: RAG excels on naming/import violations but remains weak on documentation formatting (F1 0.0606)
+- **Indentation Sensitivity**: Indentation remains challenging across LLM variants (F1 0.4118 for RAG, 0.3385 for naive)
+- **Line Localization Weakness**: Only 41.4% of RAG outputs match ground-truth line numbers exactly, suggesting structural misalignment in diff parsing or generation
 
 These limitations are **not failures of RAG concept**, but rather implementation and training constraints that future work must address.
 
@@ -991,14 +1263,14 @@ For production deployment, recommend a **three-tier hybrid approach**:
    - Coverage across all five categories with controlled precision
 
 2. **Tier 2 (Category-Specific)**: Naive LLM v1
-   - High precision for naming_convention (F1 0.9558)
-   - Acceptable for unused_import (F1 0.9154)
+  - High precision with competitive naming_convention performance (F1 0.8732)
+  - Strong unused_import performance (F1 0.9073)
    - Triggers on complex patterns static tools miss
 
 3. **Tier 3 (Premium Quality)**: RAG + LLM
    - Deploy on Tier 2 failures for unused_import and mutable_default
    - Implement robust JSON repair and retry logic
-   - Accept 74.2% non-response with Tier 1/2 fallback
+  - Accept 53.6% non-response with Tier 1/2 fallback
 
 **Expected Outcomes**:
 - Coverage: ~95% of violations detected across all tiers
@@ -1022,19 +1294,19 @@ This project advances the field in three dimensions:
 - Implement constrained decoding to force valid JSON structure at LLM inference time
 - Add JSON repair layer: detect truncated objects, handle malformed fields, recover partial outputs
 - Increase LLM retry cap from 2 to 5 with exponential backoff
-- **Expected outcome**: Reduce non-response rate from 74.2% to <30%
+- **Expected outcome**: Reduce non-response rate from 53.6% to <20%
 
 **2. Category-Specific Augmentation**
 - Expand retrieval corpus with documentation-specific examples (PEP 257, docstring standards)
 - Create dedicated prompt templates for indentation violations
 - Add code structure analysis (AST-based) to improve whitespace violation detection
-- **Expected outcome**: Improve documentation F1 from 0.0 to >0.3, indentation F1 to >0.4
+- **Expected outcome**: Improve documentation F1 from 0.0606 to >0.3, indentation F1 to >0.4
 
 **3. Line Localization Enhancement**
 - Implement diff-aware line mapping with explicit anchor token tracking
 - Use source code AST to disambiguate multi-line violations and localize to primary error
 - Add confidence score for line predictions to enable user-side filtering
-- **Expected outcome**: Increase line-match rate from 48% to >65%
+- **Expected outcome**: Increase line-match rate from 41.4% to >60%
 
 **Implementation Priority**: Output robustness first (highest ROI), then documentation, then line localization.
 
@@ -1206,7 +1478,7 @@ This project advances the field in three dimensions:
 
 | Figure | Location | Description |
 |:---|:---|:---|
-| Dataset Sizes | `docs/Milestone 6/assets/final_report_dataset_fig1_dataset_sizes.png` | Bar chart: 97 PRs, 2,847 corpus chunks, 97 source files |
+| Dataset Sizes | `docs/Milestone 6/assets/final_report_dataset_fig1_dataset_sizes.png` | Bar chart: 97 PRs, 505 corpus chunks, 97 source files |
 | Category Distribution | `docs/Milestone 6/assets/final_report_dataset_fig2_eval_categories.png` | Histogram: frequency of each 5 violation categories |
 | Repo-Category Heatmap | `docs/Milestone 6/assets/final_report_dataset_fig3_repo_category_heatmap.png` | 2D heatmap showing category prevalence across synthetic repos |
 | Retrieval Source Mix | `docs/Milestone 6/assets/final_report_dataset_fig4_retrieval_sources.png` | Stacked bar chart: guidelines vs rules vs reviews per category |
@@ -1215,10 +1487,11 @@ This project advances the field in three dimensions:
 
 | Figure | Location | Description |
 |:---|:---|:---|
-| Run A PR-level Metrics | `notebooks/rerank_simple_outputs_20260404_144238/baseline vs reranked PR level metrics.png` | Baseline vs reranked performance: precision, recall, F1 |
-| Run A Category Recall | `notebooks/rerank_simple_outputs_20260404_144238/recall and fp baseline and reranked.png` | Per-category recall and false positive comparison |
-| Run B PR-level Metrics | `notebooks/rerank_simple_outputs_20260404_150553/baseline vs reranked PR level metrics.png` | Baseline vs reranked under different tuning state |
-| Run B Category Recall | `notebooks/rerank_simple_outputs_20260404_150553/recall and fp baseline and reranked.png` | Per-category analysis showing category-cap impact |
+| Metric-vs-K Curves | `docs/Milestone 6/assets/reranking_simple_comparison/metrics_vs_k.png` | Baseline + 3 reranking sets across K for Recall/Precision/MRR |
+| Summary Metrics at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/average_metrics_by_config.png` | Final-depth comparison used for model selection |
+| Category False Positives at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/category_false_positives_k7.png` | Category-wise noise profile by configuration |
+| Category Recall at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/category_recall_k7.png` | Category-wise coverage comparison |
+| Category Precision at K=7 | `docs/Milestone 6/assets/reranking_simple_comparison/category_precision_k7.png` | Category-wise precision comparison |
 
 
 
@@ -1584,10 +1857,10 @@ def test_rerank_score_composition():
     """Test composite reranking formula"""
     semantic_score = 0.85
     lexical_overlap = 0.5
-    category_bonus = 0.15
+  category_bonus = 0.15
     rank_idx = 3
     
-    expected = 0.85 + (0.35 * 0.5) + 0.15 - (0.01 * 3)
+  expected = 0.85 + (0.35 * 0.5) + 0.15 - (0.01 * 3)
     actual = compute_rerank_score(
         semantic_score, lexical_overlap, category_bonus, rank_idx
     )
@@ -1595,7 +1868,7 @@ def test_rerank_score_composition():
     assert abs(expected - actual) < 1e-6
 
 def test_max_per_category_constraint():
-    """Test that reranking respects MAX_PER_CATEGORY=2"""
+  """Test that reranking respects MAX_PER_CATEGORY=2"""
     candidates = [
         {'id': 1, 'category': 'unused_import', 'score': 0.9},
         {'id': 2, 'category': 'unused_import', 'score': 0.8},
@@ -1644,8 +1917,8 @@ def test_model_quality_regression():
     """Ensure models don't degrade in quality"""
     baseline_f1 = {
         'static_v2': 0.779,
-        'naive_llm_v1': 0.786,
-        'rag_llm': 0.832
+    'naive_llm_v1': 0.758,
+    'rag_llm': 0.808
     }
     
     current_f1 = evaluate_models(evaluation_dataset)
@@ -1667,7 +1940,7 @@ def test_model_quality_regression():
 |:---|:---|:---|
 | Qdrant Connection Refused | `Connection refused localhost:6333` | Verify Docker container running: `docker ps \| grep qdrant` |
 | Out of Memory | Process killed, 137 exit code | Increase memory: reduce TOP_N_CANDIDATES from 25 to 10 |
-| JSON Parse Errors | 74.2% empty responses | Increase LLM_RETRY_CAP to 5; implement JSON repair layer |
+| JSON Parse Errors | 53.6% empty responses | Increase LLM_RETRY_CAP to 5; implement JSON repair layer |
 | GitHub Rate Limit | 403 Forbidden on PR fetch | Add delay between requests; check `GITHUB_TOKEN` validity |
 | Groq API Timeout | 504 Gateway Timeout | Increase timeout: GROQ_TIMEOUT_SECONDS=120 |
 
@@ -1764,12 +2037,12 @@ def test_model_quality_regression():
 
 | Category | TP | FP | FN | Precision | Recall | F1 | Support |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| unused_import | 74 | 0 | 13 | 1.0000 | 0.8506 | 0.9193 | 87 |
-| mutable_default | 12 | 0 | 1 | 1.0000 | 0.9231 | 0.9600 | 13 |
-| naming_convention | 30 | 1 | 7 | 0.9677 | 0.8108 | 0.8824 | 37 |
-| indentation | 1 | 4 | 8 | 0.2000 | 0.1111 | 0.1429 | 9 |
-| documentation_formatting | 0 | 3 | 15 | 0.0000 | 0.0000 | 0.0000 | 15 |
-| **TOTAL** | **117** | **8** | **44** | **0.9360** | **0.7266** | **0.8218** | **161** |
+| unused_import | 88 | 0 | 14 | 1.0000 | 0.8627 | 0.9263 | 102 |
+| mutable_default | 24 | 0 | 6 | 1.0000 | 0.8000 | 0.8889 | 30 |
+| naming_convention | 35 | 0 | 5 | 1.0000 | 0.8750 | 0.9333 | 40 |
+| indentation | 7 | 5 | 15 | 0.5833 | 0.3182 | 0.4118 | 22 |
+| documentation_formatting | 1 | 2 | 29 | 0.3333 | 0.0333 | 0.0606 | 30 |
+| **TOTAL** | **155** | **7** | **69** | **0.9568** | **0.6920** | **0.8021** | **224** |
 
 #### G.2 Latency Breakdown (50 PR Batch on Reference Hardware)
 

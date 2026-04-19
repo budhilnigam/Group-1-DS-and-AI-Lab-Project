@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import os
 import re
 from functools import lru_cache
@@ -106,6 +107,85 @@ def payload_to_text(payload: Any) -> str:
     return str(payload)
 
 
+def entry_source_text(entry: dict) -> str:
+    """Return the source text for an evaluation entry.
+
+    The notebook passes evaluation metadata that usually contains `source_file`
+    but not the full file contents. The regex-based query builders need the
+    source text to detect categories such as mutable_default reliably, so this
+    helper loads the file on demand when `file_text` is absent.
+    """
+    text = entry.get("file_text", "")
+    if isinstance(text, str) and text.strip():
+        return text
+
+    source_file = entry.get("source_file") or entry.get("source_path")
+    if not source_file:
+        return ""
+
+    source_path = resolve_source_path(str(source_file))
+    try:
+        return source_path.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return ""
+
+
+def _is_mutable_default_node(node: ast.AST) -> bool:
+    if isinstance(node, (ast.List, ast.Dict, ast.Set)):
+        return True
+    if isinstance(node, ast.Call):
+        func = node.func
+        if isinstance(func, ast.Name) and func.id in {"list", "dict", "set", "defaultdict"}:
+            return True
+        if isinstance(func, ast.Attribute) and func.attr in {"list", "dict", "set", "defaultdict"}:
+            return True
+    return False
+
+
+def detect_mutable_default_issues(entry: dict, text: str) -> list[str]:
+    """Detect mutable default argument issues with file-first, AST-fallback logic."""
+    issues: list[str] = []
+
+    source_file = entry.get("source_file") or entry.get("source_path")
+    if source_file:
+        try:
+            source_path = resolve_source_path(str(source_file))
+            file_issues = check_mutable_default_errors(str(source_path))
+            issues.extend([msg for msg in file_issues if "mutable default" in msg.lower()])
+        except Exception:
+            pass
+
+    if issues:
+        return issues
+
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return []
+
+    for fn in ast.walk(tree):
+        if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+
+        positional_args = list(fn.args.posonlyargs) + list(fn.args.args)
+        positional_defaults = list(fn.args.defaults)
+        if positional_defaults:
+            start = len(positional_args) - len(positional_defaults)
+            for arg, default in zip(positional_args[start:], positional_defaults):
+                if _is_mutable_default_node(default):
+                    issues.append(
+                        f"Line {getattr(default, 'lineno', fn.lineno)}: Function '{fn.name}' uses mutable default for argument '{arg.arg}'."
+                    )
+
+        for kw_arg, kw_default in zip(fn.args.kwonlyargs, fn.args.kw_defaults):
+            if kw_default is not None and _is_mutable_default_node(kw_default):
+                issues.append(
+                    f"Line {getattr(kw_default, 'lineno', fn.lineno)}: Function '{fn.name}' uses mutable default for keyword-only argument '{kw_arg.arg}'."
+                )
+
+    return issues
+
+
 def retrieve_guidelines(
     query_text: str,
     repo_name: str | None,
@@ -168,7 +248,7 @@ def query_strategy_regex_intelligent(entry: dict) -> str:
     Returns:
         str: Query text combining multiple signal types joined with " ; " separator.
     """
-    text = entry.get("file_text", "")
+    text = entry_source_text(entry)
     if not text:
         return "General Python code quality review"
 
@@ -180,8 +260,15 @@ def query_strategy_regex_intelligent(entry: dict) -> str:
     # Detect camelCase identifiers (potential naming convention violations)
     camel_case_identifiers = set(re.findall(r"\b[a-z]+[A-Z][A-Za-z0-9_]*\b", text))
 
-    # Detect mutable defaults (potential mutable default argument violations)
-    mutable_defaults = re.findall(r"def\s+\w+\([^)]*=\s*(\[\]|\{\}|dict\(|list\()", text)
+    # Detect mutable defaults with AST-backed fallback for better recall.
+    mutable_default_issues = detect_mutable_default_issues(entry, text)
+    mutable_default_count = len(mutable_default_issues)
+    if not mutable_default_count:
+        mutable_defaults = re.findall(
+            r"def\s+\w+\([^)]*=\s*(\[\]|\{\}|dict\(|list\(|set\(|defaultdict\()",
+            text,
+        )
+        mutable_default_count = len(mutable_defaults)
 
     # Check indentation issues via manual line inspection
     indent_issues = 0
@@ -201,11 +288,14 @@ def query_strategy_regex_intelligent(entry: dict) -> str:
         f"repo family: {repo_family(entry.get('repo'))}",
         f"import statements count: {len(imports)}",
         f"camelCase identifiers: {', '.join(sorted(list(camel_case_identifiers))[:8]) or 'none'}",
-        f"mutable-default patterns: {len(mutable_defaults)}",
+        f"mutable-default patterns: {mutable_default_count}",
         f"non-4-space indentation lines: {indent_issues}",
         f"docstring markers count: {docstring_markers}",
         "focus on naming_convention, unused_import, indentation, mutable_default, documentation_formatting"
     ]
+
+    if mutable_default_count:
+        signals.append("mutable_default priority terms: B006 W0102 dangerous-default-value none sentinel pattern")
 
     return " ; ".join(signals)
 
@@ -217,14 +307,21 @@ def query_strategy_regex_intelligent_v2(entry: dict) -> str:
     This keeps the fast regex approach but adds explicit keywords for categories
     that are often confused during retrieval/reranking.
     """
-    text = entry.get("file_text", "")
+    text = entry_source_text(entry)
     if not text:
         return "General Python code quality review ; focus naming_convention unused_import indentation mutable_default documentation_formatting"
 
     lines = text.splitlines()
     imports = [ln.strip() for ln in lines if re.match(r"^\s*(import|from)\s+", ln)]
     camel_case_identifiers = set(re.findall(r"\b[a-z]+[A-Z][A-Za-z0-9_]*\b", text))
-    mutable_defaults = re.findall(r"def\s+\w+\([^)]*=\s*(\[\]|\{\}|dict\(|list\(|set\()", text)
+    mutable_default_issues = detect_mutable_default_issues(entry, text)
+    mutable_default_count = len(mutable_default_issues)
+    if not mutable_default_count:
+        mutable_defaults = re.findall(
+            r"def\s+\w+\([^)]*=\s*(\[\]|\{\}|dict\(|list\(|set\(|defaultdict\()",
+            text,
+        )
+        mutable_default_count = len(mutable_defaults)
     indent_issues = sum(
         1
         for ln in lines
@@ -242,8 +339,10 @@ def query_strategy_regex_intelligent_v2(entry: dict) -> str:
         hints.append("unused_import import cleanup dead import")
     if indent_issues:
         hints.append("indentation 4-space tabs spaces")
-    if mutable_defaults:
-        hints.append("mutable_default list dict set default argument")
+    if mutable_default_count:
+        hints.append(
+            "mutable_default B006 W0102 dangerous-default-value mutable argument default list dict set defaultdict none sentinel"
+        )
     if docstring_markers:
         hints.append("documentation_formatting docstring summary style")
     if not hints:
@@ -253,11 +352,14 @@ def query_strategy_regex_intelligent_v2(entry: dict) -> str:
         f"repo family: {repo_family(entry.get('repo'))}",
         f"import statements count: {len(imports)}",
         f"camelCase identifiers: {', '.join(sorted(list(camel_case_identifiers))[:8]) or 'none'}",
-        f"mutable-default patterns: {len(mutable_defaults)}",
+        f"mutable-default patterns: {mutable_default_count}",
         f"non-4-space indentation lines: {indent_issues}",
         f"docstring markers count: {docstring_markers}",
         f"category hints: {' | '.join(hints)}",
     ]
+
+    if mutable_default_issues:
+        signals.append(f"mutable-default evidence: {' | '.join(mutable_default_issues[:2])}")
 
     return " ; ".join(signals)
 

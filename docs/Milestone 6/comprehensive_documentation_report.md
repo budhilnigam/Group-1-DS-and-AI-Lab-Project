@@ -155,17 +155,17 @@ The final deployed architecture is a retrieval-augmented review pipeline, not a 
 | Collection name | `guideline_embeddings` | Qdrant collection |
 | Top-N candidates | 25 | Rerank input size |
 | Final Top-K | 7 | Chunks passed to the prompt |
-| Lexical weight | 0.35 | Reranking weight |
-| Category bonus | 0.15 | Reranking boost |
-| Rank penalty | 0.01 | Penalizes lower-ranked chunks |
-| Max per category | 2 | Diversity cap |
+| Lexical weight | 0.50 | Reranking weight |
+| Category bonus | 0.25 | Reranking boost |
+| Rank penalty | 0.02 | Penalizes lower-ranked chunks |
+| Max per category | 1 | Diversity cap |
 | Scheduler interval | 1 minute | Default polling cadence |
 | LLM retries | 2 | Retry cap for generation failures |
 
 The reranking formula used in the final evaluation is:
 
 $$
-\text{rerank\_score} = \text{semantic\_score} + 0.35\cdot\text{lexical\_overlap} + \text{category\_bonus} - 0.01\cdot\text{rank\_idx}
+	ext{rerank\_score} = \text{semantic\_score} + 0.50\cdot\text{lexical\_overlap} + \text{category\_bonus} - 0.02\cdot\text{rank\_idx}
 $$
 
 #### Architecture diagram
@@ -230,10 +230,18 @@ The project employs a **Retrieval-Augmented Generation (RAG)** approach rather t
 - 25 → 7 candidate reranking pipeline
 
 **Reranking Formula Optimization**:
-$$\text{score} = \text{semantic\_sim} + 0.35 \times \text{lexical\_overlap} + 0.15 \times \text{category\_bonus} - 0.01 \times \text{rank\_idx}$$
+$$\text{score} = \text{semantic\_sim} + 0.50 \times \text{lexical\_overlap} + 0.25 \times \text{category\_bonus} - 0.02 \times \text{rank\_idx}$$
 - Blended semantic, lexical, and category signals
 - Top-K sweeps (tested K=5 to K=15)
-- Per-category diversity caps (max 2 chunks per violation type)
+- Per-category diversity caps (max 1 chunk per violation type)
+
+**Notebook Reranking Evaluation Artifacts** (saved for report use):
+- `docs/Milestone 6/assets/reranking_simple_comparison/metrics_vs_k.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/average_metrics_by_config.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_false_positives_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_recall_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/category_precision_k7.png`
+- `docs/Milestone 6/assets/reranking_simple_comparison/summary_metrics.csv`
 
 **Hyperparameter Tuning**:
 - Embedding model: BAAI/bge-large-en-v1.5
