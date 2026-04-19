@@ -148,34 +148,70 @@ tr:hover td { background: #f0f4f8; }
 <div id="json-sample-modal" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:8px;padding:20px 24px;max-width:680px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 8px 30px rgba(0,0,0,.3);position:relative">
     <button onclick="document.getElementById('json-sample-modal').style.display='none'" style="position:absolute;top:10px;right:14px;background:none;color:#586069;font-size:20px;border:none;cursor:pointer;padding:0;margin:0">&times;</button>
-    <h3 style="margin-bottom:12px;font-size:16px">JSON Batch Evaluation Format</h3>
-    <p style="font-size:13px;color:#586069;margin-bottom:10px">Paste a JSON array in the code box. Each entry is evaluated independently against all 3 baselines. Ground truth rows on the right are ignored in this mode.</p>
-    <p style="font-size:13px;color:#586069;margin-bottom:6px">Provide code via <b>source_file</b> (path relative to <code>data/processed/</code>) <i>or</i> <b>source_code</b> (inline).</p>
-    <pre style="background:#f6f8fa;border:1px solid #d1d5da;border-radius:6px;padding:14px;font-size:12px;line-height:1.5;overflow-x:auto;white-space:pre;margin-top:10px">[
+    <h3 style="margin-bottom:12px;font-size:16px">JSON Batch Evaluation Format — 5 PR Sample</h3>
+    <pre style="background:#f6f8fa;border:1px solid #d1d5da;border-radius:6px;padding:14px;font-size:11px;line-height:1.45;overflow-x:auto;white-space:pre;margin-top:10px;max-height:55vh;overflow-y:auto">[
   {
-    "id": "synthetic-django_PR_21",
-    "repo": "kannan-dedsec/synthetic-django",
-    "source_path": "admin.py",
-    "source_file": "evaluation_files/synthetic-django_PR_21_admin.py",
+    "id": "demo_pr1_imports",
+    "repo": "demo/sample-repo",
+    "source_path": "notifications.py",
+    "source_file": "evaluation_files/pr1_imports.py",
     "ground_truth_reviews": [
-      {
-        "line_number": 9,
-        "violation_category": "unused_import",
-        "review_comment": "Unused import: os"
-      }
+      {"line_number": 2, "violation_category": "unused_import", "review_comment": "Unused import: os"},
+      {"line_number": 3, "violation_category": "unused_import", "review_comment": "Unused import: sys"},
+      {"line_number": 4, "violation_category": "unused_import", "review_comment": "Unused import: json"}
     ]
   },
   {
-    "id": "inline_example",
-    "repo": "my-org/my-repo",
-    "source_path": "app.py",
-    "source_code": "import os\nimport sys\nx = 1\n",
+    "id": "demo_pr2_naming",
+    "repo": "demo/sample-repo",
+    "source_path": "post_repository.py",
+    "source_file": "evaluation_files/pr2_naming.py",
     "ground_truth_reviews": [
-      {
-        "line_number": 1,
-        "violation_category": "unused_import",
-        "review_comment": "Unused import: os"
-      }
+      {"line_number": 11, "violation_category": "naming_convention", "review_comment": "camelCase method name: addPost"},
+      {"line_number": 11, "violation_category": "mutable_default", "review_comment": "Mutable default [] for param 'tags'"},
+      {"line_number": 17, "violation_category": "naming_convention", "review_comment": "camelCase method name: findByAuthor"},
+      {"line_number": 27, "violation_category": "naming_convention", "review_comment": "camelCase method name: removePost"},
+      {"line_number": 27, "violation_category": "mutable_default", "review_comment": "Mutable default {} for param 'reasons'"}
+    ]
+  },
+  {
+    "id": "demo_pr3_mutable",
+    "repo": "demo/sample-repo",
+    "source_path": "analytics.py",
+    "source_file": "evaluation_files/pr3_mutable.py",
+    "ground_truth_reviews": [
+      {"line_number": 5, "violation_category": "mutable_default", "review_comment": "Mutable default {} for param 'properties'"},
+      {"line_number": 5, "violation_category": "mutable_default", "review_comment": "Mutable default [] for param 'tags'"},
+      {"line_number": 10, "violation_category": "mutable_default", "review_comment": "Mutable default {} for param 'default_props'"},
+      {"line_number": 20, "violation_category": "mutable_default", "review_comment": "Mutable default [] for param 'steps'"},
+      {"line_number": 20, "violation_category": "mutable_default", "review_comment": "Mutable default {} for param 'filters'"}
+    ]
+  },
+  {
+    "id": "demo_pr4_indent_docs",
+    "repo": "demo/sample-repo",
+    "source_path": "geometry.py",
+    "source_file": "evaluation_files/pr4_indent_docs.py",
+    "ground_truth_reviews": [
+      {"line_number": 6, "violation_category": "indentation", "review_comment": "Non-4-space indent (2 spaces) in area_circle"},
+      {"line_number": 6, "violation_category": "documentation_formatting", "review_comment": "Docstring indent (2 spaces) doesn't match 4-space convention"},
+      {"line_number": 13, "violation_category": "indentation", "review_comment": "Non-4-space indent (2 spaces) in area_rectangle"},
+      {"line_number": 13, "violation_category": "documentation_formatting", "review_comment": "Docstring indent (2 spaces) doesn't match 4-space convention"},
+      {"line_number": 20, "violation_category": "indentation", "review_comment": "Non-4-space indent (6 spaces) in perimeter_rectangle"},
+      {"line_number": 20, "violation_category": "documentation_formatting", "review_comment": "Docstring over-indented (6 spaces) relative to function signature"}
+    ]
+  },
+  {
+    "id": "demo_pr5_mixed",
+    "repo": "demo/sample-repo",
+    "source_path": "user_service.py",
+    "source_file": "evaluation_files/pr5_mixed.py",
+    "ground_truth_reviews": [
+      {"line_number": 2, "violation_category": "unused_import", "review_comment": "Unused import: os"},
+      {"line_number": 14, "violation_category": "naming_convention", "review_comment": "camelCase method name: createUser"},
+      {"line_number": 14, "violation_category": "mutable_default", "review_comment": "Mutable default [] for param 'roles'"},
+      {"line_number": 21, "violation_category": "indentation", "review_comment": "Non-4-space indent (2 spaces) in getUserById body"},
+      {"line_number": 21, "violation_category": "documentation_formatting", "review_comment": "Docstring indent (2 spaces) doesn't match class method convention"}
     ]
   }
 ]</pre>
@@ -535,12 +571,24 @@ async function runEval() {
     html += '</div>';
 
     // findings tables
+    const _gtCatCount = {};
+    gt.forEach(g => { _gtCatCount[g.violation_category] = (_gtCatCount[g.violation_category]||0) + 1; });
     ['RAG','Naive_LLM','Static_tool'].forEach(m => {
       const reviews = data[m];
       html += '<div class="result-box"><h3>'+m+' Findings</h3>';
       if (!reviews.length) { html += '<p>No violations found.</p></div>'; return; }
-      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
-      reviews.forEach(r => html += '<tr><td>'+r.line_number+'</td><td>'+r.violation_category+'</td><td>'+(r.review_comment||'–')+'</td></tr>');
+      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th><th>Match</th></tr>';
+      const seen = {};
+      reviews.forEach(r => {
+        const cat = r.violation_category;
+        seen[cat] = (seen[cat]||0) + 1;
+        const quota = _gtCatCount[cat] || 0;
+        const hit = seen[cat] <= quota;
+        const badge = hit
+          ? '<span style="color:#1a7f37;font-weight:600">✓ Correct</span>'
+          : '<span style="color:#cf222e;font-weight:600">✗ FP</span>';
+        html += '<tr><td>'+r.line_number+'</td><td>'+cat+'</td><td>'+(r.review_comment||'–')+'</td><td>'+badge+'</td></tr>';
+      });
       html += '</table></div>';
     });
     if (data.retrieved_chunks) html += renderChunksBlock(data.retrieved_chunks);
@@ -559,6 +607,15 @@ function renderBatchResults(data) {
   // Aggregate metrics
   html += '<h3 style="margin-bottom:8px">Aggregate Metrics ('+results.length+' entries)</h3>';
   html += '<div class="metrics-grid">';
+  // Aggregate per-baseline total latency across all PRs
+  var _baselineTotals = {RAG: 0, Naive_LLM: 0, Static_tool: 0};
+  results.forEach(function(r) {
+    var lat = r.Latency || {};
+    ['RAG','Naive_LLM','Static_tool'].forEach(function(m) {
+      _baselineTotals[m] += parseFloat((lat[m]||{}).total) || 0;
+    });
+  });
+
   ['RAG','Naive_LLM','Static_tool'].forEach(m => {
     const met = agg[m] || {};
     html += '<div class="metric-card"><h4>'+m+'</h4>';
@@ -567,6 +624,7 @@ function renderBatchResults(data) {
     html += '<p>Recall: <b>'+(met.Recall||0).toFixed(3)+'</b></p>';
     html += '<p>F1: <b>'+(met.F1||0).toFixed(3)+'</b></p>';
     html += '<p style="font-size:12px;color:#586069">TP:'+met.TP+' FP:'+met.FP+' FN:'+met.FN+'</p>';
+    html += '<p style="font-size:12px;color:#586069">Total latency: <b>'+_baselineTotals[m].toFixed(2)+'s</b></p>';
     html += '</div>';
   });
   html += '</div>';
@@ -600,13 +658,41 @@ function renderBatchResults(data) {
     });
     html += '</div>';
 
+    // Build GT category counts for match check (metrics use category-count matching, not exact line)
+    var _gt = r.Ground_Truth || [];
+    var _gtCatCount = {};
+    _gt.forEach(function(g){ _gtCatCount[g.violation_category] = (_gtCatCount[g.violation_category]||0) + 1; });
+
+    // Ground Truth reference box
+    if (_gt.length) {
+      html += '<div class="result-box" style="border-left:4px solid #1a7f37;background:#f0fdf4">';
+      html += '<h4 style="color:#1a7f37;display:flex;align-items:center;gap:8px">'
+           +  '<span style="display:inline-block;padding:2px 8px;background:#1a7f37;color:#fff;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:.3px">GROUND TRUTH</span>'
+           +  '<span style="color:#24292f">Expected Violations ('+_gt.length+')</span></h4>';
+      html += '<table><tr><th style="width:60px">Line</th><th style="width:180px">Category</th><th>Expected Comment</th></tr>';
+      _gt.forEach(function(g){
+        html += '<tr><td><b>'+g.line_number+'</b></td><td><code style="background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px;font-size:12px">'+g.violation_category+'</code></td><td style="color:#24292f">'+(g.review_comment||'–')+'</td></tr>';
+      });
+      html += '</table></div>';
+    }
+
     // Findings tables
     ['RAG','Naive_LLM','Static_tool'].forEach(function(m) {
       var reviews = r[m] || [];
       html += '<div class="result-box"><h4>'+m+' ('+reviews.length+' findings)</h4>';
       if (!reviews.length) { html += '<p>No violations found.</p></div>'; return; }
-      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th></tr>';
-      reviews.forEach(function(rv) { html += '<tr><td>'+rv.line_number+'</td><td>'+rv.violation_category+'</td><td>'+(rv.review_comment||'–')+'</td></tr>'; });
+      html += '<table><tr><th>Line</th><th>Category</th><th>Comment</th><th>Match</th></tr>';
+      var _seen = {};
+      reviews.forEach(function(rv) {
+        var cat = rv.violation_category;
+        _seen[cat] = (_seen[cat]||0) + 1;
+        var quota = _gtCatCount[cat] || 0;
+        var hit = _seen[cat] <= quota;
+        var badge = hit
+          ? '<span style="color:#1a7f37;font-weight:600">✓ Correct</span>'
+          : '<span style="color:#cf222e;font-weight:600">✗ FP</span>';
+        html += '<tr><td>'+rv.line_number+'</td><td>'+cat+'</td><td>'+(rv.review_comment||'–')+'</td><td>'+badge+'</td></tr>';
+      });
       html += '</table></div>';
     });
 

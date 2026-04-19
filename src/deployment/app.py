@@ -346,6 +346,7 @@ def _run_batch_eval(entries):
     """Process a list of evaluation entries (from evaluation.json format)."""
     from single_pr_model_output_metrics import run_eval_on_code
 
+    deployment_dir = Path(__file__).resolve().parent
     data_dir = Path(__file__).resolve().parents[2] / "data" / "processed"
     results = []
     agg = {m: {"TP": 0, "FP": 0, "FN": 0} for m in ("RAG", "Naive_LLM", "Static_tool")}
@@ -363,7 +364,11 @@ def _run_batch_eval(entries):
             if not rel:
                 results.append({"id": eid, "error": "No source_code or source_file"})
                 continue
-            fpath = data_dir / rel
+            # Resolve against deployment folder first (bundled samples),
+            # then fall back to data/processed for full evaluation dataset.
+            fpath = deployment_dir / rel
+            if not fpath.exists():
+                fpath = data_dir / rel
             if not fpath.exists():
                 results.append({"id": eid, "error": f"File not found: {rel}"})
                 continue
@@ -390,6 +395,7 @@ def _run_batch_eval(entries):
             )
             r["id"] = eid
             r["source_path"] = source_path
+            r["Ground_Truth"] = gt
             results.append(r)
             # accumulate TP/FP/FN for aggregate metrics
             for m in ("RAG", "Naive_LLM", "Static_tool"):
